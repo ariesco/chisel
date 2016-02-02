@@ -1,0 +1,403 @@
+fmod OP-INFO is
+ pr NAT-LIST .
+ pr QID .
+
+ sorts OpInfo OpInfoList .
+ subsort OpInfo < OpInfoList .
+
+ *** The first argument indicates the operator.
+ *** The second one indicates the positions requiring values.
+ *** Should be improved to prevent clashes
+ op <_,_> : Qid NatList -> OpInfo [ctor] .
+
+ op mtOIL : -> OpInfoList [ctor] .
+ op __ : OpInfoList OpInfoList -> OpInfoList [ctor comm assoc id: mtOIL] .
+endfm
+
+fmod DIRECTION is
+ pr META-TERM .
+ pr NAT-LIST .
+
+ sorts Direction DirectionSet .
+ subsort Direction < DirectionSet .
+
+ op [_,_] : Term NatList -> Direction [ctor] .
+
+ op mtDS : -> DirectionSet [ctor] .
+ op __ : DirectionSet DirectionSet -> DirectionSet [ctor comm assoc id: mtDS] .
+endfm
+
+fmod TERM-SET is
+ pr META-TERM .
+
+ sort TermSet .
+ subsort Term < TermSet .
+
+ op mtTS : -> TermSet [ctor] .
+ op _$_ : TermSet TermSet -> TermSet [ctor comm assoc id: mtTS] .
+
+ var  T : Term .
+ vars TS TS' : TermSet .
+ eq T $ T = T .
+
+ op empty-intersection : TermSet TermSet -> Bool .
+ eq empty-intersection(T $ TS, T $ TS') = false .
+ eq empty-intersection(TS, TS') = true [owise] .
+
+ op non-empty-intersection : TermSet TermSet -> Bool .
+ eq non-empty-intersection(T $ TS, T $ TS') = true .
+ eq non-empty-intersection(TS, TS') = false [owise] .
+endfm
+
+fmod SEMANTIC-INFERENCE is
+ pr META-LEVEL .
+ pr DIRECTION .
+ pr TERM-SET .
+ pr OP-INFO .
+
+ vars ValSrt MemSrt S S' S2 S3 InsSort CandidateSort : Sort .
+ vars TS TS' TS'' TSE : TermSet .
+ vars T T' T'' T1 T2 : Term .
+ vars SS SS' CS : SortSet .
+ vars AtS AtS' : AttrSet .
+ vars TL TL' : TermList .
+ var  COND : Condition .
+ var  OIL : OpInfoList .
+ var  ODS : OpDeclSet .
+ var  TyL : TypeList .
+ var  NL : NatList .
+ var  RS : RuleSet .
+ var  V : Variable .
+ var  C : Constant .
+ vars Q Q' : Qid .
+ var  M : Module .
+ var  R : Rule .
+ var  N : Nat .
+
+ op maudeSlicing : Rule TermSet -> TermSet .
+ eq maudeSlicing(rl T => T' [AtS] ., TS) = TS .
+ eq maudeSlicing(crl T => T' if COND [AtS] ., TS) = maudeSlicing(COND, TS) .
+
+ op maudeSlicing : Condition TermSet -> TermSet .
+ eq maudeSlicing(nil, TS) = TS .
+ *** Matching and rewrite require slicing
+ ceq maudeSlicing(COND /\ T := T', TS) = maudeSlicing(COND, TS $ TS'')
+  if TS' := getVariables(T) /\
+     non-empty-intersection(TS, TS') /\
+     TS'' := getVariables(T') .
+ ceq maudeSlicing(COND /\ T := T', TS) = maudeSlicing(COND, TS)
+  if TS' := getVariables(T) /\
+     empty-intersection(TS, TS') .
+ ceq maudeSlicing(COND /\ T => T', TS) = maudeSlicing(COND, TS $ TS'')
+  if TS' := getVariables(T') /\
+     non-empty-intersection(TS, TS') /\
+     TS'' := getVariables(T) .
+ ceq maudeSlicing(COND /\ T => T', TS) = maudeSlicing(COND, TS)
+  if TS' := getVariables(T') /\
+     empty-intersection(TS, TS') .
+ *** No slicing required.
+ eq maudeSlicing(COND /\ T = T', TS) = maudeSlicing(COND, TS) .
+ eq maudeSlicing(COND /\ T : S, TS) = maudeSlicing(COND, TS) .
+
+ op maudeSlicingExt : Module Rule SortSet TermSet -> TermSet .
+ eq maudeSlicingExt(M, rl T => T' [AtS] ., SS, TS) = TS .
+ eq maudeSlicingExt(M, crl T => T' if COND [AtS] ., SS, TS) =
+                                              maudeSlicingExt(M, COND, SS, TS) .
+
+ op maudeSlicingExt : Module Condition SortSet TermSet -> TermSet .
+ eq maudeSlicingExt(M, nil, SS, TS) = TS .
+ *** Matching and rewrite require slicing
+ ceq maudeSlicingExt(M, COND /\ T := T', SS, TS) = maudeSlicingExt(M, COND, SS, TS $ TS'' $ TSE)
+  if TS' := getVariables(T) /\
+     non-empty-intersection(TS, TS') /\
+     TS'' := getVariables(T') /\
+     TSE := extend(M, T, T', TS $ TS'', SS) .
+ ceq maudeSlicingExt(M, COND /\ T := T', SS, TS) = maudeSlicingExt(M, COND, SS, TS)
+  if TS' := getVariables(T) /\
+     empty-intersection(TS, TS') .
+ ceq maudeSlicingExt(M, COND /\ T => T', SS, TS) = maudeSlicingExt(M, COND, SS, TS $ TS'')
+  if TS' := getVariables(T') /\
+     non-empty-intersection(TS, TS') /\
+     TS'' := getVariables(T) .
+ ceq maudeSlicingExt(M, COND /\ T => T', SS, TS) = maudeSlicingExt(M, COND, SS, TS)
+  if TS' := getVariables(T') /\
+     empty-intersection(TS, TS') .
+ *** No slicing required.
+ eq maudeSlicingExt(M, COND /\ T = T', SS, TS) = maudeSlicingExt(M, COND, SS, TS) .
+ eq maudeSlicingExt(M, COND /\ T : S, SS, TS) = maudeSlicingExt(M, COND, SS, TS) .
+
+ op extend : Module Term Term TermSet SortSet -> TermSet .
+ ceq extend(M, T, T', TS, S ; SS) = extend(T, TS)
+  if S := getType(metaReduce(M, T')) .
+ eq extend(M, T, T', TS, SS) = mtTS [owise] .
+
+ op extend : Term TermSet -> TermSet .
+ eq extend(C, TS) = mtTS .
+ eq extend(V, TS) = mtTS .
+ eq extend(Q[TL, T, TL'], T $ TS) = list2set((TL, TL')) .
+ eq extend(Q[TL], TS) = extend*(TL, TS) [owise] .
+
+ op extend* : TermList TermSet -> TermSet .
+ eq extend*(empty, TS) = mtTS .
+ eq extend*((T, TL), TS) = extend(T, TS) $ extend*(TL, TS) .
+
+ op list2set : TermList -> TermSet .
+ eq list2set(mtTS) = empty .
+ eq list2set((T, TL)) = T $ list2set(TL) .
+
+ op getInstruction : Module Sort Rule ~> Term .
+ eq getInstruction(M, S, rl T => T' [AtS] .) = getInstruction(M, S, T) .
+ eq getInstruction(M, S, crl T => T' if COND [AtS] .) =
+        if getInstruction(M, S, T) :: Term
+        then getInstruction(M, S, T)
+        else getInstruction(M, S, COND)
+        fi .
+
+ op getInstruction : Module Sort Term ~> Term .
+ ceq getInstruction(M, S, T) = T
+  if isInstructionTerm(M, T, S) /\
+     not T :: Variable .
+ eq getInstruction(M, S, Q[TL]) = getInstruction*(M, S, TL) [owise] .
+
+ op getInstruction* : Module Sort TermList ~> Term .
+ ceq getInstruction*(M, S, (T, TL)) = T'
+  if T' := getInstruction(M, S, T) .
+ eq getInstruction*(M, S, (T, TL)) = getInstruction*(M, S, TL) .
+
+ op getInstruction : Module Sort Condition ~> Term .
+ eq getInstruction(M, S, T := T' /\ COND) = if getInstruction(M, S, T) :: Term
+                                            then getInstruction(M, S, T)
+                                            else getInstruction(M, S, COND)
+                                            fi .
+ eq getInstruction(M, S, T => T' /\ COND) = if getInstruction(M, S, T') :: Term
+                                            then getInstruction(M, S, T')
+                                            else getInstruction(M, S, COND)
+                                            fi .
+ *** The instruction would appear before, since no new terms are shown.
+ eq getInstruction(M, S, T = T' /\ COND) = getInstruction(M, S, COND) .
+ eq getInstruction(M, S, T : S' /\ COND) = getInstruction(M, S, COND) .
+
+ op getVariablesUsed : Rule OpInfoList -> TermSet .
+ eq getVariablesUsed(rl T => T' [AtS] ., OIL) = getVariablesUsed(T', OIL) .
+ eq getVariablesUsed(crl T => T' if COND [AtS] ., OIL) = getVariablesUsed(T', OIL) $
+                                                         getVariablesUsed(COND, OIL) .
+
+ op getVariablesUsed : Condition OpInfoList -> TermSet .
+ eq getVariablesUsed((nil).Condition, OIL) = mtTS .
+ eq getVariablesUsed(T = T' /\ COND, OIL) = getVariablesUsed(T, OIL) $
+                                            getVariablesUsed(T', OIL) $
+                                            getVariablesUsed(COND, OIL) .
+ eq getVariablesUsed(T : S /\ COND, OIL) = getVariablesUsed(T, OIL) $
+                                           getVariablesUsed(COND, OIL) .
+ *** Patterns cannot contain defined functions
+ eq getVariablesUsed(T := T' /\ COND, OIL) = getVariablesUsed(T', OIL) $
+                                             getVariablesUsed(COND, OIL) .
+ eq getVariablesUsed(T => T' /\ COND, OIL) = getVariablesUsed(T, OIL) $
+                                             getVariablesUsed(COND, OIL) .
+
+ op getVariablesUsed : Term OpInfoList -> TermSet .
+ eq getVariablesUsed(C, OIL) = mtTS .
+ eq getVariablesUsed(V, OIL) = mtTS .
+ eq getVariablesUsed(Q[TL], < Q, NL > OIL) = getTerms*(TL, NL) .
+ eq getVariablesUsed(Q[TL], OIL) = getVariablesUsed*(TL, OIL) [owise] .
+
+ op getVariablesUsed* : TermList OpInfoList -> TermSet .
+ eq getVariablesUsed*(empty, OIL) = mtTS .
+ eq getVariablesUsed*((T, TL), OIL) = getVariablesUsed(T, OIL) $
+                                      getVariablesUsed*(TL, OIL) .
+
+ op getTerms : TermList Nat -> TermList .
+ eq getTerms((T, TL), 0) = getVariables(T) .
+ eq getTerms((T, TL), s(N)) = getTerms(TL, N) .
+ eq getTerms(empty, N) = empty .
+
+ op getTerms* : TermList NatList -> TermList .
+ eq getTerms*(TL, nil) = empty .
+ eq getTerms*(TL, N NL) = getTerms(TL, N), getTerms*(TL, NL) .
+
+ op getVariables : Term -> TermSet .
+ eq getVariables(C) = mtTS .
+ eq getVariables(V) = V .
+ eq getVariables(Q[TL]) = getVariables*(TL) .
+
+ op getVariables* : TermList -> TermSet .
+ eq getVariables*((T, TL)) = getVariables(T) $ getVariables*(TL) .
+ eq getVariables*(empty) = mtTS .
+
+ op isInstructionTerm : Module Term Sort -> Bool .
+ ceq isInstructionTerm(M, T, S) = isInstructionSort(M, S', S)
+  if S' := getType(metaReduce(M, T)) .
+
+ op isInstructionSort : Module Sort Sort -> Bool .
+ eq isInstructionSort(M, InsSort, InsSort) = true .
+ ceq isInstructionSort(M, CandidateSort, InsSort) = true
+  if sameKind(M, CandidateSort, InsSort) .
+ ceq isInstructionSort(M, CandidateSort, InsSort) = true
+  if S ; SS := lesserSorts(M, InsSort) ; InsSort /\
+     op Q : TyL -> S [AtS] . ODS := getOps(M) /\
+     CandidateSort in TyL .
+ eq isInstructionSort(M, CandidateSort, InsSort) = false [owise] .
+
+ op getDirectionRules : Module Sort SortSet -> DirectionSet .
+ ceq getDirectionRules(M, InsSort, SS) = getDirectionRules(M, InsSort, SS, RS, OIL)
+  if RS := getRls(M) /\
+     OIL := getOperatorUpdateInfo(M, SS) .
+
+ op getDirectionRules : Module Sort SortSet RuleSet OpInfoList -> DirectionSet .
+ eq getDirectionRules(M, S, SS, none, OIL) = mtDS .
+ eq getDirectionRules(M, S, SS, R RS, OIL) = getDirectionRule(M, S, SS, R, OIL)
+                                             getDirectionRules(M, S, SS, RS, OIL) .
+
+ op getDirectionRule : Module Sort SortSet Rule OpInfoList -> DirectionSet .
+ ceq getDirectionRule(M, S, SS, R, OIL) = [ T'', NL ]
+  if T'' := getInstruction(M, S, R) /\
+     TS := getVariablesUsed(R, OIL) /\
+     TS =/= mtTS /\
+     TS' := maudeSlicingExt(M, R, SS, TS) /\
+     NL := getPositions(T'', TS') .
+ eq getDirectionRule(M, S, SS, R, OIL) = mtDS [owise] .
+
+ op getPositions : Term TermSet -> NatList .
+ eq getPositions(V, TS) = nil .
+ eq getPositions(C, TS) = nil .
+ eq getPositions(Q[TL], TS) = getPositions*(TL, TS, 0) .
+
+ op getPositions* : TermList TermSet Nat -> NatList .
+ eq getPositions*(empty, TS, N) = nil .
+ ceq getPositions*((T, TL), TS, N) = N getPositions*(TL, TS, s(N))
+  if TS' := getVariables(T) /\
+     non-empty-intersection(TS, TS') .
+ ceq getPositions*((T, TL), TS, N) = getPositions*(TL, TS, s(N))
+  if TS' := getVariables(T) /\
+     empty-intersection(TS, TS') .
+
+ *** Testing purposes
+ op [_,_] : Term TermSet -> Direction [ctor] .
+
+ **********************************************************************************
+ **************************** Ops modifying the memory ****************************
+ **********************************************************************************
+
+ op getOperatorUpdateInfo : Module SortSet -> OpInfoList .
+ eq getOperatorUpdateInfo(M, SS) = getOperatorUpdateInfo(M, SS, SS) .
+
+ op getOperatorUpdateInfo : Module SortSet SortSet -> OpInfoList .
+ ceq getOperatorUpdateInfo(M, MemSrt ; SS, CS) = getOperatorUpdateInfoVal(M, ValSrt, MemSrt)
+                                                 getOperatorUpdateInfo(M, SS, CS)
+  if ValSrt := getValueSort(M, MemSrt, CS) .
+ eq getOperatorUpdateInfo(M, SS, CS) = mtOIL [owise] .
+
+ op getOperatorUpdateInfoVal : Module Sort Sort -> OpInfoList .
+ eq getOperatorUpdateInfoVal(M, ValSrt, MemSrt) =
+             getOperatorUpdateInfo(getOps(M), ValSrt, MemSrt) .
+
+ op getOperatorUpdateInfo : OpDeclSet Sort Sort -> OpInfoList .
+ *** TODO: Handle kinds
+ ceq getOperatorUpdateInfo(op Q : TyL -> MemSrt [AtS] . ODS, ValSrt, MemSrt) =
+              if NL == nil
+              then mtOIL
+              else < Q, NL >
+              fi
+              getOperatorUpdateInfo(ODS, ValSrt, MemSrt)
+  if NL := search4valueSort(TyL, ValSrt) .
+ eq getOperatorUpdateInfo(ODS, ValSrt, MemSrt) = mtOIL [owise] .
+
+ op search4valueSort : TypeList Sort -> NatList .
+ eq search4valueSort(TyL, ValSrt) = search4valueSort(TyL, ValSrt, 0) .
+
+ op search4valueSort : TypeList Sort Nat -> NatList .
+ eq search4valueSort(nil, ValSrt, N) = nil .
+ eq search4valueSort(ValSrt TyL, ValSrt, N) = N search4valueSort(TyL, ValSrt, s(N)) .
+ eq search4valueSort(S TyL, ValSrt, N) = search4valueSort(TyL, ValSrt, s(N)) [owise] .
+
+ op getValueSort : Module Sort SortSet -> SortSet .
+ eq getValueSort(M, S, CS) = getValueSortWithOps(M, S) ;
+                             getValueSortWithRls(M, S, getRls(M), CS) .
+
+ op getValueSortWithOps : Module Sort -> SortSet .
+ ceq getValueSortWithOps(M, S) = S'
+  if SS := lesserSorts(M, S) /\
+     S' := accessOperator(getOps(M), S ; SS) .
+ eq getValueSortWithOps(M, S) = none [owise] .
+
+ op accessOperator : OpDeclSet SortSet ~> Sort .
+ ceq accessOperator(op Q : S S' -> S2 [AtS] .
+                    op Q' : S3 S -> S' [AtS'] . ODS, SS) = S'
+  if S2 in SS /\
+     S3 in SS .
+ ceq accessOperator(op Q : S S' -> S2 [AtS] .
+                    op Q' : S3 S' -> S [AtS'] . ODS, SS) = S
+  if S2 in SS /\
+     S3 in SS .
+
+ op getValueSortWithRls : Module Sort RuleSet SortSet -> SortSet .
+ eq getValueSortWithRls(M, S, R RS, CS) = (getValueSortWithRl(M, S, R, CS) ;
+                                           getValueSortWithRls(M, S, RS, CS)) minus CS .
+ eq getValueSortWithRls(M, S, none, CS) = none .
+
+ op getValueSortWithRl : Module Sort Rule SortSet -> SortSet .
+ *** We are forced to over-approximate
+ ceq getValueSortWithRl(M, S, rl T => T' [AtS] ., CS) = getTypes(TS)
+  if T1 := getTermOfSort(M, T, S) /\
+     TS := getVariables(T1) .
+ ceq getValueSortWithRl(M, S, R, CS) = S'
+  if crl T => T' if COND [AtS] . := R /\
+     T1 := getTermOfSort(M, T', S) /\
+     TS := getVariables(T1) /\
+     TS' := maudeSlicing(R, TS) /\
+     S' := searchMemory(M, T, COND, S, TS', CS) /\
+     S =/= S' .
+ eq getValueSortWithRl(M, S, R, CS) = none [owise] .
+
+ *********************************************************************************
+ *********************************** Auxiliary ***********************************
+ *********************************************************************************
+
+ op _in_ : Sort SortSet -> Bool .
+ eq S in (S ; SS) = true .
+ eq S in SS = false [owise] .
+
+ op _in_ : Sort TypeList -> Bool .
+ eq S in nil = false .
+ eq S in S TyL = true .
+ eq S in S' TyL = S in TyL [owise] .
+
+ op _minus_ : SortSet SortSet -> SortSet .
+ eq (S ; SS) minus (S ; SS') = SS minus SS' .
+ eq SS minus SS' = SS [owise] .
+
+ op getTermOfSort : Module Term Sort ~> Term .
+ ceq getTermOfSort(M, T, S) = T
+  if S' := getType(metaReduce(M, T)) /\
+     S' ; SS := S ; lesserSorts(M, S) .
+ eq getTermOfSort(M, Q[TL], S) = getTermOfSort*(M, TL, S) [owise] .
+
+ op getTermOfSort* : Module TermList Sort ~> Term .
+ eq getTermOfSort*(M, (T, TL), S) = if getTermOfSort(M, T, S) :: Term
+                                    then getTermOfSort(M, T, S)
+                                    else getTermOfSort*(M, TL, S)
+                                    fi .
+
+ op getTypes : TermSet -> SortSet .
+ eq getTypes(mtTS) = none .
+ eq getTypes(V $ TS) = getType(V) ; getTypes(TS) .
+
+ op searchMemory : Module Term Condition Sort TermSet SortSet ~> Sort .
+ *** The pattern is in the lefthand side.
+ ceq searchMemory(M, T, nil, S, T' $ TS, CS) = getType(T')
+  if T'' := getTermOfSort(M, T, S) /\
+     T' $ TS' := getVariables(T'') .
+ *** No matching involved
+ eq searchMemory(M, T, COND /\ T1 = T2, S, TS, CS) = searchMemory(M, T, COND, S, TS, CS) .
+ eq searchMemory(M, T, COND /\ T1 : S, S', TS, CS) = searchMemory(M, T, COND, S', TS, CS) .
+ *** We only consider a deterministic memory
+ eq searchMemory(M, T, COND /\ T1 => T2, S, TS, CS) = searchMemory(M, T, COND, S, TS, CS) .
+ ceq searchMemory(M, T, COND /\ T1 := T2, S, T' $ TS, S' ; CS) = getType(T')
+  if S' := getType(metaReduce(M, T1)) /\
+     T' $ TS' := getVariables(T1) /\
+     getType(T') =/= S .
+ eq searchMemory(M, T, COND /\ T1 := T2, S, TS, CS) =
+                                       searchMemory(M, T, COND, S, TS, CS) [owise] .
+endfm
+
+

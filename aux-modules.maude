@@ -1,0 +1,233 @@
+fmod MAYBE{X :: TRIV} is
+  sort Maybe{X} .
+  subsort X$Elt < Maybe{X} .
+  op maybe : -> Maybe{X} .
+endfm
+
+view Sort from TRIV to META-MODULE is
+ sort Elt to Sort .
+endv
+
+fmod PRINTING-FUNCTIONS is
+  pr INTER-PROCEDURAL-SLICING .
+
+  var  Q : Qid .
+  var  QS : QidSet .
+  var  C : Constant .
+  var  V : Variable .
+  vars T T' T1 T2 T3 T2' T3' : Term .
+  vars TL TL' SV FN VL : TermList .
+  var  ST : SlicingTable .
+  var  M : Module .
+  var  H : Header .
+  var  IL : ImportList .
+  var  S : Sort .
+  var  SS : SortSet .
+  var  SSDS : SubsortDeclSet .
+  var  ODS ODS' : OpDeclSet .
+  var  MAS : MembAxSet .
+  var  EqS : EquationSet .
+  var  RS : RuleSet .
+  vars Ty Ty' : Type .
+  vars QIL QIL' : QidList .
+  var  DS : DirectionSet .
+  var  NL : NatList .
+  vars N N' : Nat .
+
+  op printSlicingResult : Module TermList SlicingResult -> QidList .
+  eq printSlicingResult(M, VL, noResult) = ('\n '\r 'Error: '\b 'The 'slicing 'process
+                                            'failed. '\o '\n) .
+  eq printSlicingResult(M, VL, sliRes(QS, TL, DS)) = printRules(QS)
+                                                     printDirection(M, DS)
+                                                     printVars(TL) .
+  eq printSlicingResult(M, VL, sr(ST)) = '\n printVarsWRT(M, VL)
+                                         '\n printSets(M, ST)
+                                         '\n printCode(M, ST) .
+
+  op printRules : QidSet -> QidList .
+  eq printRules(QS) = '\n '\b '\! 'The 'rules 'causing 'side 'effects 'are: '\o
+                      qidset2qidlist(QS) '\n .
+
+  op printVarsWRT : Module TermList -> QidList .
+  eq printVarsWRT(M, T) = '\n '\! '*************** 'This 'is 'the 'slice 'w.r.t. 'the
+                          'variable '\o '\b printVarsWRTAux(M, T) '\o '\! '***************
+                          '\o '\n .
+  eq printVarsWRT(M, TL) = '\n '\! '*************** 'This 'is 'the 'slice 'w.r.t. 'the
+                           'variable '\o '\b printVarsWRTAux(M, TL) '\o '\!
+                           '*************** '\o '\n '\n [owise] .
+
+
+  op printVarsWRTAux : Module TermList -> QidList .
+  eq printVarsWRTAux(M, T) = metaPrettyPrint(M, T, po) .
+  eq printVarsWRTAux(M, (T, TL)) = metaPrettyPrint(M, T, po) '`,
+                                   printVarsWRTAux(M, TL) [owise] .
+
+
+  op printVars : TermList -> QidList .
+  eq printVars(TL) = '\n '\b '\! 'The 'variables 'obtained 'by 'the 'slicing 'process 'are: '\o
+                     termlist2qidlist(TL) '\n .
+
+  op printDirection : Module DirectionSet -> QidList .
+  eq printDirection(M, DS) = '\n '\! '\b 'The 'inferred 'data-flow 'information 'is: '\o '\n
+                             printDirectionAux(M, DS) .
+
+  op printDirectionAux : Module DirectionSet -> QidList .
+  eq printDirectionAux(M, mtDS) = nil .
+  ceq printDirectionAux(M, [Q[TL], NL] DS) = '\n '\! '- '\b 'For 'function '\o
+                                            metaPrettyPrint(M, Q[TL], po) ':
+                                            printInOut(M, TL, NL)
+                                            printDirectionAux(M, DS)
+   if (T, T', TL') := TL .
+  eq printDirectionAux(M, [T, NL] DS) = printDirectionAux(M, DS)  [owise] .
+
+  op printInOut : Module TermList NatList -> QidList .
+  ceq printInOut(M, TL, NL) = '\n '\! '\b 'Variable '`( 's '`) ' '\o
+                              printOut(M, TL, NL, 0)
+                              '\! '\b 'are 'modified 'by '\o
+                              printIn(M, TL, NL, 0) '\n
+   if printOut(M, TL, NL, 0) =/= nil .
+  eq printInOut(M, TL, NL) = '\n '\! '\b 'All 'variables 'involved. '\o '\n .
+
+  op printIn : Module TermList NatList Nat -> QidList .
+  eq printIn(M, empty, NL, N) = nil .
+  eq printIn(M, TL, nil, N) = nil .
+  eq printIn(M, (T, TL), N NL, N) = metaPrettyPrint(M, T, po)
+                                    printIn(M, TL, NL, s(N)) .
+  eq printIn(M, (T, TL), N NL, N') = printIn(M, TL, N NL, s(N')) .
+
+  op printOut : Module TermList NatList Nat -> QidList .
+  eq printOut(M, empty, NL, N) = nil .
+  eq printOut(M, (T, TL), nil, N) = metaPrettyPrint(M, T, po)
+                                    printOut(M, TL, nil, s(N)) .
+  eq printOut(M, (T, TL), N NL, N) = printOut(M, TL, NL, s(N)) .
+  eq printOut(M, (T, TL), N NL, N') = metaPrettyPrint(M, T, po)
+                                      printOut(M, TL, N NL, s(N')) .
+
+  op sli-banner : -> QidList .
+  eq sli-banner = ('\n '\t '\s '\s '\s '\s 'Slicing 'using 'semantics '2.1
+                   'April '30th '2015 '\n) .
+
+  op pos : -> PrintOptionSet .
+  eq pos = mixfix number rat format .
+
+  op qidset2qidlist : QidSet -> QidList .
+  eq qidset2qidlist(none) = nil .
+  eq qidset2qidlist(Q ; QS) = Q qidset2qidlist(QS) .
+
+  op termlist2qidlist : TermList ~> QidList .
+  eq termlist2qidlist(empty) = nil .
+  eq termlist2qidlist((C, TL)) = getName(C) termlist2qidlist(TL) .
+
+  op po : -> PrintOptionSet .
+  eq po = mixfix number rat format .
+
+  op printSets : Module SlicingTable -> QidList .
+  eq printSets(M, mtTable) = nil .
+  *** We assume the identifier is the first term.
+  eq printSets(M, Q[T, TL] |-> SV ; ST) = '\n '\b '\! 'The 'variables 'to 'slice '\o
+                                          metaPrettyPrint(M, T, po) '\b '\! 'are ' '\o
+                                          '`{ printVars(M, SV) '`}
+                                          printSets(M, ST) .
+
+  op printVars : Module TermList -> QidList .
+  eq printVars(M, empty) = nil .
+  eq printVars(M, (T, TL)) = metaPrettyPrint(M, T, po)
+                             if TL == empty
+                             then nil
+                             else '`, '
+                             fi printVars(M, TL) .
+
+  op printCode : Module SlicingTable -> QidList .
+  eq printCode(M, ST) = clean(printCodeAux(addUndefOp2Sorts(M), getFunNames(ST), ST), nil) .
+
+  op getFunNames : SlicingTable -> TermList .
+  eq getFunNames(mtTable) = empty .
+  *** We assume the definition has name, variables, and body
+  eq getFunNames(Q[T1, T2, T3] |-> SV ; ST) = T1, getFunNames(ST) .
+
+  op clean : QidList QidList -> QidList .
+  eq clean(nil, QIL) = QIL .
+  ceq clean(Q QIL, QIL') = clean(QIL, QIL' '_)
+   if find(string(Q), undefSymbol, 0) == 0 .
+  eq clean(Q QIL, QIL') = clean(QIL, QIL' Q) [owise] .
+
+  op printCodeAux : Module TermList SlicingTable -> QidList .
+  eq printCodeAux(M, FN, mtTable) = nil .
+  *** We assume the definition has name, variables, and body
+  ceq printCodeAux(M, FN,  Q[T1, T2, T3] |-> SV ; ST) = '\n metaPrettyPrint(M, T, po)
+                                                        '\n printCodeAux(M, FN, ST)
+   if T2' := slice(M, T2, SV) /\
+      T3' := slice2(M, T3, SV, FN) /\
+      T := Q[T1, T2', T3'] .
+
+  op slice : Module Term TermList -> Term .
+  eq slice(M, C, SV) = if containsAny?(C, SV)
+                       then C
+                       else qid(undefSymbol + string(getType(C)) + "." + string(getType(C)))
+                       fi .
+  eq slice(M, V, SV) = V .
+  ceq slice(M, Q[TL], SV) = C
+   if not containsAny?(Q[TL], SV) /\
+      Ty := getType(metaReduce(M, Q[TL])) /\
+      C := qid(undefSymbol + string(Ty) + "." + string(Ty)) .
+  ceq slice(M, Q[TL], SV) = Q[slice*(M, TL, SV)]
+   if containsAny?(Q[TL], SV) .
+
+  op slice* : Module TermList TermList -> TermList .
+  eq slice*(M, empty, SV) = empty .
+  eq slice*(M, (T, TL), SV) = slice(M, T, SV), slice*(M, TL, SV) .
+
+  op slice2 : Module Term TermList TermList -> Term .
+  ceq slice2(M, C, SV, FN) = C
+   if sortLeq(M, getType(C), getMaxTypeFromList(M, SV)) /\
+      containsAny?(C, SV) or containsAny?(C, FN) .
+  ceq slice2(M, C, SV, FN) = qid(undefSymbol + string(Ty) + "." + string(Ty))
+   if sortLeq(M, getType(C), getMaxTypeFromList(M, SV)) /\
+      not containsAny?(C, SV) /\
+      Ty := getType(C) .
+  ceq slice2(M, C, SV, FN) = C
+   if not sortLeq(M, getType(C), getMaxTypeFromList(M, SV)) .
+  eq slice2(M, C, SV, FN) = qid(undefSymbol + string(getType(C)) + "." + string(getType(C))) [owise] .
+  eq slice2(M, V, SV, FN) = V .
+  ceq slice2(M, Q[TL], SV, FN) = C
+   if Ty := getType(metaReduce(M, Q[TL])) /\
+      *** sortLeq(M, Ty, getMaxTypeFromList(M, SV)) /\
+      not containsAny?(Q[TL], SV) /\
+      C := qid(undefSymbol + string(Ty) + "." + string(Ty)) .
+  eq slice2(M, Q[TL], SV, FN) = Q[slice2*(M, TL, SV, FN)] [owise] .
+
+  op slice2* : Module TermList TermList TermList -> TermList .
+  eq slice2*(M, empty, SV, FN) = empty .
+  eq slice2*(M, (T, TL), SV, FN) = slice2(M, T, SV, FN), slice2*(M, TL, SV, FN) .
+
+  op addUndefOp2Sorts : Module -> Module .
+  ceq addUndefOp2Sorts(M) = addOps(M, ODS)
+   if SS := getSorts(M) /\
+      ODS := createNewCons(SS) .
+
+  op undefSymbol : -> String .
+  eq undefSymbol = "unreq" .
+
+  op createNewCons : SortSet -> OpDeclSet .
+  eq createNewCons(none) = none .
+  ceq createNewCons(S ; SS) = op Q : nil -> S [none] .
+                              createNewCons(SS)
+   if Q := qid(undefSymbol + string(S)) .
+
+  op addOps : Module OpDeclSet -> Module .
+  eq addOps(fmod H is IL sorts SS . SSDS ODS MAS EqS endfm, ODS') =
+            fmod H is IL sorts SS . SSDS ODS ODS' MAS EqS endfm .
+  eq addOps(mod H is IL sorts SS . SSDS ODS MAS EqS RS endm, ODS') =
+            mod H is IL sorts SS . SSDS ODS ODS' MAS EqS RS endm .
+
+  op getMaxTypeFromList : Module TermList ~> Type [memo] .
+  eq getMaxTypeFromList(M, T) = getType(metaReduce(M, T)) .
+  ceq getMaxTypeFromList(M, (T, TL)) =
+                      if sortLeq(M, Ty, Ty')
+                      then Ty'
+                      else Ty
+                      fi
+   if Ty := getType(metaReduce(M, T)) /\
+      Ty' := getMaxTypeFromList(M, TL) [owise] .
+endfm
+

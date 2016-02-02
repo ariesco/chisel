@@ -1,0 +1,6 @@
+load full-maude.maude
+
+load inferences.maude
+load slicing_process.maude
+load aux-modules.maude
+load db-handling.maude

@@ -1,0 +1,2 @@
+cat /Applications/maude-darwin/full-maude.maude inferences.maude slicing_process.maude aux-modules.maude db-handling.maude > slicing.maude
+
