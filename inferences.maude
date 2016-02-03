@@ -30,21 +30,21 @@ endfm
 fmod TERM-SET is
  pr META-TERM .
 
- sort TermSet .
- subsort Term < TermSet .
+ sort STermSet .
+ subsort Term < STermSet .
 
- op mtTS : -> TermSet [ctor] .
- op _$_ : TermSet TermSet -> TermSet [ctor comm assoc id: mtTS] .
+ op mtTS : -> STermSet [ctor] .
+ op _$_ : STermSet STermSet -> STermSet [ctor comm assoc id: mtTS] .
 
  var  T : Term .
- vars TS TS' : TermSet .
+ vars TS TS' : STermSet .
  eq T $ T = T .
 
- op empty-intersection : TermSet TermSet -> Bool .
+ op empty-intersection : STermSet STermSet -> Bool .
  eq empty-intersection(T $ TS, T $ TS') = false .
  eq empty-intersection(TS, TS') = true [owise] .
 
- op non-empty-intersection : TermSet TermSet -> Bool .
+ op non-empty-intersection : STermSet STermSet -> Bool .
  eq non-empty-intersection(T $ TS, T $ TS') = true .
  eq non-empty-intersection(TS, TS') = false [owise] .
 endfm
@@ -56,7 +56,7 @@ fmod SEMANTIC-INFERENCE is
  pr OP-INFO .
 
  vars ValSrt MemSrt S S' S2 S3 InsSort CandidateSort : Sort .
- vars TS TS' TS'' TSE : TermSet .
+ vars TS TS' TS'' TSE : STermSet .
  vars T T' T'' T1 T2 : Term .
  vars SS SS' CS : SortSet .
  vars AtS AtS' : AttrSet .
@@ -74,11 +74,11 @@ fmod SEMANTIC-INFERENCE is
  var  R : Rule .
  var  N : Nat .
 
- op maudeSlicing : Rule TermSet -> TermSet .
+ op maudeSlicing : Rule STermSet -> STermSet .
  eq maudeSlicing(rl T => T' [AtS] ., TS) = TS .
  eq maudeSlicing(crl T => T' if COND [AtS] ., TS) = maudeSlicing(COND, TS) .
 
- op maudeSlicing : Condition TermSet -> TermSet .
+ op maudeSlicing : Condition STermSet -> STermSet .
  eq maudeSlicing(nil, TS) = TS .
  *** Matching and rewrite require slicing
  ceq maudeSlicing(COND /\ T := T', TS) = maudeSlicing(COND, TS $ TS'')
@@ -99,12 +99,12 @@ fmod SEMANTIC-INFERENCE is
  eq maudeSlicing(COND /\ T = T', TS) = maudeSlicing(COND, TS) .
  eq maudeSlicing(COND /\ T : S, TS) = maudeSlicing(COND, TS) .
 
- op maudeSlicingExt : Module Rule SortSet TermSet -> TermSet .
+ op maudeSlicingExt : Module Rule SortSet STermSet -> STermSet .
  eq maudeSlicingExt(M, rl T => T' [AtS] ., SS, TS) = TS .
  eq maudeSlicingExt(M, crl T => T' if COND [AtS] ., SS, TS) =
                                               maudeSlicingExt(M, COND, SS, TS) .
 
- op maudeSlicingExt : Module Condition SortSet TermSet -> TermSet .
+ op maudeSlicingExt : Module Condition SortSet STermSet -> STermSet .
  eq maudeSlicingExt(M, nil, SS, TS) = TS .
  *** Matching and rewrite require slicing
  ceq maudeSlicingExt(M, COND /\ T := T', SS, TS) = maudeSlicingExt(M, COND, SS, TS $ TS'' $ TSE)
@@ -126,24 +126,24 @@ fmod SEMANTIC-INFERENCE is
  eq maudeSlicingExt(M, COND /\ T = T', SS, TS) = maudeSlicingExt(M, COND, SS, TS) .
  eq maudeSlicingExt(M, COND /\ T : S, SS, TS) = maudeSlicingExt(M, COND, SS, TS) .
 
- op extend : Module Term Term TermSet SortSet -> TermSet .
+ op extend : Module Term Term STermSet SortSet -> STermSet .
  ceq extend(M, T, T', TS, S ; SS) = extend(T, TS)
   if S := getType(metaReduce(M, T')) .
  eq extend(M, T, T', TS, SS) = mtTS [owise] .
 
- op extend : Term TermSet -> TermSet .
+ op extend : Term STermSet -> STermSet .
  eq extend(C, TS) = mtTS .
  eq extend(V, TS) = mtTS .
- eq extend(Q[TL, T, TL'], T $ TS) = list2set((TL, TL')) .
+ eq extend(Q[TL, T, TL'], T $ TS) = list2sset((TL, TL')) .
  eq extend(Q[TL], TS) = extend*(TL, TS) [owise] .
 
- op extend* : TermList TermSet -> TermSet .
+ op extend* : TermList STermSet -> STermSet .
  eq extend*(empty, TS) = mtTS .
  eq extend*((T, TL), TS) = extend(T, TS) $ extend*(TL, TS) .
 
- op list2set : TermList -> TermSet .
- eq list2set(mtTS) = empty .
- eq list2set((T, TL)) = T $ list2set(TL) .
+ op list2sset : TermList -> STermSet .
+ eq list2sset(mtTS) = empty .
+ eq list2sset((T, TL)) = T $ list2sset(TL) .
 
  op getInstruction : Module Sort Rule ~> Term .
  eq getInstruction(M, S, rl T => T' [AtS] .) = getInstruction(M, S, T) .
@@ -177,12 +177,12 @@ fmod SEMANTIC-INFERENCE is
  eq getInstruction(M, S, T = T' /\ COND) = getInstruction(M, S, COND) .
  eq getInstruction(M, S, T : S' /\ COND) = getInstruction(M, S, COND) .
 
- op getVariablesUsed : Rule OpInfoList -> TermSet .
+ op getVariablesUsed : Rule OpInfoList -> STermSet .
  eq getVariablesUsed(rl T => T' [AtS] ., OIL) = getVariablesUsed(T', OIL) .
  eq getVariablesUsed(crl T => T' if COND [AtS] ., OIL) = getVariablesUsed(T', OIL) $
                                                          getVariablesUsed(COND, OIL) .
 
- op getVariablesUsed : Condition OpInfoList -> TermSet .
+ op getVariablesUsed : Condition OpInfoList -> STermSet .
  eq getVariablesUsed((nil).Condition, OIL) = mtTS .
  eq getVariablesUsed(T = T' /\ COND, OIL) = getVariablesUsed(T, OIL) $
                                             getVariablesUsed(T', OIL) $
@@ -195,13 +195,13 @@ fmod SEMANTIC-INFERENCE is
  eq getVariablesUsed(T => T' /\ COND, OIL) = getVariablesUsed(T, OIL) $
                                              getVariablesUsed(COND, OIL) .
 
- op getVariablesUsed : Term OpInfoList -> TermSet .
+ op getVariablesUsed : Term OpInfoList -> STermSet .
  eq getVariablesUsed(C, OIL) = mtTS .
  eq getVariablesUsed(V, OIL) = mtTS .
  eq getVariablesUsed(Q[TL], < Q, NL > OIL) = getTerms*(TL, NL) .
  eq getVariablesUsed(Q[TL], OIL) = getVariablesUsed*(TL, OIL) [owise] .
 
- op getVariablesUsed* : TermList OpInfoList -> TermSet .
+ op getVariablesUsed* : TermList OpInfoList -> STermSet .
  eq getVariablesUsed*(empty, OIL) = mtTS .
  eq getVariablesUsed*((T, TL), OIL) = getVariablesUsed(T, OIL) $
                                       getVariablesUsed*(TL, OIL) .
@@ -215,12 +215,12 @@ fmod SEMANTIC-INFERENCE is
  eq getTerms*(TL, nil) = empty .
  eq getTerms*(TL, N NL) = getTerms(TL, N), getTerms*(TL, NL) .
 
- op getVariables : Term -> TermSet .
+ op getVariables : Term -> STermSet .
  eq getVariables(C) = mtTS .
  eq getVariables(V) = V .
  eq getVariables(Q[TL]) = getVariables*(TL) .
 
- op getVariables* : TermList -> TermSet .
+ op getVariables* : TermList -> STermSet .
  eq getVariables*((T, TL)) = getVariables(T) $ getVariables*(TL) .
  eq getVariables*(empty) = mtTS .
 
@@ -257,12 +257,12 @@ fmod SEMANTIC-INFERENCE is
      NL := getPositions(T'', TS') .
  eq getDirectionRule(M, S, SS, R, OIL) = mtDS [owise] .
 
- op getPositions : Term TermSet -> NatList .
+ op getPositions : Term STermSet -> NatList .
  eq getPositions(V, TS) = nil .
  eq getPositions(C, TS) = nil .
  eq getPositions(Q[TL], TS) = getPositions*(TL, TS, 0) .
 
- op getPositions* : TermList TermSet Nat -> NatList .
+ op getPositions* : TermList STermSet Nat -> NatList .
  eq getPositions*(empty, TS, N) = nil .
  ceq getPositions*((T, TL), TS, N) = N getPositions*(TL, TS, s(N))
   if TS' := getVariables(T) /\
@@ -272,7 +272,7 @@ fmod SEMANTIC-INFERENCE is
      empty-intersection(TS, TS') .
 
  *** Testing purposes
- op [_,_] : Term TermSet -> Direction [ctor] .
+ op [_,_] : Term STermSet -> Direction [ctor] .
 
  **********************************************************************************
  **************************** Ops modifying the memory ****************************
@@ -378,11 +378,11 @@ fmod SEMANTIC-INFERENCE is
                                     else getTermOfSort*(M, TL, S)
                                     fi .
 
- op getTypes : TermSet -> SortSet .
+ op getTypes : STermSet -> SortSet .
  eq getTypes(mtTS) = none .
  eq getTypes(V $ TS) = getType(V) ; getTypes(TS) .
 
- op searchMemory : Module Term Condition Sort TermSet SortSet ~> Sort .
+ op searchMemory : Module Term Condition Sort STermSet SortSet ~> Sort .
  *** The pattern is in the lefthand side.
  ceq searchMemory(M, T, nil, S, T' $ TS, CS) = getType(T')
   if T'' := getTermOfSort(M, T, S) /\

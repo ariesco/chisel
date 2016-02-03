@@ -572,7 +572,7 @@ sides of the rules of the given rules:
 %)
 
   op getOpsFromRules : Module QidSet -> QidSet .
-  ceq getOpsFromRules(M, Q ; QS) = root(first(TL)) ; getOpsFromRules(M, QS)
+  ceq getOpsFromRules(M, Q ; QS) = getRoot(first(TL)) ; getOpsFromRules(M, QS)
    if Q'[TL] := getLHS(M, Q) .
   eq getOpsFromRules(M, QS) = none [owise] .
 
@@ -582,8 +582,9 @@ sides of the rules of the given rules:
   op first : TermList ~> Term .
   eq first((T, TL)) = T .
 
-  op root : Term ~> Qid .
-  eq root(Q[TL]) = Q .
+  op getRoot : Term -> Qid .
+  eq getRoot(Q[TL]) = Q .
+  eq getRoot(T) = T [owise] .
 endfm
 
 fmod RELATIONS-GRAPH is
