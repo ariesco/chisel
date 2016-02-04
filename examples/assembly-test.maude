@@ -1,0 +1,201 @@
+load assembly.maude
+
+(mod TEST is
+  pr SEMANTICS .
+
+  op testIns : -> InsList .
+  eq testIns = addi R1, R1, 5
+               addi R2, R2, 10
+               add  R3, R1, R2
+        'loop  subi R4, R3, 10
+               j   'loop
+               break
+  .
+
+  *** Let x be the value in Mem[0] and y the value in Mem[1]
+  *** It computes x ** y and stores it in Mem[2]
+  op pow : -> InsList .
+  eq pow = sub  R1, R1, R1       *** Make sure R1 contains 0
+           load R1, R1           *** Load M[0] in R1 (function from left to right)
+           sub  R2, R2, R2       *** Make sure R2 contains 0
+           addi R2, R2, 1        *** Add 1 and save it in R2
+           load R2, R2           *** Load M[1] in R2
+           sub  R3, R3, R3       *** For comparing with 0
+           sub  R4, R4, R4       *** Initialize R4
+           addi R4, R4, 1        *** Add 1 and save it in R4
+  'loop    beq  R2, R3, 'out     *** Jump to out when R2 and R3 are equal
+           mul  R4, R4, R1       *** Store in R4 the result of R4 * R1
+           subi R2, R2, 1        *** Update the counter
+           j    'loop            *** Jump to loop
+  'out     sub  R5, R5, R5       *** Make sure R5 contains 0
+           addi R5, R5, 2        *** Add 2 and save it in R5
+           str  R5, R4           *** Store the value of R4 in position R5
+                                 *** (function from right to left)
+           break
+  .
+
+  op spi-reset : -> InsList .
+  eq spi-reset =
+      'spi-reset      sb    zero, 4(gp)
+                      sb    zero, 3(gp)
+                      lbu   v1,   4(gp)
+                      lui   v0,   65284
+                      andi  v1,   v1,    255
+                      addiu v0,   v0,    112
+                      addu  v0,   v0,    v1
+                      lbu   v0,   0(v0)
+                      sb    v0,   2(gp)
+                      lbu   v0,   2(gp)
+                      sb    zero, 1(gp)
+                      jr    ra
+                      sb    v0,   6(gp)
+  .
+
+  op spi-init : -> InsList .
+  eq spi-init =
+      'spi-init      lui   v0,   65284
+                     lbu   a2,   9(gp)
+                     lbu   a0,   7(gp)
+                     li    v1,   1
+                     lw    a1,   92(v0)
+                     sllv  a2,   v1,    a2
+                     sllv  a0,   v1,    a0
+                     lui   v1,   65284
+                     addiu v1,   v1,    112
+                     ori   a1,   a1,    16
+                     or    a0,   a2,    a0
+                     sb    zero, 19(v1)
+                     sb    zero, 20(v1)
+                     sw    a1,   92(v0)
+                     jr    ra
+                     sb    a0,   8(gp)
+  .
+
+  op sig-spi : -> InsList .
+  eq sig-spi =
+      'sig-spi       lbu   v1,   4(gp)
+                     li    v0,   1
+                     addiu v1,   v1,    1
+                     andi  v1,   v1,    255
+                     sb    v1,   4(gp)
+                     sb    v0,   0(gp)
+                     lbu   v1,   4(gp)
+                     andi  v1,   v1,    255
+                     sltiu v1,   v1,    24
+                     beqz  v1,   'end-sig-spi
+                     nop
+                     lbu   a0,   4(gp)
+                     li    v1,   23
+                     andi  a0,   a0,    255
+                     beq   a0,   v1,    'jsig-spi1
+                     nop
+                     lbu   v0,   4(gp)
+                     andi  v0,   v0,    255
+                     sltiu v0,   v0,    22
+                     beqz  v0,   'jsig-spi2
+                     nop
+                     lbu   a0,   4(gp)
+                     lui   v0,   65284
+                     andi  a0,   a0,    255
+                     addiu v0,   v0,    112
+                     lbu   v1,   2(gp)
+                     addu  v0,   v0,    a0
+                     lbu   v0,   0(v0)
+                     andi  v1,   v1,    255
+                     xor   v1,   v0,    v1
+                     sb    v0,   6(gp)
+                     sb    v1,   2(gp)
+      'jsig-spi3     lbu   a1,   4(gp)
+                     lbu   v1,   3(gp)
+                     lui   a0,   65284
+                     andi  a1,   a1,    255
+                     andi  v1,   v1,    255
+                     addiu a0,   a0,    59
+                     addu  a0,   a1,    a0
+                     xor   v1,   v0,    v1
+                     sb    v0,   5(gp)
+                     sb    v0,   0(a0)
+                     sb    v1,   3(gp)
+                     jr    ra
+                     nop
+      'jsig-spi2     lbu   v0,   2(gp)
+                     andi  v0,   v0,    255
+                     j     'jsig-spi3
+                     sb    v0,   6(gp)
+      'jsig-spi1     lbu   a0,   3(gp)
+                     lbu   v1,   6(gp)
+                     andi  a0,   a0,    255
+                     beq   v1,   a0,    'jsig-spi4
+                     sb    v1,   5(gp)
+                     lui   v0,   65284
+                     addiu v0,   v0,    112
+      'jsig-spi4     lbu   v1,   20(v0)
+                     addiu v1,   v1,    1
+                     jr    ra
+                     sb    v1,   20(v0)
+                     sb    v0,   1(gp)
+      'end-sig-spi   jr    ra
+                     nop
+  .
+
+  op bv : -> InsList .
+  eq bv =
+      'bv   		addiu   sp,sp,-8
+         	   	sw      s8,4(sp)
+         	   	move    s8,sp
+         	   	move    v0,a0
+         	   	sb      v0,8(s8)
+         	   	lbu     v0,8(s8)
+         	   	li      v1,1
+         	   	sllv    v0,v1,v0
+         	   	andi    v0,v0,255
+         	   	move    sp,s8
+         	   	lw      s8,4(sp)
+         	   	addiu   sp,sp,8
+         	   	jr      ra
+         	   	nop
+  .
+
+  op lookup-arr : -> InsList .
+  eq lookup-arr =
+    		'lookup-arr    addiu   sp,sp,-16
+    		               sw      s8,12(sp)
+    		               move    s8,sp
+    		               sw      a0,16(s8)
+    		               move    v1,a1
+    		               move    v0,a2
+    		               sb      v1,20(s8)
+    		               sb      v0,24(s8)
+    		               lbu     v1,24(s8)
+    		               lbu     v0,20(s8)
+    		               mul     v0,v1,v0
+    		               lw      v1,16(s8)
+    		               addu    v0,v1,v0
+    		               sw      v0,0(s8)
+    		               lw      v0,0(s8)
+    		               move    sp,s8
+    		               lw      s8,12(sp)
+    		               addiu   sp,sp,16
+    		               jr      ra
+    		               nop
+		.
+
+  op testSys : -> System .
+  eq testSys = [ preprocess(testIns) | mtReg | mtMem | 0 ] .
+
+  op testPow : -> System .
+  eq testPow = [ pow | mtReg | [0, 3] [1, 5] | 0 ] .
+
+  op test-spi-reset : -> System .
+  eq test-spi-reset = [spi-reset | < ra,5 > | [65284, 3] | 0] .
+endm)
+
+(rew testPow .)
+
+(set side-effect sorts Memory Registers .)
+
+(red lookup-arr .)
+
+eof
+
+(slice testPow wrt R5 .)
