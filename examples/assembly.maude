@@ -77,6 +77,8 @@ endfm)
   op jr_ : RegId -> BasicIns [ctor prec 15 format(!r o o)] .
   *** j I : PC <- I
   op j_ : Imm -> BasicIns [ctor prec 15 format(!r o o)] .
+  *** jal I : function call to I
+  op jal_ : Imm -> BasicIns [ctor prec 15 format(!r o o)] .
   *** beq R1, R2, I : PC <- I if R1 == R2
   op beq_`,_`,_ : RegId RegId Imm -> BasicIns [ctor prec 15 format(!r o o o o o o)] .
   *** beqz R, N : PC <- PC + N if R1 == 0
@@ -152,7 +154,7 @@ endfm)
   vars IIL IIL' IIL'' : IndexInsList .
   var  IL : InsList .
   var  INS : Ins .
-  vars N N' PC PC' : Nat .
+  vars N N' PC PC' PC'' : Nat .
   var  BI : BasicIns .
   vars Q Q' : Qid .
   var  RI RI' RI'' : RegId .
@@ -276,6 +278,12 @@ endfm)
   crl [jmp] : [IIL | RS | M | PC]
    =>         [IIL | RS | M | PC']
    if (j PC') := getIns(IIL, PC) .
+
+  crl [jal] : [IIL | RS | M | PC]
+   =>         [IIL | RS | M | PC + 1]
+   if (jal PC') := getIns(IIL, PC) /\
+      [IIL | RS | M | PC'] => [IIL | RS' | M' | PC''] /\
+      nop := getIns(IIL, PC'') .
 
   crl [beq] : [IIL | RS | M | PC]
    =>         [IIL | RS | M | PC']
