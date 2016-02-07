@@ -34,202 +34,2047 @@ load assembly.maude
            break
   .
 
-  op sig-spi : -> InsList .
-  eq sig-spi =
-      'sig-spi       lbu   v1,   4(gp)
-                     li    v0,   1
-                     addiu v1,   v1,    1
-                     andi  v1,   v1,    255
-                     sb    v1,   4(gp)
-                     sb    v0,   0(gp)
-                     lbu   v1,   4(gp)
-                     andi  v1,   v1,    255
-                     sltiu v1,   v1,    24
-                     beqz  v1,   'end-sig-spi
-                     nop
-                     lbu   a0,   4(gp)
-                     li    v1,   23
-                     andi  a0,   a0,    255
-                     beq   a0,   v1,    'jsig-spi1
-                     nop
-                     lbu   v0,   4(gp)
-                     andi  v0,   v0,    255
-                     sltiu v0,   v0,    22
-                     beqz  v0,   'jsig-spi2
-                     nop
-                     lbu   a0,   4(gp)
-                     lui   v0,   65284
-                     andi  a0,   a0,    255
-                     addiu v0,   v0,    112
-                     lbu   v1,   2(gp)
-                     addu  v0,   v0,    a0
-                     lbu   v0,   0(v0)
-                     andi  v1,   v1,    255
-                     xor   v1,   v0,    v1
-                     sb    v0,   6(gp)
-                     sb    v1,   2(gp)
-      'jsig-spi3     lbu   a1,   4(gp)
-                     lbu   v1,   3(gp)
-                     lui   a0,   65284
-                     andi  a1,   a1,    255
-                     andi  v1,   v1,    255
-                     addiu a0,   a0,    59
-                     addu  a0,   a1,    a0
-                     xor   v1,   v0,    v1
-                     sb    v0,   5(gp)
-                     sb    v0,   0(a0)
-                     sb    v1,   3(gp)
-                     jr    ra
-                     nop
-      'jsig-spi2     lbu   v0,   2(gp)
-                     andi  v0,   v0,    255
-                     j     'jsig-spi3
-                     sb    v0,   6(gp)
-      'jsig-spi1     lbu   a0,   3(gp)
-                     lbu   v1,   6(gp)
-                     andi  a0,   a0,    255
-                     beq   v1,   a0,    'jsig-spi4
-                     sb    v1,   5(gp)
-                     lui   v0,   65284
-                     addiu v0,   v0,    112
-      'jsig-spi4     lbu   v1,   20(v0)
-                     addiu v1,   v1,    1
-                     jr    ra
-                     sb    v1,   20(v0)
-                     sb    v0,   1(gp)
-      'end-sig-spi   jr    ra
-                     nop
+  *****************************************************************************
+  ******************************** fly_by_wire ********************************
+  *****************************************************************************
+
+  op main : -> InsList .
+  eq main =
+      'main    addiu   sp,sp,-32
+               sw      ra,28(sp)
+               sw      s8,24(sp)
+               move    s8,sp
+               jal     'fbw_init
+               nop
+               jal     'fbw_schedule
+               nop
+               jal     'timer_periodic
+               nop
+               sb      v0,16(s8)
+               lbu     v0,16(s8)
+               beqz    v0,'jmp1
+               nop
+               lbu     v0,14(gp)
+               addiu   v0,v0,1
+               andi    v0,v0,255
+               sb      v0,14(gp)
+               lbu     v0,15(gp)
+               addiu   v0,v0,1
+               andi    v0,v0,255
+               sb      v0,15(gp)
+               lbu     v0,14(gp)
+               sltiu   v0,v0,60
+               bnez    v0,'jmp1
+               nop
+               sb      zero,14(gp)
+      'jmp1    lbu     v0,15(gp)
+               sltiu   v0,v0,3
+               bnez    v0,'jmp2
+               nop
+               sb      zero,15(gp)
+      'jmp2    move    v0,zero
+               move    sp,s8
+               lw      ra,28(sp)
+               lw      s8,24(sp)
+               addiu   sp,sp,32
+               jr      ra
+               nop
   .
 
-  op bv : -> InsList .
-  eq bv =
-      'bv   		addiu   sp,sp,-8
-         	   	sw      s8,4(sp)
-         	   	move    s8,sp
-         	   	move    v0,a0
-         	   	sb      v0,8(s8)
-         	   	lbu     v0,8(s8)
-         	   	li      v1,1
-         	   	sllv    v0,v1,v0
-         	   	andi    v0,v0,255
-         	   	move    sp,s8
-         	   	lw      s8,4(sp)
-         	   	addiu   sp,sp,8
-         	   	jr      ra
-         	   	nop
+  op fbw-init : -> InsList .
+  eq fbw-init =
+      'fbw_init   addiu   sp,sp,-24
+                  sw      ra,20(sp)
+                  sw      s8,16(sp)
+                  move    s8,sp
+                  jal     'uart_init_tx
+                  nop
+                  lui     v0,65284
+                  addiu   a0,v0,36
+                  jal     'uart-print-string
+                  nop
+                  jal     'fbw_adc_init
+                  nop
+                  li      a0,3
+                  lui     v0,65284
+                  addiu   a1,v0,684
+                  jal     'fbw-adc-buf-channel
+                  nop
+                  li      a0,6
+                  lui     v0,65284
+                  addiu   a1,v0,812
+                  jal     'fbw-adc-buf-channel
+                  nop
+                  jal     'timer-init
+                  nop
+                  jal     'servo-init
+                  nop
+                  jal     'ppm-init
+                  nop
+                  jal     'fbw-spi-init
+                  nop
+                  move    sp,s8
+                  lw      ra,20(sp)
+                  lw      s8,16(sp)
+                  addiu   sp,sp,24
+                  jr      ra
+                  nop
+  .
+
+  op fbw-schedule : -> InsList .
+  eq fbw-schedule =
+      'fbw_schedule        addiu   sp,sp,-24
+                        			sw      ra,20(sp)
+                        			sw      s8,16(sp)
+                        			move    s8,sp
+                        			lbu     v0,8(gp)
+                        			sltiu   v0,v0,30
+                        			beqz    v0, 'fbw_schedule_0x30
+                        			nop
+                        			lbu     v0,8(gp)
+                        			addiu   v0,v0,1
+                        			andi    v0,v0,255
+                        			sb      v0,8(gp)
+      'fbw_schedule_0x30   lhu     v0,10(gp)
+                        			sltiu   v0,v0,300
+                        			beqz    v0, 'fbw_schedule_0x50
+                        			nop
+                        			lhu     v0,10(gp)
+                        			addiu   v0,v0,1
+                        			andi    v0,v0,65535
+                        			sh      v0,10(gp)
+      'fbw_schedule_0x50   lbu     v0,14(gp)
+                        			bnez    v0,'fbw_schedule_0x68
+                        			nop
+                        			lbu     v0,12(gp)
+                        			sb      v0,13(gp)
+                        			sb      zero,12(gp)
+      'fbw_schedule_0x68  	jal     'test_ppm_task
+                        			nop
+                        			jal     'check_mega128_values_task
+                        			nop
+                        			jal     'send_data_to_autopilot_task
+                        			nop
+                        			jal     'check_failsafe_task
+                        			nop
+                        			lbu     v0,15(gp)
+                        			sltiu   v0,v0,3
+                        			bnez    v0, 'fbw_schedule_0xa0
+                        			nop
+                        			jal     'servo_transmit
+                        			nop
+      'fbw_schedule_0xa0   move    sp,s8
+                        			lw      ra,20(sp)
+                        			lw      s8,16(sp)
+                        			addiu   sp,sp,24
+                        			jr      ra
+                        			nop
+  .
+
+  op timer-periodic : -> InsList .
+  eq timer-periodic =
+      'timer_periodic
+                          			addiu   sp,sp,-24
+                          			sw      ra,20(sp)
+                          			sw      s8,16(sp)
+                          			move    s8,sp
+                          			lhu     v0,90(gp)
+                          			andi    v0,v0,255
+                          			move    v1,v0
+                          			lhu     v0,114(gp)
+                          			andi    v0,v0,255
+                          			move    a0,v1
+                          			move    a1,v0
+                          			jal     'bit_is_set
+                          			nop
+                          			bnez    v0, 'timer_periodic_0x48
+                          			nop
+                          			move    v0,zero
+                          			j       'timer_periodic_0x68
+                          			nop
+      'timer_periodic_0x48   lhu     v0,114(gp)
+                          			andi    v0,v0,255
+                          			li      a0,1
+                          			move    a1,v0
+                          			jal     'shiftl_bitwise
+                          			nop
+                          			sh      v0,90(gp)
+                          			li      v0,1
+      'timer_periodic_0x68  move    sp,s8
+                          			lw      ra,20(sp)
+                          			lw      s8,16(sp)
+                          			addiu   sp,sp,24
+                          			jr      ra
+                          			nop
+  .
+
+  op bit-is-set : -> InsList .
+  eq bit-is-set =
+      'bit_is_set        addiu   sp,sp,-8
+                       		sw      s8,4(sp)
+                       		move    s8,sp
+                       		move    v1,a0
+                       		move    v0,a1
+                       		sb      v1,8(s8)
+                       		sb      v0,12(s8)
+                       		lbu     v1,8(s8)
+                       		li      v0,1
+                       		bne     v1,v0, 'bit_is_set_0x48
+                       		nop
+                       		lbu     v1,12(s8)
+                       		li      v0,1
+                       		bne     v1,v0, 'bit_is_set_0x48
+                       		nop
+                       		li      v0,1
+                       		j       'bit_is_set_0x4c
+                       		nop
+      'bit_is_set_0x48   move    v0,zero
+      'bit_is_set_0x4c   move    sp,s8
+                       		lw      s8,4(sp)
+                       		addiu   sp,sp,8
+                       		jr      ra
+                       		nop
+  .
+
+  op shiftl-bitwise : -> InsList .
+  eq shiftl-bitwise =
+      'shiftl_bitwise 		addiu   sp,sp,-8
+                      		sw      s8,4(sp)
+                      		move    s8,sp
+                      		move    v1,a0
+                      		move    v0,a1
+                      		sb      v1,8(s8)
+                      		sb      v0,12(s8)
+                      		move    sp,s8
+                      		lw      s8,4(sp)
+                      		addiu   sp,sp,8
+                      		jr      ra
+                      		nop
+  .
+
+  op uart-init-tx : -> InsList .
+  eq uart-init-tx =
+      'uart_init_tx    addiu   sp,sp,-32
+                         			sw      ra,28(sp)
+                         			sw      s8,24(sp)
+                         			move    s8,sp
+                         			sb      zero,31(gp)
+                         			li      v0,25
+                         			sb      v0,82(gp)
+                         			sb      zero,24(gp)
+                         			lbu     v0,29(gp)
+                         			move    a0,v0
+                         			jal     '_BV
+                         			nop
+                         			sh      v0,16(s8)
+                         			lhu     v0,16(s8)
+                         			andi    v0,v0,255
+                         			sb      v0,61(gp)
+                         			lbu     v0,43(gp)
+                         			move    a0,v0
+                         			jal     '_BV
+                         			nop
+                         			sh      v0,18(s8)
+                         			lbu     v0,76(gp)
+                         			move    a0,v0
+                         			jal     '_BV
+                         			nop
+                         			sh      v0,20(s8)
+                         			lbu     v0,60(gp)
+                         			move    a0,v0
+                         			jal     '_BV
+                         			nop
+                         			sh      v0,22(s8)
+                         			lhu     v1,18(s8)
+                         			lhu     v0,20(s8)
+                         			or      v0,v1,v0
+                         			andi    v1,v0,65535
+                         			lhu     v0,22(s8)
+                         			or      v0,v1,v0
+                         			andi    v0,v0,65535
+                         			beqz    v0, 'uart_init_tx_0xb0
+                         			nop
+                         			li      v0,1
+                         			sb      v0,77(gp)
+                         			j       'uart_init_tx_0xb4
+                         			nop
+      'uart_init_tx_0xb0    sb      zero,77(gp)
+      'uart_init_tx_0xb4    move    sp,s8
+                         			lw      ra,28(sp)
+                         			lw      s8,24(sp)
+                         			addiu   sp,sp,32
+                         			jr      ra
+                         			nop
+  .
+
+  op BV : -> InsList .
+  eq BV =
+      '_BV   addiu   sp,sp,-8
+          			sw      s8,4(sp)
+          			move    s8,sp
+          			move    v0,a0
+          			sh      v0,8(s8)
+          			lhu     v0,8(s8)
+          			li      v1,1
+          			sllv    v0,v1,v0
+          			andi    v0,v0,65535
+          			move    sp,s8
+          			lw      s8,4(sp)
+          			addiu   sp,sp,8
+          			jr      ra
+          			nop
   .
 
   op lookup-arr : -> InsList .
   eq lookup-arr =
-    		'lookup-arr    addiu   sp,sp,-16
-    		               sw      s8,12(sp)
-    		               move    s8,sp
-    		               sw      a0,16(s8)
-    		               move    v1,a1
-    		               move    v0,a2
-    		               sb      v1,20(s8)
-    		               sb      v0,24(s8)
-    		               lbu     v1,24(s8)
-    		               lbu     v0,20(s8)
-    		               mul     v0,v1,v0
-    		               lw      v1,16(s8)
-    		               addu    v0,v1,v0
-    		               sw      v0,0(s8)
-    		               lw      v0,0(s8)
-    		               move    sp,s8
-    		               lw      s8,12(sp)
-    		               addiu   sp,sp,16
-    		               jr      ra
-    		               nop
-		.
-
-		op spi-reset : -> InsList .
-  eq spi-reset =
-      'spi-reset  		addiu   sp,sp,-24
-                  		sw      ra,20(sp)
-                  		sw      s8,16(sp)
-                  		move    s8,sp
-                  		sb      zero,2(gp)
-                  		sb      zero,3(gp)
-                  		lbu     v0,2(gp)
-                  		andi    v0,v0,255
-                  		lui     v1,65284
-                  		addiu   a0,v1,112
-                  		li      a1,22
-                  		move    a2,v0
-                  		jal     'lookup-arr
-                  		nop
-                  		lbu     v0,0(v0)
-                  		sb      v0,4(gp)
-                  		lbu     v0,4(gp)
-                  		andi    v0,v0,255
-                  		sb      v0,6(gp)
-                  		sb      zero,0(gp)
-                  		move    sp,s8
-                  		lw      ra,20(sp)
-                  		lw      s8,16(sp)
-                  		addiu   sp,sp,24
-                  		jr      ra
-                  		nop
+      'lookup_arr    addiu   sp,sp,-16
+                     sw      s8,12(sp)
+                     move    s8,sp
+                     sw      a0,16(s8)
+                     move    v1,a1
+                     move    v0,a2
+                     sb      v1,20(s8)
+                     sb      v0,24(s8)
+                     lbu     v1,24(s8)
+                     lbu     v0,20(s8)
+                     mul     v0,v1,v0
+                     lw      v1,16(s8)
+                     addu    v0,v1,v0
+                     sw      v0,0(s8)
+                     lw      v0,0(s8)
+                     move    sp,s8
+                     lw      s8,12(sp)
+                     addiu   sp,sp,16
+                     jr      ra
+                     nop
   .
 
-  op spi-init : -> InsList .
-  eq spi-init =
- 	    'spi-init   	addiu   sp,sp,-24
-                 		sw      ra,20(sp)
-                 		sw      s8,16(sp)
-                 		move    s8,sp
-                 		lui     v0,65284
-                 		addiu   v0,v0,112
-                 		sb      zero,19(v0)
-                 		lui     v0,65284
-                 		addiu   v0,v0,112
-                 		sb      zero,20(v0)
-                 		li      a0,4
-                 		jal     'bv
-                 		nop
-                 		move    v1,v0
-                 		lui     v0,65284
-                 		lw      v0,92(v0)
-                 		or      v1,v1,v0
-                 		lui     v0,65284
-                 		sw      v1,92(v0)
-                 		lbu     v0,9(gp)
-                 		move    a0,v0
-                 		jal     'bv
-               				nop
-               				sb      v0,8(gp)
-               				lbu     v0,7(gp)
-               				move    a0,v0
-               				jal     'bv
-               				nop
-               				move    v1,v0
-               				lbu     v0,8(gp)
-               				or      v0,v1,v0
-               				andi    v0,v0,255
-               				sb      v0,8(gp)
-               				move    sp,s8
-               				lw      ra,20(sp)
-               				lw      s8,16(sp)
-               				addiu   sp,sp,24
-               				jr      ra
-               				nop
-.
+  op spi-reset : -> InsList .
+  eq spi-reset =
+      'spi_reset   addiu   sp,sp,-32
+              sw      ra,28(sp)
+              sw      s8,24(sp)
+              move    s8,sp
+              sb      zero,3(gp)
+              sb      zero,4(gp)
+              lbu     v0,3(gp)
+              andi    v0,v0,255
+              lui     v1,65284
+              addiu   a0,v1,900
+              li      a1,22
+              move    a2,v0
+              jal     'lookup_arr
+              nop
+              lbu     v0,0(v0)
+              sb      v0,16(s8)
+              lbu     v0,16(s8)
+              sb      v0,5(gp)
+              lbu     v0,5(gp)
+              andi    v0,v0,255
+              sh      v0,44(gp)
+              sb      zero,1(gp)
+              move    sp,s8
+              lw      ra,28(sp)
+              lw      s8,24(sp)
+              addiu   sp,sp,32
+              jr      ra
+              nop
+  .
 
+  op fbw-spi-init : -> InsList .
+  eq fbw-spi-init =
+      'fbw_spi_init   addiu   sp,sp,-32
+              sw      ra,28(sp)
+              sw      s8,24(sp)
+              move    s8,sp
+              lui     v0,65284
+              addiu   v0,v0,900
+              sb      zero,19(v0)
+              lui     v0,65284
+              addiu   v0,v0,900
+              sb      zero,20(v0)
+              li      a0,7
+              jal     '_BV
+              nop
+              andi    v1,v0,255
+              lbu     v0,16(s8)
+              or      v0,v1,v0
+              sb      v0,16(s8)
+              li      a0,4
+              jal     '_BV
+              nop
+              sb      v0,17(s8)
+              lbu     v1,85(gp)
+              lbu     v0,17(s8)
+              or      v0,v1,v0
+              andi    v0,v0,255
+              sb      v0,85(gp)
+              lhu     v0,102(gp)
+              move    a0,v0
+              jal     '_BV
+              nop
+              sb      v0,18(s8)
+              lbu     v0,18(s8)
+              andi    v0,v0,65535
+              sh      v0,78(gp)
+              lhu     v0,72(gp)
+              move    a0,v0
+              jal     '_BV
+              nop
+              sb      v0,19(s8)
+              lbu     v0,19(s8)
+              andi    v1,v0,65535
+              lhu     v0,78(gp)
+              or      v0,v1,v0
+              andi    v0,v0,65535
+              sh      v0,78(gp)
+              move    sp,s8
+              lw      ra,28(sp)
+              lw      s8,24(sp)
+              addiu   sp,sp,32
+              jr      ra
+              nop
+  .
+
+  op update-arr : -> InsList .
+  eq update-arr =
+      'update_arr
+              addiu   sp,sp,-32
+              sw      ra,28(sp)
+              sw      s8,24(sp)
+              move    s8,sp
+              sw      a0,32(s8)
+              move    a0,a1
+              move    v1,a2
+              move    v0,a3
+              sb      a0,36(s8)
+              sb      v1,40(s8)
+              sb      v0,44(s8)
+              lbu     v1,36(s8)
+              lbu     v0,40(s8)
+              lw      a0,32(s8)
+              move    a1,v1
+              move    a2,v0
+              jal     'lookup_arr
+              nop
+              sw      v0,16(s8)
+              lw      v0,16(s8)
+              andi    v0,v0,255
+              move    sp,s8
+              lw      ra,28(sp)
+              lw      s8,24(sp)
+              addiu   sp,sp,32
+              jr      ra
+              nop
+  .
+
+  op fbw-spi-init : -> InsList .
+  eq fbw-spi-init =
+      'fbw_spi_init>:
+              addiu   sp,sp,-32
+              sw      ra,28(sp)
+              sw      s8,24(sp)
+              move    s8,sp
+              lui     v0,65284
+              addiu   v0,v0,900
+              sb      zero,19(v0)
+              lui     v0,65284
+              addiu   v0,v0,900
+              sb      zero,20(v0)
+              li      a0,7
+              jal     '_BV
+              nop
+              andi    v1,v0,255
+              lbu     v0,16(s8)
+              or      v0,v1,v0
+              sb      v0,16(s8)
+              li      a0,4
+              jal     '_BV
+              nop
+              sb      v0,17(s8)
+              lbu     v1,85(gp)
+              lbu     v0,17(s8)
+              or      v0,v1,v0
+              andi    v0,v0,255
+              sb      v0,85(gp)
+              lhu     v0,102(gp)
+              move    a0,v0
+              jal     '_BV
+              nop
+              sb      v0,18(s8)
+              lbu     v0,18(s8)
+              andi    v0,v0,65535
+              sh      v0,78(gp)
+              lhu     v0,72(gp)
+              move    a0,v0
+              jal     '_BV
+              nop
+              sb      v0,19(s8)
+              lbu     v0,19(s8)
+              andi    v1,v0,65535
+              lhu     v0,78(gp)
+              or      v0,v1,v0
+              andi    v0,v0,65535
+              sh      v0,78(gp)
+              move    sp,s8
+              lw      ra,28(sp)
+              lw      s8,24(sp)
+              addiu   sp,sp,32
+              jr      ra
+              nop
+  .
+
+  op fbw-adc-buf-channel : -> InsList .
+  eq fbw-adc-buf-channel =
+      'fbw_adc_buf_channel
+              addiu   sp,sp,-32
+              sw      ra,28(sp)
+              sw      s8,24(sp)
+              move    s8,sp
+              move    v0,a0
+              sw      a1,36(s8)
+              sb      v0,32(s8)
+              lbu     v0,32(s8)
+              lui     v1,65284
+              addiu   a0,v1,632
+              move    a1,v0
+              li      a2,32
+              lw      a3,36(s8)
+              jal     'update_arr
+              nop
+              sb      v0,16(s8)
+              move    sp,s8
+              lw      ra,28(sp)
+              lw      s8,24(sp)
+              addiu   sp,sp,32
+              jr      ra
+              nop
+  .
+
+  op timer-init : -> InsList .
+  eq timer-init =
+      'timer_init
+              addiu   sp,sp,-8
+              sw      s8,4(sp)
+              move    s8,sp
+              sh      zero,66(gp)
+              li      v0,1
+              sh      v0,98(gp)
+              li      v0,7
+              sh      v0,74(gp)
+              move    sp,s8
+              lw      s8,4(sp)
+              addiu   sp,sp,8
+              jr      ra
+              nop
+  .
+
+  op VoltageOfAdc : -> InsList .
+  eq VoltageOfAdc =
+      'VoltageOfAdc
+              			addiu   sp,sp,-8
+              			sw      s8,4(sp)
+              			move    s8,sp
+              			move    v0,a0
+              			sh      v0,8(s8)
+              			lhu     v0,8(s8)
+              			mtc1    v0,$f1
+              			cvt.d.w $f0,$f1
+              			mfc1    a0,$f0
+              			mfc1    a1,$f1
+              			lui     v0,65284
+              			lw      v1,108(v0)
+              			lw      v0,104(v0)
+              			mtc1    a0,$f2
+              			mtc1    a1,$f3
+              			mtc1    v0,$f0
+              			mtc1    v1,$f1
+              			mul     $f2,$f2,$f0
+              			mfc1    a0,$f2
+              			mfc1    a1,$f3
+              			lui     v0,65284
+              			lw      v1,116(v0)
+              			lw      v0,112(v0)
+              			mtc1    a0,$f2
+              			mtc1    a1,$f3
+              			mtc1    v0,$f0
+              			mtc1    v1,$f1
+              			add     $f2,$f2,$f0
+              			mfc1    v0,$f2
+              			mfc1    v1,$f3
+              			lui     a0,65284
+              			lw      a1,124(a0)
+              			lw      a0,120(a0)
+              			mtc1    v0,$f2
+              			mtc1    v1,$f3
+              			mtc1    a0,$f0
+              			mtc1    a1,$f1
+              			c.le.d  $f0,$f2
+              			lui     a2,16256
+              			movf    a2,zero,$fcc0
+              			mtc1    a2,$f0
+              			mtc1    zero,$f2
+              			c.lt.s  $f2,$f0
+              			bc1t    'VoltageOfAdc_0xcc
+              			nop
+              			mtc1    v0,$f0
+              			mtc1    v1,$f1
+              			trunc.w.d       $f1,$f0
+              			mfc1    v0,$f1
+              			j       'VoltageOfAdc_0x100
+              			nop
+      'VoltageOfAdc_0xcc
+                 mtc1    v0,$f2
+              			mtc1    v1,$f3
+              			mtc1    a0,$f0
+              			mtc1    a1,$f1
+              			sub   $f2,$f2,$f0
+              			mfc1    v0,$f2
+              			mfc1    v1,$f3
+              			lui     a0,32768
+              			mtc1    v0,$f2
+              			mtc1    v1,$f3
+              			trunc.w.d       $f3,$f2
+              			mfc1    v0,$f3
+              			or      v0,v0,a0
+      'VoltageOfAdc_0x100
+                 andi    v0,v0,65535
+		               move    sp,s8
+		               lw      s8,4(sp)
+    		           addiu   sp,sp,8
+       			       jr      ra
+              			nop
+  .
+
+  op to-autopilot-from-last-radio : -> InsList .
+  eq to-autopilot-from-last-radio =
+   'to_autopilot_from_last_radio
+              addiu   sp,sp,-32
+              sw      ra,28(sp)
+              sw      s8,24(sp)
+              sw      s0,20(sp)
+              move    s8,sp
+              lui     v0,65284
+              lh      v1,864(v0)
+              lui     v0,65284
+              sh      v1,884(v0)
+              lui     v0,65284
+              addiu   v0,v0,864
+              lh      v1,2(v0)
+              lui     v0,65284
+              addiu   v0,v0,884
+              sh      v1,2(v0)
+              lui     v0,65284
+              addiu   v0,v0,864
+              lh      v1,4(v0)
+              lui     v0,65284
+              addiu   v0,v0,884
+              sh      v1,4(v0)
+              lui     v0,65284
+              addiu   v0,v0,864
+              lh      v1,6(v0)
+              lui     v0,65284
+              addiu   v0,v0,884
+              sh      v1,6(v0)
+              lui     v0,65284
+              addiu   v0,v0,864
+              lh      v1,8(v0)
+              lui     v0,65284
+              addiu   v0,v0,884
+              sh      v1,8(v0)
+              lui     v0,65284
+              addiu   v0,v0,864
+              lh      v1,10(v0)
+              lui     v0,65284
+              addiu   v0,v0,884
+              sh      v1,10(v0)
+              lui     v0,65284
+              addiu   v0,v0,864
+              lh      v1,12(v0)
+              lui     v0,65284
+              addiu   v0,v0,884
+              sh      v1,12(v0)
+              lui     v0,65284
+              addiu   v0,v0,864
+              lh      v1,14(v0)
+              lui     v0,65284
+              addiu   v0,v0,884
+              sh      v1,14(v0)
+              lui     v0,65284
+              addiu   v0,v0,864
+              lh      v1,16(v0)
+              lui     v0,65284
+              addiu   v0,v0,884
+              sh      v1,16(v0)
+              lbu     v0,110(gp)
+              beqz    v0, 'to_autopilot_from_last_radio_0x108
+              nop
+              move    a0,zero
+              jal     '_BV
+              nop
+              andi    v0,v0,255
+              j       'to_autopilot_from_last_radio_0x10c
+              nop
+   'to_autopilot_from_last_radio_0x108
+              move    v0,zero
+   'to_autopilot_from_last_radio_0x10c
+              lui     v1,65284
+              addiu   v1,v1,884
+              sb      v0,19(v1)
+              lui     v0,65284
+              addiu   v0,v0,884
+              lbu     v0,19(v0)
+              sll     s0,v0,24
+              sra     s0,s0,24
+              lbu     v0,71(gp)
+              beqz    v0, 'to_autopilot_from_last_radio_0x154
+              nop
+              li      a0,1
+              jal     '_BV
+              nop
+              sll     v0,v0,24
+              sra     v0,v0,24
+              j       'to_autopilot_from_last_radio_0x158
+              nop
+   'to_autopilot_from_last_radio_0x154
+              move    v0,zero
+   'to_autopilot_from_last_radio_0x158
+              or      v0,s0,v0
+              sll     v0,v0,24
+              sra     v0,v0,24
+              andi    v1,v0,255
+              lui     v0,65284
+              addiu   v0,v0,884
+              sb      v1,19(v0)
+              lbu     v0,0(gp)
+              beqz    v0, 'to_autopilot_from_last_radio_0x1b4
+              nop
+              lui     v0,65284
+              addiu   v0,v0,884
+              lbu     s0,19(v0)
+              li      a0,2
+              jal     '_BV
+              nop
+              andi    v0,v0,255
+              or      v0,s0,v0
+              andi    v1,v0,255
+              lui     v0,65284
+              addiu   v0,v0,884
+              sb      v1,19(v0)
+              sb      zero,0(gp)
+   'to_autopilot_from_last_radio_0x1b4
+              lbu     v1,13(gp)
+              lui     v0,65284
+              addiu   v0,v0,884
+              sb      v1,18(v0)
+              lui     v0,65284
+              lhu     v0,668(v0)
+              srl     v0,v0,5
+              andi    v0,v0,65535
+              move    a0,v0
+              jal     'VoltageOfAdc
+              nop
+              andi    v0,v0,255
+              sll     v0,v0,1
+              sll     v1,v0,2
+              addu    v0,v0,v1
+              andi    v1,v0,255
+              lui     v0,65284
+              addiu   v0,v0,884
+              sb      v1,21(v0)
+              move    sp,s8
+              lw      ra,28(sp)
+              lw      s8,24(sp)
+              lw      s0,20(sp)
+              addiu   sp,sp,32
+              jr      ra
+              nop
+  .
+
+  op SFR-BYTE : -> InsList .
+  eq SFR-BYTE =
+      'SFR_BYTE
+              addiu   sp,sp,-8
+              sw      s8,4(sp)
+              move    s8,sp
+              move    v0,a0
+              sb      v0,8(s8)
+              addiu   v0,s8,8
+              andi    v0,v0,65535
+              lbu     v0,0(v0)
+              andi    v0,v0,255
+              move    sp,s8
+              lw      s8,4(sp)
+              addiu   sp,sp,8
+              jr      ra
+              nop
+  .
+
+  op sbi : -> InsList .
+  eq sbi =
+      'sbi
+              addiu   sp,sp,-32
+              sw      ra,28(sp)
+              sw      s8,24(sp)
+              move    s8,sp
+              move    v1,a0
+              move    v0,a1
+              sb      v1,32(s8)
+              sb      v0,36(s8)
+              lbu     v0,32(s8)
+              move    a0,v0
+              jal     'SFR_BYTE
+              nop
+              sb      v0,16(s8)
+              lbu     v0,36(s8)
+              move    a0,v0
+              jal     '_BV
+              nop
+              andi    v1,v0,255
+              lbu     v0,16(s8)
+              or      v0,v1,v0
+              sb      v0,17(s8)
+              lbu     v0,17(s8)
+              move    sp,s8
+              lw      ra,28(sp)
+              lw      s8,24(sp)
+              addiu   sp,sp,32
+              jr      ra
+              nop
+  .
+
+  op uart-transmit : -> InsList .
+  eq uart-transmit =
+      'uart_transmit
+              			addiu   sp,sp,-40
+              			sw      ra,36(sp)
+              			sw      s8,32(sp)
+              			sw      s0,28(sp)
+              			move    s8,sp
+              			move    v0,a0
+              			sb      v0,40(s8)
+              			lbu     v0,61(gp)
+              			move    s0,v0
+              			lbu     v0,106(gp)
+              			move    a0,v0
+              			jal     '_BV
+              			nop
+              			and     v0,s0,v0
+              			beqz    v0, 'uart_transmit_0xa0
+              			nop
+              			lbu     v0,7(gp)
+              			andi    v0,v0,255
+              			move    v1,v0
+             	 		lbu     v0,6(gp)
+              			addiu   v0,v0,1
+              			beq     v1,v0, 'uart_transmit_0xcc
+              			nop
+              			lbu     v0,6(gp)
+              			move    v1,v0
+              			lbu     v0,40(s8)
+              			lui     a0,65284
+              			addiu   a0,a0,360
+              			move    a1,v1
+              			move    a2,zero
+              			move    a3,v0
+              			jal     'update_arr
+              			nop
+              			sb      v0,16(s8)
+              			lbu     v0,6(gp)
+              			addiu   v0,v0,1
+              			andi    v0,v0,255
+              			sb      v0,6(gp)
+              			j       'uart_transmit_0xd0
+              			nop
+     'uart_transmit_0xa0
+                	lbu     v0,40(s8)
+              			sb      v0,48(gp)
+              			lbu     v0,61(gp)
+              			move    v1,v0
+              			lbu     v0,106(gp)
+              			move    a0,v1
+              			move    a1,v0
+              			jal     'sbi
+              			nop
+              			j       'uart_transmit_0xd0
+              			nop
+     'uart_transmit_0xcc	nop
+     'uart_transmit_0xd0	move    sp,s8
+              			lw      ra,36(sp)
+              			lw      s8,32(sp)
+              			lw      s0,28(sp)
+              			addiu   sp,sp,40
+              			jr      ra
+              			nop
+  .
+
+  op cbi : -> InsList .
+  eq cbi =
+      'cbi
+              addiu   sp,sp,-32
+              sw      ra,28(sp)
+              sw      s8,24(sp)
+              move    s8,sp
+              move    v1,a0
+              move    v0,a1
+              sb      v1,32(s8)
+              sb      v0,36(s8)
+              lbu     v0,32(s8)
+              move    a0,v0
+              jal     'SFR_BYTE
+              nop
+              sb      v0,16(s8)
+              lbu     v0,36(s8)
+              move    a0,v0
+              jal     '_BV
+              nop
+              sll     v0,v0,24
+              sra     v0,v0,24
+              nor     v0,zero,v0
+              sll     v1,v0,24
+              sra     v1,v1,24
+              lb      v0,16(s8)
+              and     v0,v1,v0
+              sll     v0,v0,24
+              sra     v0,v0,24
+              sb      v0,17(s8)
+              lbu     v0,17(s8)
+              move    sp,s8
+              lw      ra,28(sp)
+              lw      s8,24(sp)
+              addiu   sp,sp,32
+              jr      ra
+              nop
+  .
+
+  op servo-init : -> InsList .
+  eq servo-init =
+      'servo_init
+              addiu   sp,sp,-32
+              sw      ra,28(sp)
+              sw      s8,24(sp)
+              move    s8,sp
+              li      a0,7
+              jal     '_BV
+              nop
+              move    v1,v0
+              lhu     v0,86(gp)
+              or      v0,v1,v0
+              andi    v0,v0,65535
+              sh      v0,86(gp)
+              lhu     v0,38(gp)
+              move    a0,v0
+              jal     '_BV
+              nop
+              andi    v1,v0,255
+              lbu     v0,85(gp)
+              or      v0,v1,v0
+              andi    v0,v0,255
+              sb      v0,85(gp)
+              lhu     v0,26(gp)
+              andi    v0,v0,255
+              move    a0,v0
+              li      a1,7
+              jal     'sbi
+              nop
+              lhu     v0,68(gp)
+              andi    v0,v0,255
+              move    v1,v0
+              lhu     v0,38(gp)
+              andi    v0,v0,255
+              move    a0,v1
+              move    a1,v0
+              jal     'cbi
+              nop
+              sb      zero,16(s8)
+              j       'servo_init_0xc8
+              nop
+      'servo_init_0x9c
+              lbu     v0,16(s8)
+              lui     v1,65284
+              addiu   a0,v1,340
+              move    a1,v0
+              li      a2,20
+              li      a3,192
+              jal     'update_arr
+              nop
+              lbu     v0,16(s8)
+              addiu   v0,v0,1
+              sb      v0,16(s8)
+      'servo_init_0xc8
+              lbu     v0,16(s8)
+              sltiu   v0,v0,10
+              bnez    v0, 'servo_init_0x9c
+              nop
+              li      v0,-32768
+              sh      v0,40(gp)
+              lhu     v0,92(gp)
+              move    a0,v0
+              jal     '_BV
+              nop
+              move    v1,v0
+              lhu     v0,66(gp)
+              or      v0,v1,v0
+              andi    v0,v0,65535
+              sh      v0,66(gp)
+              lhu     v0,50(gp)
+              move    a0,v0
+              jal     '_BV
+              nop
+              sh      v0,90(gp)
+              lhu     v0,26(gp)
+              andi    v0,v0,255
+              move    a0,v0
+              li      a1,7
+              jal     'cbi
+              nop
+              lhu     v0,56(gp)
+              move    a0,v0
+              jal     '_BV
+              nop
+              andi    v1,v0,255
+              lbu     v0,30(gp)
+              or      v0,v1,v0
+              andi    v0,v0,255
+              sb      v0,30(gp)
+              move    sp,s8
+              lw      ra,28(sp)
+              lw      s8,24(sp)
+              addiu   sp,sp,32
+              jr      ra
+              nop
+  .
+
+  op ppm-init : -> InsList .
+  eq ppm-init =
+      'ppm_init
+              addiu   sp,sp,-24
+              sw      ra,20(sp)
+              sw      s8,16(sp)
+              move    s8,sp
+              lhu     v0,98(gp)
+              andi    v0,v0,255
+              move    v1,v0
+              lbu     v0,63(gp)
+              move    a0,v1
+              move    a1,v0
+              jal     'cbi
+              nop
+              lhu     v0,98(gp)
+              andi    v0,v0,255
+              move    v1,v0
+              lbu     v0,63(gp)
+              move    a0,v1
+              move    a1,v0
+              jal     'sbi
+              nop
+              lhu     v0,98(gp)
+              andi    v0,v0,255
+              move    v1,v0
+              lbu     v0,28(gp)
+              move    a0,v1
+              move    a1,v0
+              jal     'sbi
+              nop
+              lbu     v0,85(gp)
+              move    v1,v0
+              lbu     v0,49(gp)
+              move    a0,v1
+              move    a1,v0
+              jal     'cbi
+              nop
+              lbu     v0,30(gp)
+              move    v1,v0
+              lbu     v0,70(gp)
+              move    a0,v1
+              move    a1,v0
+              jal     'sbi
+              nop
+              move    sp,s8
+              lw      ra,20(sp)
+              lw      s8,16(sp)
+              addiu   sp,sp,24
+              jr      ra
+              nop
+  .
+
+  op shiftr-bitwise : -> InsList .
+  eq shiftr-bitwise =
+      'shiftr_bitwise
+              addiu   sp,sp,-8
+              sw      s8,4(sp)
+              move    s8,sp
+              move    v1,a0
+              move    v0,a1
+              sb      v1,8(s8)
+              sb      v0,12(s8)
+              move    sp,s8
+              lw      s8,4(sp)
+              addiu   sp,sp,8
+              jr      ra
+              nop
+  .
+
+  op servo-transmit : -> InsList .
+  eq servo-transmit =
+      'servo_transmit
+              			addiu   sp,sp,-32
+              			sw      ra,28(sp)
+              			sw      s8,24(sp)
+              			move    s8,sp
+              			move    a0,zero
+              			jal     'uart_transmit
+              			nop
+              			move    a0,zero
+              			jal     'uart_transmit
+              			nop
+              			sb      zero,16(s8)
+              			j       'servo_transmit_0xc4
+              			nop
+      'servo_transmit_0x34
+                 lbu     v0,16(s8)
+              			lui     v1,65284
+              			addiu   a0,v1,340
+              			move    a1,v0
+              			li      a2,20
+              			jal     'lookup_arr
+              			nop
+              			lbu     v0,0(v0)
+              			sb      v0,17(s8)
+              			lbu     v0,17(s8)
+              			move    a0,v0
+              			li      a1,8
+              			jal     'shiftr_bitwise
+              			nop
+              			sb      v0,18(s8)
+              			lbu     v0,18(s8)
+              			move    a0,v0
+              			jal     'uart_transmit
+              			nop
+              			lbu     v0,18(s8)
+              			move    a0,v0
+              			jal     'uart_transmit
+		               nop
+       			       lbu     v1,16(s8)
+       			       lui     v0,65284
+              			sll     v1,v1,1
+              			addiu   v0,v0,340
+              			addu    v0,v1,v0
+              			lhu     v0,0(v0)
+              			andi    v0,v0,255
+              			move    a0,v0
+              			jal     'uart_transmit
+              			nop
+              			lbu     v0,16(s8)
+              			addiu   v0,v0,1
+              			sb      v0,16(s8)
+      'servo_transmit_0xc4
+                 lbu     v0,16(s8)
+              			sltiu   v0,v0,10
+              			bnez    v0, 'servo_transmit_0x34
+              			nop
+              			li      a0,10
+              			jal     'uart_transmit
+              			nop
+              			move    sp,s8
+              			lw      ra,28(sp)
+              			lw      s8,24(sp)
+              			addiu   sp,sp,32
+              			jr      ra
+              			nop
+  .
+
+  op SIGNAL : -> InsList .
+  eq SIGNAL =
+      '<SIGNAL>:
+              addiu   sp,sp,-32
+              sw      ra,28(sp)
+              sw      s8,24(sp)
+              move    s8,sp
+              sw      a0,32(s8)
+              lbu     v0,3(gp)
+              andi    v0,v0,255
+              addiu   v0,v0,1
+              andi    v0,v0,255
+              sb      v0,3(gp)
+              li      v0,1
+              sb      v0,2(gp)
+              lbu     v0,3(gp)
+              andi    v0,v0,255
+              sltiu   v0,v0,24
+              beqz    v0,'SIGNAL_0x188
+              nop
+              lbu     v0,3(gp)
+              andi    v1,v0,255
+              li      v0,23
+              bne     v1,v0,'SIGNAL_0xb0
+              nop
+              lhu     v0,44(gp)
+              andi    v0,v0,255
+              sb      v0,17(gp)
+              lbu     v1,17(gp)
+              lbu     v0,4(gp)
+              andi    v0,v0,255
+              bne     v1,v0,'SIGNAL_0x88
+              nop
+              li      v0,1
+              sb      v0,1(gp)
+              j       'SIGNAL_0x18c
+              nop
+      'SIGNAL_0x88
+              lui     v0,65284
+              addiu   v0,v0,884
+              lbu     v0,20(v0)
+              addiu   v0,v0,1
+              andi    v1,v0,255
+              lui     v0,65284
+              addiu   v0,v0,884
+              sb      v1,20(v0)
+              j       'SIGNAL_0x18c
+              nop
+      'SIGNAL_0xb0
+             	lbu     v0,3(gp)
+              andi    v0,v0,255
+              sltiu   v0,v0,22
+              beqz    v0,'SIGNAL_0x11c
+              nop
+              lbu     v0,3(gp)
+              andi    v0,v0,255
+              lui     v1,65284
+              addiu   a0,v1,884
+              move    a1,v0
+              li      a2,22
+              jal     'lookup_arr
+              nop
+              sw      v0,16(s8)
+              lw      v0,16(s8)
+              lbu     v0,0(v0)
+              sb      v0,17(gp)
+              lbu     v0,17(gp)
+              sh      v0,44(gp)
+              lbu     v0,5(gp)
+              andi    v1,v0,255
+              lbu     v0,17(gp)
+              xor     v0,v1,v0
+              andi    v0,v0,255
+              sb      v0,5(gp)
+              j       'SIGNAL_0x128
+              nop
+      'SIGNAL_0x11c
+             	lbu     v0,5(gp)
+              andi    v0,v0,255
+              sh      v0,44(gp)
+      'SIGNAL_0x128
+             	lhu     v0,44(gp)
+              andi    v0,v0,255
+              sb      v0,17(gp)
+              lbu     v0,3(gp)
+              andi    v0,v0,255
+              addiu   v0,v0,-1
+              andi    v0,v0,255
+              move    v1,v0
+              lbu     v0,17(gp)
+              lui     a0,65284
+              addiu   a0,a0,736
+              move    a1,v1
+              li      a2,22
+              move    a3,v0
+              jal     'update_arr
+              nop
+              lbu     v0,4(gp)
+              andi    v1,v0,255
+              lbu     v0,17(gp)
+              xor     v0,v1,v0
+              andi    v0,v0,255
+              sb      v0,4(gp)
+              j       'SIGNAL_0x18c
+              nop
+      'SIGNAL_0x188
+             	nop
+      'SIGNAL_0x18c
+             	move    sp,s8
+              lw      ra,28(sp)
+              lw      s8,24(sp)
+              addiu   sp,sp,32
+              jr      ra
+              nop
+  .
+
+  op uart-print-string : -> InsList .
+  eq uart-print-string =
+      'uart_print_string
+              				addiu   sp,sp,-32
+              				sw      ra,28(sp)
+              				sw      s8,24(sp)
+              				move    s8,sp
+              				sw      a0,32(s8)
+              				sb      zero,16(s8)
+              				j       'uart_print_string_0x94
+              				nop
+      'uart_print_string_0x20
+                 	lbu     v0,16(s8)
+              				addiu   a0,s8,32
+              				move    a1,v0
+              				li      a2,4
+              				jal     'lookup_arr
+              				nop
+              				lbu     v0,0(v0)
+              				sb      v0,17(s8)
+              				j       'uart_print_string_0x84
+              				nop
+      'uart_print_string_0x48
+                 	lbu     v0,16(s8)
+              				addiu   a0,s8,32
+              				move    a1,v0
+              				li      a2,4
+              				jal     'lookup_arr
+              				nop
+              				lbu     v0,0(v0)
+              				sb      v0,17(s8)
+              				lbu     v0,17(s8)
+              				move    a0,v0
+              				jal     'uart_transmit
+              				nop
+              				lbu     v0,16(s8)
+              				addiu   v0,v0,1
+              				sb      v0,16(s8)
+      'uart_print_string_0x84
+                 	lbu     v1,17(s8)
+              				li      v0,1
+              				beq     v1,v0,'uart_print_string_0x48
+               			nop
+      'uart_print_string_0x94
+                  lbu     v0,16(s8)
+              				sltiu   v0,v0,100
+              				bnez    v0,'uart_print_string_0x20
+              				nop
+              				lbu     v0,68(gp)
+              				move    a0,v0
+              				jal     'SIGNAL
+              				nop
+              				lbu     v1,6(gp)
+              				lbu     v0,7(gp)
+              				andi    v0,v0,255
+              				bne     v1,v0, 'uart_print_string_0xec
+              				nop
+              				lbu     v0,61(gp)
+              				move    v1,v0
+              				lbu     v0,108(gp)
+              				move    a0,v1
+              				move    a1,v0
+              				jal     'cbi
+              				nop
+              				j       'uart_print_string_0x130
+              				nop
+      'uart_print_string_0xec
+                 	lbu     v0,7(gp)
+              				andi    v0,v0,255
+              				lui     v1,65284
+              				addiu   a0,v1,360
+              				move    a1,v0
+              				move    a2,zero
+              				jal     'lookup_arr
+              				nop
+              				lbu     v0,0(v0)
+              				sb      v0,18(s8)
+              				lbu     v0,18(s8)
+              				sb      v0,48(gp)
+              				lbu     v0,7(gp)
+              				andi    v0,v0,255
+              				addiu   v0,v0,1
+              				andi    v0,v0,255
+              				sb      v0,7(gp)
+      'uart_print_string_0x130
+                 	move    sp,s8
+              				lw      ra,28(sp)
+              				lw      s8,24(sp)
+              				addiu   sp,sp,32
+              				jr      ra
+              				nop
+  .
+
+  op SpiIsSelected : -> InsList .
+  eq SpiIsSelected =
+      'SpiIsSelected
+              addiu   sp,sp,-24
+              sw      ra,20(sp)
+              sw      s8,16(sp)
+              move    s8,sp
+              lbu     v0,109(gp)
+              move    a0,v0
+              li      a1,2
+              jal     'bit_is_set
+              nop
+              move    sp,s8
+              lw      ra,20(sp)
+              lw      s8,16(sp)
+              addiu   sp,sp,24
+              jr      ra
+              nop
+  .
+
+  op send-data-to-autopilot-task : -> InsList .
+  eq send-data-to-autopilot-task =
+      'send_data_to_autopilot_task
+              			addiu   sp,sp,-24
+              			sw      ra,20(sp)
+              			sw      s8,16(sp)
+              			move    s8,sp
+              			jal     'SpiIsSelected
+              			nop
+              			bnez    v0, 'send_data_to_autopilot_task_0x44
+              			nop
+              			lbu     v0,2(gp)
+              			andi    v0,v0,255
+              			beqz    v0, 'send_data_to_autopilot_task_0x44
+              			nop
+              			sb      zero,2(gp)
+              			jal     'to_autopilot_from_last_radio
+              			nop
+              			jal     'spi_reset
+              			nop
+      'send_data_to_autopilot_task_0x44
+                	move    sp,s8
+              			lw      ra,20(sp)
+              			lw      s8,16(sp)
+              			addiu   sp,sp,24
+              			jr      ra
+              			nop
+  .
+
+  op MODE-OF-PPRZ : -> InsList .
+  eq MODE-OF-PPRZ =
+      'MODE_OF_PPRZ
+              			addiu   sp,sp,-16
+              			sw      s8,12(sp)
+              			move    s8,sp
+              			sw      a0,16(s8)
+              			lw      v0,16(s8)
+              			slti    v0,v0,-4800
+              			beqz    v0, 'MODE_OF_PPRZ_0x2c
+              			nop
+              			sb      zero,0(s8)
+              			j       'MODE_OF_PPRZ_0x34
+              			nop
+      'MODE_OF_PPRZ_0x2c
+                	li      v0,1
+                 sb      v0,0(s8)
+      'MODE_OF_PPRZ_0x34
+                	lbu     v0,0(s8)
+              			move    sp,s8
+              			lw      s8,12(sp)
+              			addiu   sp,sp,16
+              			jr      ra
+              			nop
+  .
+
+  op LastRadioFromPpm : -> InsList .
+  eq LastRadioFromPpm =
+      'LastRadioFromPpm
+              addiu   sp,sp,-8
+              sw      s8,4(sp)
+              move    s8,sp
+              move    sp,s8
+              lw      s8,4(sp)
+              addiu   sp,sp,8
+              jr      ra
+              nop
+  .
+
+  op last-radio-from-ppm : -> InsList .
+  eq last-radio-from-ppm =
+      'last_radio_from_ppm
+              addiu   sp,sp,-24
+              sw      ra,20(sp)
+              sw      s8,16(sp)
+              move    s8,sp
+              jal     'LastRadioFromPpm
+              nop
+              move    sp,s8
+              lw      ra,20(sp)
+              lw      s8,16(sp)
+              addiu   sp,sp,24
+              jr      ra
+              nop
+  .
+
+  op ChopServo : -> InsList .
+  eq ChopServo =
+      'ChopServo
+              		addiu   sp,sp,-16
+              		sw      s8,12(sp)
+              		move    s8,sp
+              		move    v0,a0
+              		sh      v0,16(s8)
+              		lhu     v0,68(gp)
+              		lhu     v1,16(s8)
+              		sltu    v0,v1,v0
+              		beqz    v0,'ChopServo_0x38
+              		nop
+              		lhu     v0,68(gp)
+              		sb      v0,0(s8)
+              		j       'ChopServo_0x64
+              		nop
+      'ChopServo_0x38
+               	lhu     v0,86(gp)
+              		lhu     v1,16(s8)
+              		sltu    v0,v0,v1
+              		beqz    v0,'ChopServo_0x5c
+              		nop
+              		lhu     v0,86(gp)
+              		sb      v0,0(s8)
+              		j       'ChopServo_0x64
+              		nop
+      'ChopServo_0x5c
+               	lhu     v0,16(s8)
+              		sb      v0,0(s8)
+      'ChopServo_0x64
+               	lbu     v0,0(s8)
+              		move    sp,s8
+              		lw      s8,12(sp)
+              		addiu   sp,sp,16
+              		jr      ra
+              		nop
+  .
+
+  op ServoSet : -> InsList .
+  eq ServoSet =
+      'ServoSet
+              addiu   sp,sp,-40
+              sw      ra,36(sp)
+              sw      s8,32(sp)
+              move    s8,sp
+              sw      a0,40(s8)
+              li      a0,3
+              jal     'SERVO_NEUTRAL
+              nop
+              sh      v0,16(s8)
+              addiu   a0,s8,40
+              li      a1,5
+              li      a2,4
+              jal     'lookup_arr
+              nop
+              lhu     v0,0(v0)
+              sh      v0,18(s8)
+              lh      v0,18(s8)
+              sll     v0,v0,1
+              mtc1    v0,$f1
+              cvt.d.w $f0,$f1
+              mfc1    a0,$f0
+              mfc1    a1,$f1
+              lui     v0,65284
+              lw      v1,108(v0)
+              lw      v0,104(v0)
+              mtc1    a0,$f2
+              mtc1    a1,$f3
+              mtc1    v0,$f0
+              mtc1    v1,$f1
+              mul     $f2,$f2,$f0
+              mfc1    v0,$f2
+              mfc1    v1,$f3
+              mtc1    v0,$f2
+              mtc1    v1,$f3
+              trunc.w.d       $f3,$f2
+              mfc1    v0,$f3
+              sll     v0,v0,16
+              sra     v0,v0,16
+              andi    v1,v0,65535
+              lhu     v0,16(s8)
+              addu    v0,v1,v0
+              sh      v0,20(s8)
+              lhu     v0,20(s8)
+              move    a0,v0
+              jal     'ChopServo
+		         	 	nop
+              sh      v0,22(s8)
+              lhu     v0,22(s8)
+              andi    v0,v0,255
+              addiu   v1,s8,28
+              move    a0,v1
+              li      a1,3
+              li      a2,4
+              move    a3,v0
+              jal     'update_arr
+              nop
+              li      a0,9
+              jal     'SERVO_NEUTRAL
+              nop
+              sh      v0,16(s8)
+              addiu   a0,s8,40
+              move    a1,zero
+              li      a2,4
+              jal     'lookup_arr
+              nop
+              lhu     v0,0(v0)
+              sh      v0,18(s8)
+              lh      v0,18(s8)
+              sll     v0,v0,1
+              mtc1    v0,$f1
+              cvt.d.w $f0,$f1
+              mfc1    a0,$f0
+              mfc1    a1,$f1
+              lui     v0,65284
+              lw      v1,108(v0)
+              lw      v0,104(v0)
+              mtc1    a0,$f2
+              mtc1    a1,$f3
+              mtc1    v0,$f0
+              mtc1    v1,$f1
+              mul     $f2,$f2,$f0
+              mfc1    v0,$f2
+              mfc1    v1,$f3
+              mtc1    v0,$f2
+              mtc1    v1,$f3
+              trunc.w.d       $f3,$f2
+              mfc1    v0,$f3
+              sll     v0,v0,16
+              sra     v0,v0,16
+              andi    v1,v0,65535
+              lhu     v0,16(s8)
+              addu    v0,v1,v0
+              sh      v0,20(s8)
+              lhu     v0,20(s8)
+              move    a0,v0
+              jal     'ChopServo
+              nop
+              sh      v0,22(s8)
+              lhu     v0,22(s8)
+              andi    v0,v0,255
+              addiu   v1,s8,28
+              move    a0,v1
+              li      a1,9
+              li      a2,4
+              move    a3,v0
+              jal     'update_arr
+              nop
+              li      a0,6
+              jal     'SERVO_NEUTRAL
+              nop
+              sh      v0,16(s8)
+              addiu   a0,s8,40
+              li      a1,2
+              li      a2,4
+              jal     'lookup_arr
+              nop
+              lhu     v0,0(v0)
+              sh      v0,18(s8)
+              lh      v0,18(s8)
+              mtc1    v0,$f1
+              cvt.d.w $f0,$f1
+              mfc1    a0,$f0
+              mfc1    a1,$f1
+              lui     v0,65284
+              lw      v1,116(v0)
+              lw      v0,112(v0)
+              mtc1    a0,$f2
+              mtc1    a1,$f3
+              mtc1    v0,$f0
+              mtc1    v1,$f1
+              mul     $f2,$f2,$f0
+              mfc1    v0,$f2
+              mfc1    v1,$f3
+              mtc1    v0,$f2
+              mtc1    v1,$f3
+              trunc.w.d       $f3,$f2
+              mfc1    v0,$f3
+              sll     v0,v0,16
+              sra     v0,v0,16
+              andi    v1,v0,65535
+              lhu     v0,16(s8)
+              addu    v0,v1,v0
+              sh      v0,20(s8)
+              lhu     v0,20(s8)
+              move    a0,v0
+              jal     'ChopServo
+              nop
+              sh      v0,22(s8)
+              lhu     v0,22(s8)
+              andi    v0,v0,255
+              addiu   v1,s8,28
+              move    a0,v1
+              li      a1,6
+              li      a2,4
+              move    a3,v0
+              jal     'update_arr
+              nop
+              addiu   a0,s8,40
+              li      a1,1
+              li      a2,4
+              jal     'lookup_arr
+              nop
+              lhu     v0,0(v0)
+              sh      v0,24(s8)
+              move    a0,zero
+              jal     'SERVO_NEUTRAL
+              nop
+              sh      v0,16(s8)
+              lh      v0,24(s8)
+              bgtz    v0,'ServoSet_0x2b8
+              nop
+              lhu     v0,90(gp)
+              j       'ServoSet_0x2bc
+              nop
+      'ServoSet_0x2b8
+             	li      v0,1
+      'ServoSet_0x2bc
+              lh      v1,24(s8)
+              mul     v0,v0,v1
+              mtc1    v0,$f1
+              cvt.d.w $f0,$f1
+              mfc1    a0,$f0
+              mfc1    a1,$f1
+              lui     v0,65284
+              lw      v1,124(v0)
+              lw      v0,120(v0)
+              mtc1    a0,$f2
+              mtc1    a1,$f3
+              mtc1    v0,$f0
+              mtc1    v1,$f1
+              mul   $f2,$f2,$f0
+              mfc1    v0,$f2
+              mfc1    v1,$f3
+              mtc1    v0,$f2
+              mtc1    v1,$f3
+              trunc.w.d       $f3,$f2
+              mfc1    v0,$f3
+              sll     v0,v0,16
+              sra     v0,v0,16
+              andi    v1,v0,65535
+              lhu     v0,16(s8)
+              addu    v0,v1,v0
+              sh      v0,20(s8)
+              lhu     v0,20(s8)
+              move    a0,v0
+              jal     'ChopServo
+              nop
+              sh      v0,18(s8)
+              lhu     v0,18(s8)
+              andi    v0,v0,255
+              addiu   v1,s8,28
+              move    a0,v1
+              move    a1,zero
+              li      a2,4
+              move    a3,v0
+              jal     'update_arr
+              nop
+              li      a0,2
+              jal     'SERVO_NEUTRAL
+              nop
+              sh      v0,16(s8)
+              lh      v0,24(s8)
+              blez    v0,'ServoSet_0x384
+              nop
+              lhu     v0,90(gp)
+              j       'ServoSet_0x388
+              nop
+      'ServoSet_0x384
+             	li      v0,1
+      'ServoSet_0x388
+             	lh      v1,24(s8)
+              mul     v0,v0,v1
+              mtc1    v0,$f1
+              cvt.d.w $f0,$f1
+              mfc1    a0,$f0
+              mfc1    a1,$f1
+              lui     v0,65284
+              lw      v1,132(v0)
+              lw      v0,128(v0)
+              mtc1    a0,$f2
+              mtc1    a1,$f3
+              mtc1    v0,$f0
+              mtc1    v1,$f1
+              mul     $f2,$f2,$f0
+              mfc1    v0,$f2
+              mfc1    v1,$f3
+              mtc1    v0,$f2
+              mtc1    v1,$f3
+              trunc.w.d       $f3,$f2
+              mfc1    v0,$f3
+              sll     v0,v0,16
+              sra     v0,v0,16
+              andi    v1,v0,65535
+              lhu     v0,16(s8)
+              addu    v0,v1,v0
+              sh      v0,20(s8)
+              lhu     v0,20(s8)
+              move    a0,v0
+              jal     'ChopServo
+              nop
+              sh      v0,18(s8)
+              lhu     v0,18(s8)
+              andi    v0,v0,255
+              addiu   v1,s8,28
+              move    a0,v1
+              li      a1,2
+              li      a2,4
+              move    a3,v0
+              jal     'update_arr
+              nop
+              li      a0,7
+              jal     'SERVO_NEUTRAL
+              nop
+              sh      v0,16(s8)
+              addiu   a0,s8,40
+              li      a1,3
+              li      a2,4
+              jal     'lookup_arr
+              nop
+              lhu     v0,0(v0)
+              sh      v0,18(s8)
+              addiu   a0,s8,40
+              li      a1,1
+              li      a2,4
+              jal     'lookup_arr
+              nop
+              lhu     v0,0(v0)
+              sh      v0,22(s8)
+              lh      v1,18(s8)
+              lh      a0,22(s8)
+              lhu     v0,80(gp)
+              mul     v0,a0,v0
+              addu    v0,v1,v0
+              mtc1    v0,$f1
+              cvt.d.w $f0,$f1
+              mfc1    a0,$f0
+              mfc1    a1,$f1
+              lui     v0,65284
+              lw      v1,140(v0)
+              lw      v0,136(v0)
+              mtc1    a0,$f2
+              mtc1    a1,$f3
+              mtc1    v0,$f0
+              mtc1    v1,$f1
+              mul     $f2,$f2,$f0
+              mfc1    v0,$f2
+              mfc1    v1,$f3
+              mtc1    v0,$f2
+              mtc1    v1,$f3
+              trunc.w.d       $f3,$f2
+              mfc1    v0,$f3
+              sll     v0,v0,16
+              sra     v0,v0,16
+              andi    v1,v0,65535
+              lhu     v0,16(s8)
+              addu    v0,v1,v0
+              sh      v0,20(s8)
+              lhu     v0,20(s8)
+              move    a0,v0
+              jal     'ChopServo
+              nop
+              sh      v0,26(s8)
+              lhu     v0,26(s8)
+              andi    v0,v0,255
+              addiu   v1,s8,28
+              move    a0,v1
+              li      a1,7
+              li      a2,4
+              move    a3,v0
+              jal     'update_arr
+              nop
+              move    sp,s8
+              lw      ra,36(sp)
+              lw      s8,32(sp)
+              addiu   sp,sp,40
+              jr      ra
+              nop
+  .
+
+  op servo-set : -> InsList .
+  eq servo-set =
+      'servo_set
+              addiu   sp,sp,-24
+              sw      ra,20(sp)
+              sw      s8,16(sp)
+              move    s8,sp
+              sw      a0,24(s8)
+              lw      a0,24(s8)
+              jal     'ServoSet
+              nop
+              move    sp,s8
+              lw      ra,20(sp)
+              lw      s8,16(sp)
+              addiu   sp,sp,24
+              jr      ra
+              nop
+  .
+
+  op test-ppm-task : -> InsList .
+  eq test-ppm-task =
+      'test_ppm_task
+              addiu   sp,sp,-32
+              sw      ra,28(sp)
+              sw      s8,24(sp)
+              move    s8,sp
+              lbu     v0,40(gp)
+              andi    v0,v0,255
+              beqz    v0, 'test_ppm_task_0xb0
+              nop
+              sb      zero,40(gp)
+              lbu     v0,12(gp)
+              addiu   v0,v0,1
+              andi    v0,v0,255
+              sb      v0,12(gp)
+              li      v0,1
+              sb      v0,118(gp)
+              sb      zero,75(gp)
+              sh      zero,10(gp)
+              jal     'last_radio_from_ppm
+              nop
+              lbu     v0,0(gp)
+              beqz    v0,'test_ppm_task_0x8c
+              nop
+              lui     v0,65284
+              addiu   a0,v0,864
+              li      a1,4
+              li      a2,18
+              jal     'lookup_arr
+              nop
+              lhu     v0,0(v0)
+              sh      v0,16(s8)
+              lhu     v0,16(s8)
+              move    a0,v0
+              jal     'MODE_OF_PPRZ
+              nop
+              sb      v0,62(gp)
+      'test_ppm_task_0x8c
+             	lbu     v0,62(gp)
+              bnez    v0,'test_ppm_task_0xd0
+              nop
+              lui     v0,65284
+              addiu   a0,v0,864
+              jal     'servo_set
+              nop
+              j       'test_ppm_task_0xd0
+              nop
+      'test_ppm_task_0xb0
+            	lbu     v0,62(gp)
+              bnez    v0,'test_ppm_task_0xd0
+              nop
+              lbu     v0,75(gp)
+              beqz    v0,'test_ppm_task_0xd0
+              nop
+              li      v0,1
+              sb      v0,62(gp)
+      'test_ppm_task_0xd0
+             	lhu     v0,10(gp)
+              sltiu   v0,v0,30
+              bnez    v0,'test_ppm_task_0xe4
+              nop
+              sb      zero,118(gp)
+      'test_ppm_task_0xe4
+             	lhu     v0,10(gp)
+              sltiu   v0,v0,300
+              bnez    v0,'test_ppm_task_0xfc
+              nop
+              li      v0,1
+              sb      v0,75(gp)
+      'test_ppm_task_0xfc
+             	move    sp,s8
+              lw      ra,28(sp)
+              lw      s8,24(sp)
+              addiu   sp,sp,32
+              jr      ra
+              nop
+  .
+
+  op check-failsafe-task : -> InsList .
+  eq check-failsafe-task =
+      'check_failsafe_task
+              			addiu   sp,sp,-24
+              			sw      ra,20(sp)
+              			sw      s8,16(sp)
+              			move    s8,sp
+              			lbu     v0,62(gp)
+              			bnez    v0,'check_failsafe_task_0x28
+              			nop
+              			lbu     v0,118(gp)
+              			beqz    v0,'check_failsafe_task_0x44
+              			nop
+      'check_failsafe_task_0x28
+               		lbu     v1,62(gp)
+              			li      v0,1
+              			bne     v1,v0,'check_failsafe_task_0x58
+              			nop
+              			lbu     v0,93(gp)
+              			bnez    v0,'check_failsafe_task_0x58
+              			nop
+      'check_failsafe_task_0x44
+               		lui     v0,65284
+              			lw      v0,736(v0)
+              			move    a0,v0
+              			jal     'servo_set
+              			nop
+      'check_failsafe_task_0x58
+               		move    sp,s8
+              			lw      ra,20(sp)
+              			lw      s8,16(sp)
+              			addiu   sp,sp,24
+              			jr      ra
+              			nop
+  .
+
+  op check-mega128-values-task : -> InsList .
+  eq check-mega128-values-task =
+      'check_mega128_values_task
+              		addiu   sp,sp,-24
+              		sw      ra,20(sp)
+              		sw      s8,16(sp)
+              		move    s8,sp
+              		jal     'SpiIsSelected
+              		nop
+              		bnez    v0, 'check_mega128_values_task_0x6c
+              		nop
+              		lbu     v0,2(gp)
+              		andi    v0,v0,255
+              		beqz    v0, 'check_mega128_values_task_0x6c
+              		nop
+              		lbu     v0,1(gp)
+              		andi    v0,v0,255
+              		beqz    v0, 'check_mega128_values_task_0x6c
+              		nop
+              		sb      zero,8(gp)
+              		li      v0,1
+              		sb      v0,93(gp)
+              		lbu     v1,62(gp)
+              		li      v0,1
+              		bne     v1,v0, 'check_mega128_values_task_0x6c
+              		nop
+              		lui     v0,65284
+              		addiu   a0,v0,740
+              		jal     'servo_set
+              		nop
+      'check_mega128_values_task_0x6c
+               	lbu     v1,8(gp)
+              		li      v0,30
+              		bne     v1,v0, 'check_mega128_values_task_0x80
+              		nop
+              		sb      zero,93(gp)
+      'check_mega128_values_task_0x80
+               	move    sp,s8
+              		lw      ra,20(sp)
+              		lw      s8,16(sp)
+              		addiu   sp,sp,24
+              		jr      ra
+              		nop
+  .
+
+  *****************************************************************************
+  ****************************** end fly_by_wire ******************************
+  *****************************************************************************
   op testSys : -> System .
   eq testSys = [ preprocess(testIns) | mtReg | mtMem | 0 ] .
 
   op testPow : -> System .
   eq testPow = [ pow | mtReg | [0, 3] [1, 5] | 0 ] .
 
-  op test-spi-reset : -> System .
-  eq test-spi-reset = [spi-reset | < ra,5 > | [65284, 3] | 0] .
+  op test-main : -> System .
+  eq test-main = [main | < ra,5 > | [65284, 3] | 0] .
 endm)
 
-(rew testPow .)
+*** (rew testPow .)
 
 (set side-effect sorts Memory Registers .)
 
-(red spi-reset .)
+(red servo-set .)
 
 *** (slice testPow wrt R5 .)

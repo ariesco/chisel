@@ -10,7 +10,8 @@ load ../slicing.prj
   ops v0 v1 v2 v3 v4 v5 v6 v7 v8 : -> RegId [ctor] .
   ops a0 a1 a2 a3 a4 a5 a6 a7 a8 : -> RegId [ctor] .
   ops s0 s1 s2 s3 s4 s5 s6 s7 s8 : -> RegId [ctor] .
-  ops zero gp ra sp : -> RegId [ctor] .
+  ops $f0 $f1 $f2 $f3 $f4 $f5 $f6 $f7 $f8 : -> RegId [ctor] .
+  ops zero gp ra sp $fcc0 : -> RegId [ctor] .
 
   sort Register .
   op <_`,_> : RegId Int -> Register [ctor] .
@@ -69,6 +70,8 @@ endfm)
   op ori_`,_`,_ : RegId RegId Int -> BasicIns [ctor prec 15 format(!r o o o o o o)] .
   *** xor R1, R2, R3 : R1 <- R2 xor R3
   op xor_`,_`,_ : RegId RegId RegId -> BasicIns [ctor prec 15 format(!r o o o o o o)] .
+  *** nor R1, R2, R3 : R1 <- not (R2 or R3)
+  op nor_`,_`,_ : RegId RegId RegId -> BasicIns [ctor prec 15 format(!r o o o o o o)] .
   *** str R1, R2 : mem[R1] <- R2
   op str_`,_ : RegId RegId -> BasicIns [ctor prec 15 format(!r o o o o)] .
   *** load R1, R2 : mem[R1] -> R2
@@ -81,13 +84,25 @@ endfm)
   op jal_ : Imm -> BasicIns [ctor prec 15 format(!r o o)] .
   *** beq R1, R2, I : PC <- I if R1 == R2
   op beq_`,_`,_ : RegId RegId Imm -> BasicIns [ctor prec 15 format(!r o o o o o o)] .
-  *** beqz R, N : PC <- PC + N if R1 == 0
+  *** bne R1, R2, I : PC <- I if R1 =/= R2
+  op bne_`,_`,_ : RegId RegId Imm -> BasicIns [ctor prec 15 format(!r o o o o o o)] .
+  *** beqz R, N : PC <- N if R == 0
   op beqz_`,_ : RegId Imm -> BasicIns [ctor prec 15 format(!r o o o o)] .
+  *** bgtz R, N : PC <- N if R == 0
+  op bgtz_`,_ : RegId Imm -> BasicIns [ctor prec 15 format(!r o o o o)] .
+  *** blez R, N : PC <- N if R == 0
+  op blez_`,_ : RegId Imm -> BasicIns [ctor prec 15 format(!r o o o o)] .
+  *** bnez R, N : PC <-  N if R == 0
+  op bnez_`,_ : RegId Imm -> BasicIns [ctor prec 15 format(!r o o o o)] .
+  *** bc1t R : PC <- R if math co-processor condition bit 1 is true
+  op bc1t_ : Imm -> BasicIns [ctor prec 15 format(!r o o)] .
   op nop : -> BasicIns [ctor format(!r o)] .
   op break : -> BasicIns [ctor format(!r o)] .
 
   *** sb R1, N(R2) : mem[R2 + N] <- R1 (8 bits)
   op sb_`,_`(_`) : RegId Nat RegId -> BasicIns [ctor prec 15 format(!r o o o o o o o)] .
+  *** sh R1, N(R2) : mem[R2 + N] <- R1 (16 bits)
+  op sh_`,_`(_`) : RegId Nat RegId -> BasicIns [ctor prec 15 format(!r o o o o o o o)] .
   *** sw R1, N(R2) : mem[R2 + N] <- R1 (32 bits)
   op sw_`,_`(_`) : RegId Nat RegId -> BasicIns [ctor prec 15 format(!r o o o o o o o)] .
   *** li R, I : R <- I (32 bits)
@@ -96,14 +111,46 @@ endfm)
   op lui_`,_ : RegId Int -> BasicIns [ctor prec 15 format(!r o o o o)] .
   *** lbu R1, N(R2) : R1 <- Mem[R2 + N] (8 bits)
   op lbu_`,_`(_`) : RegId Int RegId -> BasicIns [ctor prec 15 format(!r o o o o o o o)] .
+  *** lhu R1, N(R2) : R1 <- Mem[R2 + N] (16 bits)
+  op lhu_`,_`(_`) : RegId Int RegId -> BasicIns [ctor prec 15 format(!r o o o o o o o)] .
+  *** lb R1, N(R2) : R1 <- Mem[R2 + N] (8 bits)
+  op lb_`,_`(_`) : RegId Int RegId -> BasicIns [ctor prec 15 format(!r o o o o o o o)] .
+  *** lh R1, N(R2) : R1 <- Mem[R2 + N] (8 bits)
+  op lh_`,_`(_`) : RegId Int RegId -> BasicIns [ctor prec 15 format(!r o o o o o o o)] .
   *** lw R1, N(R2) : R1 <- Mem[R2 + N] (32 bits)
   op lw_`,_`(_`) : RegId Int RegId -> BasicIns [ctor prec 15 format(!r o o o o o o o)] .
-  *** sllv R1, R2, R3 : R1 <- << R2 << R3
+  *** sra R1, R2, N : R1 <- R2 >> N
+  op sra_`,_`,_ : RegId RegId Int -> BasicIns [ctor prec 15 format(!r o o o o o o)] .
+  *** srl R1, R2, N : R1 <- R2 >> N
+  op srl_`,_`,_ : RegId RegId Int -> BasicIns [ctor prec 15 format(!r o o o o o o)] .
+  *** sll R1, R2, N : R1 <- R2 << N
+  op sll_`,_`,_ : RegId RegId Int -> BasicIns [ctor prec 15 format(!r o o o o o o)] .
+  *** sllv R1, R2, R3 : R1 <- R2 << R3
   op sllv_`,_`,_ : RegId RegId RegId -> BasicIns [ctor prec 15 format(!r o o o o o o)] .
-  *** sltiu R1, R2, I : R1 <- R2 == I
+  *** slti R1, R2, I : R1 <- R2 < I
+  op slti_`,_`,_ : RegId RegId Int -> BasicIns [ctor prec 15 format(!r o o o o o o)] .
+  *** sltiu R1, R2, I : R1 <- R2 < I
   op sltiu_`,_`,_ : RegId RegId Int -> BasicIns [ctor prec 15 format(!r o o o o o o)] .
+  *** slt R1, R2, R3 : R1 <- R2 < R3
+  op slt_`,_`,_ : RegId RegId RegId -> BasicIns [ctor prec 15 format(!r o o o o o o)] .
+  *** sltu R1, R2, R3 : R1 <- R2 < R3 (unsigned)
+  op sltu_`,_`,_ : RegId RegId RegId -> BasicIns [ctor prec 15 format(!r o o o o o o)] .
   *** move R1, R2 : R1 <- R2 (32 bits)
   op move_`,_ : RegId RegId -> BasicIns [ctor prec 15 format(!r o o o o)] .
+  *** movf R1, R2, R3 : R1 <- R2 if R3 == 0
+  op movf_`,_`,_ : RegId RegId RegId -> BasicIns [ctor prec 15 format(!r o o o o o o)] .
+  *** cvt.d.w R1, R2 : R1 <- R2 (format translation)
+  op cvt.d.w_`,_ : RegId RegId -> BasicIns [ctor prec 15 format(!r o o o o)] .
+  *** c.le.d R1, R2 : R1 <- R2 (format translation)
+  op c.le.d_`,_ : RegId RegId -> BasicIns [ctor prec 15 format(!r o o o o)] .
+  *** c.lt.s R1, R2 : R1 <- R2 (format translation)
+  op c.lt.s_`,_ : RegId RegId -> BasicIns [ctor prec 15 format(!r o o o o)] .
+  *** trunc.w.d R1, R2 : R1 <- R2 (format translation)
+  op trunc.w.d_`,_ : RegId RegId -> BasicIns [ctor prec 15 format(!r o o o o)] .
+  *** mfc1 R1, R2 : R1 <- R2 (format translation)
+  op mfc1_`,_ : RegId RegId -> BasicIns [ctor prec 15 format(!r o o o o)] .
+  *** mtc1 R1, R2 : R1 <- R2 (format translation)
+  op mtc1_`,_ : RegId RegId -> BasicIns [ctor prec 15 format(!r o o o o)] .
 
   op __ : Qid BasicIns -> LabelIns [ctor prec 20 format(!b o o)] .
 
@@ -249,12 +296,37 @@ endfm)
       I' := RS [RI''] /\
       RS' := update(RI, xorWithInt(I, I'), RS) .
 
+  crl [nor] : [IIL | RS | M | PC]
+   =>         [IIL | RS' | M | PC + 1]
+   if (nor RI, RI', RI'') := getIns(IIL, PC) /\
+      I := RS [RI'] /\
+      I' := RS [RI''] /\
+      RS' := update(RI, notWithInt(orWithInt(I, I')), RS) .
+
+  crl [sra] : [IIL | RS | M | PC]
+   =>         [IIL | RS' | M | PC + 1]
+   if (sra RI, RI', I) := getIns(IIL, PC) /\
+      I' := RS [RI'] /\
+      RS' := update(RI, shiftRightWithInt(I', I), RS) .
+
+  crl [srl] : [IIL | RS | M | PC]
+   =>         [IIL | RS' | M | PC + 1]
+   if (srl RI, RI', I) := getIns(IIL, PC) /\
+      I' := RS [RI'] /\
+      RS' := update(RI, shiftRightWithInt(I', I), RS) .
+
+  crl [sll] : [IIL | RS | M | PC]
+   =>         [IIL | RS' | M | PC + 1]
+   if (sll RI, RI', I) := getIns(IIL, PC) /\
+      I' := RS [RI'] /\
+      RS' := update(RI, shiftLeftWithInt(I', I), RS) .
+
   crl [sllv] : [IIL | RS | M | PC]
    =>         [IIL | RS' | M | PC + 1]
    if (sllv RI, RI', RI'') := getIns(IIL, PC) /\
       I := RS [RI'] /\
       I' := RS [RI''] /\
-      RS' := update(RI, shiftWithInt(I, I'), RS) .
+      RS' := update(RI, shiftLeftWithInt(I, I'), RS) .
 
   crl [str] : [IIL | RS | M | PC]
    =>         [IIL | RS | M' | PC + 1]
@@ -291,16 +363,53 @@ endfm)
       I := RS [RI] /\
       I' := RS [RI'] /\
       PC' := if I == I'
-             then PC + N
+             then N
              else PC + 1
              fi .
 
-  crl [beq] : [IIL | RS | M | PC]
+  crl [bne] : [IIL | RS | M | PC]
+   =>         [IIL | RS | M | PC']
+   if (bne RI, RI', N) := getIns(IIL, PC) /\
+      I := RS [RI] /\
+      I' := RS [RI'] /\
+      PC' := if I =/= I'
+             then N
+             else PC + 1
+             fi .
+
+  crl [beqz] : [IIL | RS | M | PC]
    =>         [IIL | RS | M | PC']
    if (beqz RI, N) := getIns(IIL, PC) /\
       I := RS [RI] /\
       PC' := if I == 0
              then PC + N
+             else PC + 1
+             fi .
+
+  crl [bgtz] : [IIL | RS | M | PC]
+   =>         [IIL | RS | M | PC']
+   if (bgtz RI, N) := getIns(IIL, PC) /\
+      I := RS [RI] /\
+      PC' := if I > 0
+             then PC + N
+             else PC + 1
+             fi .
+
+  crl [blez] : [IIL | RS | M | PC]
+   =>         [IIL | RS | M | PC']
+   if (blez RI, N) := getIns(IIL, PC) /\
+      I := RS [RI] /\
+      PC' := if I <= 0
+             then PC + N
+             else PC + 1
+             fi .
+
+  crl [bnez] : [IIL | RS | M | PC]
+   =>         [IIL | RS | M | PC']
+   if (bnez RI, N) := getIns(IIL, PC) /\
+      I := RS [RI] /\
+      PC' := if I =/= 0
+             then N
              else PC + 1
              fi .
 
@@ -313,6 +422,13 @@ endfm)
   crl [sb] : [IIL | RS | M | PC]
    =>        [IIL | RS | M' | PC + 1]
    if (sb RI, N(RI')) := getIns(IIL, PC) /\
+      N' := RS [RI] /\
+      I := RS [RI'] /\
+      M' := set(M, N + N', I) .
+
+  crl [sh] : [IIL | RS | M | PC]
+   =>        [IIL | RS | M' | PC + 1]
+   if (sh RI, N(RI')) := getIns(IIL, PC) /\
       N' := RS [RI] /\
       I := RS [RI'] /\
       M' := set(M, N + N', I) .
@@ -341,6 +457,27 @@ endfm)
       I' := M [I + N] /\
       RS' := update(RI, I', RS) .
 
+  crl [lhu] : [IIL | RS | M | PC]
+   =>         [IIL | RS' | M | PC + 1]
+   if (lhu RI, N(RI')) := getIns(IIL, PC) /\
+      I := RS [RI'] /\
+      I' := M [I + N] /\
+      RS' := update(RI, I', RS) .
+
+  crl [lb] : [IIL | RS | M | PC]
+   =>         [IIL | RS' | M | PC + 1]
+   if (lb RI, N(RI')) := getIns(IIL, PC) /\
+      I := RS [RI'] /\
+      I' := M [I + N] /\
+      RS' := update(RI, I', RS) .
+
+  crl [lh] : [IIL | RS | M | PC]
+   =>         [IIL | RS' | M | PC + 1]
+   if (lh RI, N(RI')) := getIns(IIL, PC) /\
+      I := RS [RI'] /\
+      I' := M [I + N] /\
+      RS' := update(RI, I', RS) .
+
   crl [lw] : [IIL | RS | M | PC]
    =>         [IIL | RS' | M | PC + 1]
    if (lw RI, N(RI')) := getIns(IIL, PC) /\
@@ -348,17 +485,87 @@ endfm)
       I' := M [I + N] /\
       RS' := update(RI, I', RS) .
 
-  crl [sllv] : [IIL | RS | M | PC]
+  crl [slti] : [IIL | RS | M | PC]
+   =>         [IIL | RS' | M | PC + 1]
+   if (slti RI, RI', I) := getIns(IIL, PC) /\
+      I' := RS [RI'] /\
+      RS' := update(RI, I' <i I, RS) .
+
+  crl [sltiu] : [IIL | RS | M | PC]
    =>         [IIL | RS' | M | PC + 1]
    if (sltiu RI, RI', I) := getIns(IIL, PC) /\
       I' := RS [RI'] /\
-      RS' := update(RI, I' <i I, RS) .
+      RS' := update(RI, abs(I') <i abs(I), RS) .
+
+  crl [slt] : [IIL | RS | M | PC]
+   =>         [IIL | RS' | M | PC + 1]
+   if (slt RI, RI', RI'') := getIns(IIL, PC) /\
+      I := RS [RI'] /\
+      I' := RS [RI''] /\
+      RS' := update(RI, I <i I', RS) .
+
+  crl [sltu] : [IIL | RS | M | PC]
+   =>         [IIL | RS' | M | PC + 1]
+   if (sltu RI, RI', RI'') := getIns(IIL, PC) /\
+      I := RS [RI'] /\
+      I' := RS [RI''] /\
+      RS' := update(RI, abs(I) <i abs(I'), RS) .
 
   crl [move] : [IIL | RS | M | PC]
    =>         [IIL | RS' | M | PC + 1]
    if (move RI, RI') := getIns(IIL, PC) /\
       I := RS [RI'] /\
       RS' := update(RI, I, RS) .
+
+  crl [movf] : [IIL | RS | M | PC]
+   =>         [IIL | RS' | M | PC + 1]
+   if (movf RI, RI', RI'') := getIns(IIL, PC) /\
+      I := RS [RI'] /\
+      I' := RS [RI''] /\
+      RS' := if I' == 0
+             then update(RI, I + I', RS)
+             else RS
+             fi .
+
+  crl [cvt.d.w] : [IIL | RS | M | PC]
+   =>         [IIL | RS' | M | PC + 1]
+   if (cvt.d.w RI, RI') := getIns(IIL, PC) /\
+      I := RS [RI'] /\
+      RS' := update(RI, I, RS) .
+
+  crl [c.le.d] : [IIL | RS | M | PC]
+   =>         [IIL | RS' | M | PC + 1]
+   if (c.le.d RI, RI') := getIns(IIL, PC) /\
+      I := RS [RI'] /\
+      RS' := update(RI, I, RS) .
+
+  crl [c.lt.s] : [IIL | RS | M | PC]
+   =>         [IIL | RS' | M | PC + 1]
+   if (c.lt.s RI, RI') := getIns(IIL, PC) /\
+      I := RS [RI'] /\
+      RS' := update(RI, I, RS) .
+
+  crl [trunc.w.d] : [IIL | RS | M | PC]
+   =>         [IIL | RS' | M | PC + 1]
+   if (trunc.w.d RI, RI') := getIns(IIL, PC) /\
+      I := RS [RI'] /\
+      RS' := update(RI, I, RS) .
+
+  crl [mfc1] : [IIL | RS | M | PC]
+   =>         [IIL | RS' | M | PC + 1]
+   if (mfc1 RI, RI') := getIns(IIL, PC) /\
+      I := RS [RI'] /\
+      RS' := update(RI, I, RS) .
+
+  crl [mtc1] : [IIL | RS | M | PC]
+   =>         [IIL | RS' | M | PC + 1]
+   if (mtc1 RI, RI') := getIns(IIL, PC) /\
+      I := RS [RI'] /\
+      RS' := update(RI, I, RS) .
+
+  crl [bc1t] : [IIL | RS | M | PC]
+   =>         [IIL | RS | M | N]
+   if (bc1t N) := getIns(IIL, PC) .
 
   *********************************************************************
   ************************ Normalization steps ************************
@@ -419,11 +626,18 @@ endfm)
   eq orWithInt(0, 0) = 0 .
   eq orWithInt(I, I') = 1 [owise] .
 
+  op notWithInt : Int -> Int .
+  eq notWithInt(0) = 1 .
+  eq notWithInt(I) = 0 [owise] .
+
   op xorWithInt : Int Int -> Int [comm] .
   eq xorWithInt(0, I) = if I =/= 0 then 1 else 0 fi .
 
-  op shiftWithInt : Int Int -> Int .
-  eq shiftWithInt(I, I') = I' .
+  op shiftLeftWithInt : Int Int -> Int .
+  eq shiftLeftWithInt(I, I') = I' .
+
+  op shiftRightWithInt : Int Int -> Int .
+  eq shiftRightWithInt(I, I') = I' .
 
   op getIns : IndexInsList Nat ~> BasicIns .
   eq getIns(IIL ; PC : BI ; IIL', PC) = BI .
