@@ -150,4 +150,4 @@ endm)
 
 (set side-effect sorts Memory Registers .)
 
-(slice testSys wrt v0 ra .)
+(slice testSys wrt s8 .)

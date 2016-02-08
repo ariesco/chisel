@@ -495,22 +495,22 @@ endfm)
   crl [sb] : [IIL | RS | M | PC]
    =>        [IIL | RS | M' | PC + 1]
    if (sb RI, N(RI')) := getIns(IIL, PC) /\
-      N' := RS [RI] /\
-      I := RS [RI'] /\
+      I := RS [RI] /\
+      N' := RS [RI'] /\
       M' := set(M, N + N', I) .
 
   crl [sh] : [IIL | RS | M | PC]
    =>        [IIL | RS | M' | PC + 1]
    if (sh RI, N(RI')) := getIns(IIL, PC) /\
-      N' := RS [RI] /\
-      I := RS [RI'] /\
+      I := RS [RI] /\
+      N' := RS [RI'] /\
       M' := set(M, N + N', I) .
 
   crl [sw] : [IIL | RS | M | PC]
    =>        [IIL | RS | M' | PC + 1]
    if (sw RI, N(RI')) := getIns(IIL, PC) /\
-      N' := RS [RI] /\
-      I := RS [RI'] /\
+      I := RS [RI] /\
+      N' := RS [RI'] /\
       M' := set(M, N + N', I) .
 
   crl [li] : [IIL | RS | M | PC]
