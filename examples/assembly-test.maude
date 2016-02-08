@@ -2068,6 +2068,5942 @@ load assembly.maude
   *****************************************************************************
 
 
+  op main-autopilot : -> InsList .
+  eq main-autopilot =
+     'main_autopilot
+	       addiu   sp,sp,-24
+        sw      ra,20(sp)
+        sw      s8,16(sp)
+        move    s8,sp
+        jal     'periodic_task
+        nop
+        move    v0,zero
+        move    sp,s8
+        lw      ra,20(sp)
+        lw      s8,16(sp)
+        addiu   sp,sp,24
+        jr      ra
+        nop
+  .
+
+ op ModemStartMessage : -> InsList .
+ eq ModemStartMessage =
+     '_ModemStartMessage
+	       addiu   sp,sp,-8
+        sw      s8,4(sp)
+        move    s8,sp
+        move    v0,a0
+        sb      v0,8(s8)
+        lbu     v1,8(s8)
+        li      v0,1
+        bne     v1,v0, '_ModemStartMessage_0x30
+        nop
+        li      v0,1
+        j        '_ModemStartMessage_0x30
+        nop
+    '_ModemStartMessage_0x30
+        move    sp,s8
+        lw      s8,4(sp)
+        addiu   sp,sp,8
+        jr      ra
+        nop
+  .
+
+ op ModemEndMessage : -> InsList .
+ eq ModemEndMessage =
+     '_ModemEndMessage
+       	addiu   sp,sp,-8
+        sw      s8,4(sp)
+        move    s8,sp
+        li      v0,1
+        move    sp,s8
+        lw      s8,4(sp)
+        addiu   sp,sp,8
+        jr      ra
+        nop
+ .
+
+ op MODEM-PUT-4-BYTE-BY-ADDR : -> InsList .
+ eq MODEM-PUT-4-BYTE-BY-ADDR =
+     '_MODEM_PUT_4_BYTE_BY_ADDR
+       	addiu   sp,sp,-8
+        sw      s8,4(sp)
+        move    s8,sp
+        move    v0,a0
+        sb      v0,8(s8)
+        lbu     v0,8(s8)
+        move    sp,s8
+        lw      s8,4(sp)
+        addiu   sp,sp,8
+        jr      ra
+        nop
+ .
+
+ op MODEM-PUT-2-BYTE-BY-ADDR : -> InsList .
+ eq MODEM-PUT-2-BYTE-BY-ADDR =
+     '_MODEM_PUT_2_BYTE_BY_ADDR
+       	addiu   sp,sp,-8
+        sw      s8,4(sp)
+        move    s8,sp
+        move    v0,a0
+        sb      v0,8(s8)
+        lbu     v0,8(s8)
+        move    sp,s8
+        lw      s8,4(sp)
+        addiu   sp,sp,8
+        jr      ra
+        nop
+ .
+
+ op MODEM-PUT-1-BYTE-BY-ADDR : -> InsList .
+ eq MODEM-PUT-1-BYTE-BY-ADDR =
+     '_MODEM_PUT_1_BYTE_BY_ADDR
+       	addiu   sp,sp,-8
+        sw      s8,4(sp)
+        move    s8,sp
+        move    v0,a0
+        sb      v0,8(s8)
+        lbu     v0,8(s8)
+        move    sp,s8
+        lw      s8,4(sp)
+        addiu   sp,sp,8
+        jr      ra
+        nop
+ .
+
+ op DOWNLINK-SEND-CALIB-START : -> InsList .
+ eq DOWNLINK-SEND-CALIB-START =
+     '_DOWNLINK_SEND_CALIB_START
+       	addiu   sp,sp,-24
+        sw      ra,20(sp)
+        sw      s8,16(sp)
+        move    s8,sp
+        lbu     v1,86(gp)
+        lbu     v0,112(gp)
+        andi    v0,v0,255
+        sltu    v0,v1,v0
+        bnez    v0, '_DOWNLINK_SEND_CALIB_START_0x54
+        nop
+        lbu     v0,112(gp)
+        andi    v0,v0,255
+        move    v1,v0
+        lbu     v0,86(gp)
+        subu    v0,v1,v0
+        addiu   v0,v0,255
+        slti    v0,v0,5
+        xori    v0,v0,1
+        andi    v0,v0,255
+        j        '_DOWNLINK_SEND_CALIB_START_0x74
+        nop
+     '_DOWNLINK_SEND_CALIB_START_0x54
+        lbu     v0,112(gp)
+        andi    v0,v0,255
+        move    v1,v0
+        lbu     v0,86(gp)
+        subu    v0,v1,v0
+        slti    v0,v0,5
+        xori    v0,v0,1
+        andi    v0,v0,255
+     '_DOWNLINK_SEND_CALIB_START_0x74
+        beqz    v0, '_DOWNLINK_SEND_CALIB_START_0x98
+        nop
+        li      a0,2
+        jal     '_ModemStartMessage
+        nop
+        jal     '_ModemEndMessage
+        nop
+        j       '_DOWNLINK_SEND_CALIB_START_0xa8
+        nop
+     '_DOWNLINK_SEND_CALIB_START_0x98
+        lbu     v0,73(gp)
+        addiu   v0,v0,1
+        andi    v0,v0,255
+        sb      v0,73(gp)
+     '_DOWNLINK_SEND_CALIB_START_0xa8
+        move    sp,s8
+        lw      ra,20(sp)
+        lw      s8,16(sp)
+        addiu   sp,sp,24
+        jr      ra
+        nop
+ .
+
+ op RadOfIrFromConstrast : -> InsList .
+ eq RadOfIrFromConstrast =
+     '_RadOfIrFromConstrast
+       	addiu   sp,sp,-8
+        sw      s8,4(sp)
+        move    s8,sp
+        move    v0,a0
+        sh      v0,8(s8)
+        lhu     v0,8(s8)
+        mtc1    v0,$f1
+        cvt.d.w $f0,$f1
+        mfc1    v0,$f0
+        mfc1    v1,$f1
+        lui     a0,0
+        lw      a1,468(a0)
+        lw      a0,464(a0)
+        mtc1    a0,$f2
+        mtc1    a1,$f3
+        mtc1    v0,$f0
+        mtc1    v1,$f1
+        div     $f2,$f2,$f0
+        mfc1    v0,$f2
+        mfc1    v1,$f3
+        mtc1    v0,$f2
+        mtc1    v1,$f3
+        cvt.s.d $f3,$f2
+        mfc1    v1,$f3
+        lui     v0,65284
+        sw      v1,716(v0)
+        move    sp,s8
+        lw      s8,4(sp)
+        addiu   sp,sp,8
+        jr      ra
+        nop
+ .
+
+ op ir-gain-calib : -> InsList .
+ eq ir-gain-calib =
+     'ir_gain_calib
+       	addiu   sp,sp,-24
+        sw      ra,20(sp)
+        sw      s8,16(sp)
+        move    s8,sp
+        lh      v0,64(gp)
+        andi    v0,v0,0
+        negu    v0,v0
+        andi    v0,v0,0
+        sll     v0,v0,16
+        sra     v0,v0,16
+        sh      v0,-10(gp)
+        lh      v0,-10(gp)
+        andi    v0,v0,0
+        move    a0,v0
+        jal     '_RadOfIrFromConstrast
+        nop
+        move    sp,s8
+        lw      ra,20(sp)
+        lw      s8,16(sp)
+        addiu   sp,sp,24
+        jr      ra
+        nop
+ .
+
+ op STICK-PUSHED : -> InsList .
+ eq STICK-PUSHED =
+     'STICK_PUSHED
+       	addiu   sp,sp,-8
+        sw      s8,4(sp)
+        move    s8,sp
+        move    v0,a0
+        sh      v0,8(s8)
+        lhu     v0,8(s8)
+        sltiu   v0,v0,0
+        bnez    v0, 'STICK_PUSHED_0x30
+        nop
+        li      v0,1
+        j       'STICK_PUSHED_0x34
+        nop
+     'STICK_PUSHED_0x30
+        move    v0,zero
+     'STICK_PUSHED_0x34
+        move    sp,s8
+        lw      s8,4(sp)
+        addiu   sp,sp,8
+        jr      ra
+        nop
+ .
+
+ op DOWNLINK-SEND-RAD-OF-IR : -> InsList .
+ eq DOWNLINK-SEND-RAD-OF-IR =
+     '_DOWNLINK_SEND_RAD_OF_IR
+       	addiu   sp,sp,-40
+        sw      ra,36(sp)
+        sw      s8,32(sp)
+        move    s8,sp
+        move    t0,a0
+        move    a0,a2
+        move    v1,a3
+        lw      v0,56(s8)
+        sb      t0,40(s8)
+        sb      a1,44(s8)
+        sb      a0,48(s8)
+        sb      v1,52(s8)
+        sb      v0,24(s8)
+        lhu     v0,16(s8)
+        sltiu   v0,v0,21
+        bnez    v0, '_DOWNLINK_SEND_RAD_OF_IR_0xb0
+        nop
+        li      a0,5
+        jal     '_ModemStartMessage
+        nop
+        lbu     v0,40(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_4_BYTE_BY_ADDR
+        nop
+        lbu     v0,44(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_4_BYTE_BY_ADDR
+        nop
+        lbu     v0,48(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_4_BYTE_BY_ADDR
+        nop
+        lbu     v0,52(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_2_BYTE_BY_ADDR
+        nop
+        lbu     v0,24(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_2_BYTE_BY_ADDR
+        nop
+        jal     '_ModemEndMessage
+        nop
+        j       '_DOWNLINK_SEND_RAD_OF_IR_0xc0
+        nop
+     '_DOWNLINK_SEND_RAD_OF_IR_0xb0
+        lbu     v0,73(gp)
+        addiu   v0,v0,1
+        andi    v0,v0,255
+        sb      v0,73(gp)
+     '_DOWNLINK_SEND_RAD_OF_IR_0xc0
+        move    sp,s8
+        lw      ra,36(sp)
+        lw      s8,32(sp)
+        addiu   sp,sp,40
+        jr      ra
+        nop
+ .
+
+ op DOWNLINK-SEND-CALIB-CONTRAST : -> InsList .
+ eq DOWNLINK-SEND-CALIB-CONTRAST =
+     '_DOWNLINK_SEND_CALIB_CONTRAST
+       	addiu   sp,sp,-32
+        sw      ra,28(sp)
+        sw      s8,24(sp)
+        move    s8,sp
+        move    v0,a0
+        sb      v0,32(s8)
+        lbu     v0,16(s8)
+        sltiu   v0,v0,7
+        bnez    v0, '_DOWNLINK_SEND_CALIB_CONTRAST_0x54
+        nop
+        li      a0,3
+        jal     '_ModemStartMessage
+        nop
+        lbu     v0,32(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_2_BYTE_BY_ADDR
+        nop
+        jal     '_ModemEndMessage
+        nop
+        j       '_DOWNLINK_SEND_CALIB_CONTRAST_0x64
+        nop
+     '_DOWNLINK_SEND_CALIB_CONTRAST_0x54
+        lbu     v0,73(gp)
+        addiu   v0,v0,1
+        andi    v0,v0,255
+        sb      v0,73(gp)
+     '_DOWNLINK_SEND_CALIB_CONTRAST_0x64
+        move    sp,s8
+        lw      ra,28(sp)
+        lw      s8,24(sp)
+        addiu   sp,sp,32
+        jr      ra
+        nop
+ .
+
+ op ground-calibrate : -> InsList .
+ eq ground-calibrate =
+     'ground_calibrate
+       	addiu   sp,sp,-32
+        sw      ra,28(sp)
+        sw      s8,24(sp)
+        move    s8,sp
+        lbu     v0,36(gp)
+        bnez    v0, 'ground_calibrate_0x54
+        nop
+        lhu     v0,20(gp)
+        sltiu   v0,v0,10
+        beqz    v0, 'ground_calibrate_0x1c0
+        nop
+        lbu     v1,3(gp)
+        li      v0,1
+        bne     v1,v0, 'ground_calibrate_0x1c0
+        nop
+        li      v0,1
+        sb      v0,36(gp)
+        jal     '_DOWNLINK_SEND_CALIB_START
+        nop
+        j       'ground_calibrate_0x1c0
+        nop
+     'ground_calibrate_0x54
+ 	      lbu     v1,36(gp)
+        li      v0,1
+        bne     v1,v0, 'ground_calibrate_0x1c0
+        nop
+        lui     v0,65284
+        addiu   a0,v0,255
+        li      a1,1
+        li      a2,18
+        jal     'lookup_arr
+        nop
+        lw      v1,0(v0)
+        lui     v0,65284
+        lw      v0,512(v0)
+        mtc1    v1,$f0
+        mtc1    v0,$f1
+        c.lt.s  $f0,$f1
+        lui     v0,65284
+        movf    v0,zero,$f0
+        mtc1    v0,$f0
+        mtc1    zero,$f2
+        c.lt.s  $f2,$f0
+        bc1t    'ground_calibrate_0xfc
+        nop
+        lui     v0,65284
+        addiu   a0,v0,255
+        li      a1,1
+        li      a2,18
+        jal     'lookup_arr
+        nop
+        lw      v1,0(v0)
+        lui     v0,65284
+        lw      v0,516(v0)
+        mtc1    v1,$f0
+        mtc1    v0,$f1
+        c.lt.s  $f1,$f0
+        lui     v0,65284
+        movf    v0,zero,$f0
+        mtc1    v0,$f0
+        mtc1    zero,$f2
+        c.lt.s  $f2,$f0
+        bc1f	   'ground_calibrate_0x1c0
+        nop
+     'ground_calibrate_0xfc
+        jal     'ir_gain_calib
+        nop
+        lui     v0,65284
+        lw      v1,724(v0)
+        lui     v0,65284
+        sw      v1,0(v0)
+        lui     v0,65284
+        lw      v0,0(v0)
+        mtc1    v0,$f0
+        trunc.w.s       $f0,$f0
+        mfc1    v0,$f0
+        sll     v0,v0,24
+        sra     v0,v0,24
+        andi    v0,v0,255
+        move    a0,v0
+        lui     v0,65284
+        lw      v0,0(v0)
+        mtc1    v0,$f1
+        trunc.w.s       $f1,$f1
+        mfc1    v0,$f1
+        sll     v0,v0,24
+        sra     v0,v0,24
+        andi    v0,v0,255
+        move    a1,v0
+        lui     v0,65284
+        lw      v0,0(v0)
+        mtc1    v0,$f2
+        trunc.w.s       $f2,$f2
+        mfc1    v0,$f2
+        sll     v0,v0,24
+        sra     v0,v0,24
+        andi    v0,v0,255
+        move    v1,v0
+        lh      v0,-8(gp)
+        andi    v0,v0,255
+        lh      a2,-6(gp)
+        andi    a2,a2,255
+        sw      a2,16(sp)
+        move    a2,v1
+        move    a3,v0
+        jal     '_DOWNLINK_SEND_RAD_OF_IR
+        nop
+        li      v0,2
+        sb      v0,36(gp)
+        lh      v0,-10(gp)
+        andi    v0,v0,255
+        move    a0,v0
+        jal     '_DOWNLINK_SEND_CALIB_CONTRAST
+        nop
+     'ground_calibrate_0x1c0
+        move    sp,s8
+        lw      ra,28(sp)
+        lw      s8,24(sp)
+        addiu   sp,sp,32
+        jr      ra
+        nop
+ .
+
+ op CheckEvent : -> InsList .
+ eq CheckEvent =
+     '_CheckEvent
+       	addiu   sp,sp,-8
+        sw      s8,4(sp)
+        move    s8,sp
+        move    v0,a0
+        sb      v0,8(s8)
+        lbu     v0,8(s8)
+        beqz    v0, '_CheckEvent_0x2c
+        nop
+        move    v0,zero
+        j       '_CheckEvent_0x30
+        nop
+     '_CheckEvent_0x2c
+        li      v0,1
+     '_CheckEvent_0x30
+        move    sp,s8
+        lw      s8,4(sp)
+        addiu   sp,sp,8
+        jr      ra
+        nop
+ .
+
+ op PPRZ-MODE-OF-PULSE : -> InsList .
+ eq PPRZ-MODE-OF-PULSE =
+     '_PPRZ_MODE_OF_PULSE
+       	addiu   sp,sp,-8
+        sw      s8,4(sp)
+        move    s8,sp
+        move    v1,a0
+        move    v0,a1
+        sb      v1,8(s8)
+        sb      v0,12(s8)
+        li      v0,1
+        move    sp,s8
+        lw      s8,4(sp)
+        addiu   sp,sp,8
+        jr      ra
+        nop
+ .
+
+ op ModeUpdate : -> InsList .
+ eq ModeUpdate =
+     '_ModeUpdate
+       	addiu   sp,sp,-16
+        sw      s8,12(sp)
+        move    s8,sp
+        move    v1,a0
+        move    v0,a1
+        sb      v1,16(s8)
+        sb      v0,20(s8)
+        lbu     v0,20(s8)
+        sb      v0,0(s8)
+        lbu     v1,16(s8)
+        lbu     v0,0(s8)
+        beq     v1,v0, '_ModeUpdate_0x48
+        nop
+        lbu     v0,0(s8)
+        sb      v0,16(s8)
+        li      v0,1
+        j       '_ModeUpdate_0x4c
+        nop
+     '_ModeUpdate_0x48
+        move    v0,zero
+     '_ModeUpdate_0x4c
+        move    sp,s8
+        lw      s8,12(sp)
+        addiu   sp,sp,16
+        jr      ra
+        nop
+ .
+
+ op pprz-mode-update : -> InsList .
+ eq pprz-mode-update =
+     'pprz_mode_update
+       	addiu   sp,sp,-32
+        sw      ra,28(sp)
+        sw      s8,24(sp)
+        sw      s0,20(sp)
+        move    s8,sp
+        lbu     v1,3(gp)
+        li      v0,3
+        bne     v1,v0, 'pprz_mode_update_0x3c
+        nop
+        lbu     v0,52(gp)
+        move    a0,v0
+        jal     '_CheckEvent
+        nop
+        beqz    v0, 'pprz_mode_update_0x9c
+        nop
+     'pprz_mode_update_0x3c
+        lbu     v0,3(gp)
+        move    s0,v0
+        lui     v0,65284
+        addiu   a0,v0,4
+        li      a1,4
+        li      a2,18
+        jal     'lookup_arr
+        nop
+        lb      v0,0(v0)
+        andi    v0,v0,255
+        move    v1,v0
+        lui     v0,65284
+        addiu   v0,v0,255
+        lbu     v0,19(v0)
+        move    a0,v1
+        move    a1,v0
+        jal     '_PPRZ_MODE_OF_PULSE
+        nop
+        move    a0,s0
+        move    a1,v0
+        jal     '_ModeUpdate
+        nop
+        j       'pprz_mode_update_0xa0
+        nop
+     'pprz_mode_update_0x9c
+        move    v0,zero
+     'pprz_mode_update_0xa0
+        move    sp,s8
+        lw      ra,28(sp)
+        lw      s8,24(sp)
+        lw      s0,20(sp)
+        addiu   sp,sp,32
+        jr      ra
+        nop
+ .
+
+ op IR-ESTIM-MODE-OF-PULSE : -> InsList .
+ eq IR-ESTIM-MODE-OF-PULSE =
+     '_IR_ESTIM_MODE_OF_PULSE
+       	addiu   sp,sp,-8
+        sw      s8,4(sp)
+        move    s8,sp
+        move    v0,a0
+        sb      v0,8(s8)
+        move    v0,zero
+        move    sp,s8
+        lw      s8,4(sp)
+        addiu   sp,sp,8
+        jr      ra
+        nop
+ .
+
+ op ir-estim-mode-update : -> InsList .
+ eq ir-estim-mode-update =
+     'ir_estim_mode_update
+       	addiu   sp,sp,-32
+        sw      ra,28(sp)
+        sw      s8,24(sp)
+        sw      s0,20(sp)
+        move    s8,sp
+        lbu     v0,-2(gp)
+        move    s0,v0
+        lui     v0,65284
+        addiu   a0,v0,16
+        li      a1,7
+        li      a2,18
+        jal     'lookup_arr
+        nop
+        lb      v0,0(v0)
+        andi    v0,v0,255
+        move    a0,v0
+        jal     '_IR_ESTIM_MODE_OF_PULSE
+        nop
+        move    a0,s0
+        move    a1,v0
+        jal     '_ModeUpdate
+        nop
+        move    sp,s8
+        lw      ra,28(sp)
+        lw      s8,24(sp)
+        lw      s0,20(sp)
+        addiu   sp,sp,32
+        jr      ra
+        nop
+ .
+
+ op mcu1-status-update : -> InsList .
+ eq mcu1-status-update =
+     'mcu1_status_update
+       	addiu   sp,sp,-16
+        sw      s8,12(sp)
+        move    s8,sp
+        lui     v0,65284
+        addiu   v0,v0,8
+        lbu     v0,19(v0)
+        sb      v0,1(s8)
+        lbu     v0,22(gp)
+        lbu     v1,1(s8)
+        beq     v1,v0, 'mcu1_status_update_0x70
+        nop
+        lbu     v0,22(gp)
+        move    v1,v0
+        lbu     v0,1(s8)
+        xor     v0,v1,v0
+        andi    v0,v0,3
+        beqz    v0, 'mcu1_status_update_0x58
+        nop
+        li      v0,1
+        sb      v0,0(s8)
+        j       'mcu1_status_update_0x5c
+        nop
+     'mcu1_status_update_0x58
+        sb      zero,0(s8)
+     'mcu1_status_update_0x5c
+        lbu     v0,1(s8)
+        sb      v0,22(gp)
+        lbu     v0,0(s8)
+        j       'mcu1_status_update_0x74
+        nop
+     'mcu1_status_update_0x70
+        move    v0,zero
+     'mcu1_status_update_0x74
+        move    sp,s8
+        lw      s8,12(sp)
+        addiu   sp,sp,16
+        jr      ra
+        nop
+ .
+
+ op EventUpdate : -> InsList .
+ eq EventUpdate =
+     '_EventUpdate
+       	addiu   sp,sp,-16
+        sw      s8,12(sp)
+        move    s8,sp
+        move    v1,a1
+        move    v0,a2
+        sb      a0,16(s8)
+        sb      v1,20(s8)
+        sb      v0,24(s8)
+        lbu     v0,20(s8)
+        beqz    v0, '_EventUpdate_0x68
+        nop
+        lbu     v0,16(s8)
+        sltiu   v0,v0,20
+        beqz    v0, '_EventUpdate_0x70
+        nop
+        lbu     v0,16(s8)
+        addiu   v0,v0,1
+        sb      v0,16(s8)
+        lbu     v1,16(s8)
+        li      v0,20
+        bne     v1,v0, '_EventUpdate_0x70
+        nop
+        li      v0,1
+        sb      v0,0(s8)
+        j       '_EventUpdate_0x70
+        nop
+     '_EventUpdate_0x68
+        sb      zero,16(s8)
+        sb      zero,0(s8)
+     '_EventUpdate_0x70
+        move    sp,s8
+        lw      s8,12(sp)
+        addiu   sp,sp,16
+        jr      ra
+        nop
+ .
+
+ op EventPos : -> InsList .
+ eq EventPos =
+     '_EventPos
+       	addiu   sp,sp,-32
+        sw      ra,28(sp)
+        sw      s8,24(sp)
+        sw      s0,20(sp)
+        move    s8,sp
+        move    v1,a1
+        move    v0,a2
+        sb      a0,32(s8)
+        sb      v1,36(s8)
+        sb      v0,40(s8)
+        lbu     s0,32(s8)
+        lbu     v0,1(gp)
+        bnez    v0, '_EventPos_0x70
+        nop
+        lbu     v0,36(s8)
+        lui     v1,65284
+        addiu   a0,v1,16
+        move    a1,v0
+        li      a2,18
+        jal     'lookup_arr
+        nop
+        lbu     v0,0(v0)
+        slti    v0,v0,16
+        bnez    v0, '_EventPos_0x70
+        nop
+        li      v0,1
+        j       '_EventPos_0x74
+        nop
+     '_EventPos_0x70
+        move    v0,zero
+     '_EventPos_0x74
+        andi    v0,v0,255
+        move    v1,v0
+        lbu     v0,40(s8)
+        move    a0,s0
+        move    a1,v1
+        move    a2,v0
+        jal     '_EventUpdate
+        nop
+        move    sp,s8
+        lw      ra,28(sp)
+        lw      s8,24(sp)
+        lw      s0,20(sp)
+        addiu   sp,sp,32
+        jr      ra
+        nop
+ .
+
+ op EventNeg : -> InsList .
+ eq EventNeg =
+     '_EventNeg
+       	addiu   sp,sp,-32
+        sw      ra,28(sp)
+        sw      s8,24(sp)
+        sw      s0,20(sp)
+        move    s8,sp
+        move    v1,a1
+        move    v0,a2
+        sb      a0,32(s8)
+        sb      v1,36(s8)
+        sb      v0,40(s8)
+        lbu     s0,32(s8)
+        lbu     v0,1(gp)
+        bnez    v0, '_EventNeg_0x70
+        nop
+        lbu     v0,36(s8)
+        lui     v1,65284
+        addiu   a0,v1,16
+        move    a1,v0
+        li      a2,18
+        jal     'lookup_arr
+        nop
+        lbu     v0,0(v0)
+        slti    v0,v0,-16
+        bnez    v0, '_EventNeg_0x70
+        nop
+        li      v0,1
+        j       '_EventNeg_0x74
+        nop
+     '_EventNeg_0x70
+        move    v0,zero
+     '_EventNeg_0x74
+        andi    v0,v0,255
+        move    v1,v0
+        lbu     v0,40(s8)
+        move    a0,s0
+        move    a1,v1
+        move    a2,v0
+        jal     '_EventUpdate
+        nop
+        move    sp,s8
+        lw      ra,28(sp)
+        lw      s8,24(sp)
+        lw      s0,20(sp)
+        addiu   sp,sp,32
+        jr      ra
+        nop
+.
+
+ op events-update : -> InsList .
+ eq events-update =
+     'events_update
+       	addiu   sp,sp,-24
+        sw      ra,20(sp)
+        sw      s8,16(sp)
+        move    s8,sp
+        lhu     v0,32(gp)
+        andi    v0,v0,255
+        move    v1,v0
+        lbu     v0,52(gp)
+        move    a0,v1
+        li      a1,5
+        move    a2,v0
+        jal     '_EventPos
+        nop
+        lhu     v0,34(gp)
+        andi    v0,v0,255
+        move    v1,v0
+        lbu     v0,140(gp)
+        move    a0,v1
+        li      a1,5
+        move    a2,v0
+        jal     '_EventNeg
+        nop
+        move    sp,s8
+        lw      ra,20(sp)
+        lw      s8,16(sp)
+        addiu   sp,sp,24
+        jr      ra
+        nop
+ .
+
+ op lookup-arr : -> InsList .
+ eq lookup-arr =
+     'lookup_arr
+       	addiu   sp,sp,-16
+        sw      s8,12(sp)
+        move    s8,sp
+        sw      a0,16(s8)
+        move    v1,a1
+        move    v0,a2
+        sb      v1,20(s8)
+        sb      v0,24(s8)
+        lbu     v1,24(s8)
+        lbu     v0,20(s8)
+        mul     v0,v1,v0
+        lw      v1,16(s8)
+        addu    v0,v1,v0
+        sw      v0,0(s8)
+        lw      v0,0(s8)
+        move    sp,s8
+        lw      s8,12(sp)
+        addiu   sp,sp,16
+        jr      ra
+        nop
+ .
+
+ op update-arr : -> InsList .
+ eq update-arr =
+     'update_arr
+	       addiu   sp,sp,-32
+        sw      ra,28(sp)
+        sw      s8,24(sp)
+        move    s8,sp
+        sw      a0,32(s8)
+        move    a0,a1
+        move    v1,a2
+        move    v0,a3
+        sb      a0,36(s8)
+        sb      v1,40(s8)
+        sb      v0,44(s8)
+        lbu     v1,36(s8)
+        lbu     v0,40(s8)
+        lw      a0,32(s8)
+        move    a1,v1
+        move    a2,v0
+        jal     'lookup_arr
+        nop
+        sw      v0,16(s8)
+        lw      v0,16(s8)
+        andi    v1,v0,255
+        lbu     v0,44(s8)
+        addu    v0,v1,v0
+        andi    v0,v0,255
+        move    sp,s8
+        lw      ra,28(sp)
+        lw      s8,24(sp)
+        addiu   sp,sp,32
+        jr      ra
+        nop
+ .
+
+ op copy-from-to-fbw : -> InsList .
+ eq copy-from-to-fbw =
+     'copy_from_to_fbw
+       	addiu   sp,sp,-32
+        sw      ra,28(sp)
+        sw      s8,24(sp)
+        move    s8,sp
+        lui     v0,65284
+        addiu   a0,v0,16
+        li      a1,3
+        li      a2,18
+        jal     'lookup_arr
+        nop
+        lbu     v0,0(v0)
+        sb      v0,16(s8)
+        lbu     v0,16(s8)
+        lui     v1,65284
+        addiu   a0,v1,16
+        li      a1,3
+        li      a2,18
+        move    a3,v0
+        jal     'update_arr
+        nop
+        lui     v0,65284
+        addiu   a0,v0,16
+        li      a1,2
+        li      a2,18
+        jal     'lookup_arr
+        nop
+        lbu     v0,0(v0)
+        sb      v0,17(s8)
+        lbu     v0,17(s8)
+        lui     v1,65284
+        addiu   a0,v1,16
+        li      a1,2
+        li      a2,18
+        move    a3,v0
+        jal     'update_arr
+        nop
+        lui     v0,65284
+        addiu   v0,v0,16
+        sb      zero,19(v0)
+        move    sp,s8
+        lw      ra,28(sp)
+        lw      s8,24(sp)
+        addiu   sp,sp,32
+        jr      ra
+        nop
+ .
+
+ op DOWNLINK-SEND-BOOT : -> InsList .
+ eq DOWNLINK-SEND-BOOT =
+     '_DOWNLINK_SEND_BOOT
+       	addiu   sp,sp,-32
+        sw      ra,28(sp)
+        sw      s8,24(sp)
+        move    s8,sp
+        move    v0,a0
+        sb      v0,32(s8)
+        lbu     v0,16(s8)
+        sltiu   v0,v0,7
+        bnez    v0, '_DOWNLINK_SEND_BOOT_0x54
+        nop
+        li      a0,1
+        jal     '_ModemStartMessage
+        nop
+        lbu     v0,32(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_2_BYTE_BY_ADDR
+        nop
+        jal     '_ModemEndMessage
+        nop
+        j       '_DOWNLINK_SEND_BOOT_0x64
+        nop
+     '_DOWNLINK_SEND_BOOT_0x54
+        lbu     v0,73(gp)
+        addiu   v0,v0,1
+        andi    v0,v0,255
+        sb      v0,73(gp)
+     '_DOWNLINK_SEND_BOOT_0x64
+        move    sp,s8
+        lw      ra,28(sp)
+        lw      s8,24(sp)
+        addiu   sp,sp,32
+        jr      ra
+        nop
+ .
+
+ op send-boot : -> InsList .
+ eq send-boot =
+     'send_boot
+       	addiu   sp,sp,-40
+        sw      ra,36(sp)
+        sw      s8,32(sp)
+        move    s8,sp
+        lbu     v0,-1(gp)
+        beqz    v0, 'send_boot_0x150
+        nop
+        lhu     v0,-4(gp)
+        andi    v0,v0,255
+        move    a0,v0
+        jal     '_DOWNLINK_SEND_BOOT
+        nop
+        lbu     a2,24(s8)
+        lui     v0,65284
+        lw      v0,0(v0)
+        lui     v1,65284
+        lw      a0,520(v1)
+        mtc1    v0,$f0
+        mtc1    a0,$f1
+        c.le.s  $f1,$f0
+        lui     v1,65284
+        movf    v1,zero,$f0
+        mtc1    v1,$f0
+        mtc1    zero,$f2
+        c.lt.s  $f2,$f0
+        bc1t    'send_boot_0x80
+        nop
+        mtc1    v0,$f0
+        trunc.w.s       $f0,$f0
+        mfc1    v0,$f0
+        j       'send_boot_0xa4
+        nop
+     'send_boot_0x80
+        mtc1    v0,$f1
+        mtc1    a0,$f2
+        sub     $f1,$f1,$f2
+        mfc1    v0,$f1
+        lui     v1,65284
+        mtc1    v0,$f3
+        trunc.w.s       $f3,$f3
+        mfc1    v0,$f3
+        or      v0,v0,v1
+     'send_boot_0xa4
+        andi    v0,v0,255
+        move    a1,v0
+        lui     v0,65284
+        lw      v0,0(v0)
+        lui     v1,65284
+        lw      a0,520(v1)
+        mtc1    v0,$f0
+        mtc1    a0,$f1
+        c.le.s  $f1,$f0
+        lui     v1,65284
+        movf    v1,zero,$f0
+        mtc1    v1,$f0
+        mtc1    zero,$f2
+        c.lt.s  $f2,$f0
+        bc1t    'send_boot_0xf8
+        nop
+        mtc1    v0,$f0
+        trunc.w.s       $f0,$f0
+        mfc1    v0,$f0
+        j       'send_boot_0x11c
+        nop
+     'send_boot_0xf8
+        mtc1    v0,$f1
+        mtc1    a0,$f2
+        sub     $f1,$f1,$f2
+        mfc1    v0,$f1
+        lui     v1,65284
+        mtc1    v0,$f3
+        trunc.w.s       $f3,$f3
+        mfc1    v0,$f3
+        or      v0,v0,v1
+     'send_boot_0x11c
+        andi    v0,v0,255
+        move    v1,v0
+        lh      v0,-8(gp)
+        andi    v0,v0,255
+        lh      a0,-6(gp)
+        andi    a0,a0,255
+        sw      a0,16(sp)
+        move    a0,a2
+        move    a2,v1
+        move    a3,v0
+        jal     '_DOWNLINK_SEND_RAD_OF_IR
+        nop
+        sb      zero,-1(gp)
+     'send_boot_0x150
+        move    sp,s8
+        lw      ra,36(sp)
+        lw      s8,32(sp)
+        addiu   sp,sp,40
+        jr      ra
+        nop
+ .
+
+ op DOWNLINK-SEND-ATTITUDE : -> InsList .
+ eq DOWNLINK-SEND-ATTITUDE =
+     '_DOWNLINK_SEND_ATTITUDE
+       	addiu   sp,sp,-32
+        sw      ra,28(sp)
+        sw      s8,24(sp)
+        move    s8,sp
+        move    v1,a1
+        move    v0,a2
+        sb      a0,32(s8)
+        sb      v1,36(s8)
+        sb      v0,40(s8)
+        lbu     v0,16(s8)
+        sltiu   v0,v0,17
+        bnez    v0, '_DOWNLINK_SEND_ATTITUDE_0x80
+        nop
+        li      a0,6
+        jal     '_ModemStartMessage
+        nop
+        lbu     v0,32(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_4_BYTE_BY_ADDR
+        nop
+        lbu     v0,36(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_4_BYTE_BY_ADDR
+        nop
+        lbu     v0,40(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_4_BYTE_BY_ADDR
+        nop
+        jal     '_ModemEndMessage
+        nop
+        j       '_DOWNLINK_SEND_ATTITUDE_0x90
+        nop
+     '_DOWNLINK_SEND_ATTITUDE_0x80
+        lbu     v0,73(gp)
+        addiu   v0,v0,1
+        andi    v0,v0,255
+        sb      v0,73(gp)
+     '_DOWNLINK_SEND_ATTITUDE_0x90
+        move    sp,s8
+        lw      ra,28(sp)
+        lw      s8,24(sp)
+        addiu   sp,sp,32
+        jr      ra
+        nop
+ .
+
+ op PERIODIC-SEND-ATTITUDE : -> InsList .
+ eq PERIODIC-SEND-ATTITUDE =
+     '_PERIODIC_SEND_ATTITUDE
+       	addiu   sp,sp,-24
+        sw      ra,20(sp)
+        sw      s8,16(sp)
+        move    s8,sp
+        lui     v0,65284
+        lw      v0,0(v0)
+        lui     v1,65284
+        lw      a0,520(v1)
+        mtc1    v0,$f0
+        mtc1    a0,$f1
+        c.le.s  $f1,$f0
+        lui     v1,65284
+        movf    v1,zero,$f0
+        mtc1    v1,$f0
+        mtc1    zero,$f2
+        c.lt.s  $f2,$f0
+        bc1t    '_PERIODIC_SEND_ATTITUDE_0x5c
+        nop
+        mtc1    v0,$f0
+        trunc.w.s       $f0,$f0
+        mfc1    v0,$f0
+        j       '_PERIODIC_SEND_ATTITUDE_0x80
+        nop
+     '_PERIODIC_SEND_ATTITUDE_0x5c
+        mtc1    v0,$f1
+        mtc1    a0,$f2
+        sub     $f1,$f1,$f2
+        mfc1    v0,$f1
+        lui     v1,65284
+        mtc1    v0,$f3
+        trunc.w.s       $f3,$f3
+        mfc1    v0,$f3
+        or      v0,v0,v1
+     '_PERIODIC_SEND_ATTITUDE_0x80
+        andi    v0,v0,255
+        move    a2,v0
+        lui     v0,65284
+        lw      v0,0(v0)
+        lui     v1,65284
+        lw      a0,520(v1)
+        mtc1    v0,$f0
+        mtc1    a0,$f1
+        c.le.s  $f1,$f0
+        lui     v1,65284
+        movf    v1,zero,$f0
+        mtc1    v1,$f0
+        mtc1    zero,$f2
+        c.lt.s  $f2,$f0
+        bc1t    '_PERIODIC_SEND_ATTITUDE_0xd4
+        nop
+        mtc1    v0,$f0
+        trunc.w.s       $f0,$f0
+        mfc1    v0,$f0
+        j       '_PERIODIC_SEND_ATTITUDE_0xf8
+        nop
+     '_PERIODIC_SEND_ATTITUDE_0xd4
+        mtc1    v0,$f1
+        mtc1    a0,$f2
+        sub     $f1,$f1,$f2
+        mfc1    v0,$f1
+        lui     v1,65284
+        mtc1    v0,$f3
+        trunc.w.s       $f3,$f3
+        mfc1    v0,$f3
+        or      v0,v0,v1
+     '_PERIODIC_SEND_ATTITUDE_0xf8
+        andi    v0,v0,255
+        move    a1,v0
+        lui     v0,65284
+        lw      v0,0(v0)
+        lui     v1,65284
+        lw      a0,520(v1)
+        mtc1    v0,$f0
+        mtc1    a0,$f1
+        c.le.s  $f1,$f0
+        lui     v1,65284
+        movf    v1,zero,$f0
+        mtc1    v1,$f0
+        mtc1    zero,$f2
+        c.lt.s  $f2,$f0
+        bc1t    '_PERIODIC_SEND_ATTITUDE_0x14c
+        nop
+        mtc1    v0,$f0
+        trunc.w.s       $f0,$f0
+        mfc1    v0,$f0
+        j       '_PERIODIC_SEND_ATTITUDE_0x170
+        nop
+     '_PERIODIC_SEND_ATTITUDE_0x14c
+        mtc1    v0,$f1
+        mtc1    a0,$f2
+        sub     $f1,$f1,$f2
+        mfc1    v0,$f1
+        lui     v1,65284
+        mtc1    v0,$f3
+        trunc.w.s       $f3,$f3
+        mfc1    v0,$f3
+        or      v0,v0,v1
+     '_PERIODIC_SEND_ATTITUDE_0x170
+        andi    v0,v0,255
+        move    a0,a2
+        move    a2,v0
+        jal     '_DOWNLINK_SEND_ATTITUDE
+        nop
+        move    sp,s8
+        lw      ra,20(sp)
+        lw      s8,16(sp)
+        addiu   sp,sp,24
+        jr      ra
+        nop
+ .
+
+ op send-attitude : -> InsList .
+ eq send-attitude =
+     'send_attitude
+	       addiu   sp,sp,-24
+        sw      ra,20(sp)
+        sw      s8,16(sp)
+        move    s8,sp
+        lbu     v0,-1(gp)
+        bnez    v0, 'send_attitude_0x7c
+        nop
+        lbu     v0,25(gp)
+        addiu   v0,v0,1
+        andi    v0,v0,255
+        sb      v0,25(gp)
+        lbu     v1,25(gp)
+        li      v0,250
+        bne     v1,v0, 'send_attitude_0x40
+        nop
+        sb      zero,25(gp)
+     'send_attitude_0x40
+        lbu     v1,25(gp)
+        lui     v0,65284
+        ori     v0,v0,16
+        multu   v1,v0
+        mfhi    v0
+        srl     a0,v0,2
+        move    v0,a0
+        sll     v0,v0,2
+        addu    v0,v0,a0
+        subu    v0,v1,v0
+        andi    v0,v0,255
+        bnez    v0, 'send_attitude_0x7c
+        nop
+        jal     '_PERIODIC_SEND_ATTITUDE
+        nop
+     'send_attitude_0x7c
+        move    sp,s8
+        lw      ra,20(sp)
+        lw      s8,16(sp)
+        addiu   sp,sp,24
+        jr      ra
+        nop
+ .
+
+ op DOWNLINK-SEND-ADC : -> InsList .
+ eq DOWNLINK-SEND-ADC =
+     '_DOWNLINK_SEND_ADC
+	       addiu   sp,sp,-32
+        sw      ra,28(sp)
+        sw      s8,24(sp)
+        move    s8,sp
+        move    v1,a0
+        move    v0,a1
+        sb      v1,32(s8)
+        sb      v0,36(s8)
+        lbu     v0,16(s8)
+        sltiu   v0,v0,9
+        bnez    v0, '_DOWNLINK_SEND_ADC_0x6c
+        nop
+        li      a0,7
+        jal     '_ModemStartMessage
+        nop
+        lbu     v0,32(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_2_BYTE_BY_ADDR
+        nop
+        lbu     v0,36(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_2_BYTE_BY_ADDR
+        nop
+        jal     '_ModemEndMessage
+        nop
+        j       '_DOWNLINK_SEND_ADC_0x7c
+        nop
+     '_DOWNLINK_SEND_ADC_0x6c
+        lbu     v0,73(gp)
+        addiu   v0,v0,1
+        andi    v0,v0,255
+        sb      v0,73(gp)
+     '_DOWNLINK_SEND_ADC_0x7c
+        move    sp,s8
+        lw      ra,28(sp)
+        lw      s8,24(sp)
+        addiu   sp,sp,32
+        jr      ra
+        nop
+ .
+
+ op PERIODIC-SEND-ADC : -> InsList .
+ eq PERIODIC-SEND-ADC =
+     '_PERIODIC_SEND_ADC
+       	addiu   sp,sp,-24
+        sw      ra,20(sp)
+        sw      s8,16(sp)
+        move    s8,sp
+        lh      v0,164(gp)
+        andi    v0,v0,255
+        move    v1,v0
+        lh      v0,64(gp)
+        andi    v0,v0,255
+        move    a0,v1
+        move    a1,v0
+        jal     '_DOWNLINK_SEND_ADC
+        nop
+        move    sp,s8
+        lw      ra,20(sp)
+        lw      s8,16(sp)
+        addiu   sp,sp,24
+        jr      ra
+        nop
+ .
+
+ op send-adc : -> InsList .
+ eq send-adc =
+     'send_adc
+       	addiu   sp,sp,-24
+        sw      ra,20(sp)
+        sw      s8,16(sp)
+        move    s8,sp
+        lbu     v0,-1(gp)
+        bnez    v0, 'send_adc_0x5c
+        nop
+        lbu     v1,25(gp)
+        lui     v0,65284
+        ori     v0,v0,16
+        multu   v1,v0
+        mfhi    v0
+        srl     a0,v0,2
+        move    v0,a0
+        sll     v0,v0,2
+        addu    v0,v0,a0
+        subu    v0,v1,v0
+        andi    v1,v0,255
+        li      v0,1
+        bne     v1,v0, 'send_adc_0x5c
+        nop
+        jal     '_PERIODIC_SEND_ADC
+        nop
+     'send_adc_0x5c
+        move    sp,s8
+        lw      ra,20(sp)
+        lw      s8,16(sp)
+        addiu   sp,sp,24
+        jr      ra
+        nop
+ .
+
+ op DOWNLINK-SEND-SETTINGS : -> InsList .
+ eq DOWNLINK-SEND-SETTINGS =
+     '_DOWNLINK_SEND_SETTINGS
+       	addiu   sp,sp,-32
+        sw      ra,28(sp)
+        sw      s8,24(sp)
+        move    s8,sp
+        move    v1,a1
+        move    v0,a2
+        sb      a0,32(s8)
+        sb      v1,36(s8)
+        sb      v0,40(s8)
+        lbu     v0,16(s8)
+        sltiu   v0,v0,14
+        bnez    v0, '_DOWNLINK_SEND_SETTINGS_0x80
+        nop
+        li      a0,17
+        jal     '_ModemStartMessage
+        nop
+        lbu     v0,32(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_1_BYTE_BY_ADDR
+        nop
+        lbu     v0,36(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_4_BYTE_BY_ADDR
+        nop
+        lbu     v0,40(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_4_BYTE_BY_ADDR
+        nop
+        jal     '_ModemEndMessage
+        nop
+        j       '_DOWNLINK_SEND_SETTINGS_0x90
+        nop
+     '_DOWNLINK_SEND_SETTINGS_0x80
+        lbu     v0,73(gp)
+        addiu   v0,v0,1
+        andi    v0,v0,255
+        sb      v0,73(gp)
+     '_DOWNLINK_SEND_SETTINGS_0x90
+        move    sp,s8
+        lw      ra,28(sp)
+        lw      s8,24(sp)
+        addiu   sp,sp,32
+        jr      ra
+        nop
+ .
+
+ op PERIODIC-SEND-SETTINGS : -> InsList .
+ eq PERIODIC-SEND-SETTINGS =
+     '_PERIODIC_SEND_SETTINGS
+       	addiu   sp,sp,-24
+        sw      ra,20(sp)
+        sw      s8,16(sp)
+        move    s8,sp
+        lbu     v0,1(gp)
+        beqz    v0, '_PERIODIC_SEND_SETTINGS_0x120
+        nop
+        lbu     v0,1(gp)
+        move    a2,v0
+        lui     v0,65284
+        lw      v0,0(v0)
+        lui     v1,65284
+        lw      a0,520(v1)
+        mtc1    v0,$f0
+        mtc1    a0,$f1
+        c.le.s  $f1,$f0
+        lui     v1,65284
+        movf    v1,zero,$f0
+        mtc1    v1,$f0
+        mtc1    zero,$f2
+        c.lt.s  $f2,$f0
+        bc1t    '_PERIODIC_SEND_SETTINGS_0x70
+        nop
+        mtc1    v0,$f0
+        trunc.w.s       $f0,$f0
+        mfc1    v0,$f0
+        j       '_PERIODIC_SEND_SETTINGS_0x94
+        nop
+     '_PERIODIC_SEND_SETTINGS_0x70
+        mtc1    v0,$f1
+        mtc1    a0,$f2
+        sub     $f1,$f1,$f2
+        mfc1    v0,$f1
+        lui     v1,65284
+        mtc1    v0,$f3
+        trunc.w.s       $f3,$f3
+        mfc1    v0,$f3
+        or      v0,v0,v1
+     '_PERIODIC_SEND_SETTINGS_0x94
+        andi    v0,v0,255
+        move    a1,v0
+        lui     v0,65284
+        lw      v0,0(v0)
+        lui     v1,65284
+        lw      a0,520(v1)
+        mtc1    v0,$f0
+        mtc1    a0,$f1
+        c.le.s  $f1,$f0
+        lui     v1,65284
+        movf    v1,zero,$f0
+        mtc1    v1,$f0
+        mtc1    zero,$f2
+        c.lt.s  $f2,$f0
+        bc1t    '_PERIODIC_SEND_SETTINGS_0xe8
+        nop
+        mtc1    v0,$f0
+        trunc.w.s       $f0,$f0
+        mfc1    v0,$f0
+        j       '_PERIODIC_SEND_SETTINGS_0x10c
+        nop
+     '_PERIODIC_SEND_SETTINGS_0xe8
+        mtc1    v0,$f1
+        mtc1    a0,$f2
+        sub     $f1,$f1,$f2
+        mfc1    v0,$f1
+        lui     v1,65284
+        mtc1    v0,$f3
+        trunc.w.s       $f3,$f3
+        mfc1    v0,$f3
+        or      v0,v0,v1
+     '_PERIODIC_SEND_SETTINGS_0x10c
+        andi    v0,v0,255
+        move    a0,a2
+        move    a2,v0
+        jal     '_DOWNLINK_SEND_SETTINGS
+        nop
+     '_PERIODIC_SEND_SETTINGS_0x120
+        move    sp,s8
+        lw      ra,20(sp)
+        lw      s8,16(sp)
+        addiu   sp,sp,24
+        jr      ra
+        nop
+ .
+
+ op send-settings : -> InsList .
+ eq send-settings =
+     'send_settings
+       	addiu   sp,sp,-24
+        sw      ra,20(sp)
+        sw      s8,16(sp)
+        move    s8,sp
+        lbu     v0,-1(gp)
+        bnez    v0, 'send_settings_0x5c
+        nop
+        lbu     v1,25(gp)
+        lui     v0,65284
+        ori     v0,v0,16
+        multu   v1,v0
+        mfhi    v0
+        srl     a0,v0,2
+        move    v0,a0
+        sll     v0,v0,2
+        addu    v0,v0,a0
+        subu    v0,v1,v0
+        andi    v1,v0,255
+        li      v0,2
+        bne     v1,v0, 'send_settings_0x5c
+        nop
+        jal     '_PERIODIC_SEND_SETTINGS
+        nop
+     'send_settings_0x5c
+        move    sp,s8
+        lw      ra,20(sp)
+        lw      s8,16(sp)
+        addiu   sp,sp,24
+        jr      ra
+        nop
+ .
+
+ op DOWNLINK-SEND-DESIRED : -> InsList .
+ eq DOWNLINK-SEND-DESIRED =
+     '_DOWNLINK_SEND_DESIRED
+       	addiu   sp,sp,-40
+        sw      ra,36(sp)
+        sw      s8,32(sp)
+        move    s8,sp
+        move    t0,a0
+        move    a0,a2
+        move    v1,a3
+        lw      v0,56(s8)
+        sb      t0,40(s8)
+        sb      a1,44(s8)
+        sb      a0,48(s8)
+        sb      v1,52(s8)
+        sb      v0,24(s8)
+        lbu     v0,16(s8)
+        sltiu   v0,v0,25
+        bnez    v0, '_DOWNLINK_SEND_DESIRED_0xb0
+        nop
+        li      a0,18
+        jal     '_ModemStartMessage
+        nop
+        lbu     v0,40(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_4_BYTE_BY_ADDR
+        nop
+        lbu     v0,44(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_4_BYTE_BY_ADDR
+        nop
+        lbu     v0,48(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_4_BYTE_BY_ADDR
+        nop
+        lbu     v0,52(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_4_BYTE_BY_ADDR
+        nop
+        lbu     v0,24(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_4_BYTE_BY_ADDR
+        nop
+        jal     '_ModemEndMessage
+        nop
+        j       '_DOWNLINK_SEND_DESIRED_0xc0
+        nop
+     '_DOWNLINK_SEND_DESIRED_0xb0
+        lbu     v0,73(gp)
+        addiu   v0,v0,1
+        andi    v0,v0,255
+        sb      v0,73(gp)
+     '_DOWNLINK_SEND_DESIRED_0xc0
+        move    sp,s8
+        lw      ra,36(sp)
+        lw      s8,32(sp)
+        addiu   sp,sp,40
+        jr      ra
+        nop
+ .
+
+ op PERIODIC-SEND-DESIRED : -> InsList .
+ eq PERIODIC-SEND-DESIRED =
+     '_PERIODIC_SEND_DESIRED
+       	addiu   sp,sp,-32
+        sw      ra,28(sp)
+        sw      s8,24(sp)
+        move    s8,sp
+        lui     v0,65284
+        lw      v0,956(v0)
+        lui     v1,65284
+        lw      a0,520(v1)
+        mtc1    v0,$f0
+        mtc1    a0,$f1
+        c.le.s  $f1,$f0
+        lui     v1,65284
+        movf    v1,zero,$f0
+        mtc1    v1,$f0
+        mtc1    zero,$f2
+        c.lt.s  $f2,$f0
+        bc1t    '_PERIODIC_SEND_DESIRED_0x5c
+        nop
+        mtc1    v0,$f0
+        trunc.w.s       $f0,$f0
+        mfc1    v0,$f0
+        j       '_PERIODIC_SEND_DESIRED_0x80
+        nop
+     '_PERIODIC_SEND_DESIRED_0x5c
+        mtc1    v0,$f1
+        mtc1    a0,$f2
+        sub     $f1,$f1,$f2
+        mfc1    v0,$f1
+        lui     v1,65284
+        mtc1    v0,$f3
+        trunc.w.s       $f3,$f3
+        mfc1    v0,$f3
+        or      v0,v0,v1
+     '_PERIODIC_SEND_DESIRED_0x80
+        andi    v0,v0,255
+        move    t0,v0
+        lui     v0,65284
+        lw      v0,960(v0)
+        lui     v1,65284
+        lw      a0,520(v1)
+        mtc1    v0,$f0
+        mtc1    a0,$f1
+        c.le.s  $f1,$f0
+        lui     v1,65284
+        movf    v1,zero,$f0
+        mtc1    v1,$f0
+        mtc1    zero,$f2
+        c.lt.s  $f2,$f0
+        bc1t    '_PERIODIC_SEND_DESIRED_0xd4
+        nop
+        mtc1    v0,$f0
+        trunc.w.s       $f0,$f0
+        mfc1    v0,$f0
+        j       '_PERIODIC_SEND_DESIRED_0xf8
+        nop
+     '_PERIODIC_SEND_DESIRED_0xd4
+        mtc1    v0,$f1
+        mtc1    a0,$f2
+        sub     $f1,$f1,$f2
+        mfc1    v0,$f1
+        lui     v1,65284
+        mtc1    v0,$f3
+        trunc.w.s       $f3,$f3
+        mfc1    v0,$f3
+        or      v0,v0,v1
+     '_PERIODIC_SEND_DESIRED_0xf8
+        andi    v0,v0,255
+        move    a1,v0
+        lui     v0,65284
+        lw      v0,0(v0)
+        lui     v1,65284
+        lw      a0,520(v1)
+        mtc1    v0,$f0
+        mtc1    a0,$f1
+        c.le.s  $f1,$f0
+        lui     v1,65284
+        movf    v1,zero,$f0
+        mtc1    v1,$f0
+        mtc1    zero,$f2
+        c.lt.s  $f2,$f0
+        bc1t    '_PERIODIC_SEND_DESIRED_0x14c
+        nop
+        mtc1    v0,$f0
+        trunc.w.s       $f0,$f0
+        mfc1    v0,$f0
+        j       '_PERIODIC_SEND_DESIRED_0x170
+        nop
+     '_PERIODIC_SEND_DESIRED_0x14c
+        mtc1    v0,$f1
+        mtc1    a0,$f2
+        sub     $f1,$f1,$f2
+        mfc1    v0,$f1
+        lui     v1,65284
+        mtc1    v0,$f3
+        trunc.w.s       $f3,$f3
+        mfc1    v0,$f3
+        or      v0,v0,v1
+     '_PERIODIC_SEND_DESIRED_0x170
+        andi    v0,v0,255
+        move    a2,v0
+        lui     v0,65284
+        lw      v0,0(v0)
+        lui     v1,65284
+        lw      a0,520(v1)
+        mtc1    v0,$f0
+        mtc1    a0,$f1
+        c.le.s  $f1,$f0
+        lui     v1,65284
+        movf    v1,zero,$f0
+        mtc1    v1,$f0
+        mtc1    zero,$f2
+        c.lt.s  $f2,$f0
+        bc1t    '_PERIODIC_SEND_DESIRED_0x1c4
+        nop
+        mtc1    v0,$f0
+        trunc.w.s       $f0,$f0
+        mfc1    v0,$f0
+        j       '_PERIODIC_SEND_DESIRED_0x1e8
+        nop
+     '_PERIODIC_SEND_DESIRED_0x1c4
+        mtc1    v0,$f1
+        mtc1    a0,$f2
+        sub     $f1,$f1,$f2
+        mfc1    v0,$f1
+        lui     v1,65284
+        mtc1    v0,$f3
+        trunc.w.s       $f3,$f3
+        mfc1    v0,$f3
+        or      v0,v0,v1
+     '_PERIODIC_SEND_DESIRED_0x1e8
+        andi    v0,v0,255
+        move    a3,v0
+        lui     v0,65284
+        lw      v0,632(v0)
+        lui     v1,65284
+        lw      a0,520(v1)
+        mtc1    v0,$f0
+        mtc1    a0,$f1
+        c.le.s  $f1,$f0
+        lui     v1,65284
+        movf    v1,zero,$f0
+        mtc1    v1,$f0
+        mtc1    zero,$f2
+        c.lt.s  $f2,$f0
+        bc1t    '_PERIODIC_SEND_DESIRED_0x23c
+        nop
+        mtc1    v0,$f0
+        trunc.w.s       $f0,$f0
+        mfc1    v0,$f0
+        j       '_PERIODIC_SEND_DESIRED_0x260
+        nop
+     '_PERIODIC_SEND_DESIRED_0x23c
+        mtc1    v0,$f1
+        mtc1    a0,$f2
+        sub     $f1,$f1,$f2
+        mfc1    v0,$f1
+        lui     v1,65284
+        mtc1    v0,$f3
+        trunc.w.s       $f3,$f3
+        mfc1    v0,$f3
+        or      v0,v0,v1
+     '_PERIODIC_SEND_DESIRED_0x260
+        andi    v0,v0,255
+        sw      v0,16(sp)
+        move    a0,t0
+        jal     '_DOWNLINK_SEND_DESIRED
+        nop
+        move    sp,s8
+        lw      ra,28(sp)
+        lw      s8,24(sp)
+        addiu   sp,sp,32
+        jr      ra
+        nop
+ .
+
+ op send-desired : -> InsList .
+ eq send-desired =
+     'send_desired
+	       addiu   sp,sp,-24
+        sw      ra,20(sp)
+        sw      s8,16(sp)
+        move    s8,sp
+        lbu     v0,-1(gp)
+        bnez    v0, 'send_desired_0x5c
+        nop
+        lbu     v1,25(gp)
+        lui     v0,65284
+        ori     v0,v0,16
+        multu   v1,v0
+        mfhi    v0
+        srl     v0,v0,3
+        sll     v0,v0,1
+        sll     a0,v0,2
+        addu    v0,v0,a0
+        subu    v0,v1,v0
+        andi    v1,v0,255
+        li      v0,3
+        bne     v1,v0, 'send_desired_0x5c
+        nop
+        jal     '_PERIODIC_SEND_DESIRED
+        nop
+     'send_desired_0x5c
+        move    sp,s8
+        lw      ra,20(sp)
+        lw      s8,16(sp)
+        addiu   sp,sp,24
+        jr      ra
+        nop
+ .
+
+ op DOWNLINK-SEND-BAT : -> InsList .
+ eq DOWNLINK-SEND-BAT =
+     '_DOWNLINK_SEND_BAT
+       	addiu   sp,sp,-40
+        sw      ra,36(sp)
+        sw      s8,32(sp)
+        move    s8,sp
+        move    t0,a0
+        move    a0,a2
+        move    v1,a3
+        lw      v0,56(s8)
+        sb      t0,40(s8)
+        sb      a1,44(s8)
+        sb      a0,48(s8)
+        sb      v1,52(s8)
+        sb      v0,24(s8)
+        lbu     v0,16(s8)
+        sltiu   v0,v0,13
+        bnez    v0, '_DOWNLINK_SEND_BAT_0xb0
+        nop
+        li      a0,12
+        jal     '_ModemStartMessage
+        nop
+        lbu     v0,40(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_1_BYTE_BY_ADDR
+        nop
+        lbu     v0,44(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_2_BYTE_BY_ADDR
+        nop
+        lbu     v0,48(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_1_BYTE_BY_ADDR
+        nop
+        lbu     v0,52(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_2_BYTE_BY_ADDR
+        nop
+        lbu     v0,24(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_2_BYTE_BY_ADDR
+        nop
+        jal     '_ModemEndMessage
+        nop
+        j       '_DOWNLINK_SEND_BAT_0xc0
+        nop
+     '_DOWNLINK_SEND_BAT_0xb0
+        lbu     v0,73(gp)
+        addiu   v0,v0,1
+        andi    v0,v0,255
+        sb      v0,73(gp)
+     '_DOWNLINK_SEND_BAT_0xc0
+        move    sp,s8
+        lw      ra,36(sp)
+        lw      s8,32(sp)
+        addiu   sp,sp,40
+        jr      ra
+        nop
+ .
+
+ op PERIODIC-SEND-BAT : -> InsList .
+ eq PERIODIC-SEND-BAT =
+     '_PERIODIC_SEND_BAT
+       	addiu   sp,sp,-32
+        sw      ra,28(sp)
+        sw      s8,24(sp)
+        move    s8,sp
+        lbu     v0,192(gp)
+        move    a0,v0
+        lhu     v0,46(gp)
+        andi    v0,v0,255
+        move    a1,v0
+        lbu     v0,24(gp)
+        move    v1,v0
+        lhu     v0,194(gp)
+        andi    v0,v0,255
+        lhu     a2,190(gp)
+        andi    a2,a2,255
+        sw      a2,16(sp)
+        move    a2,v1
+        move    a3,v0
+        jal     '_DOWNLINK_SEND_BAT
+        nop
+        move    sp,s8
+        lw      ra,28(sp)
+        lw      s8,24(sp)
+        addiu   sp,sp,32
+        jr      ra
+        nop
+ .
+
+ op send-bat : -> InsList .
+ eq send-bat =
+     'send_bat
+       	addiu   sp,sp,-24
+        sw      ra,20(sp)
+        sw      s8,16(sp)
+        move    s8,sp
+        lbu     v0,-1(gp)
+        bnez    v0, 'send_bat_0x5c
+        nop
+        lbu     v1,25(gp)
+        lui     v0,65284
+        ori     v0,v0,16
+        multu   v1,v0
+        mfhi    v0
+        srl     v0,v0,4
+        sll     v0,v0,2
+        sll     a0,v0,2
+        addu    v0,v0,a0
+        subu    v0,v1,v0
+        andi    v1,v0,255
+        li      v0,8
+        bne     v1,v0, 'send_bat_0x5c
+        nop
+        jal     '_PERIODIC_SEND_BAT
+        nop
+     'send_bat_0x5c
+        move    sp,s8
+        lw      ra,20(sp)
+        lw      s8,16(sp)
+        addiu   sp,sp,24
+        jr      ra
+        nop
+ .
+
+ op DOWNLINK-SEND-CLIMB-PID : -> InsList .
+ eq DOWNLINK-SEND-CLIMB-PID =
+     '_DOWNLINK_SEND_CLIMB_PID
+       	addiu   sp,sp,-32
+        sw      ra,28(sp)
+        sw      s8,24(sp)
+        move    s8,sp
+        move    t0,a0
+        move    a0,a1
+        move    v1,a2
+        move    v0,a3
+        sb      t0,32(s8)
+        sb      a0,36(s8)
+        sb      v1,40(s8)
+        sb      v0,44(s8)
+        lbu     v0,16(s8)
+        sltiu   v0,v0,19
+        bnez    v0, '_DOWNLINK_SEND_CLIMB_PID_0x9c
+        nop
+        li      a0,14
+        jal     '_ModemStartMessage
+        nop
+        lbu     v0,32(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_2_BYTE_BY_ADDR
+        nop
+        lbu     v0,36(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_4_BYTE_BY_ADDR
+        nop
+        lbu     v0,40(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_4_BYTE_BY_ADDR
+        nop
+        lbu     v0,44(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_4_BYTE_BY_ADDR
+        nop
+        jal     '_ModemEndMessage
+        nop
+        j       '_DOWNLINK_SEND_CLIMB_PID_0xac
+        nop
+     '_DOWNLINK_SEND_CLIMB_PID_0x9c
+        lbu     v0,73(gp)
+        addiu   v0,v0,1
+        andi    v0,v0,255
+        sb      v0,73(gp)
+     '_DOWNLINK_SEND_CLIMB_PID_0xac
+        move    sp,s8
+        lw      ra,28(sp)
+        lw      s8,24(sp)
+        addiu   sp,sp,32
+        jr      ra
+        nop
+ .
+
+ op PERIODIC-SEND-CLIMB-PID : -> InsList .
+ eq PERIODIC-SEND-CLIMB-PID =
+     '_PERIODIC_SEND_CLIMB_PID
+	       addiu   sp,sp,-24
+        sw      ra,20(sp)
+        sw      s8,16(sp)
+        move    s8,sp
+        lh      v0,82(gp)
+        andi    v0,v0,255
+        move    a3,v0
+        lui     v0,65284
+        lw      v0,976(v0)
+        lui     v1,65284
+        lw      a0,520(v1)
+        mtc1    v0,$f0
+        mtc1    a0,$f1
+        c.le.s  $f1,$f0
+        lui     v1,65284
+        movf    v1,zero,$f0
+        mtc1    v1,$f0
+        mtc1    zero,$f2
+        c.lt.s  $f2,$f0
+        bc1t    '_PERIODIC_SEND_CLIMB_PID_0x68
+        nop
+        mtc1    v0,$f0
+        trunc.w.s       $f0,$f0
+        mfc1    v0,$f0
+        j       '_PERIODIC_SEND_CLIMB_PID_0x8c
+        nop
+     '_PERIODIC_SEND_CLIMB_PID_0x68
+        mtc1    v0,$f1
+        mtc1    a0,$f2
+        sub     $f1,$f1,$f2
+        mfc1    v0,$f1
+        lui     v1,65284
+        mtc1    v0,$f3
+        trunc.w.s       $f3,$f3
+        mfc1    v0,$f3
+        or      v0,v0,v1
+     '_PERIODIC_SEND_CLIMB_PID_0x8c
+        andi    v0,v0,255
+        move    a1,v0
+        lui     v0,65284
+        lw      v0,984(v0)
+        lui     v1,65284
+        lw      a0,520(v1)
+        mtc1    v0,$f0
+        mtc1    a0,$f1
+        c.le.s  $f1,$f0
+        lui     v1,65284
+        movf    v1,zero,$f0
+        mtc1    v1,$f0
+        mtc1    zero,$f2
+        c.lt.s  $f2,$f0
+        bc1t    '_PERIODIC_SEND_CLIMB_PID_0xe0
+        nop
+        mtc1    v0,$f0
+        trunc.w.s       $f0,$f0
+        mfc1    v0,$f0
+        j       '_PERIODIC_SEND_CLIMB_PID_0x104
+        nop
+     '_PERIODIC_SEND_CLIMB_PID_0xe0
+        mtc1    v0,$f1
+        mtc1    a0,$f2
+        sub     $f1,$f1,$f2
+        mfc1    v0,$f1
+        lui     v1,65284
+        mtc1    v0,$f3
+        trunc.w.s       $f3,$f3
+        mfc1    v0,$f3
+        or      v0,v0,v1
+     '_PERIODIC_SEND_CLIMB_PID_0x104
+        andi    v0,v0,255
+        move    a2,v0
+        lui     v0,65284
+        lw      v0,0(v0)
+        lui     v1,65284
+        lw      a0,520(v1)
+        mtc1    v0,$f0
+        mtc1    a0,$f1
+        c.le.s  $f1,$f0
+        lui     v1,65284
+        movf    v1,zero,$f0
+        mtc1    v1,$f0
+        mtc1    zero,$f2
+        c.lt.s  $f2,$f0
+        bc1t    '_PERIODIC_SEND_CLIMB_PID_0x158
+        nop
+        mtc1    v0,$f0
+        trunc.w.s       $f0,$f0
+        mfc1    v0,$f0
+        j       '_PERIODIC_SEND_CLIMB_PID_0x17c
+        nop
+     '_PERIODIC_SEND_CLIMB_PID_0x158
+        mtc1    v0,$f1
+        mtc1    a0,$f2
+        sub     $f1,$f1,$f2
+        mfc1    v0,$f1
+        lui     v1,65284
+        mtc1    v0,$f3
+        trunc.w.s       $f3,$f3
+        mfc1    v0,$f3
+        or      v0,v0,v1
+     '_PERIODIC_SEND_CLIMB_PID_0x17c
+        andi    v0,v0,255
+        move    a0,a3
+        move    a3,v0
+        jal     '_DOWNLINK_SEND_CLIMB_PID
+        nop
+        move    sp,s8
+        lw      ra,20(sp)
+        lw      s8,16(sp)
+        addiu   sp,sp,24
+        jr      ra
+        nop
+ .
+
+ op send-climb : -> InsList .
+ eq send-climb =
+     'send_climb
+       	addiu   sp,sp,-24
+        sw      ra,20(sp)
+        sw      s8,16(sp)
+        move    s8,sp
+        lbu     v0,-1(gp)
+        bnez    v0, 'send_climb_0x5c
+        nop
+        lbu     v1,25(gp)
+        lui     v0,65284
+        ori     v0,v0,16
+        multu   v1,v0
+        mfhi    v0
+        srl     v0,v0,4
+        sll     v0,v0,2
+        sll     a0,v0,2
+        addu    v0,v0,a0
+        subu    v0,v1,v0
+        andi    v1,v0,255
+        li      v0,18
+        bne     v1,v0, 'send_climb_0x5c
+        nop
+        jal     '_PERIODIC_SEND_CLIMB_PID
+        nop
+     'send_climb_0x5c
+        move    sp,s8
+        lw      ra,20(sp)
+        lw      s8,16(sp)
+        addiu   sp,sp,24
+        jr      ra
+        nop
+ .
+
+ op DOWNLINK-SEND-PPRZ-MODE : -> InsList .
+ eq DOWNLINK-SEND-PPRZ-MODE =
+     '_DOWNLINK_SEND_PPRZ_MODE
+       	addiu   sp,sp,-40
+        sw      ra,36(sp)
+        sw      s8,32(sp)
+        move    s8,sp
+        move    t0,a0
+        move    a0,a2
+        move    v1,a3
+        lw      v0,56(s8)
+        sb      t0,40(s8)
+        sb      a1,44(s8)
+        sb      a0,48(s8)
+        sb      v1,52(s8)
+        sb      v0,24(s8)
+        lbu     v0,16(s8)
+        sltiu   v0,v0,10
+        bnez    v0, '_DOWNLINK_SEND_PPRZ_MODE_0xb0
+        nop
+        li      a0,11
+        jal     '_ModemStartMessage
+        nop
+        lbu     v0,40(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_1_BYTE_BY_ADDR
+        nop
+        lbu     v0,44(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_1_BYTE_BY_ADDR
+        nop
+        lbu     v0,48(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_1_BYTE_BY_ADDR
+        nop
+        lbu     v0,52(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_1_BYTE_BY_ADDR
+        nop
+        lbu     v0,24(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_1_BYTE_BY_ADDR
+        nop
+        jal     '_ModemEndMessage
+        nop
+        j       '_DOWNLINK_SEND_PPRZ_MODE_0xc0
+        nop
+     '_DOWNLINK_SEND_PPRZ_MODE_0xb0
+        lbu     v0,73(gp)
+        addiu   v0,v0,1
+        andi    v0,v0,255
+        sb      v0,73(gp)
+     '_DOWNLINK_SEND_PPRZ_MODE_0xc0
+        move    sp,s8
+        lw      ra,36(sp)
+        lw      s8,32(sp)
+        addiu   sp,sp,40
+        jr      ra
+        nop
+ .
+
+ op PERIODIC-SEND-PPRZ-MODE : -> InsList .
+ eq PERIODIC-SEND-PPRZ-MODE =
+     '_PERIODIC_SEND_PPRZ_MODE
+       	addiu   sp,sp,-32
+        sw      ra,28(sp)
+        sw      s8,24(sp)
+        move    s8,sp
+        lbu     v0,3(gp)
+        move    a0,v0
+        lbu     v0,4(gp)
+        move    a1,v0
+        lbu     v0,1(gp)
+        move    v1,v0
+        lbu     v0,22(gp)
+        lbu     a2,-2(gp)
+        sw      a2,16(sp)
+        move    a2,v1
+        move    a3,v0
+        jal     '_DOWNLINK_SEND_PPRZ_MODE
+        nop
+        move    sp,s8
+        lw      ra,28(sp)
+        lw      s8,24(sp)
+        addiu   sp,sp,32
+        jr      ra
+        nop
+ .
+
+ op send-mode : -> InsList .
+ eq send-mode =
+     'send_mode
+       	addiu   sp,sp,-24
+        sw      ra,20(sp)
+        sw      s8,16(sp)
+        move    s8,sp
+        lbu     v0,-1(gp)
+        bnez    v0, 'send_mode_0x64
+        nop
+        lbu     v1,25(gp)
+        lui     v0,65284
+        ori     v0,v0,16
+        multu   v1,v0
+        mfhi    v0
+        srl     v0,v0,4
+        sll     v0,v0,1
+        sll     a0,v0,2
+        addu    v0,v0,a0
+        sll     a0,v0,2
+        addu    v0,v0,a0
+        subu    v0,v1,v0
+        andi    v1,v0,255
+        li      v0,9
+        bne     v1,v0, 'send_mode_0x64
+        nop
+        jal     '_PERIODIC_SEND_PPRZ_MODE
+        nop
+     'send_mode_0x64
+        move    sp,s8
+        lw      ra,20(sp)
+        lw      s8,16(sp)
+        addiu   sp,sp,24
+        jr      ra
+        nop
+ .
+
+ op DOWNLINK-SEND-DEBUG : -> InsList .
+ eq DOWNLINK-SEND-DEBUG =
+     '_DOWNLINK_SEND_DEBUG
+       	addiu   sp,sp,-40
+        sw      ra,36(sp)
+        sw      s8,32(sp)
+        move    s8,sp
+        move    t0,a0
+        move    a0,a2
+        move    v1,a3
+        lw      v0,56(s8)
+        sb      t0,40(s8)
+        sb      a1,44(s8)
+        sb      a0,48(s8)
+        sb      v1,52(s8)
+        sb      v0,24(s8)
+        lbu     v0,16(s8)
+        sltiu   v0,v0,10
+        bnez    v0, '_DOWNLINK_SEND_DEBUG_0xb0
+        nop
+        li      a0,13
+        jal     '_ModemStartMessage
+        nop
+        lbu     v0,40(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_1_BYTE_BY_ADDR
+        nop
+        lbu     v0,44(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_1_BYTE_BY_ADDR
+        nop
+        lbu     v0,48(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_1_BYTE_BY_ADDR
+        nop
+        lbu     v0,52(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_1_BYTE_BY_ADDR
+        nop
+        lbu     v0,24(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_1_BYTE_BY_ADDR
+        nop
+        jal     '_ModemEndMessage
+        nop
+        j       '_DOWNLINK_SEND_DEBUG_0xc0
+        nop
+     '_DOWNLINK_SEND_DEBUG_0xb0
+        lbu     v0,73(gp)
+        addiu   v0,v0,1
+        andi    v0,v0,255
+        sb      v0,73(gp)
+     '_DOWNLINK_SEND_DEBUG_0xc0
+        move    sp,s8
+        lw      ra,36(sp)
+        lw      s8,32(sp)
+        addiu   sp,sp,40
+        jr      ra
+        nop
+ .
+
+ op PERIODIC-SEND-DEBUG : -> InsList .
+ eq PERIODIC-SEND-DEBUG =
+     '_PERIODIC_SEND_DEBUG
+       	addiu   sp,sp,-32
+        sw      ra,28(sp)
+        sw      s8,24(sp)
+        move    s8,sp
+        lbu     v0,204(gp)
+        andi    v0,v0,255
+        move    a0,v0
+        lbu     v0,172(gp)
+        move    a1,v0
+        lbu     v0,73(gp)
+        move    v1,v0
+        lbu     v0,91(gp)
+        lbu     a2,23(gp)
+        sw      a2,16(sp)
+        move    a2,v1
+        move    a3,v0
+        jal     '_DOWNLINK_SEND_DEBUG
+        nop
+        move    sp,s8
+        lw      ra,28(sp)
+        lw      s8,24(sp)
+        addiu   sp,sp,32
+        jr      ra
+        nop
+ .
+
+ op send-debug : -> InsList .
+ eq send-debug =
+     'send_debug
+       	addiu   sp,sp,-24
+        sw      ra,20(sp)
+        sw      s8,16(sp)
+        move    s8,sp
+        lbu     v0,-1(gp)
+        bnez    v0, 'send_debug_0x64
+        nop
+        lbu     v1,25(gp)
+        lui     v0,65284
+        ori     v0,v0,16
+        multu   v1,v0
+        mfhi    v0
+        srl     v0,v0,4
+        sll     v0,v0,1
+        sll     a0,v0,2
+        addu    v0,v0,a0
+        sll     a0,v0,2
+        addu    v0,v0,a0
+        subu    v0,v1,v0
+        andi    v1,v0,255
+        li      v0,29
+        bne     v1,v0, 'send_debug_0x64
+        nop
+        jal     '_PERIODIC_SEND_DEBUG
+        nop
+     'send_debug_0x64
+        move    sp,s8
+        lw      ra,20(sp)
+        lw      s8,16(sp)
+        addiu   sp,sp,24
+        jr      ra
+        nop
+ .
+
+ op DOWNLINK-SEND-NAVIGATION-REF : -> InsList .
+ eq DOWNLINK-SEND-NAVIGATION-REF =
+     '_DOWNLINK_SEND_NAVIGATION_REF
+       	addiu   sp,sp,-32
+        sw      ra,28(sp)
+        sw      s8,24(sp)
+        move    s8,sp
+        move    v1,a0
+        move    v0,a1
+        sb      v1,32(s8)
+        sb      v0,36(s8)
+        lbu     v0,16(s8)
+        sltiu   v0,v0,13
+        bnez    v0, '_DOWNLINK_SEND_NAVIGATION_REF_0x6c
+        nop
+        li      a0,9
+        jal     '_ModemStartMessage
+        nop
+        lbu     v0,32(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_4_BYTE_BY_ADDR
+        nop
+        lbu     v0,36(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_4_BYTE_BY_ADDR
+        nop
+        jal     '_ModemEndMessage
+        nop
+        j       '_DOWNLINK_SEND_NAVIGATION_REF_0x7c
+        nop
+     '_DOWNLINK_SEND_NAVIGATION_REF_0x6c
+        lbu     v0,73(gp)
+        addiu   v0,v0,1
+        andi    v0,v0,255
+        sb      v0,73(gp)
+     '_DOWNLINK_SEND_NAVIGATION_REF_0x7c
+        move    sp,s8
+        lw      ra,28(sp)
+        lw      s8,24(sp)
+        addiu   sp,sp,32
+        jr      ra
+        nop
+ .
+
+ op PERIODIC-SEND-NAVIGATION-REF : -> InsList .
+ eq PERIODIC-SEND-NAVIGATION-REF =
+     '_PERIODIC_SEND_NAVIGATION_REF
+       	addiu   sp,sp,-24
+        sw      ra,20(sp)
+        sw      s8,16(sp)
+        move    s8,sp
+        lui     v0,65284
+        lw      v0,20(v0)
+        andi    v0,v0,255
+        move    v1,v0
+        lui     v0,65284
+        lw      v0,24(v0)
+        andi    v0,v0,255
+        move    a0,v1
+        move    a1,v0
+        jal     '_DOWNLINK_SEND_NAVIGATION_REF
+        nop
+        move    sp,s8
+        lw      ra,20(sp)
+        lw      s8,16(sp)
+        addiu   sp,sp,24
+        jr      ra
+        nop
+ .
+
+ op send-nav-ref : -> InsList .
+ eq send-nav-ref =
+     'send_nav_ref
+       	addiu   sp,sp,-24
+        sw      ra,20(sp)
+        sw      s8,16(sp)
+        move    s8,sp
+        lbu     v0,-1(gp)
+        bnez    v0, 'send_nav_ref_0x64
+        nop
+        lbu     v1,25(gp)
+        lui     v0,65284
+        ori     v0,v0,16
+        multu   v1,v0
+        mfhi    v0
+        srl     v0,v0,5
+        sll     v0,v0,2
+        sll     a0,v0,2
+        addu    v0,v0,a0
+        sll     a0,v0,2
+        addu    v0,v0,a0
+        subu    v0,v1,v0
+        andi    v1,v0,255
+        li      v0,49
+        bne     v1,v0, 'send_nav_ref_0x64
+        nop
+        jal     '_PERIODIC_SEND_NAVIGATION_REF
+        nop
+     'send_nav_ref_0x64
+        move    sp,s8
+        lw      ra,20(sp)
+        lw      s8,16(sp)
+        addiu   sp,sp,24
+        jr      ra
+        nop
+ .
+
+ op IF-CALIB-MODE-OF-PULSE : -> InsList .
+ eq IF-CALIB-MODE-OF-PULSE =
+     '_IF_CALIB_MODE_OF_PULSE
+       	addiu   sp,sp,-8
+        sw      s8,4(sp)
+        move    s8,sp
+        move    v0,a0
+        sb      v0,8(s8)
+        move    v0,zero
+        move    sp,s8
+        lw      s8,4(sp)
+        addiu   sp,sp,8
+        jr      ra
+        nop
+ .
+
+ op inflight-calib-mode-update : -> InsList .
+ eq inflight-calib-mode-update =
+     'inflight_calib_mode_update
+       	addiu   sp,sp,-32
+        sw      ra,28(sp)
+        sw      s8,24(sp)
+        sw      s0,20(sp)
+        move    s8,sp
+        lbu     v0,1(gp)
+        move    s0,v0
+        lui     v0,65284
+        addiu   a0,v0,16
+        li      a1,8
+        li      a2,18
+        jal     'lookup_arr
+        nop
+        lbu     v0,0(v0)
+        move    a0,v0
+        jal     '_IF_CALIB_MODE_OF_PULSE
+        nop
+        move    a0,s0
+        move    a1,v0
+        jal     '_ModeUpdate
+        nop
+        move    sp,s8
+        lw      ra,28(sp)
+        lw      s8,24(sp)
+        lw      s0,20(sp)
+        addiu   sp,sp,32
+        jr      ra
+        nop
+ .
+
+ op bit-is-set : -> InsList .
+ eq bit-is-set =
+     '_bit_is_set
+       	addiu   sp,sp,-8
+        sw      s8,4(sp)
+        move    s8,sp
+        move    v1,a0
+        move    v0,a1
+        sb      v1,8(s8)
+        sb      v0,12(s8)
+        lbu     v1,8(s8)
+        li      v0,1
+        bne     v1,v0, '_bit_is_set_0x48
+        nop
+        lbu     v1,12(s8)
+        li      v0,1
+        bne     v1,v0, '_bit_is_set_0x48
+        nop
+        li      v0,1
+        j       '_bit_is_set_0x4c
+        nop
+     '_bit_is_set_0x48
+        move    v0,zero
+        move    sp,s8
+        lw      s8,4(sp)
+        addiu   sp,sp,8
+        jr      ra
+        nop
+ .
+
+ op and-bitwise : -> InsList .
+ eq and-bitwise =
+     'and_bitwise
+       	addiu   sp,sp,-8
+        sw      s8,4(sp)
+        move    s8,sp
+        move    v1,a0
+        move    v0,a1
+        sb      v1,8(s8)
+        sb      v0,12(s8)
+        lbu     v1,8(s8)
+        lbu     v0,12(s8)
+        and     v0,v1,v0
+        andi    v0,v0,255
+        move    sp,s8
+        lw      s8,4(sp)
+        addiu   sp,sp,8
+        jr      ra
+        nop
+ .
+
+ op inflight-calib : -> InsList .
+ eq inflight-calib =
+     'inflight_calib
+       	addiu   sp,sp,-8
+        sw      s8,4(sp)
+        move    s8,sp
+        move    v0,a0
+        sb      v0,8(s8)
+        move    sp,s8
+        lw      s8,4(sp)
+        addiu   sp,sp,8
+        jr      ra
+        nop
+ .
+
+ op FLOAT-OF-PPRZ : -> InsList .
+ eq FLOAT-OF-PPRZ =
+     '_FLOAT_OF_PPRZ
+       	addiu   sp,sp,-8
+        sw      s8,4(sp)
+        move    s8,sp
+        move    v1,a1
+        move    v0,a2
+        sb      a0,8(s8)
+        sb      v1,12(s8)
+        sb      v0,16(s8)
+        lbu     v0,8(s8)
+        mtc1    v0,$f0
+        cvt.s.w $f0,$f0
+        mfc1    v1,$f0
+        lui     v0,65284
+        lw      v0,112(v0)
+        mtc1    v1,$f1
+        mtc1    v0,$f0
+        div     $f1,$f1,$f0
+        mfc1    v1,$f1
+        lbu     v0,16(s8)
+        mtc1    v0,$f1
+        cvt.s.w $f1,$f1
+        mfc1    v0,$f1
+        mtc1    v1,$f0
+        mtc1    v0,$f1
+        mul     $f0,$f0,$f1
+        mfc1    v1,$f0
+        lbu     v0,12(s8)
+        mtc1    v0,$f0
+        cvt.s.w $f0,$f0
+        mfc1    v0,$f0
+        mtc1    v1,$f1
+        mtc1    v0,$f0
+        add     $f1,$f1,$f0
+        mfc1    v0,$f1
+        mtc1    v0,$f0
+        move    sp,s8
+        lw      s8,4(sp)
+        addiu   sp,sp,8
+        jr      ra
+        nop
+ .
+
+ op shiftl-bitwise : -> InsList .
+ eq shiftl-bitwise =
+     'shiftl_bitwise
+       	addiu   sp,sp,-8
+        sw      s8,4(sp)
+        move    s8,sp
+        move    v1,a0
+        move    v0,a1
+        sb      v1,8(s8)
+        sb      v0,12(s8)
+        move    sp,s8
+        lw      s8,4(sp)
+        addiu   sp,sp,8
+        jr      ra
+        nop
+ .
+
+ op radio-control-task : -> InsList .
+ eq radio-control-task =
+     'radio_control_task
+       	addiu   sp,sp,-48
+        sw      ra,44(sp)
+        sw      s8,40(sp)
+        sw      s0,36(sp)
+        move    s8,sp
+        lbu     v0,0(gp)
+        andi    v0,v0,255
+        beqz    v0, 'radio_control_task_0x4b0
+        nop
+        sb      zero,24(s8)
+        jal     'copy_from_to_fbw
+        nop
+        lui     v0,65284
+        addiu   v0,v0,16
+        lbu     v0,19(v0)
+        move    a0,v0
+        li      a1,1
+        jal     '_bit_is_set
+        nop
+        beqz    v0, 'radio_control_task_0x70
+        nop
+        lbu     v1,3(gp)
+        li      v0,1
+        beq     v1,v0, 'radio_control_task_0x7c
+        nop
+        lbu     v0,3(gp)
+        beqz    v0, 'radio_control_task_0x7c
+        nop
+     'radio_control_task_0x70
+        lbu     v0,90(gp)
+        beqz    v0, 'radio_control_task_0x8c
+        nop
+     'radio_control_task_0x7c
+        li      v0,3
+        sb      v0,3(gp)
+        li      v0,1
+        sb      v0,24(s8)
+     'radio_control_task_0x8c
+        lui     v0,65284
+        addiu   v0,v0,16
+        lbu     v0,19(v0)
+        move    a0,v0
+        li      a1,2
+        jal     '_bit_is_set
+        nop
+        beqz    v0, 'radio_control_task_0x158
+        nop
+        jal     'pprz_mode_update
+        nop
+        sb      v0,25(s8)
+        lbu     v1,24(s8)
+        lbu     v0,25(s8)
+        move    a0,v1
+        move    a1,v0
+        jal     'and_bitwise
+        nop
+        sb      v0,24(s8)
+        lbu     s0,24(s8)
+        jal     'ir_estim_mode_update
+        nop
+        move    a0,s0
+        move    a1,v0
+        jal     'and_bitwise
+        nop
+        sb      v0,24(s8)
+        jal     'inflight_calib_mode_update
+        nop
+        sb      v0,26(s8)
+        lbu     v0,26(s8)
+        bnez    v0, 'radio_control_task_0x11c
+        nop
+        lbu     v0,25(s8)
+        beqz    v0, 'radio_control_task_0x128
+        nop
+    'radio_control_task_0x11c
+        li      v0,1
+        j       'radio_control_task_0x12c
+        nop
+     'radio_control_task_0x128
+        move    v0,zero
+     'radio_control_task_0x12c
+        andi    v0,v0,255
+        move    a0,v0
+        jal     'inflight_calib
+        nop
+        lbu     v1,24(s8)
+        lbu     v0,26(s8)
+        move    a0,v1
+        move    a1,v0
+        jal     'and_bitwise
+        nop
+        sb      v0,24(s8)
+     'radio_control_task_0x158
+        lbu     s0,24(s8)
+        jal     'mcu1_status_update
+        nop
+        move    a0,s0
+        move    a1,v0
+        jal     'and_bitwise
+        nop
+        sb      v0,24(s8)
+        lbu     v0,24(s8)
+        beqz    v0, 'radio_control_task_0x1b8
+        nop
+        lbu     v0,3(gp)
+        move    a0,v0
+        lbu     v0,4(gp)
+        move    a1,v0
+        lbu     v0,1(gp)
+        move    v1,v0
+        lbu     v0,22(gp)
+        lbu     a2,-2(gp)
+        sw      a2,16(sp)
+        move    a2,v1
+        move    a3,v0
+        jal     '_DOWNLINK_SEND_PPRZ_MODE
+        nop
+     'radio_control_task_0x1b8
+        lbu     v1,3(gp)
+        li      v0,1
+        bne     v1,v0, 'radio_control_task_0x228
+        nop
+        lui     v0,65284
+        addiu   v0,v0,16
+        lh      v0,2(v0)
+        andi    v0,v0,255
+        move    a0,v0
+        move    a1,zero
+        move    a2,zero
+        jal     '_FLOAT_OF_PPRZ
+        nop
+        mfc1    v1,$f0
+        lui     v0,65284
+        sw      v1,952(v0)
+        lui     v0,65284
+        addiu   v0,v0,16
+        lh      v0,4(v0)
+        andi    v0,v0,255
+        move    a0,v0
+        move    a1,zero
+        move    a2,zero
+        jal     '_FLOAT_OF_PPRZ
+        nop
+        mfc1    v1,$f0
+        lui     v0,65284
+        sw      v1,956(v0)
+     'radio_control_task_0x228
+        lbu     v0,3(gp)
+        beqz    v0, 'radio_control_task_0x244
+        nop
+        lbu     v1,3(gp)
+        li      v0,1
+        bne     v1,v0, 'radio_control_task_0x434
+        nop
+     'radio_control_task_0x244
+        lui     v0,65284
+        addiu   a0,v0,16
+        move    a1,zero
+        li      a2,18
+        jal     'lookup_arr
+        nop
+        lbu     v0,0(v0)
+        sll     v0,v0,16
+        sra     v0,v0,16
+        sh      v0,76(gp)
+        lui     v0,65284
+        addiu   a0,v0,16
+        move    a1,zero
+        li      a2,18
+        jal     'lookup_arr
+        nop
+        lbu     v0,0(v0)
+        mtc1    v0,$f1
+        cvt.d.w $f0,$f1
+        mfc1    a0,$f0
+        mfc1    a1,$f1
+        lui     v0,65284
+        lw      v1,492(v0)
+        lw      v0,488(v0)
+        mtc1    a0,$f2
+        mtc1    a1,$f3
+        mtc1    v0,$f0
+        mtc1    v1,$f1
+        mul     $f2,$f2,$f0
+        mfc1    a0,$f2
+        mfc1    a1,$f3
+        lui     v0,65284
+        lw      v1,500(v0)
+        lw      v0,496(v0)
+        mtc1    a0,$f2
+        mtc1    a1,$f3
+        mtc1    v0,$f0
+        mtc1    v1,$f1
+        div     $f2,$f2,$f0
+        mfc1    v0,$f2
+        mfc1    v1,$f3
+        lui     a0,65284
+        lw      a1,508(a0)
+        lw      a0,504(a0)
+        mtc1    a0,$f2
+        mtc1    a1,$f3
+        mtc1    v0,$f0
+        mtc1    v1,$f1
+        sub     $f2,$f2,$f0
+        mfc1    a0,$f2
+        mfc1    a1,$f3
+        lui     v0,65284
+        lw      v1,516(v0)
+        lw      v0,512(v0)
+        mtc1    a0,$f2
+        mtc1    a1,$f3
+        mtc1    v0,$f0
+        mtc1    v1,$f1
+        mul     $f2,$f2,$f0
+        mfc1    v0,$f2
+        mfc1    v1,$f3
+        mtc1    v0,$f2
+        mtc1    v1,$f3
+        cvt.s.d $f3,$f2
+        mfc1    v1,$f3
+        lui     v0,65284
+        sw      v1,592(v0)
+        lui     v0,65284
+        addiu   a0,v0,16
+        move    a1,zero
+        li      a2,18
+        jal     'lookup_arr
+        nop
+        lbu     v0,0(v0)
+        mtc1    v0,$f1
+        cvt.d.w $f0,$f1
+        mfc1    a0,$f0
+        mfc1    a1,$f1
+        lui     v0,65284
+        lw      v1,524(v0)
+        lw      v0,520(v0)
+        mtc1    a0,$f2
+        mtc1    a1,$f3
+        mtc1    v0,$f0
+        mtc1    v1,$f1
+        mul     $f2,$f2,$f0
+        mfc1    a0,$f2
+        mfc1    a1,$f3
+        lui     v0,65284
+        lw      v1,500(v0)
+        lw      v0,496(v0)
+        mtc1    a0,$f2
+        mtc1    a1,$f3
+        mtc1    v0,$f0
+        mtc1    v1,$f1
+        div     $f2,$f2,$f0
+        mfc1    v0,$f2
+        mfc1    v1,$f3
+        lui     a0,65284
+        lw      a1,508(a0)
+        lw      a0,504(a0)
+        mtc1    a0,$f2
+        mtc1    a1,$f3
+        mtc1    v0,$f0
+        mtc1    v1,$f1
+        sub     $f2,$f2,$f0
+        mfc1    a0,$f2
+        mfc1    a1,$f3
+        lui     v0,65284
+        lw      v1,532(v0)
+        lw      v0,528(v0)
+        mtc1    a0,$f2
+        mtc1    a1,$f3
+        mtc1    v0,$f0
+        mtc1    v1,$f1
+        mul     $f2,$f2,$f0
+        mfc1    v0,$f2
+        mfc1    v1,$f3
+        mtc1    v0,$f2
+        mtc1    v1,$f3
+        cvt.s.d $f3,$f2
+        mfc1    v1,$f3
+        lui     v0,65284
+        sw      v1,596(v0)
+     'radio_control_task_0x434
+        lui     v0,65284
+        addiu   v0,v0,16
+        lbu     v0,18(v0)
+        sb      v0,23(gp)
+        lui     v0,65284
+        addiu   v0,v0,16
+        lbu     v0,21(v0)
+        sb      v0,186(gp)
+        jal     'events_update
+        nop
+        lhu     v0,40(gp)
+        bnez    v0, 'radio_control_task_0x4b0
+        nop
+        jal     'ground_calibrate
+        nop
+        lbu     v1,3(gp)
+        li      v0,2
+        bne     v1,v0, 'radio_control_task_0x4b0
+        nop
+        lui     v0,65284
+        addiu   a0,v0,16
+        move    a1,zero
+        li      a2,18
+        jal     'lookup_arr
+        nop
+        lbu     v0,0(v0)
+        slti    v0,v0,16
+        bnez    v0, 'radio_control_task_0x4b0
+        nop
+        li      v0,1
+        sb      v0,7(gp)
+     'radio_control_task_0x4b0
+        move    sp,s8
+        lw      ra,44(sp)
+        lw      s8,40(sp)
+        lw      s0,36(sp)
+        addiu   sp,sp,48
+        jr      ra
+        nop
+ .
+
+ op Circle : -> InsList .
+ eq Circle =
+     '_Circle
+       	addiu   sp,sp,-48
+        sw      ra,44(sp)
+        sw      s8,40(sp)
+        sw      s0,36(sp)
+        move    s8,sp
+        move    v0,a0
+        sw      a1,52(s8)
+        sb      v0,48(s8)
+        lui     v0,65284
+        lw      s0,0(v0)
+        lbu     v1,48(s8)
+        lbu     v0,16(s8)
+        lui     a0,65284
+        addiu   a0,a0,620
+        move    a1,v1
+        move    a2,v0
+        jal     'lookup_arr
+        nop
+        lbu     v0,0(v0)
+        mtc1    v0,$f0
+        cvt.s.w $f0,$f0
+        mfc1    v0,$f0
+        mtc1    s0,$f1
+        mtc1    v0,$f2
+        sub     $f1,$f1,$f2
+        mfc1    v1,$f1
+        lui     v0,65284
+        lw      v0,0(v0)
+        mtc1    v1,$f3
+        mtc1    v0,$f0
+        add     $f3,$f3,$f0
+        mfc1    s0,$f3
+        lbu     v1,48(s8)
+        lbu     v0,17(s8)
+        lui     a0,65284
+        addiu   a0,a0,620
+        move    a1,v1
+        move    a2,v0
+        jal     'lookup_arr
+        nop
+        lbu     v0,0(v0)
+        mtc1    v0,$f1
+        cvt.s.w $f1,$f1
+        mfc1    v0,$f1
+        mtc1    s0,$f2
+        mtc1    v0,$f3
+        sub     $f2,$f2,$f3
+        mfc1    v0,$f2
+        sw      v0,20(s8)
+        lw      v0,20(s8)
+        mtc1    v0,$f1
+        cvt.d.s $f0,$f1
+        mfc1    a0,$f0
+        mfc1    a1,$f1
+        lw      v1,52(s8)
+        lui     v0,65284
+        xor     v1,v1,v0
+        lui     v0,65284
+        lw      v0,0(v0)
+        mtc1    v1,$f2
+        mtc1    v0,$f3
+        mul     $f2,$f2,$f3
+        mfc1    v0,$f2
+        mtc1    v0,$f1
+        cvt.d.s $f0,$f1
+        mfc1    v0,$f0
+        mfc1    v1,$f1
+        lui     a2,65284
+        lw      a3,180(a2)
+        lw      a2,176(a2)
+        mtc1    a2,$f2
+        mtc1    a3,$f3
+        mtc1    v0,$f0
+        mtc1    v1,$f1
+        div     $f2,$f2,$f0
+        mfc1    v0,$f2
+        mfc1    v1,$f3
+        mtc1    a0,$f2
+        mtc1    a1,$f3
+        mtc1    v0,$f0
+        mtc1    v1,$f1
+        add     $f2,$f2,$f0
+        mfc1    v0,$f2
+        mfc1    v1,$f3
+        mtc1    v0,$f2
+        mtc1    v1,$f3
+        cvt.s.d $f3,$f2
+        mfc1    v0,$f3
+        sw      v0,24(s8)
+        lbu     v1,48(s8)
+        lbu     v0,17(s8)
+        lui     a0,65284
+        addiu   a0,a0,620
+        move    a1,v1
+        move    a2,v0
+        jal     'lookup_arr
+        nop
+        lbu     v1,48(s8)
+        lbu     v0,16(s8)
+        lui     a0,65284
+        addiu   a0,a0,620
+        move    a1,v1
+        move    a2,v0
+        jal     'lookup_arr
+        nop
+        lw      v0,24(s8)
+        mtc1    v0,$f1
+        cvt.d.s $f0,$f1
+        mfc1    v0,$f0
+        mfc1    v1,$f1
+        lui     a0,65284
+        lw      a1,188(a0)
+        lw      a0,184(a0)
+        mtc1    a0,$f2
+        mtc1    a1,$f3
+        mtc1    v0,$f0
+        mtc1    v1,$f1
+        sub     $f2,$f2,$f0
+        mfc1    a0,$f2
+        mfc1    a1,$f3
+        lui     v0,65284
+        lw      v1,132(v0)
+        lw      v0,128(v0)
+        mtc1    a0,$f2
+        mtc1    a1,$f3
+        mtc1    v0,$f0
+        mtc1    v1,$f1
+        div     $f2,$f2,$f0
+        mfc1    a0,$f2
+        mfc1    a1,$f3
+        lui     v0,65284
+        lw      v1,196(v0)
+        lw      v0,192(v0)
+        mtc1    a0,$f2
+        mtc1    a1,$f3
+        mtc1    v0,$f0
+        mtc1    v1,$f1
+        mul     $f2,$f2,$f0
+        mfc1    v0,$f2
+        mfc1    v1,$f3
+        mtc1    v0,$f2
+        mtc1    v1,$f3
+        cvt.s.d $f3,$f2
+        mfc1    v1,$f3
+        lui     v0,65284
+        sw      v1,0(v0)
+        j       '_Circle_0x278
+        nop
+     '_Circle_0x250
+        lui     v0,65284
+        lw      v1,0(v0)
+        lui     v0,65284
+        lw      v0,200(v0)
+        mtc1    v1,$f0
+        mtc1    v0,$f1
+        add     $f0,$f0,$f1
+        mfc1    v1,$f0
+        lui     v0,65284
+        sw      v1,0(v0)
+     '_Circle_0x278
+        lui     v0,65284
+        lw      v1,0(v0)
+        move    v0,zero
+        mtc1    v1,$f2
+        mtc1    v0,$f3
+        c.lt.s  $f2,$f3
+        lui     v0,65284
+        movf    v0,zero,$f0
+        mtc1    v0,$f0
+        mtc1    zero,$f2
+        c.lt.s  $f2,$f0
+        bc1t    '_Circle_0x250
+        nop
+        j       '_Circle_0x2dc
+        nop
+     '_Circle_0x2b4
+        lui     v0,65284
+        lw      v1,0(v0)
+        lui     v0,65284
+        lw      v0,200(v0)
+        mtc1    v1,$f0
+        mtc1    v0,$f1
+        sub     $f0,$f0,$f1
+        mfc1    v1,$f0
+        lui     v0,65284
+        sw      v1,0(v0)
+     '_Circle_0x2dc
+        lui     v0,65284
+        lw      v1,0(v0)
+        lui     v0,65284
+        lw      v0,200(v0)
+        mtc1    v1,$f2
+        mtc1    v0,$f3
+        c.le.s  $f3,$f2
+        lui     v0,65284
+        movf    v0,zero,$f0
+        mtc1    v0,$f0
+        mtc1    zero,$f2
+        c.lt.s  $f2,$f0
+        bc1t    '_Circle_0x2b4
+        nop
+        mtc1    v0,$f0
+        move    sp,s8
+        lw      ra,44(sp)
+        lw      s8,40(sp)
+        lw      s0,36(sp)
+        addiu   sp,sp,48
+        jr      ra
+        nop
+ .
+
+ op compute-dist2-to-home : -> InsList .
+ eq compute-dist2-to-home =
+     'compute_dist2_to_home
+       	addiu   sp,sp,-40
+        sw      ra,36(sp)
+        sw      s8,32(sp)
+        move    s8,sp
+        lbu     v0,16(s8)
+        lui     v1,65284
+        addiu   a0,v1,620
+        move    a1,zero
+        move    a2,v0
+        jal     'lookup_arr
+        nop
+        lbu     v0,0(v0)
+        mtc1    v0,$f0
+        cvt.s.w $f0,$f0
+        mfc1    v1,$f0
+        lui     v0,65284
+        lw      v0,0(v0)
+        mtc1    v1,$f1
+        mtc1    v0,$f2
+        sub     $f1,$f1,$f2
+        mfc1    v0,$f1
+        sw      v0,20(s8)
+        lbu     v0,24(s8)
+        lui     v1,65284
+        addiu   a0,v1,620
+        move    a1,zero
+        move    a2,v0
+        jal     'lookup_arr
+        nop
+        lbu     v0,0(v0)
+        mtc1    v0,$f3
+        cvt.s.w $f3,$f3
+        mfc1    v1,$f3
+        lui     v0,65284
+        lw      v0,0(v0)
+        mtc1    v1,$f0
+        mtc1    v0,$f1
+        sub     $f0,$f0,$f1
+        mfc1    v0,$f0
+        sw      v0,28(s8)
+        lw      v1,20(s8)
+        lw      v0,20(s8)
+        mtc1    v1,$f2
+        mtc1    v0,$f3
+        mul     $f2,$f2,$f3
+        mfc1    v1,$f2
+        lw      a0,28(s8)
+        lw      v0,28(s8)
+        mtc1    a0,$f0
+        mtc1    v0,$f1
+        mul     $f0,$f0,$f1
+        mfc1    v0,$f0
+        mtc1    v1,$f2
+        mtc1    v0,$f3
+        add     $f2,$f2,$f3
+        mfc1    v1,$f2
+        lui     v0,65284
+        sw      v1,0(v0)
+        lui     v0,65284
+        lw      v1,0(v0)
+        lui     v0,65284
+        lw      v0,276(v0)
+        mtc1    v1,$f0
+        mtc1    v0,$f1
+        c.lt.s  $f1,$f0
+        lui     v0,65284
+        movf    v0,zero,$f0
+        mtc1    v0,$f0
+        mtc1    zero,$f2
+        c.lt.s  $f2,$f0
+        bc1f 	  'compute_dist2_to_home_0x130
+        nop
+        li      v0,1
+        sb      v0,90(gp)
+        j       'compute_dist2_to_home_0x134
+        nop
+     'compute_dist2_to_home_0x130
+        sb      zero,90(gp)
+     'compute_dist2_to_home_0x134
+        move    sp,s8
+        lw      ra,36(sp)
+        lw      s8,32(sp)
+        addiu   sp,sp,40
+        jr      ra
+        nop
+ .
+
+ op nav-home : -> InsList .
+ eq nav-home =
+     'nav_home
+       	addiu   sp,sp,-24
+        sw      ra,20(sp)
+        sw      s8,16(sp)
+        move    s8,sp
+        lui     v0,65284
+        lw      v0,252(v0)
+        move    a0,zero
+        move    a1,v0
+        jal     '_Circle
+        nop
+        lui     v0,65284
+        sw      zero,980(v0)
+        li      v0,3
+        sb      v0,4(gp)
+        lui     v0,65284
+        lui     v1,65284
+        lw      v1,240(v1)
+        sw      v1,624(v0)
+        jal     'compute_dist2_to_home
+        nop
+        lui     v0,65284
+        lw      v1,0(v0)
+        lui     v0,65284
+        sw      v1,0(v0)
+        move    sp,s8
+        lw      ra,20(sp)
+        lw      s8,16(sp)
+        addiu   sp,sp,24
+        jr      ra
+        nop
+ .
+
+ op auto-nav : -> InsList .
+ eq auto-nav =
+     '_auto_nav
+       	addiu   sp,sp,-8
+        sw      s8,4(sp)
+        move    s8,sp
+        move    sp,s8
+        lw      s8,4(sp)
+        addiu   sp,sp,8
+        jr      ra
+        nop
+ .
+
+ op nav-update : -> InsList .
+ eq nav-update =
+     'nav_update
+       	addiu   sp,sp,-24
+        sw      ra,20(sp)
+        sw      s8,16(sp)
+        move    s8,sp
+        jal     'compute_dist2_to_home
+        nop
+        jal     '_auto_nav
+        nop
+        move    sp,s8
+        lw      ra,20(sp)
+        lw      s8,16(sp)
+        addiu   sp,sp,24
+        jr      ra
+        nop
+ .
+
+ op navigation-update : -> InsList .
+ eq navigation-update =
+     'navigation_update
+       	addiu   sp,sp,-24
+        sw      ra,20(sp)
+        sw      s8,16(sp)
+        move    s8,sp
+        li      v0,3
+        sb      v0,5(gp)
+        lbu     v1,3(gp)
+        li      v0,3
+        bne     v1,v0, 'navigation_update_0x38
+        nop
+        jal     'nav_home
+        nop
+        j       'navigation_update_0x40
+        nop
+     'navigation_update_0x38
+        jal     'nav_update
+        nop
+     'navigation_update_0x40
+        move    sp,s8
+        lw      ra,20(sp)
+        lw      s8,16(sp)
+        addiu   sp,sp,24
+        jr      ra
+        nop
+ .
+
+ op DOWNLINK-SEND-NAVIGATION : -> InsList .
+ eq DOWNLINK-SEND-NAVIGATION =
+     '_DOWNLINK_SEND_NAVIGATION
+       	addiu   sp,sp,-48
+        sw      ra,44(sp)
+        sw      s8,40(sp)
+        move    s8,sp
+        move    t2,a0
+        move    t1,a1
+        move    t0,a2
+        move    a2,a3
+        lw      a1,64(s8)
+        lw      a0,68(s8)
+        lw      v1,72(s8)
+        lw      v0,76(s8)
+        sb      t2,48(s8)
+        sb      t1,52(s8)
+        sb      t0,56(s8)
+        sb      a2,60(s8)
+        sb      a1,24(s8)
+        sb      a0,28(s8)
+        sb      v1,32(s8)
+        sb      v0,36(s8)
+        lbu     v0,16(s8)
+        sltiu   v0,v0,30
+        beqz    v0, '_DOWNLINK_SEND_NAVIGATION_0xfc
+        nop
+        li      a0,10
+        jal     '_ModemStartMessage
+        nop
+        lbu     v0,48(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_1_BYTE_BY_ADDR
+        nop
+        lbu     v0,52(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_1_BYTE_BY_ADDR
+        nop
+        lbu     v0,56(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_4_BYTE_BY_ADDR
+        nop
+        lbu     v0,60(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_4_BYTE_BY_ADDR
+        nop
+        lbu     v0,24(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_4_BYTE_BY_ADDR
+        nop
+        lbu     v0,28(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_4_BYTE_BY_ADDR
+        nop
+        lbu     v0,32(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_4_BYTE_BY_ADDR
+        nop
+        lbu     v0,36(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_4_BYTE_BY_ADDR
+        nop
+        jal     '_ModemEndMessage
+        nop
+        j       '_DOWNLINK_SEND_NAVIGATION_0x10c
+        nop
+     '_DOWNLINK_SEND_NAVIGATION_0xfc
+        lbu     v0,67(gp)
+        addiu   v0,v0,1
+        andi    v0,v0,255
+        sb      v0,67(gp)
+     '_DOWNLINK_SEND_NAVIGATION_0x10c
+        move    sp,s8
+        lw      ra,44(sp)
+        lw      s8,40(sp)
+        addiu   sp,sp,48
+        jr      ra
+        nop
+ .
+
+ op send-nav-values : -> InsList .
+ eq send-nav-values =
+     'send_nav_values
+       	addiu   sp,sp,-40
+        sw      ra,36(sp)
+        sw      s8,32(sp)
+        move    s8,sp
+        lbu     v0,87(gp)
+        move    t0,v0
+        lbu     v0,142(gp)
+        move    a1,v0
+        lui     v0,65284
+        lw      v0,0(v0)
+        lui     v1,65284
+        lw      a0,412(v1)
+        mtc1    v0,$f0
+        mtc1    a0,$f1
+        c.le.s  $f1,$f0
+        lui     v1,65284
+        movf    v1,zero,$f0
+        mtc1    v1,$f0
+        mtc1    zero,$f2
+        c.lt.s  $f2,$f0
+        bc1t    'send_nav_values_0x6c
+        nop
+        mtc1    v0,$f0
+        trunc.w.s       $f0,$f0
+        mfc1    v0,$f0
+        j       'send_nav_values_0x90
+        nop
+     'send_nav_values_0x6c
+        mtc1    v0,$f1
+        mtc1    a0,$f2
+        sub     $f1,$f1,$f2
+        mfc1    v0,$f1
+        lui     v1,65284
+        mtc1    v0,$f3
+        trunc.w.s       $f3,$f3
+        mfc1    v0,$f3
+        or      v0,v0,v1
+     'send_nav_values_0x90
+        andi    v0,v0,255
+        move    a2,v0
+        lui     v0,65284
+        lw      v0,0(v0)
+        lui     v1,65284
+        lw      a0,412(v1)
+        mtc1    v0,$f0
+        mtc1    a0,$f1
+        c.le.s  $f1,$f0
+        lui     v1,65284
+        movf    v1,zero,$f0
+        mtc1    v1,$f0
+        mtc1    zero,$f2
+        c.lt.s  $f2,$f0
+        bc1t    'send_nav_values_0xe4
+        nop
+        mtc1    v0,$f0
+        trunc.w.s       $f0,$f0
+        mfc1    v0,$f0
+        j       'send_nav_values_0x108
+        nop
+     'send_nav_values_0xe4
+        mtc1    v0,$f1
+        mtc1    a0,$f2
+        sub     $f1,$f1,$f2
+        mfc1    v0,$f1
+        lui     v1,65284
+        mtc1    v0,$f3
+        trunc.w.s       $f3,$f3
+        mfc1    v0,$f3
+        or      v0,v0,v1
+     'send_nav_values_0x108
+        andi    v0,v0,255
+        move    a3,v0
+        lui     v0,65284
+        lw      v0,896(v0)
+        lui     v1,65284
+        lw      a0,412(v1)
+        mtc1    v0,$f0
+        mtc1    a0,$f1
+        c.le.s  $f1,$f0
+        lui     v1,65284
+        movf    v1,zero,$f0
+        mtc1    v1,$f0
+        mtc1    zero,$f2
+        c.lt.s  $f2,$f0
+        bc1t    'send_nav_values_0x15c
+        nop
+        mtc1    v0,$f0
+        trunc.w.s       $f0,$f0
+        mfc1    v0,$f0
+        j       'send_nav_values_0x180
+        nop
+     'send_nav_values_0x15c
+        mtc1    v0,$f1
+        mtc1    a0,$f2
+        sub     $f1,$f1,$f2
+        mfc1    v0,$f1
+        lui     v1,65284
+        mtc1    v0,$f3
+        trunc.w.s       $f3,$f3
+        mfc1    v0,$f3
+        or      v0,v0,v1
+     'send_nav_values_0x180
+        andi    v0,v0,255
+        move    t3,v0
+        lui     v0,65284
+        lw      v0,0(v0)
+        lui     v1,65284
+        lw      a0,412(v1)
+        mtc1    v0,$f0
+        mtc1    a0,$f1
+        c.le.s  $f1,$f0
+        lui     v1,65284
+        movf    v1,zero,$f0
+        mtc1    v1,$f0
+        mtc1    zero,$f2
+        c.lt.s  $f2,$f0
+        bc1t    'send_nav_values_0x1d4
+        nop
+        mtc1    v0,$f0
+        trunc.w.s       $f0,$f0
+        mfc1    v0,$f0
+        j       'send_nav_values_0x1f8
+        nop
+     'send_nav_values_0x1d4
+        mtc1    v0,$f1
+        mtc1    a0,$f2
+        sub     $f1,$f1,$f2
+        mfc1    v0,$f1
+        lui     v1,65284
+        mtc1    v0,$f3
+        trunc.w.s       $f3,$f3
+        mfc1    v0,$f3
+        or      v0,v0,v1
+     'send_nav_values_0x1f8
+        andi    v0,v0,255
+        move    t2,v0
+        lui     v0,65284
+        lw      v0,532(v0)
+        lui     v1,65284
+        lw      a0,412(v1)
+        mtc1    v0,$f0
+        mtc1    a0,$f1
+        c.le.s  $f1,$f0
+        lui     v1,65284
+        movf    v1,zero,$f0
+        mtc1    v1,$f0
+        mtc1    zero,$f2
+        c.lt.s  $f2,$f0
+        bc1t    'send_nav_values_0x24c
+        nop
+        mtc1    v0,$f0
+        trunc.w.s       $f0,$f0
+        mfc1    v0,$f0
+        j       'send_nav_values_0x270
+        nop
+     'send_nav_values_0x24c
+        mtc1    v0,$f1
+        mtc1    a0,$f2
+        sub     $f1,$f1,$f2
+        mfc1    v0,$f1
+        lui     v1,65284
+        mtc1    v0,$f3
+        trunc.w.s       $f3,$f3
+        mfc1    v0,$f3
+        or      v0,v0,v1
+     'send_nav_values_0x270
+        andi    v0,v0,255
+        move    t1,v0
+        lui     v0,65284
+        lw      v0,0(v0)
+        lui     v1,65284
+        lw      a0,412(v1)
+        mtc1    v0,$f0
+        mtc1    a0,$f1
+        c.le.s  $f1,$f0
+        lui     v1,65284
+        movf    v1,zero,$f0
+        mtc1    v1,$f0
+        mtc1    zero,$f2
+        c.lt.s  $f2,$f0
+        bc1t    'send_nav_values_0x2c4
+        nop
+        mtc1    v0,$f0
+        trunc.w.s       $f0,$f0
+        mfc1    v0,$f0
+        j       'send_nav_values_0x2e8
+        nop
+     'send_nav_values_0x2c4
+        mtc1    v0,$f1
+        mtc1    a0,$f2
+        sub     $f1,$f1,$f2
+        mfc1    v0,$f1
+        lui     v1,65284
+        mtc1    v0,$f3
+        trunc.w.s       $f3,$f3
+        mfc1    v0,$f3
+        or      v0,v0,v1
+     'send_nav_values_0x2e8
+        andi    v0,v0,255
+        sw      t3,16(sp)
+        sw      t2,20(sp)
+        sw      t1,24(sp)
+        sw      v0,28(sp)
+        move    a0,t0
+        jal     '_DOWNLINK_SEND_NAVIGATION
+        nop
+        move    sp,s8
+        lw      ra,36(sp)
+        lw      s8,32(sp)
+        addiu   sp,sp,40
+        jr      ra
+        nop
+ .
+
+ op NORM-RAD-ANGLE : -> InsList .
+ eq NORM-RAD-ANGLE =
+     '_NORM_RAD_ANGLE
+       	addiu   sp,sp,-8
+        sw      s8,4(sp)
+        move    s8,sp
+        move    v0,a0
+        sb      v0,8(s8)
+        j       '_NORM_RAD_ANGLE_0xe4
+        nop
+     '_NORM_RAD_ANGLE_0x1c
+        lbu     v0,8(s8)
+        mtc1    v0,$f1
+        cvt.d.w $f0,$f1
+        mfc1    a0,$f0
+        mfc1    a1,$f1
+        lui     v0,65284
+        lw      v1,124(v0)
+        lw      v0,120(v0)
+        mtc1    a0,$f2
+        mtc1    a1,$f3
+        mtc1    v0,$f0
+        mtc1    v1,$f1
+        sub     $f2,$f2,$f0
+        mfc1    v0,$f2
+        mfc1    v1,$f3
+        lui     a0,65284
+        lw      a1,108(a0)
+        lw      a0,104(a0)
+        mtc1    v0,$f2
+        mtc1    v1,$f3
+        mtc1    a0,$f0
+        mtc1    a1,$f1
+        c.le.d  $f0,$f2
+        lui     a2,65284
+        movf    a2,zero,$f0
+        mtc1    a2,$f0
+        mtc1    zero,$f2
+        c.lt.s  $f2,$f0
+        bc1t    '_NORM_RAD_ANGLE_0xac
+        nop
+        mtc1    v0,$f0
+        mtc1    v1,$f1
+        trunc.w.d       $f1,$f0
+        mfc1    v0,$f1
+        j       '_NORM_RAD_ANGLE_0xe0
+        nop
+     '_NORM_RAD_ANGLE_0xac
+        mtc1    v0,$f2
+        mtc1    v1,$f3
+        mtc1    a0,$f0
+        mtc1    a1,$f1
+        sub     $f2,$f2,$f0
+        mfc1    v0,$f2
+        mfc1    v1,$f3
+        lui     a0,65284
+        mtc1    v0,$f2
+        mtc1    v1,$f3
+        trunc.w.d       $f3,$f2
+        mfc1    v0,$f3
+        or      v0,v0,a0
+     '_NORM_RAD_ANGLE_0xe0
+        sb      v0,8(s8)
+     '_NORM_RAD_ANGLE_0xe4
+        lbu     v0,8(s8)
+        mtc1    v0,$f1
+        cvt.d.w $f0,$f1
+        mfc1    a0,$f0
+        mfc1    a1,$f1
+        lui     v0,65284
+        lw      v1,132(v0)
+        lw      v0,128(v0)
+        mtc1    a0,$f2
+        mtc1    a1,$f3
+        mtc1    v0,$f0
+        mtc1    v1,$f1
+        c.lt.d  $f0,$f2
+        lui     v0,65284
+        movf    v0,zero,$f0
+        mtc1    v0,$f0
+        mtc1    zero,$f2
+        c.lt.s  $f2,$f0
+        bc1t    '_NORM_RAD_ANGLE_0x1c
+        nop
+        j       '_NORM_RAD_ANGLE_0x204
+        nop
+     '_NORM_RAD_ANGLE_0x13c
+        lbu     v0,8(s8)
+        mtc1    v0,$f1
+        cvt.d.w $f0,$f1
+        mfc1    a0,$f0
+        mfc1    a1,$f1
+        lui     v0,65284
+        lw      v1,124(v0)
+        lw      v0,120(v0)
+        mtc1    a0,$f2
+        mtc1    a1,$f3
+        mtc1    v0,$f0
+        mtc1    v1,$f1
+        add     $f2,$f2,$f0
+        mfc1    v0,$f2
+        mfc1    v1,$f3
+        lui     a0,65284
+        lw      a1,108(a0)
+        lw      a0,104(a0)
+        mtc1    v0,$f2
+        mtc1    v1,$f3
+        mtc1    a0,$f0
+        mtc1    a1,$f1
+        c.le.d  $f0,$f2
+        lui     a2,65284
+        movf    a2,zero,$f0
+        mtc1    a2,$f0
+        mtc1    zero,$f2
+        c.lt.s  $f2,$f0
+        bc1t    '_NORM_RAD_ANGLE_0x1cc
+        nop
+        mtc1    v0,$f0
+        mtc1    v1,$f1
+        trunc.w.d       $f1,$f0
+        mfc1    v0,$f1
+        j       '_NORM_RAD_ANGLE_0x200
+        nop
+     '_NORM_RAD_ANGLE_0x1cc
+        mtc1    v0,$f2
+        mtc1    v1,$f3
+        mtc1    a0,$f0
+        mtc1    a1,$f1
+        sub     $f2,$f2,$f0
+        mfc1    v0,$f2
+        mfc1    v1,$f3
+        lui     a0,65284
+        mtc1    v0,$f2
+        mtc1    v1,$f3
+        trunc.w.d       $f3,$f2
+        mfc1    v0,$f3
+        or      v0,v0,a0
+     '_NORM_RAD_ANGLE_0x200
+        sb      v0,8(s8)
+     '_NORM_RAD_ANGLE_0x204
+        lbu     v0,8(s8)
+        mtc1    v0,$f1
+        cvt.d.w $f0,$f1
+        mfc1    a0,$f0
+        mfc1    a1,$f1
+        lui     v0,65284
+        lw      v1,140(v0)
+        lw      v0,136(v0)
+        mtc1    a0,$f2
+        mtc1    a1,$f3
+        mtc1    v0,$f0
+        mtc1    v1,$f1
+        c.lt.d  $f2,$f0
+        lui     v0,65284
+        movf    v0,zero,$f0
+        mtc1    v0,$f0
+        mtc1    zero,$f2
+        c.lt.s  $f2,$f0
+        bc1t    '_NORM_RAD_ANGLE_0x13c
+        nop
+        move    sp,s8
+        lw      s8,4(sp)
+        addiu   sp,sp,8
+        jr      ra
+        nop
+ .
+
+ op course-pid-run : -> InsList .
+ eq course-pid-run =
+     'course_pid_run
+       	addiu   sp,sp,-32
+        sw      ra,28(sp)
+        sw      s8,24(sp)
+        move    s8,sp
+        lui     v0,65284
+        lw      v1,0(v0)
+        lui     v0,65284
+        lw      v0,904(v0)
+        mtc1    v1,$f0
+        mtc1    v0,$f1
+        sub     $f0,$f0,$f1
+        mfc1    v0,$f0
+        sw      v0,16(s8)
+        lw      v0,16(s8)
+        lui     v1,65284
+        lw      a0,148(v1)
+        mtc1    v0,$f2
+        mtc1    a0,$f3
+        c.le.s  $f3,$f2
+        lui     v1,65284
+        movf    v1,zero,$f0
+        mtc1    v1,$f0
+        mtc1    zero,$f2
+        c.lt.s  $f2,$f0
+        bc1t    'course_pid_run_0x7c
+        nop
+        mtc1    v0,$f0
+        trunc.w.s       $f0,$f0
+        mfc1    v0,$f0
+        j       'course_pid_run_0xa0
+        nop
+     'course_pid_run_0x7c
+        mtc1    v0,$f1
+        mtc1    a0,$f2
+        sub     $f1,$f1,$f2
+        mfc1    v0,$f1
+        lui     v1,65284
+        mtc1    v0,$f3
+        trunc.w.s       $f3,$f3
+        mfc1    v0,$f3
+        or      v0,v0,v1
+     'course_pid_run_0xa0
+        andi    v0,v0,255
+        move    a0,v0
+        jal     '_NORM_RAD_ANGLE
+        nop
+        lui     v0,65284
+        lw      v1,540(v0)
+        lw      v0,16(s8)
+        mtc1    v1,$f0
+        mtc1    v0,$f1
+        mul     $f0,$f0,$f1
+        mfc1    v1,$f0
+        lui     v0,65284
+        sw      v1,0(v0)
+        lui     v0,65284
+        lw      v1,0(v0)
+        lui     v0,65284
+        lw      v0,544(v0)
+        mtc1    v1,$f2
+        mtc1    v0,$f3
+        c.lt.s  $f3,$f2
+        lui     v0,65284
+        movf    v0,zero,$f0
+        mtc1    v0,$f0
+        mtc1    zero,$f2
+        c.lt.s  $f2,$f0
+        bc1f	   'course_pid_run_0x124
+        nop
+        lui     v0,65284
+        lw      v1,544(v0)
+        lui     v0,65284
+        sw      v1,0(v0)
+        j       'course_pid_run_0x17c
+        nop
+     'course_pid_run_0x124
+        lui     v0,65284
+        lw      v1,544(v0)
+        lui     v0,65284
+        xor     v1,v1,v0
+        lui     v0,65284
+        lw      v0,0(v0)
+        mtc1    v1,$f0
+        mtc1    v0,$f1
+        c.lt.s  $f1,$f0
+        lui     v0,65284
+        movf    v0,zero,$f0
+        mtc1    v0,$f0
+        mtc1    zero,$f2
+        c.lt.s  $f2,$f0
+        bc1f 	  'course_pid_run_0x17c
+        nop
+        lui     v0,65284
+        lw      v1,544(v0)
+        lui     v0,65284
+        xor     v1,v1,v0
+        lui     v0,65284
+        sw      v1,0(v0)
+     'course_pid_run_0x17c
+        move    sp,s8
+        lw      ra,28(sp)
+        lw      s8,24(sp)
+        addiu   sp,sp,32
+        jr      ra
+        nop
+ .
+
+ op course-run : -> InsList .
+ eq course-run =
+     'course_run
+       	addiu   sp,sp,-24
+        sw      ra,20(sp)
+        sw      s8,16(sp)
+        move    s8,sp
+        lbu     v1,3(gp)
+        li      v0,2
+        beq     v1,v0, 'course_run_0x30
+        nop
+        lbu     v1,3(gp)
+        li      v0,3
+        bne     v1,v0, 'course_run_0x58
+        nop
+     'course_run_0x30
+        lbu     v0,5(gp)
+        sltiu   v0,v0,3
+        bnez    v0, 'course_run_0x48
+        nop
+        jal     'course_pid_run
+        nop
+     'course_run_0x48
+        lui     v0,65284
+        lw      v1,0(v0)
+        lui     v0,65284
+        sw      v1,888(v0)
+     'course_run_0x58
+        move    sp,s8
+        lw      ra,20(sp)
+        lw      s8,16(sp)
+        addiu   sp,sp,24
+        jr      ra
+        nop
+ .
+
+ op altitude-pid-run : -> InsList .
+ eq altitude-pid-run =
+     'altitude_pid_run
+       	addiu   sp,sp,-16
+        sw      s8,12(sp)
+        move    s8,sp
+        lui     v0,65284
+        lw      v1,0(v0)
+        lui     v0,65284
+        lw      v0,568(v0)
+        mtc1    v1,$f0
+        mtc1    v0,$f1
+        sub     $f0,$f0,$f1
+        mfc1    v0,$f0
+        sw      v0,0(s8)
+        lui     v0,65284
+        lw      v1,564(v0)
+        lw      v0,0(s8)
+        mtc1    v1,$f2
+        mtc1    v0,$f3
+        mul     $f2,$f2,$f3
+        mfc1    v1,$f2
+        lui     v0,65284
+        lw      v0,912(v0)
+        mtc1    v1,$f0
+        mtc1    v0,$f1
+        add     $f0,$f0,$f1
+        mfc1    v1,$f0
+        lui     v0,65284
+        sw      v1,908(v0)
+        lui     v0,65284
+        lw      v1,908(v0)
+        lui     v0,65284
+        lw      v0,176(v0)
+        mtc1    v1,$f2
+        mtc1    v0,$f3
+        c.lt.s  $f2,$f3
+        lui     v0,65284
+        movf    v0,zero,$f0
+        mtc1    v0,$f0
+        mtc1    zero,$f2
+        c.lt.s  $f2,$f0
+        bc1f	   'altitude_pid_run_0xb4
+        nop
+        lui     v0,65284
+        lui     v1,65284
+        lw      v1,176(v1)
+        sw      v1,908(v0)
+     'altitude_pid_run_0xb4
+        lui     v0,65284
+        lw      v1,908(v0)
+        lui     v0,65284
+        lw      v0,180(v0)
+        mtc1    v1,$f0
+        mtc1    v0,$f1
+        c.lt.s  $f1,$f0
+        lui     v0,65284
+        movf    v0,zero,$f0
+        mtc1    v0,$f0
+        mtc1    zero,$f2
+        c.lt.s  $f2,$f0
+        bc1f	   'altitude_pid_run_0xfc
+        nop
+        lui     v0,65284
+        lui     v1,65284
+        lw      v1,180(v1)
+        sw      v1,908(v0)
+     'altitude_pid_run_0xfc
+        move    sp,s8
+        lw      s8,12(sp)
+        addiu   sp,sp,16
+        jr      ra
+        nop
+ .
+
+ op altitude-control-task : -> InsList .
+ eq altitude-control-task =
+     'altitude_control_task
+       	addiu   sp,sp,-24
+        sw      ra,20(sp)
+        sw      s8,16(sp)
+        move    s8,sp
+        lbu     v1,3(gp)
+        li      v0,2
+        beq     v1,v0, 'altitude_control_task_0x30
+        nop
+        lbu     v1,3(gp)
+        li      v0,3
+        bne     v1,v0, 'altitude_control_task_0x48
+        nop
+     'altitude_control_task_0x30
+        lbu     v1,4(gp)
+        li      v0,3
+        bne     v1,v0, 'altitude_control_task_0x48
+        nop
+        jal     'altitude_pid_run
+        nop
+     'altitude_control_task_0x48
+        move    sp,s8
+        lw      ra,20(sp)
+        lw      s8,16(sp)
+        addiu   sp,sp,24
+        jr      ra
+        nop
+ .
+
+ op TRIM-UPPRZ : -> InsList .
+ eq TRIM-UPPRZ =
+     '_TRIM_UPPRZ
+       	addiu   sp,sp,-8
+        sw      s8,4(sp)
+        move    s8,sp
+        move    v0,a0
+        sb      v0,8(s8)
+        move    sp,s8
+        lw      s8,4(sp)
+        addiu   sp,sp,8
+        jr      ra
+        nop
+ .
+
+ op climb-pid-run : -> InsList .
+ eq climb-pid-run =
+     'climb_pid_run
+       	addiu   sp,sp,-32
+        sw      ra,28(sp)
+        sw      s8,24(sp)
+        move    s8,sp
+        lui     v0,65284
+        lw      v1,0(v0)
+        lui     v0,65284
+        lw      v0,908(v0)
+        mtc1    v1,$f0
+        mtc1    v0,$f1
+        sub     $f0,$f0,$f1
+        mfc1    v0,$f0
+        sw      v0,16(s8)
+        lbu     v0,6(gp)
+        beqz    v0, 'climb_pid_run_0x1f0
+        nop
+        lhu     v0,70(gp)
+        sll     v0,v0,16
+        sra     v0,v0,16
+        sh      v0,76(gp)
+        lui     v0,65284
+        lw      v1,552(v0)
+        lui     v0,65284
+        lw      v0,920(v0)
+        mtc1    v1,$f2
+        mtc1    v0,$f3
+        mul     $f2,$f2,$f3
+        mfc1    v1,$f2
+        lw      v0,16(s8)
+        mtc1    v1,$f0
+        mtc1    v0,$f1
+        add     $f0,$f0,$f1
+        mfc1    v1,$f0
+        lui     v0,65284
+        lw      v0,548(v0)
+        mtc1    v1,$f2
+        mtc1    v0,$f3
+        mul     $f2,$f2,$f3
+        mfc1    v1,$f2
+        lui     v0,65284
+        sw      v1,892(v0)
+        lui     v0,65284
+        lw      v1,892(v0)
+        lui     v0,65284
+        lw      v0,556(v0)
+        mtc1    v1,$f0
+        mtc1    v0,$f1
+        c.lt.s  $f1,$f0
+        lui     v0,65284
+        movf    v0,zero,$f0
+        mtc1    v0,$f0
+        mtc1    zero,$f2
+        c.lt.s  $f2,$f0
+        bc1f 	  'climb_pid_run_0xec
+        nop
+        lui     v0,65284
+        lw      v1,556(v0)
+        lui     v0,65284
+        sw      v1,892(v0)
+     'climb_pid_run_0xec
+        lui     v0,65284
+        lw      v1,892(v0)
+        lui     v0,65284
+        lw      v0,560(v0)
+        mtc1    v1,$f0
+        mtc1    v0,$f1
+        c.lt.s  $f0,$f1
+        lui     v0,65284
+        movf    v0,zero,$f0
+        mtc1    v0,$f0
+        mtc1    zero,$f2
+        c.lt.s  $f2,$f0
+        bc1f	   'climb_pid_run_0x134
+        nop
+        lui     v0,65284
+        lw      v1,560(v0)
+        lui     v0,65284
+        sw      v1,892(v0)
+     'climb_pid_run_0x134
+        lui     v0,65284
+        lw      v1,920(v0)
+        lw      v0,16(s8)
+        mtc1    v1,$f0
+        mtc1    v0,$f1
+        add     $f0,$f0,$f1
+        mfc1    v1,$f0
+        lui     v0,65284
+        sw      v1,920(v0)
+        lui     v0,65284
+        lw      v1,920(v0)
+        lui     v0,65284
+        lw      v0,152(v0)
+        mtc1    v1,$f2
+        mtc1    v0,$f3
+        c.lt.s  $f3,$f2
+        lui     v0,65284
+        movf    v0,zero,$f0
+        mtc1    v0,$f0
+        mtc1    zero,$f2
+        c.lt.s  $f2,$f0
+        bc1f	   'climb_pid_run_0x1a0
+        nop
+        lui     v0,65284
+        lui     v1,65284
+        lw      v1,152(v1)
+        sw      v1,920(v0)
+     'climb_pid_run_0x1a0
+        lui     v0,65284
+        lw      v1,920(v0)
+        lui     v0,65284
+        lw      v0,156(v0)
+        mtc1    v1,$f0
+        mtc1    v0,$f1
+        c.lt.s  $f0,$f1
+        lui     v0,65284
+        movf    v0,zero,$f0
+        mtc1    v0,$f0
+        mtc1    zero,$f2
+        c.lt.s  $f2,$f0
+        bc1f	   'climb_pid_run_0x4c8
+        nop
+        lui     v0,65284
+        lui     v1,65284
+        lw      v1,156(v1)
+        sw      v1,920(v0)
+        j       'climb_pid_run_0x4c8
+        nop
+     'climb_pid_run_0x1f0
+        lui     v0,65284
+        lw      v1,908(v0)
+        move    v0,zero
+        mtc1    v1,$f0
+        mtc1    v0,$f1
+        c.lt.s  $f1,$f0
+        lui     v0,65284
+        movf    v0,zero,$f0
+        mtc1    v0,$f0
+        mtc1    zero,$f2
+        c.lt.s  $f2,$f0
+        bc1f	   'climb_pid_run_0x24c
+        nop
+        lui     v0,65284
+        lw      v1,908(v0)
+        lui     v0,65284
+        lw      v0,536(v0)
+        mtc1    v1,$f0
+        mtc1    v0,$f1
+        mul     $f0,$f0,$f1
+        mfc1    v0,$f0
+        j       'climb_pid_run_0x250
+        nop
+     'climb_pid_run_0x24c
+        move    v0,zero
+     'climb_pid_run_0x250
+        lui     v1,65284
+        sw      v0,900(v1)
+        lui     v0,65284
+        lw      v1,4(v0)
+        lui     v0,65284
+        lw      v0,916(v0)
+        mtc1    v1,$f2
+        mtc1    v0,$f3
+        mul     $f2,$f2,$f3
+        mfc1    v1,$f2
+        lw      v0,16(s8)
+        mtc1    v1,$f0
+        mtc1    v0,$f1
+        add     $f0,$f0,$f1
+        mfc1    v1,$f0
+        lui     v0,65284
+        lw      v0,0(v0)
+        mtc1    v1,$f2
+        mtc1    v0,$f3
+        mul     $f2,$f2,$f3
+        mfc1    v0,$f2
+        mtc1    v0,$f1
+        cvt.d.s $f0,$f1
+        mfc1    a0,$f0
+        mfc1    a1,$f1
+        lui     v0,65284
+        lw      v1,164(v0)
+        lw      v0,160(v0)
+        mtc1    a0,$f2
+        mtc1    a1,$f3
+        mtc1    v0,$f0
+        mtc1    v1,$f1
+        add     $f2,$f2,$f0
+        mfc1    a0,$f2
+        mfc1    a1,$f3
+        lui     v0,65284
+        lw      v0,908(v0)
+        mtc1    v0,$f3
+        cvt.d.s $f2,$f3
+        mfc1    a2,$f2
+        mfc1    a3,$f3
+        lui     v0,65284
+        lw      v1,172(v0)
+        lw      v0,168(v0)
+        mtc1    a2,$f0
+        mtc1    a3,$f1
+        mtc1    v0,$f2
+        mtc1    v1,$f3
+        mul     $f0,$f0,$f2
+        mfc1    v0,$f0
+        mfc1    v1,$f1
+        mtc1    a0,$f0
+        mtc1    a1,$f1
+        mtc1    v0,$f2
+        mtc1    v1,$f3
+        add     $f0,$f0,$f2
+        mfc1    v0,$f0
+        mfc1    v1,$f1
+        mtc1    v0,$f0
+        mtc1    v1,$f1
+        cvt.s.d $f1,$f0
+        mfc1    v0,$f1
+        sw      v0,20(s8)
+        lui     v0,65284
+        lw      v1,916(v0)
+        lw      v0,16(s8)
+        mtc1    v1,$f2
+        mtc1    v0,$f3
+        add     $f2,$f2,$f3
+        mfc1    v1,$f2
+        lui     v0,65284
+        sw      v1,916(v0)
+        lui     v0,65284
+        lw      v1,916(v0)
+        lui     v0,65284
+        lw      v0,152(v0)
+        mtc1    v1,$f0
+        mtc1    v0,$f1
+        c.lt.s  $f1,$f0
+        lui     v0,65284
+        movf    v0,zero,$f0
+        mtc1    v0,$f0
+        mtc1    zero,$f2
+        c.lt.s  $f2,$f0
+        bc1f	   'climb_pid_run_0x3b8
+        nop
+        lui     v0,65284
+        lui     v1,65284
+        lw      v1,152(v1)
+        sw      v1,916(v0)
+     'climb_pid_run_0x3b8
+        lui     v0,65284
+        lw      v1,916(v0)
+        lui     v0,65284
+        lw      v0,156(v0)
+        mtc1    v1,$f0
+        mtc1    v0,$f1
+        c.lt.s  $f0,$f1
+        lui     v0,65284
+        movf    v0,zero,$f0
+        mtc1    v0,$f0
+        mtc1    zero,$f2
+        c.lt.s  $f2,$f0
+        bc1f	   'climb_pid_run_0x400
+        nop
+        lui     v0,65284
+        lui     v1,65284
+        lw      v1,156(v1)
+        sw      v1,916(v0)
+     'climb_pid_run_0x400
+        lw      v1,20(s8)
+        lui     v0,65284
+        lw      v0,112(v0)
+        mtc1    v1,$f0
+        mtc1    v0,$f1
+        mul     $f0,$f0,$f1
+        mfc1    v0,$f0
+        lui     v1,65284
+        lw      a0,148(v1)
+        mtc1    v0,$f2
+        mtc1    a0,$f3
+        c.le.s  $f3,$f2
+        lui     v1,65284
+        movf    v1,zero,$f0
+        mtc1    v1,$f0
+        mtc1    zero,$f2
+        c.lt.s  $f2,$f0
+        bc1t    'climb_pid_run_0x460
+        nop
+        mtc1    v0,$f0
+        trunc.w.s       $f0,$f0
+        mfc1    v0,$f0
+        j       'climb_pid_run_0x484
+        nop
+     'climb_pid_run_0x460
+        mtc1    v0,$f1
+        mtc1    a0,$f2
+        sub     $f1,$f1,$f2
+        mfc1    v0,$f1
+        lui     v1,65284
+        mtc1    v0,$f3
+        trunc.w.s       $f3,$f3
+        mfc1    v0,$f3
+        or      v0,v0,v1
+     'climb_pid_run_0x484
+        andi    v0,v0,255
+        move    a0,v0
+        jal     '_TRIM_UPPRZ
+        nop
+        sll     v0,v0,16
+        sra     v0,v0,16
+        sh      v0,76(gp)
+        lui     v0,65284
+        lw      v1,924(v0)
+        lui     v0,65284
+        lw      v0,900(v0)
+        mtc1    v1,$f0
+        mtc1    v0,$f1
+        add     $f0,$f0,$f1
+        mfc1    v1,$f0
+        lui     v0,65284
+        sw      v1,892(v0)
+     'climb_pid_run_0x4c8
+        move    sp,s8
+        lw      ra,28(sp)
+        lw      s8,24(sp)
+        addiu   sp,sp,32
+        jr      ra
+        nop
+ .
+
+ op climb-control-task : -> InsList .
+ eq climb-control-task =
+     'climb_control_task
+       	addiu   sp,sp,-24
+        sw      ra,20(sp)
+        sw      s8,16(sp)
+        move    s8,sp
+        lbu     v1,3(gp)
+        li      v0,2
+        beq     v1,v0, 'climb_control_task_0x30
+        nop
+        lbu     v1,3(gp)
+        li      v0,3
+        bne     v1,v0, 'climb_control_task_0x90
+        nop
+     'climb_control_task_0x30
+        lbu     v0,4(gp)
+        sltiu   v0,v0,2
+        bnez    v0, 'climb_control_task_0x48
+        nop
+        jal     'climb_pid_run
+        nop
+     'climb_control_task_0x48
+        lbu     v1,4(gp)
+        li      v0,1
+        bne     v1,v0, 'climb_control_task_0x68
+        nop
+        lhu     v0,70(gp)
+        sll     v0,v0,16
+        sra     v0,v0,16
+        sh      v0,76(gp)
+     'climb_control_task_0x68
+        lbu     v0,24(gp)
+        bnez    v0, 'climb_control_task_0x8c
+        nop
+        lhu     v0,40(gp)
+        bnez    v0, 'climb_control_task_0x90
+        nop
+        lbu     v0,7(gp)
+        bnez    v0, 'climb_control_task_0x90
+        nop
+     'climb_control_task_0x8c
+        sh      zero,76(gp)
+     'climb_control_task_0x90
+        move    sp,s8
+        lw      ra,20(sp)
+        lw      s8,16(sp)
+        addiu   sp,sp,24
+        jr      ra
+        nop
+.
+
+ op estimator-propagate-state : -> InsList .
+ eq estimator-propagate-state =
+     'estimator_propagate_state
+       	addiu   sp,sp,-8
+        sw      s8,4(sp)
+        move    s8,sp
+        move    sp,s8
+        lw      s8,4(sp)
+        addiu   sp,sp,8
+        jr      ra
+        nop
+ .
+
+ op link-fbw-send : -> InsList .
+ eq link-fbw-send =
+     'link_fbw_send
+       	addiu   sp,sp,-16
+        sw      s8,12(sp)
+        move    s8,sp
+        lbu     v0,138(gp)
+        andi    v0,v0,255
+        beqz    v0, 'link_fbw_send_0x34
+        nop
+        lbu     v0,126(gp)
+        addiu   v0,v0,1
+        andi    v0,v0,255
+        sb      v0,126(gp)
+        j       'link_fbw_send_0x154
+        nop
+     'link_fbw_send_0x34
+        lbu     v0,178(gp)
+        li      v1,1
+        sllv    v0,v1,v0
+        sll     v1,v0,24
+        sra     v1,v1,24
+        lbu     v0,84(gp)
+        li      a0,1
+        sllv    v0,a0,v0
+        sll     v0,v0,24
+        sra     v0,v0,24
+        or      v0,v1,v0
+        sll     v1,v0,24
+        sra     v1,v1,24
+        lbu     v0,143(gp)
+        li      a0,1
+        sllv    v0,a0,v0
+        sll     v0,v0,24
+        sra     v0,v0,24
+        or      v0,v1,v0
+        sll     v0,v0,24
+        sra     v0,v0,24
+        andi    v0,v0,255
+        sb      v0,133(gp)
+        addiu   v0,gp,100
+        andi    v0,v0,16
+        lbu     v0,0(v0)
+        andi    v0,v0,255
+        move    v1,v0
+        lbu     v0,56(gp)
+        srav    v0,v1,v0
+        andi    v0,v0,1
+        beqz    v0, 'link_fbw_send_0xc0
+        nop
+        lbu     v0,73(gp)
+        sb      v0,0(s8)
+     'link_fbw_send_0xc0
+        lbu     v0,118(gp)
+        li      v1,1
+        sllv    v0,v1,v0
+        sll     v1,v0,24
+        sra     v1,v1,24
+        lbu     v0,133(gp)
+        sll     v0,v0,24
+        sra     v0,v0,24
+        or      v0,v1,v0
+        sll     v0,v0,24
+        sra     v0,v0,24
+        andi    v0,v0,255
+        sb      v0,133(gp)
+        li      v0,1
+        sb      v0,138(gp)
+        addiu   v0,gp,112
+        andi    v0,v0,16
+        addiu   v1,gp,112
+        andi    v1,v1,16
+        lbu     v1,0(v1)
+        andi    a0,v1,255
+        li      v1,-2
+        and     v1,a0,v1
+        andi    v1,v1,255
+        sb      v1,0(v0)
+        sb      zero,13(gp)
+        sb      zero,14(gp)
+        lbu     v0,13(gp)
+        move    v1,v0
+        lui     v0,65284
+        addiu   v0,v0,16
+        addu    v0,v1,v0
+        lbu     v0,0(v0)
+        sb      v0,15(gp)
+        lbu     v0,15(gp)
+        sb      v0,73(gp)
+        sb      zero,0(gp)
+     'link_fbw_send_0x154
+        move    sp,s8
+        lw      s8,12(sp)
+        addiu   sp,sp,16
+        jr      ra
+        nop
+ .
+
+ op periodic-task : -> InsList .
+ eq periodic-task =
+     'periodic_task
+       	addiu   sp,sp,-24
+        sw      ra,20(sp)
+        sw      s8,16(sp)
+        move    s8,sp
+        lui     v0,65284
+        lw      v0,0(v0)
+        mtc1    v0,$f1
+        cvt.d.s $f0,$f1
+        mfc1    a0,$f0
+        mfc1    a1,$f1
+        lui     v0,65284
+        lw      v1,476(v0)
+        lw      v0,472(v0)
+        mtc1    a0,$f2
+        mtc1    a1,$f3
+        mtc1    v0,$f0
+        mtc1    v1,$f1
+        add     $f2,$f2,$f0
+        mfc1    v0,$f2
+        mfc1    v1,$f3
+        mtc1    v0,$f2
+        mtc1    v1,$f3
+        cvt.s.d $f3,$f2
+        mfc1    v1,$f3
+        lui     v0,65284
+        sw      v1,0(v0)
+        lbu     v0,26(gp)
+        addiu   v0,v0,1
+        andi    v0,v0,255
+        sb      v0,26(gp)
+        lbu     v0,26(gp)
+        sltiu   v0,v0,3
+        bnez    v0, 'periodic_task_0x8c
+        nop
+        sb      zero,26(gp)
+     'periodic_task_0x8c
+        lbu     v0,28(gp)
+        addiu   v0,v0,1
+        andi    v0,v0,255
+        sb      v0,28(gp)
+        lbu     v0,28(gp)
+        sltiu   v0,v0,6
+        bnez    v0, 'periodic_task_0xb0
+        nop
+        sb      zero,28(gp)
+     'periodic_task_0xb0
+        lbu     v0,29(gp)
+        addiu   v0,v0,1
+        andi    v0,v0,255
+        sb      v0,29(gp)
+        lbu     v0,29(gp)
+        sltiu   v0,v0,15
+        bnez    v0, 'periodic_task_0xd4
+        nop
+        sb      zero,29(gp)
+     'periodic_task_0xd4
+        lbu     v0,27(gp)
+        addiu   v0,v0,1
+        andi    v0,v0,255
+        sb      v0,27(gp)
+        lbu     v0,27(gp)
+        sltiu   v0,v0,61
+        bnez    v0, 'periodic_task_0xf8
+        nop
+        sb      zero,27(gp)
+     'periodic_task_0xf8
+        lbu     v0,28(gp)
+        bnez    v0, 'periodic_task_0x15c
+        nop
+        lui     v0,65284
+        lw      v0,0(v0)
+        mtc1    v0,$f1
+        cvt.d.s $f0,$f1
+        mfc1    a0,$f0
+        mfc1    a1,$f1
+        lui     v0,65284
+        lw      v1,268(v0)
+        lw      v0,264(v0)
+        mtc1    a0,$f2
+        mtc1    a1,$f3
+        mtc1    v0,$f0
+        mtc1    v1,$f1
+        add     $f2,$f2,$f0
+        mfc1    v0,$f2
+        mfc1    v1,$f3
+        mtc1    v0,$f2
+        mtc1    v1,$f3
+        cvt.s.d $f3,$f2
+        mfc1    v1,$f3
+        lui     v0,65284
+        sw      v1,0(v0)
+     'periodic_task_0x15c
+        lbu     v0,27(gp)
+        bnez    v0, 'periodic_task_0x284
+        nop
+        lhu     v0,40(gp)
+        beqz    v0, 'periodic_task_0x184
+        nop
+        lhu     v0,40(gp)
+        addiu   v0,v0,1
+        andi    v0,v0,16
+        sh      v0,40(gp)
+     'periodic_task_0x184
+        lhu     v0,20(gp)
+        addiu   v0,v0,1
+        andi    v0,v0,16
+        sh      v0,20(gp)
+        lui     v0,65284
+        lw      v0,0(v0)
+        mtc1    v0,$f1
+        cvt.d.s $f0,$f1
+        mfc1    a0,$f0
+        mfc1    a1,$f1
+        lui     v0,65284
+        lw      v1,484(v0)
+        lw      v0,480(v0)
+        mtc1    a0,$f2
+        mtc1    a1,$f3
+        mtc1    v0,$f0
+        mtc1    v1,$f1
+        add     $f2,$f2,$f0
+        mfc1    v0,$f2
+        mfc1    v1,$f3
+        mtc1    v0,$f2
+        mtc1    v1,$f3
+        trunc.w.d       $f3,$f2
+        mfc1    v0,$f3
+        sll     v0,v0,16
+        sra     v0,v0,16
+        mtc1    v0,$f0
+        cvt.s.w $f0,$f0
+        mfc1    v1,$f0
+        lui     v0,65284
+        sw      v1,0(v0)
+        lhu     v0,184(gp)
+        addiu   v0,v0,1
+        andi    v0,v0,16
+        sh      v0,184(gp)
+        lhu     v0,188(gp)
+        addiu   v0,v0,1
+        andi    v0,v0,16
+        sh      v0,188(gp)
+        lbu     v0,186(gp)
+        sltiu   v0,v0,93
+        beqz    v0, 'periodic_task_0x248
+        nop
+        lbu     v0,30(gp)
+        addiu   v0,v0,1
+        andi    v0,v0,255
+        sb      v0,30(gp)
+        j       'periodic_task_0x24c
+        nop
+     'periodic_task_0x248
+        sb      zero,30(gp)
+     'periodic_task_0x24c
+        lbu     v0,30(gp)
+        sltiu   v0,v0,5
+        xori    v0,v0,1
+        andi    v0,v0,255
+        sll     v1,v0,24
+        sra     v1,v1,24
+        lbu     v0,24(gp)
+        sll     v0,v0,24
+        sra     v0,v0,24
+        or      v0,v1,v0
+        sll     v0,v0,24
+        sra     v0,v0,24
+        andi    v0,v0,255
+        sb      v0,24(gp)
+     'periodic_task_0x284
+        lbu     v0,29(gp)
+        bnez    v0, 'periodic_task_0x2c0
+        nop
+        jal     'estimator_propagate_state
+        nop
+        jal     'navigation_update
+        nop
+        jal     'send_nav_values
+        nop
+        jal     'course_run
+        nop
+        jal     'altitude_control_task
+        nop
+        jal     'climb_control_task
+        nop
+     'periodic_task_0x2c0
+        lbu     v0,26(gp)
+        beqz    v0, 'periodic_task_0x38c
+        nop
+        lbu     v1,26(gp)
+        li      v0,1
+        bne     v1,v0, 'periodic_task_0x354
+        nop
+        lbu     v0,31(gp)
+        addiu   v0,v0,1
+        andi    v0,v0,255
+        sb      v0,31(gp)
+        lbu     v0,31(gp)
+        andi    v0,v0,1
+        beqz    v0, 'periodic_task_0x38c
+        nop
+        jal     'send_boot
+        nop
+        jal     'send_attitude
+        nop
+        jal     'send_adc
+        nop
+        jal     'send_settings
+        nop
+        jal     'send_desired
+        nop
+        jal     'send_bat
+        nop
+        jal     'send_climb
+        nop
+        jal     'send_mode
+        nop
+        jal     'send_debug
+        nop
+        jal     'send_nav_ref
+        nop
+        j       'periodic_task_0x38c
+        nop
+     'periodic_task_0x354
+        lbu     v1,26(gp)
+        li      v0,2
+        bne     v1,v0, 'periodic_task_0x37c
+        nop
+        jal     'stabilisation_task
+        nop
+        jal     'link_fbw_send
+        nop
+        j       'periodic_task_0x38c
+        nop
+     'periodic_task_0x37c
+        lbu     v0,2(gp)
+        addiu   v0,v0,1
+        andi    v0,v0,255
+        sb      v0,2(gp)
+     'periodic_task_0x38c
+        move    sp,s8
+        lw      ra,20(sp)
+       	lw      s8,16(sp)
+        addiu   sp,sp,24
+        jr      ra
+        nop
+ .
+
+ op ir-update : -> InsList .
+ eq ir-update =
+     'ir_update
+       	addiu   sp,sp,-16
+        sw      s8,12(sp)
+        move    s8,sp
+        lui     v0,65284
+        lhu     v0,0(v0)
+        srl     v0,v0,5
+        andi    v0,v0,16
+        sh      v0,0(s8)
+        lui     v0,65284
+        lhu     v0,0(v0)
+        srl     v0,v0,5
+        andi    v0,v0,16
+        sh      v0,2(s8)
+        lhu     v0,0(s8)
+        negu    v0,v0
+        andi    v1,v0,16
+        lhu     v0,2(s8)
+        subu    v0,v1,v0
+        andi    v1,v0,16
+        lh      v0,-8(gp)
+        andi    v0,v0,16
+        subu    v0,v1,v0
+        andi    v0,v0,16
+        sll     v0,v0,16
+        sra     v0,v0,16
+        sh      v0,158(gp)
+        lhu     v1,2(s8)
+        lhu     v0,0(s8)
+        subu    v0,v1,v0
+        andi    v1,v0,16
+        lh      v0,-6(gp)
+        andi    v0,v0,16
+        subu    v0,v1,v0
+        andi    v0,v0,16
+        sll     v0,v0,16
+        sra     v0,v0,16
+        sh      v0,58(gp)
+        move    sp,s8
+        lw      s8,12(sp)
+        addiu   sp,sp,16
+        jr      ra
+        nop
+ .
+
+ op estimator-update-state-infrared : -> InsList .
+ eq estimator-update-state-infrared =
+     'estimator_update_state_infrared
+       	addiu   sp,sp,-16
+        sw      s8,12(sp)
+        move    s8,sp
+        lbu     v1,-2(gp)
+        li      v0,1
+        bne     v1,v0, 'estimator_update_state_infrared_0x2c
+        nop
+        lui     v0,65284
+        lw      v0,0(v0)
+        j       'estimator_update_state_infrared_0x34
+        nop
+     'estimator_update_state_infrared_0x2c
+        lui     v0,65284
+        lw      v0,668(v0)
+     'estimator_update_state_infrared_0x34
+        sw      v0,0(s8)
+        lh      v0,158(gp)
+        mtc1    v0,$f0
+        cvt.s.w $f0,$f0
+        mfc1    v1,$f0
+        lw      v0,0(s8)
+        mtc1    v1,$f1
+        mtc1    v0,$f0
+        mul     $f1,$f1,$f0
+        mfc1    v1,$f1
+        lui     v0,65284
+        sw      v1,0(v0)
+        lh      v0,58(gp)
+        mtc1    v0,$f1
+        cvt.s.w $f1,$f1
+        mfc1    v1,$f1
+        lw      v0,0(s8)
+        mtc1    v1,$f0
+        mtc1    v0,$f1
+        mul     $f0,$f0,$f1
+        mfc1    v1,$f0
+        lui     v0,65284
+        sw      v1,0(v0)
+        move    sp,s8
+        lw      s8,12(sp)
+        addiu   sp,sp,16
+        jr      ra
+        nop
+ .
+
+ op fabs : -> InsList .
+ eq fabs =
+     '_fabs
+       	addiu   sp,sp,-8
+        sw      s8,4(sp)
+        move    s8,sp
+        move    v0,a0
+        sh      v0,8(s8)
+        lhu     v0,8(s8)
+        beqz    v0, '_fabs_0x2c
+        nop
+        lhu     v0,8(s8)
+        j       '_fabs_0x38
+        nop
+     '_fabs_0x2c
+        lhu     v0,8(s8)
+        negu    v0,v0
+        andi    v0,v0,16
+     '_fabs_0x38
+        move    sp,s8
+        lw      s8,4(sp)
+        addiu   sp,sp,8
+        jr      ra
+        nop
+ .
+
+ op TRIM-PPRZ : -> InsList .
+ eq TRIM-PPRZ =
+     '_TRIM_PPRZ
+       	addiu   sp,sp,-8
+        sw      s8,4(sp)
+        move    s8,sp
+        move    v0,a0
+        sb      v0,8(s8)
+        move    sp,s8
+        lw      s8,4(sp)
+        addiu   sp,sp,8
+        jr      ra
+        nop
+ .
+
+ op roll-pitch-pid-run : -> InsList .
+ eq roll-pitch-pid-run =
+     'roll_pitch_pid_run
+       	addiu   sp,sp,-32
+        sw      ra,28(sp)
+        sw      s8,24(sp)
+        move    s8,sp
+        lui     v0,65284
+        lw      v1,0(v0)
+        lui     v0,65284
+        lw      v0,888(v0)
+        mtc1    v1,$f0
+        mtc1    v0,$f1
+        sub     $f0,$f0,$f1
+        mfc1    v0,$f0
+        sw      v0,16(s8)
+        lui     v0,65284
+        lw      v1,528(v0)
+        lw      v0,16(s8)
+        mtc1    v1,$f2
+        mtc1    v0,$f3
+        mul     $f2,$f2,$f3
+        mfc1    v0,$f2
+        lui     v1,65284
+        lw      a0,144(v1)
+        mtc1    v0,$f0
+        mtc1    a0,$f1
+        c.le.s  $f1,$f0
+        lui     v1,65284
+        movf    v1,zero,$f0
+        mtc1    v1,$f0
+        mtc1    zero,$f2
+        c.lt.s  $f2,$f0
+        bc1t    'roll_pitch_pid_run_0x94
+        nop
+        mtc1    v0,$f0
+        trunc.w.s       $f0,$f0
+        mfc1    v0,$f0
+        j       'roll_pitch_pid_run_0xb8
+        nop
+     'roll_pitch_pid_run_0x94
+        mtc1    v0,$f1
+        mtc1    a0,$f2
+        sub     $f1,$f1,$f2
+        mfc1    v0,$f1
+        lui     v1,65284
+        mtc1    v0,$f3
+        trunc.w.s       $f3,$f3
+        mfc1    v0,$f3
+        or      v0,v0,v1
+     'roll_pitch_pid_run_0xb8
+        andi    v0,v0,255
+        move    a0,v0
+        jal     '_TRIM_PPRZ
+        nop
+        sll     v0,v0,16
+        sra     v0,v0,16
+        sh      v0,128(gp)
+        lui     v0,65284
+        lw      v1,896(v0)
+        move    v0,zero
+        mtc1    v1,$f0
+        mtc1    v0,$f1
+        c.lt.s  $f0,$f1
+        lui     v0,65284
+        movf    v0,zero,$f0
+        mtc1    v0,$f0
+        mtc1    zero,$f2
+        c.lt.s  $f2,$f0
+        bc1f 	  'roll_pitch_pid_run_0x110
+        nop
+        lui     v0,65284
+        sw      zero,896(v0)
+     'roll_pitch_pid_run_0x110
+        lui     v0,65284
+        lw      v1,0(v0)
+        lui     v0,65284
+        lw      v0,892(v0)
+        mtc1    v1,$f0
+        mtc1    v0,$f1
+        sub     $f0,$f0,$f1
+        mfc1    v1,$f0
+        lui     v0,65284
+        lw      a0,0(v0)
+        move    v0,zero
+        mtc1    a0,$f2
+        mtc1    v0,$f3
+        c.lt.s  $f2,$f3
+        lui     v0,65284
+        movf    v0,zero,$f0
+        mtc1    v0,$f0
+        mtc1    zero,$f2
+        c.lt.s  $f2,$f0
+        bc1f	   'roll_pitch_pid_run_0x17c
+        nop
+        lui     v0,65284
+        lw      a0,0(v0)
+        lui     v0,65284
+        xor     a0,a0,v0
+        j       'roll_pitch_pid_run_0x184
+        nop
+     'roll_pitch_pid_run_0x17c
+        lui     v0,65284
+        lw      a0,0(v0)
+     'roll_pitch_pid_run_0x184
+        lui     v0,65284
+        lw      v0,896(v0)
+        mtc1    a0,$f0
+        mtc1    v0,$f1
+        mul     $f0,$f0,$f1
+        mfc1    v0,$f0
+        mtc1    v1,$f2
+        mtc1    v0,$f3
+        sub     $f2,$f2,$f3
+        mfc1    v1,$f2
+        lui     v0,65284
+        xor     v0,v1,v0
+        sw      v0,16(s8)
+        lui     v0,65284
+        lw      v1,532(v0)
+        lw      v0,16(s8)
+        mtc1    v1,$f0
+        mtc1    v0,$f1
+        mul     $f0,$f0,$f1
+        mfc1    v0,$f0
+        lui     v1,65284
+        lw      a0,144(v1)
+        mtc1    v0,$f2
+        mtc1    a0,$f3
+        c.le.s  $f3,$f2
+        lui     v1,65284
+        movf    v1,zero,$f0
+        mtc1    v1,$f0
+        mtc1    zero,$f2
+        c.lt.s  $f2,$f0
+        bc1t    'roll_pitch_pid_run_0x218
+        nop
+        mtc1    v0,$f0
+        trunc.w.s       $f0,$f0
+        mfc1    v0,$f0
+        j       'roll_pitch_pid_run_0x23c
+        nop
+     'roll_pitch_pid_run_0x218
+        mtc1    v0,$f1
+        mtc1    a0,$f2
+        sub     $f1,$f1,$f2
+        mfc1    v0,$f1
+        lui     v1,65284
+        mtc1    v0,$f3
+        trunc.w.s       $f3,$f3
+        mfc1    v0,$f3
+        or      v0,v0,v1
+     'roll_pitch_pid_run_0x23c
+        andi    v0,v0,255
+        move    a0,v0
+        jal     '_TRIM_PPRZ
+        nop
+        sll     v0,v0,16
+        sra     v0,v0,16
+        sh      v0,168(gp)
+        move    sp,s8
+        lw      ra,28(sp)
+        lw      s8,24(sp)
+        addiu   sp,sp,32
+        jr      ra
+        nop
+ .
+
+ op stabilisation-task : -> InsList .
+ eq stabilisation-task =
+     'stabilisation_task
+       	addiu   sp,sp,-32
+        sw      ra,28(sp)
+        sw      s8,24(sp)
+        move    s8,sp
+        jal     'ir_update
+        nop
+        jal     'estimator_update_state_infrared
+        nop
+        jal     'roll_pitch_pid_run
+        nop
+        lh      v0,76(gp)
+        andi    v0,v0,255
+        lui     v1,65284
+        addiu   a0,v1,16
+        move    a1,zero
+        li      a2,18
+        move    a3,v0
+        jal     'update_arr
+        nop
+        lh      v0,128(gp)
+        andi    v0,v0,255
+        lui     v1,65284
+        addiu   a0,v1,16
+        li      a1,1
+        li      a2,18
+        move    a3,v0
+        jal     'update_arr
+        nop
+        lh      v0,168(gp)
+        andi    v0,v0,255
+        lui     v1,65284
+        addiu   a0,v1,16
+        li      a1,2
+        li      a2,18
+        move    a3,v0
+        jal     'update_arr
+        nop
+        lui     v0,65284
+        lw      v1,0(v0)
+        lui     v0,65284
+        xor     v0,v1,v0
+        mtc1    v0,$f1
+        cvt.d.s $f0,$f1
+        mfc1    a0,$f0
+        mfc1    a1,$f1
+        lui     v0,65284
+        lw      v1,492(v0)
+        lw      v0,488(v0)
+        mtc1    a0,$f2
+        mtc1    a1,$f3
+        mtc1    v0,$f0
+        mtc1    v1,$f1
+        mul     $f2,$f2,$f0
+        mfc1    v0,$f2
+        mfc1    v1,$f3
+        lui     a0,65284
+        lw      a1,108(a0)
+        lw      a0,104(a0)
+        mtc1    v0,$f2
+        mtc1    v1,$f3
+        mtc1    a0,$f0
+        mtc1    a1,$f1
+        c.le.d  $f0,$f2
+        lui     a2,65284
+        movf    a2,zero,$f0
+        mtc1    a2,$f0
+        mtc1    zero,$f2
+        c.lt.s  $f2,$f0
+        bc1t    'stabilisation_task_0x130
+        nop
+        mtc1    v0,$f0
+        mtc1    v1,$f1
+        trunc.w.d       $f1,$f0
+        mfc1    v0,$f1
+        j       'stabilisation_task_0x164
+        nop
+     'stabilisation_task_0x130
+        mtc1    v0,$f2
+        mtc1    v1,$f3
+        mtc1    a0,$f0
+        mtc1    a1,$f1
+        sub     $f2,$f2,$f0
+        mfc1    v0,$f2
+        mfc1    v1,$f3
+        lui     a0,65284
+        mtc1    v0,$f2
+        mtc1    v1,$f3
+        trunc.w.d       $f3,$f2
+        mfc1    v0,$f3
+        or      v0,v0,a0
+     'stabilisation_task_0x164
+        andi    v0,v0,255
+        move    a0,v0
+        jal     '_TRIM_PPRZ
+        nop
+        sb      v0,16(s8)
+        lbu     v0,16(s8)
+        lui     v1,65284
+        addiu   a0,v1,16
+        li      a1,5
+        li      a2,18
+        move    a3,v0
+        jal     'update_arr
+        nop
+        move    sp,s8
+        lw      ra,28(sp)
+        lw      s8,24(sp)
+        addiu   sp,sp,32
+        jr      ra
+        nop
+ .
+
+ op DOWNLINK-SEND-GPS : -> InsList .
+ eq DOWNLINK-SEND-GPS =
+     '_DOWNLINK_SEND_GPS
+       	addiu   sp,sp,-48
+        sw      ra,44(sp)
+        sw      s8,40(sp)
+        move    s8,sp
+        move    t2,a0
+        move    t1,a1
+        move    t0,a2
+        move    a2,a3
+        lw      a1,64(s8)
+        lw      a0,68(s8)
+        lw      v1,72(s8)
+        lw      v0,76(s8)
+        sb      t2,48(s8)
+        sb      t1,52(s8)
+        sb      t0,56(s8)
+        sb      a2,60(s8)
+        sb      a1,24(s8)
+        sb      a0,28(s8)
+        sb      v1,32(s8)
+        sb      v0,36(s8)
+        lbu     v0,16(s8)
+        sltiu   v0,v0,33
+        beqz    v0, '_DOWNLINK_SEND_GPS_0xfc
+        nop
+        li      a0,8
+        jal     '_ModemStartMessage
+        nop
+        lbu     v0,48(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_1_BYTE_BY_ADDR
+        nop
+        lbu     v0,52(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_4_BYTE_BY_ADDR
+        nop
+        lbu     v0,56(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_4_BYTE_BY_ADDR
+        nop
+        lbu     v0,60(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_4_BYTE_BY_ADDR
+        nop
+        lbu     v0,24(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_4_BYTE_BY_ADDR
+        nop
+        lbu     v0,28(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_4_BYTE_BY_ADDR
+        nop
+        lbu     v0,32(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_4_BYTE_BY_ADDR
+        nop
+        lbu     v0,36(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_4_BYTE_BY_ADDR
+        nop
+        jal     '_ModemEndMessage
+        nop
+        j       '_DOWNLINK_SEND_GPS_0x10c
+        nop
+     '_DOWNLINK_SEND_GPS_0xfc
+        lbu     v0,67(gp)
+        addiu   v0,v0,1
+        andi    v0,v0,255
+        sb      v0,67(gp)
+     '_DOWNLINK_SEND_GPS_0x10c
+        move    sp,s8
+        lw      ra,44(sp)
+        lw      s8,40(sp)
+        addiu   sp,sp,48
+        jr      ra
+        nop
+ .
+
+ op estimator-update-ir-estim : -> InsList .
+ eq estimator-update-ir-estim =
+     'estimator_update_ir_estim
+       	addiu   sp,sp,-8
+        sw      s8,4(sp)
+        move    s8,sp
+        move    sp,s8
+        lw      s8,4(sp)
+        addiu   sp,sp,8
+        jr      ra
+        nop
+ .
+
+ op estimator-update-state-gps : -> InsList .
+ eq estimator-update-state-gps =
+     'estimator_update_state_gps
+       	addiu   sp,sp,-24
+        sw      ra,20(sp)
+        sw      s8,16(sp)
+        move    s8,sp
+        lbu     v0,148(gp)
+        andi    v0,v0,32
+        beqz    v0, 'estimator_update_state_gps_0x94
+        nop
+        lui     v0,65284
+        lw      v1,0(v0)
+        lui     v0,65284
+        sw      v1,0(v0)
+        lui     v0,65284
+        lw      v1,0(v0)
+        lui     v0,65284
+        sw      v1,0(v0)
+        lui     v0,65284
+        lw      v1,0(v0)
+        lui     v0,65284
+        sw      v1,0(v0)
+        lui     v0,65284
+        lw      v1,0(v0)
+        lui     v0,65284
+        sw      v1,0(v0)
+        lui     v0,65284
+        lw      v1,0(v0)
+        lui     v0,65284
+        sw      v1,0(v0)
+        lui     v0,65284
+        lw      v1,0(v0)
+        lui     v0,65284
+        sw      v1,0(v0)
+        lhu     v0,40(gp)
+        beqz    v0, 'estimator_update_state_gps_0x94
+        nop
+        jal     '_estimator_update_ir_estim
+        nop
+     'estimator_update_state_gps_0x94
+        move    sp,s8
+        lw      ra,20(sp)
+        lw      s8,16(sp)
+        addiu   sp,sp,24
+        jr      ra
+        nop
+ .
+
+ op send-gps-pos : -> InsList .
+ eq send-gps-pos =
+     'send_gps_pos
+       	addiu   sp,sp,-40
+        sw      ra,36(sp)
+        sw      s8,32(sp)
+        move    s8,sp
+        sb      zero,66(gp)
+        lbu     v0,122(gp)
+        beqz    v0, 'send_gps_pos_0x2c0
+        nop
+        lbu     v0,148(gp)
+        move    t0,v0
+        lui     v0,65284
+        lw      v0,0(v0)
+        andi    v0,v0,255
+        move    a1,v0
+        lui     v0,65284
+        lw      v0,0(v0)
+        andi    v0,v0,255
+        move    a2,v0
+        lui     v0,65284
+        lw      v0,0(v0)
+        lui     v1,65284
+        lw      a0,144(v1)
+        mtc1    v0,$f0
+        mtc1    a0,$f1
+        c.le.s  $f1,$f0
+        lui     v1,65284
+        movf    v1,zero,$f0
+        mtc1    v1,$f0
+        mtc1    zero,$f2
+        c.lt.s  $f2,$f0
+        bc1t    'send_gps_pos_0x94
+        nop
+        mtc1    v0,$f0
+        trunc.w.s       $f0,$f0
+        mfc1    v0,$f0
+        j       'send_gps_pos_0xb8
+        nop
+     'send_gps_pos_0x94
+        mtc1    v0,$f1
+        mtc1    a0,$f2
+        sub     $f1,$f1,$f2
+        mfc1    v0,$f1
+        lui     v1,65284
+        mtc1    v0,$f3
+        trunc.w.s       $f3,$f3
+        mfc1    v0,$f3
+        or      v0,v0,v1
+     'send_gps_pos_0xb8
+        andi    v0,v0,255
+        move    a3,v0
+        lui     v0,65284
+        lw      v0,0(v0)
+        lui     v1,65284
+        lw      a0,144(v1)
+        mtc1    v0,$f0
+        mtc1    a0,$f1
+        c.le.s  $f1,$f0
+        lui     v1,65284
+        movf    v1,zero,$f0
+        mtc1    v1,$f0
+        mtc1    zero,$f2
+        c.lt.s  $f2,$f0
+        bc1t    'send_gps_pos_0x10c
+        nop
+        mtc1    v0,$f0
+        trunc.w.s       $f0,$f0
+        mfc1    v0,$f0
+        j       'send_gps_pos_0x130
+        nop
+     'send_gps_pos_0x10c
+        mtc1    v0,$f1
+        mtc1    a0,$f2
+        sub     $f1,$f1,$f2
+        mfc1    v0,$f1
+        lui     v1,65284
+        mtc1    v0,$f3
+        trunc.w.s       $f3,$f3
+        mfc1    v0,$f3
+        or      v0,v0,v1
+     'send_gps_pos_0x130
+        andi    v0,v0,255
+        move    t3,v0
+        lui     v0,65284
+        lw      v0,0(v0)
+        lui     v1,65284
+        lw      a0,144(v1)
+        mtc1    v0,$f0
+        mtc1    a0,$f1
+        c.le.s  $f1,$f0
+        lui     v1,65284
+        movf    v1,zero,$f0
+        mtc1    v1,$f0
+        mtc1    zero,$f2
+        c.lt.s  $f2,$f0
+        bc1t    'send_gps_pos_0x184
+        nop
+        mtc1    v0,$f0
+        trunc.w.s       $f0,$f0
+        mfc1    v0,$f0
+        j       'send_gps_pos_0x1a8
+        nop
+     'send_gps_pos_0x184
+        mtc1    v0,$f1
+        mtc1    a0,$f2
+        sub     $f1,$f1,$f2
+        mfc1    v0,$f1
+        lui     v1,65284
+        mtc1    v0,$f3
+        trunc.w.s       $f3,$f3
+        mfc1    v0,$f3
+        or      v0,v0,v1
+     'send_gps_pos_0x1a8
+        andi    v0,v0,255
+        move    t2,v0
+        lui     v0,65284
+        lw      v0,0(v0)
+        lui     v1,65284
+        lw      a0,144(v1)
+        mtc1    v0,$f0
+        mtc1    a0,$f1
+        c.le.s  $f1,$f0
+        lui     v1,65284
+        movf    v1,zero,$f0
+        mtc1    v1,$f0
+        mtc1    zero,$f2
+        c.lt.s  $f2,$f0
+        bc1t    'send_gps_pos_0x1fc
+        nop
+        mtc1    v0,$f0
+        trunc.w.s       $f0,$f0
+        mfc1    v0,$f0
+        j       'send_gps_pos_0x220
+        nop
+     'send_gps_pos_0x1fc
+        mtc1    v0,$f1
+        mtc1    a0,$f2
+        sub     $f1,$f1,$f2
+        mfc1    v0,$f1
+        lui     v1,65284
+        mtc1    v0,$f3
+        trunc.w.s       $f3,$f3
+        mfc1    v0,$f3
+        or      v0,v0,v1
+     'send_gps_pos_0x220
+        andi    v0,v0,255
+        move    t1,v0
+        lui     v0,65284
+        lw      v0,0(v0)
+        lui     v1,65284
+        lw      a0,144(v1)
+        mtc1    v0,$f0
+        mtc1    a0,$f1
+        c.le.s  $f1,$f0
+        lui     v1,65284
+        movf    v1,zero,$f0
+        mtc1    v1,$f0
+        mtc1    zero,$f2
+        c.lt.s  $f2,$f0
+        bc1t    'send_gps_pos_0x274
+        nop
+        mtc1    v0,$f0
+        trunc.w.s       $f0,$f0
+        mfc1    v0,$f0
+        j       'send_gps_pos_0x298
+        nop
+     'send_gps_pos_0x274
+        mtc1    v0,$f1
+        mtc1    a0,$f2
+        sub     $f1,$f1,$f2
+        mfc1    v0,$f1
+        lui     v1,65284
+        mtc1    v0,$f3
+        trunc.w.s       $f3,$f3
+        mfc1    v0,$f3
+        or      v0,v0,v1
+     'send_gps_pos_0x298
+        andi    v0,v0,255
+        sw      t3,16(sp)
+        sw      t2,20(sp)
+        sw      t1,24(sp)
+        sw      v0,28(sp)
+        move    a0,t0
+        jal     '_DOWNLINK_SEND_GPS
+        nop
+        jal     'estimator_update_state_gps
+        nop
+     'send_gps_pos_0x2c0
+        move    sp,s8
+        lw      ra,36(sp)
+        lw      s8,32(sp)
+        addiu   sp,sp,40
+        jr      ra
+        nop
+ .
+
+ op send-radIR : -> InsList .
+ eq send-radIR =
+     'send_radIR
+       	addiu   sp,sp,-32
+        sw      ra,28(sp)
+        sw      s8,24(sp)
+        move    s8,sp
+        lbu     v0,122(gp)
+        beqz    v0, 'send_radIR_0x1ac
+        nop
+        lui     v0,65284
+        lw      v0,0(v0)
+        lui     v1,65284
+        lw      a0,144(v1)
+        mtc1    v0,$f0
+        mtc1    a0,$f1
+        c.le.s  $f1,$f0
+        lui     v1,65284
+        movf    v1,zero,$f0
+        mtc1    v1,$f0
+        mtc1    zero,$f2
+        c.lt.s  $f2,$f0
+        bc1t    'send_radIR_0x68
+        nop
+        mtc1    v0,$f0
+        trunc.w.s       $f0,$f0
+        mfc1    v0,$f0
+        j       'send_radIR_0x8c
+        nop
+     'send_radIR_0x68
+        mtc1    v0,$f1
+        mtc1    a0,$f2
+        sub     $f1,$f1,$f2
+        mfc1    v0,$f1
+        lui     v1,65284
+        mtc1    v0,$f3
+        trunc.w.s       $f3,$f3
+        mfc1    v0,$f3
+        or      v0,v0,v1
+     'send_radIR_0x8c
+        andi    v0,v0,255
+        move    a2,v0
+        lui     v0,65284
+        lw      v0,0(v0)
+        lui     v1,65284
+        lw      a0,144(v1)
+        mtc1    v0,$f0
+        mtc1    a0,$f1
+        c.le.s  $f1,$f0
+        lui     v1,65284
+        movf    v1,zero,$f0
+        mtc1    v1,$f0
+        mtc1    zero,$f2
+        c.lt.s  $f2,$f0
+        bc1t    'send_radIR_0xe0
+        nop
+        mtc1    v0,$f0
+        trunc.w.s       $f0,$f0
+        mfc1    v0,$f0
+        j       'send_radIR_0x104
+        nop
+     'send_radIR_0xe0
+        mtc1    v0,$f1
+        mtc1    a0,$f2
+        sub     $f1,$f1,$f2
+        mfc1    v0,$f1
+        lui     v1,65284
+        mtc1    v0,$f3
+        trunc.w.s       $f3,$f3
+        mfc1    v0,$f3
+        or      v0,v0,v1
+     'send_radIR_0x104
+        andi    v0,v0,255
+        move    a1,v0
+        lui     v0,65284
+        lw      v0,0(v0)
+        lui     v1,65284
+        lw      a0,144(v1)
+        mtc1    v0,$f0
+        mtc1    a0,$f1
+        c.le.s  $f1,$f0
+        lui     v1,65284
+        movf    v1,zero,$f0
+        mtc1    v1,$f0
+        mtc1    zero,$f2
+        c.lt.s  $f2,$f0
+        bc1t    'send_radIR_0x158
+        nop
+        mtc1    v0,$f0
+        trunc.w.s       $f0,$f0
+        mfc1    v0,$f0
+        j       'send_radIR_0x17c
+        nop
+     'send_radIR_0x158
+        mtc1    v0,$f1
+        mtc1    a0,$f2
+        sub     $f1,$f1,$f2
+        mfc1    v0,$f1
+        lui     v1,65284
+        mtc1    v0,$f3
+        trunc.w.s       $f3,$f3
+        mfc1    v0,$f3
+        or      v0,v0,v1
+     'send_radIR_0x17c
+        andi    v0,v0,255
+        move    v1,v0
+        lh      v0,-8(gp)
+        andi    v0,v0,255
+        lh      a0,-6(gp)
+        andi    a0,a0,255
+        sw      a0,16(sp)
+        move    a0,a2
+        move    a2,v1
+        move    a3,v0
+        jal     '_DOWNLINK_SEND_RAD_OF_IR
+        nop
+     'send_radIR_0x1ac
+        move    sp,s8
+        lw      ra,28(sp)
+        lw      s8,24(sp)
+        addiu   sp,sp,32
+        jr      ra
+        nop
+ .
+
+ op DOWNLINK-SEND-TAKEOFF : -> InsList .
+ eq DOWNLINK-SEND-TAKEOFF =
+     '_DOWNLINK_SEND_TAKEOFF
+       	addiu   sp,sp,-32
+        sw      ra,28(sp)
+        sw      s8,24(sp)
+        move    s8,sp
+        sw      a0,32(s8)
+        lbu     v0,16(s8)
+        sltiu   v0,v0,6
+        beqz    v0, '_DOWNLINK_SEND_TAKEOFF_0x54
+        nop
+        li      a0,4
+        jal     '_ModemStartMessage
+        nop
+        lw      v0,32(s8)
+        andi    v0,v0,255
+        move    a0,v0
+        jal     '_MODEM_PUT_2_BYTE_BY_ADDR
+        nop
+        jal     '_ModemEndMessage
+        nop
+        j       '_DOWNLINK_SEND_TAKEOFF_0x64
+        nop
+     '_DOWNLINK_SEND_TAKEOFF_0x54
+        lbu     v0,67(gp)
+        addiu   v0,v0,1
+        andi    v0,v0,255
+        sb      v0,67(gp)
+     '_DOWNLINK_SEND_TAKEOFF_0x64
+        move    sp,s8
+        lw      ra,28(sp)
+        lw      s8,24(sp)
+        addiu   sp,sp,32
+        jr      ra
+        nop
+ .
+
+ op send-takeOff : -> InsList .
+ eq send-takeOff =
+     'send_takeOff
+       	addiu   sp,sp,-24
+        sw      ra,20(sp)
+        sw      s8,16(sp)
+        move    s8,sp
+        lbu     v0,122(gp)
+        beqz    v0, 'send_takeOff_0x80
+        nop
+        lhu     v0,40(gp)
+        bnez    v0, 'send_takeOff_0x7c
+        nop
+        lui     v0,65284
+        lw      v1,0(v0)
+        lui     v0,65284
+        lw      v0,212(v0)
+        mtc1    v1,$f0
+        mtc1    v0,$f1
+        c.lt.s  $f1,$f0
+        lui     v0,65284
+        movf    v0,zero,$f0
+        mtc1    v0,$f0
+        mtc1    zero,$f2
+        c.lt.s  $f2,$f0
+        bc1f	   'send_takeOff_0x7c
+        nop
+        li      v0,1
+        sh      v0,40(gp)
+        li      v0,1
+        sb      v0,7(gp)
+        addiu   a0,gp,20
+        jal     '_DOWNLINK_SEND_TAKEOFF
+        nop
+     'send_takeOff_0x7c
+        sb      zero,122(gp)
+     'send_takeOff_0x80
+        move    sp,s8
+        lw      ra,20(sp)
+        lw      s8,16(sp)
+        addiu   sp,sp,24
+        jr      ra
+        nop
+ .
+
+ op autopilot : -> InsList .
+ eq autopilot =
+    main-autopilot ModemStartMessage ModemEndMessage MODEM-PUT-4-BYTE-BY-ADDR
+    MODEM-PUT-2-BYTE-BY-ADDR MODEM-PUT-1-BYTE-BY-ADDR DOWNLINK-SEND-CALIB-START
+    RadOfIrFromConstrast ir-gain-calib STICK-PUSHED DOWNLINK-SEND-RAD-OF-IR
+    DOWNLINK-SEND-CALIB-CONTRAST ground-calibrate CheckEvent PPRZ-MODE-OF-PULSE
+    ModeUpdate pprz-mode-update IR-ESTIM-MODE-OF-PULSE ir-estim-mode-update
+    mcu1-status-update EventUpdate EventPos EventNeg events-update lookup-arr
+    update-arr copy-from-to-fbw DOWNLINK-SEND-BOOT send-boot DOWNLINK-SEND-ATTITUDE
+    PERIODIC-SEND-ATTITUDE send-attitude DOWNLINK-SEND-ADC PERIODIC-SEND-ADC
+    send-adc DOWNLINK-SEND-SETTINGS PERIODIC-SEND-SETTINGS send-settings
+    DOWNLINK-SEND-DESIRED PERIODIC-SEND-DESIRED send-desired DOWNLINK-SEND-BAT
+    PERIODIC-SEND-BAT send-bat DOWNLINK-SEND-CLIMB-PID PERIODIC-SEND-CLIMB-PID
+    send-climb DOWNLINK-SEND-PPRZ-MODE PERIODIC-SEND-PPRZ-MODE send-mode
+    DOWNLINK-SEND-DEBUG PERIODIC-SEND-DEBUG send-debug DOWNLINK-SEND-NAVIGATION-REF
+    PERIODIC-SEND-NAVIGATION-REF send-nav-ref IF-CALIB-MODE-OF-PULSE
+    inflight-calib-mode-update bit-is-set and-bitwise inflight-calib
+    FLOAT-OF-PPRZ shiftl-bitwise radio-control-task Circle compute-dist2-to-home
+    nav-home auto-nav nav-update navigation-update DOWNLINK-SEND-NAVIGATION
+    send-nav-values NORM-RAD-ANGLE course-pid-run course-run altitude-pid-run
+    altitude-control-task TRIM-UPPRZ climb-pid-run climb-control-task
+    estimator-propagate-state link-fbw-send periodic-task ir-update
+    estimator-update-state-infrared fabs TRIM-PPRZ roll-pitch-pid-run
+    stabilisation-task DOWNLINK-SEND-GPS estimator-update-ir-estim
+    estimator-update-state-gps send-gps-pos send-radIR DOWNLINK-SEND-TAKEOFF
+    send-takeOff .
+
   *****************************************************************************
   ******************************* end autopilot *******************************
   *****************************************************************************
@@ -2078,14 +8014,14 @@ load assembly.maude
   op testPow : -> System .
   eq testPow = [ pow | mtReg | [0, 3] [1, 5] | 0 ] .
 
-  op test-main : -> System .
-  eq test-main = [main | < ra,5 > | [65284, 3] | 0] .
+  op test-DOWNLINK : -> System .
+  eq test-DOWNLINK = [DOWNLINK-SEND-TAKEOFF | < ra,5 > | [65284, 3] | 0] .
 endm)
 
 *** (rew testPow .)
 
 (set side-effect sorts Memory Registers .)
 
-(red servo-set .)
+(red autopilot .)
 
-*** (slice testPow wrt R5 .)
+*** (slice test-DOWNLINK wrt sp .)
