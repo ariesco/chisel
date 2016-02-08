@@ -336,6 +336,18 @@ The current result of the hypernode, including the nodes in the olive and orange
                        else T, getInnocentTerms(TL, N NL, s(N'))
                        fi .
 
+  *** Takes the terms which are in the list.
+  op getCulpritTerms : TermList NatList -> TermList .
+  eq getCulpritTerms(TL, NL) = getCulpritTerms(TL, NL, 0) .
+
+  op getCulpritTerms : TermList NatList Nat -> TermList .
+  eq getCulpritTerms(TL, nil, N) = TL .
+  eq getCulpritTerms((T, TL), N NL, N') =
+                       if N =/= N'
+                       then getInnocentTerms(TL, NL, s(N'))
+                       else T, getInnocentTerms(TL, N NL, s(N'))
+                       fi .
+
   op getTermsOfSort* : Module TermList Type NatList -> TermList .
 
   op getTermsOfSort : Module Term Type -> TermList .

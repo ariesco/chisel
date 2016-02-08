@@ -1,0 +1,153 @@
+load assembly.maude
+
+(mod TEST is
+  pr SEMANTICS .
+
+  op test : -> InsList .
+  eq test =
+      'inc
+	addiu   sp,sp,-32
+	sw      ra,28(sp)
+	sw      s8,24(sp)
+	move    s8,sp
+	sw      a0,32(s8)
+	li      v0,1
+	sw      v0,16(s8)
+	li      v0,1
+	sw      v0,20(s8)
+	lw      a0,32(s8)
+	lw      a1,16(s8)
+	jal     'add
+	nop
+	lw      a0,20(s8)
+	jal     'inc
+	nop
+	move    sp,s8
+	lw      ra,28(sp)
+	lw      s8,24(sp)
+	addiu   sp,sp,32
+	jr      ra
+	nop
+
+     'add
+	addiu   sp,sp,-8
+	sw      s8,4(sp)
+	move    s8,sp
+	sw      a0,8(s8)
+	sw      a1,12(s8)
+	lw      v1,8(s8)
+	lw      v0,12(s8)
+	addu    v0,v1,v0
+	sw      v0,8(s8)
+	move    sp,s8
+	lw      s8,4(sp)
+	addiu   sp,sp,8
+	jr      ra
+	nop
+
+     'a
+			addiu   sp,sp,-24
+			sw      ra,20(sp)
+			sw      s8,16(sp)
+			move    s8,sp
+			sw      a0,24(s8)
+			sw      a1,28(s8)
+			lw      v0,24(s8)
+			slti    v0,v0,2
+			bnez    v0,'a_0x44
+			nop
+			lw      a0,24(s8)
+			lw      a1,28(s8)
+			jal     'add
+			nop
+			lw      a0,28(s8)
+			jal     'inc
+			nop
+
+     'a_0x44		move    sp,s8
+			lw      ra,20(sp)
+			lw      s8,16(sp)
+			addiu   sp,sp,24
+			jr      ra
+			nop
+
+
+     'b
+			addiu   sp,sp,-24
+			sw      ra,20(sp)
+			sw      s8,16(sp)
+			move    s8,sp
+			sw      a0,24(s8)
+			sw      a1,28(s8)
+			lw      v0,24(s8)
+			blez    v0, 'b_0x40
+			nop
+			lw      v1,24(s8)
+			lw      v0,28(s8)
+			addu    v0,v1,v0
+			move    a0,v0
+			lw      a1,28(s8)
+			jal     'b
+			nop
+     'b_0x40		move    sp,s8
+			lw      ra,20(sp)
+			lw      s8,16(sp)
+			addiu   sp,sp,24
+			jr      ra
+			nop
+
+
+     'main
+				addiu   sp,sp,-40
+				sw      ra,36(sp)
+				sw      s8,32(sp)
+				move    s8,sp
+				sw      zero,16(s8)
+				li      v0,1
+				sw      v0,20(s8)
+				li      v0,-1
+				sw      v0,24(s8)
+				j       'main_0x5c
+				nop
+     'main+0x2c
+  		lw      a0,16(s8)
+				lw      a1,20(s8)
+				jal     'a
+				nop
+				lw      a0,16(s8)
+				lw      a1,24(s8)
+				jal     'b
+				nop
+				lw      a0,24(s8)
+				lw      a1,20(s8)
+				jal     'a
+				nop
+
+     'main_0x5c
+   	lw      v0,20(s8)
+				slti    v0,v0,11
+				bnez    v0, 'main_0x2c
+				nop
+				move    sp,s8
+				lw      ra,36(sp)
+				lw      s8,32(sp)
+				addiu   sp,sp,40
+				jr      ra
+				nop
+ .
+
+  op test2 : -> InsList .
+  eq test2 =
+      'inc    sw    s8,24(sp)
+ .
+
+  op testSys : -> System .
+  eq testSys = [ preprocess(test) | mtReg | mtMem | 0 ] .
+
+  op testSys2 : -> System .
+  eq testSys2 = [ preprocess(test2) | mtReg | mtMem | 0 ] .
+endm)
+
+(set side-effect sorts Memory Registers .)
+
+(slice testSys wrt v0 ra .)

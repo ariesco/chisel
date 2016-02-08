@@ -257,6 +257,13 @@ endfm)
       I' := RS [RI''] /\
       RS' := update(RI, I + I', RS) .
 
+  crl [addu] : [IIL | RS | M | PC]
+   =>         [IIL | RS' | M | PC + 1]
+   if (addu RI, RI', RI'') := getIns(IIL, PC) /\
+      I := RS [RI'] /\
+      I' := RS [RI''] /\
+      RS' := update(RI, abs(I) + abs(I'), RS) .
+
   crl [addi] : [IIL | RS | M | PC]
    =>          [IIL | RS' | M | PC + 1]
    if (addi RI, RI', I) := getIns(IIL, PC) /\
