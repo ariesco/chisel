@@ -1,0 +1,49 @@
+load reverse_assembly_implicit.maude
+
+(mod TEST is
+  pr SEMANTICS .
+
+  op testIns : -> InsList .
+  eq testIns = addi R1, 5, R1
+               addi R2, 10, R2
+               add  R3, R1, R2
+        'loop  subi R3, 10, R4
+               jmp 'loop
+               break
+  .
+
+  *** Let x be the value in Mem[0] and y the value in Mem[1]
+  *** It computes x ** y and stores it in Mem[2]
+  op pow : -> InsList .
+  eq pow = sub  R1, R1, R1       *** It has 0 by default, but I clean it anyway
+           load R1, R1
+           sub  R2, R2, R2
+           addi R2, 1, R2
+           load R2, R2
+           sub  R3, R3, R3       *** For comparing with 0
+           sub  R4, R4, R4       *** The result is stored in R4
+           addi R4, 1, R4
+  'loop    beq  R2, R3, 'out
+           mul  R4, R4, R1
+           subi R2, 1, R2
+           jmp  'loop
+  'out     sub  R5, R5, R5
+           addi R5, 2, R5
+           str  R5, R4
+           break
+  .
+
+  op testSys : -> System .
+  eq testSys = [ preprocess(testIns) | mtReg | mtMem | 0 ] .
+
+  op testPow : -> System .
+  eq testPow = [ preprocess(pow) | mtReg | [0, 3] [1, 5] | 0 ] .
+endm)
+
+*** (rew testPow .)
+
+(set side-effect sorts Memory Registers .)
+
+(dataflow inferences InsList .)
+
+(slice testPow wrt R5 .)

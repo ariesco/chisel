@@ -1,4 +1,4 @@
-load ../slicing.prj
+load ../../slicing.prj
 
 (fmod REGISTERS is
   pr INT .
@@ -20,6 +20,10 @@ load ../slicing.prj
   var  RS : Registers .
   vars I I' : Int .
 
+  op _`[_`] : Registers RegId -> Int .
+  eq [lur1] : (< R, I > RS) [R] = I .
+  eq [lur2] : RS [R] = 0 [owise] .
+
   op update : RegId Int Registers -> Registers .
   eq [upd_int1] : update(R, I, < R, I' > RS) = < R, I > RS .
   eq [upd_int2] : update(R, I, RS) = < R, I > RS [owise] .
@@ -35,19 +39,19 @@ endfm)
   sort Imm .
   subsort Qid Nat < Imm .
 
-  *** add R1, R2, R3 : R1 <- R2 + R3
+  *** add R1, R2, R3 : R1 + R2 -> R3
   op add_`,_`,_ : RegId RegId RegId -> BasicIns [ctor prec 15 format(!r o o o o o o)] .
-  *** addi R1, R2, I : R1 <- R2 + I
-  op addi_`,_`,_ : RegId RegId Int -> BasicIns [ctor prec 15 format(!r o o o o o o)] .
-  *** sub R1, R2, R3 : R1 <- R2 - R3
+  *** addi I, R1, R2 : I + R1 -> R2
+  op addi_`,_`,_ : Int RegId RegId -> BasicIns [ctor prec 15 format(!r o o o o o o)] .
+  *** sub R1, R2, R3 : R1 - R2 -> R3
   op sub_`,_`,_ : RegId RegId RegId -> BasicIns [ctor prec 15 format(!r o o o o o o)] .
-  *** subi R1, R2, I : R1 <- R2 - I
-  op subi_`,_`,_ : RegId RegId Int -> BasicIns [ctor prec 15 format(!r o o o o o o)] .
-  *** mul R1, R2, R3 : R1 <- R2 * R3
+  *** subi R1, I, R2 : R1 - I -> R2
+  op subi_`,_`,_ : RegId Int RegId -> BasicIns [ctor prec 15 format(!r o o o o o o)] .
+  *** mul R1, R2, R3 : R1 * R2 -> R3
   op mul_`,_`,_ : RegId RegId RegId -> BasicIns [ctor prec 15 format(!r o o o o o o)] .
-  *** muli R1, R2, I : R1 <- R2 * I
-  op muli_`,_`,_ : RegId RegId Int -> BasicIns [ctor prec 15 format(!r o o o o o o)] .
-  *** add R1, R2, R3 : R1 <- R2 + R3
+  *** muli I, R1, R2 : I * R1 -> R2
+  op muli_`,_`,_ : Int RegId RegId -> BasicIns [ctor prec 15 format(!r o o o o o o)] .
+  *** and R1, R2, R3 : R1 and R2 -> R3
   op and_`,_`,_ : RegId RegId RegId -> BasicIns [ctor prec 15 format(!r o o o o o o)] .
   *** str R1, R2 : mem[R1] <- R2
   op str_`,_ : RegId RegId -> BasicIns [ctor prec 15 format(!r o o o o)] .
@@ -86,11 +90,9 @@ endfm)
   vars I I' : Int .
   var  N : Nat .
 
-***(
   op _`[_`] : Memory Nat -> Int .
   eq [lp1] : ([N, I] M) [N] = I .
   eq [lp2] : M [N] = 0 [owise] .
-)
 
   op set : Memory Nat Int -> Memory .
   eq [set1] : set([N, I] M, N, I') = [N, I'] M .
@@ -117,7 +119,7 @@ endfm)
   var  BI : BasicIns .
   vars Q Q' : Qid .
   var  RI RI' RI'' : RegId .
-  vars RS RS' RS'' : Registers .
+  vars RS RS' : Registers .
   vars M M' : Memory .
   vars I I' : Int .
 
@@ -131,64 +133,69 @@ endfm)
                  [ preprocess(IL) | RS | M | PC] .
 
   crl [add] : [IIL | RS | M | PC]
-   =>         [IIL | RS'' | M | PC + 1]
+   =>         [IIL | RS' | M | PC + 1]
    if (add RI, RI', RI'') := getIns(IIL, PC) /\
-      < RI', I > < RI'', I' > RS' := RS /\
-      RS'' := update(RI, I + I', RS) .
+      I := RS [RI] /\
+      I' := RS [RI'] /\
+      RS' := update(RI'', I + I', RS) .
 
   crl [addi] : [IIL | RS | M | PC]
-   =>          [IIL | RS'' | M | PC + 1]
-   if (addi RI, RI', I) := getIns(IIL, PC) /\
-      < RI', I' > RS' := RS /\
-      RS'' := update(RI, I + I', RS) .
+   =>          [IIL | RS' | M | PC + 1]
+   if (addi I, RI, RI') := getIns(IIL, PC) /\
+      I' := RS [RI] /\
+      RS' := update(RI', I + I', RS) .
 
   crl [sub] : [IIL | RS | M | PC]
-   =>         [IIL | RS'' | M | PC + 1]
+   =>         [IIL | RS' | M | PC + 1]
    if (sub RI, RI', RI'') := getIns(IIL, PC) /\
-      < RI', I > < RI'', I' > RS' := RS /\
-      RS'' := update(RI, I - I', RS) .
+      I := RS [RI] /\
+      I' := RS [RI'] /\
+      RS' := update(RI'', I - I', RS) .
 
   crl [subi] : [IIL | RS | M | PC]
-   =>          [IIL | RS'' | M | PC + 1]
-   if (subi RI, RI', I) := getIns(IIL, PC) /\
-      < RI', I' > RS' := RS /\
-      RS'' := update(RI, I' - I, RS) .
+   =>          [IIL | RS' | M | PC + 1]
+   if (subi RI, I, RI') := getIns(IIL, PC) /\
+      I' := RS [RI] /\
+      RS' := update(RI', I' - I, RS) .
 
   crl [mul] : [IIL | RS | M | PC]
-   =>         [IIL | RS'' | M | PC + 1]
+   =>         [IIL | RS' | M | PC + 1]
    if (mul RI, RI', RI'') := getIns(IIL, PC) /\
-      < RI', I > < RI'', I' > RS' := RS /\
-      RS'' := update(RI, I * I', RS) .
+      I := RS [RI] /\
+      I' := RS [RI'] /\
+      RS' := update(RI'', I * I', RS) .
 
   crl [muli] : [IIL | RS | M | PC]
-   =>          [IIL | RS'' | M | PC + 1]
-   if (muli RI, RI', I) := getIns(IIL, PC) /\
-      < RI', I' > RS' := RS /\
-      RS'' := update(RI, I * I', RS) .
+   =>          [IIL | RS' | M | PC + 1]
+   if (muli I, RI, RI') := getIns(IIL, PC) /\
+      I' := RS [RI] /\
+      RS' := update(RI', I * I', RS) .
 
   crl [and] : [IIL | RS | M | PC]
-   =>         [IIL | RS'' | M | PC + 1]
+   =>         [IIL | RS' | M | PC + 1]
    if (and RI, RI', RI'') := getIns(IIL, PC) /\
-      < RI', I > < RI'', I' > RS' := RS /\
-      RS'' := update(RI, andWithInt(I, I'), RS) .
+      I := RS [RI] /\
+      I' := RS [RI'] /\
+      RS' := update(RI'', andWithInt(I, I'), RS) .
 
   crl [str] : [IIL | RS | M | PC]
    =>         [IIL | RS | M' | PC + 1]
    if (str RI, RI') := getIns(IIL, PC) /\
-      < RI, N > < RI', I > RS' := RS /\
+      N := RS [RI] /\
+      I := RS [RI'] /\
       M' := set(M, N, I) .
 
   crl [load] : [IIL | RS | M | PC]
-   =>          [IIL | RS' | M | PC + 1]
+   =>         [IIL | RS' | M | PC + 1]
    if (load RI, RI') := getIns(IIL, PC) /\
-      < RI, I > RS' := RS /\
-      [I, I'] M' := M /\
+      I := RS [RI] /\
+      I' := M [I] /\
       RS' := update(RI', I', RS) .
 
   crl [jr] : [IIL | RS | M | PC]
-   =>        [IIL | RS | M | PC']
+   =>         [IIL | RS | M | PC']
    if (jr RI) := getIns(IIL, PC) /\
-      < RI, PC' > RS' := RS .
+      PC' := RS [RI] .
 
   crl [jmp] : [IIL | RS | M | PC]
    =>         [IIL | RS | M | PC']
@@ -197,7 +204,8 @@ endfm)
   crl [beq] : [IIL | RS | M | PC]
    =>         [IIL | RS | M | PC']
    if (beq RI, RI', N) := getIns(IIL, PC) /\
-      < RI', I > < RI'', I' > RS' := RS /\
+      I := RS [RI] /\
+      I' := RS [RI'] /\
       PC' := if I == I'
              then N
              else PC + 1
@@ -243,8 +251,8 @@ endfm)
 
   op substitute : Qid Nat Ins -> Ins .
   eq substitute(Q, N, Q' BI) = Q' substitute(Q, N, BI) .
-  eq substitute(Q, N, (addi RI, RI', Q)) = addi RI, RI', N .
-  eq substitute(Q, N, (subi RI, RI', Q)) = subi RI, RI', N .
+  eq substitute(Q, N, (addi Q, RI, RI')) = addi N, RI, RI' .
+  eq substitute(Q, N, (subi RI, Q, RI')) = subi RI, N, RI' .
   eq substitute(Q, N, (beq RI, RI', Q)) = beq RI, RI', N .
   eq substitute(Q, N, jmp Q) = jmp N .
   eq substitute(Q, N, BI) = BI [owise] .
@@ -266,52 +274,3 @@ endfm)
   eq andWithInt(I, I') = 1 [owise] .
 endm)
 
-(mod TEST is
-  pr SEMANTICS .
-
-  op testIns : -> InsList .
-  eq testIns = addi R1, R1, 5
-               addi R2, R2, 10
-               add  R3, R1, R2
-        'loop  subi R4, R3, 10
-               jmp 'loop
-               break
-  .
-
-  *** Let x be the value in Mem[0] and y the value in Mem[1]
-  *** It computes x ** y and stores it in Mem[2]
-  op pow : -> InsList .
-  eq pow = sub  R1, R1, R1       *** It has 0 by default, but I clean it anyway
-           load R1, R1
-           sub  R2, R2, R2
-           addi R2, R2, 1
-           load R2, R2
-           sub  R3, R3, R3       *** For comparing with 0
-           sub  R4, R4, R4       *** The result is stored in R4
-           addi R4, R4, 1
-  'loop    beq  R2, R3, 'out
-           mul  R4, R4, R1
-           subi R2, R2, 1
-           jmp  'loop
-  'out     sub  R5, R5, R5
-           addi R5, R5, 2
-           str  R5, R4
-           break
-  .
-
-  op testSys : -> System .
-  eq testSys = [ preprocess(testIns) | mtReg | mtMem | 0 ] .
-
-  op testPow : -> System .
-  eq testPow = [ preprocess(pow) | mtReg | [0, 3] [1, 5] | 0 ] .
-endm)
-
-(rew testPow .)
-
-(set side-effect sorts Memory Registers .)
-
-(slice testPow wrt R5 .)
-
-(infer 'InsList .)
-
-cont .

@@ -1,5 +1,7 @@
 *** Evaluation semantics for WhileL
 
+load ../../slicing.prj
+
 (fmod WHILE-SYNTAX-EVAL is
   protecting QID .
 
@@ -347,21 +349,3 @@ endm)
    if st' := allocateLocals(vl, st) .
 
 endm)
-
-(fmod TEST is
-  pr EVALUATION-WHILE .
-
-  op pow : -> Com .
-  eq pow = 1 =: x ;
-           y =: i ;
-           While Not Equal(x, 0) Do
-             x *. y =: x ;
-             i -. 1 =: i .
-
-  op testPow : -> Statement .
-  eq testPow = < pow, y = 5, nb, nf > .
-endfm)
-
-(set side-effect sorts ESt RWBUF .)
-
-(slice testPow wrt x .)

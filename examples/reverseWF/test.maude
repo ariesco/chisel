@@ -1,0 +1,33 @@
+load reverse_wfe
+
+(fmod TEST is
+  pr EVALUATION-WHILE .
+
+  op pow : -> Com .
+  eq pow = 1 =: x ;
+           y =: i ;
+           While Not Equal(x, 0) Do
+             x *. y =: x ;
+             i -. 1 =: i .
+
+  op foo : -> Com .
+  eq foo = 1 =: x ;
+           2 =: y ;
+           x +. y =: z ;
+           If Not Equal(x, y)
+           Then 0 =: w .
+
+  op testPow : -> Statement .
+  eq testPow = < pow, y = 5, nb, nf > .
+
+  op testFoo : -> Statement .
+  eq testFoo = < foo, mt, nb, nf > .
+endfm)
+
+(set side-effect sorts ESt RWBUF .)
+
+(dataflow inferences Prog .)
+
+(slice testPow wrt x .)
+
+(slice foo wrt x y .)

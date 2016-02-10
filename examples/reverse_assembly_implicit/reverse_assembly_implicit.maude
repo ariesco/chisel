@@ -1,0 +1,268 @@
+load ../../slicing.prj
+
+(fmod REGISTERS is
+  pr INT .
+
+  sort RegId .
+
+  op reg : Nat -> RegId [ctor] .
+  ops R1 R2 R3 R4 R5 R6 R7 R8 : -> RegId [ctor] .
+
+  sort Register .
+  op <_`,_> : RegId Int -> Register [ctor] .
+
+  sort Registers .
+  subsort Register < Registers .
+  op mtReg : -> Registers [ctor] .
+  op __ : Registers Registers -> Registers [ctor assoc comm id: mtReg] .
+
+  vars R R' : RegId .
+  var  RS : Registers .
+  vars I I' : Int .
+
+  op update : RegId Int Registers -> Registers .
+  eq [upd_int1] : update(R, I, < R, I' > RS) = < R, I > RS .
+  eq [upd_int2] : update(R, I, RS) = < R, I > RS [owise] .
+endfm)
+
+(fmod INS-SYNTAX is
+  pr REGISTERS .
+  pr QID .
+
+  sorts BasicIns LabelIns Ins .
+  subsort BasicIns LabelIns < Ins .
+
+  sort Imm .
+  subsort Qid Nat < Imm .
+
+  *** add R1, R2, R3 : R1 + R2 -> R3
+  op add_`,_`,_ : RegId RegId RegId -> BasicIns [ctor prec 15 format(!r o o o o o o)] .
+  *** addi R1, R2, I : R1 + I -> R2
+  op addi_`,_`,_ : RegId Int RegId -> BasicIns [ctor prec 15 format(!r o o o o o o)] .
+  *** sub R1, R2, R3 : R1 - R2 -> R3
+  op sub_`,_`,_ : RegId RegId RegId -> BasicIns [ctor prec 15 format(!r o o o o o o)] .
+  *** subi R1, R2, I : R1 - I -> R2
+  op subi_`,_`,_ : RegId Int RegId -> BasicIns [ctor prec 15 format(!r o o o o o o)] .
+  *** mul R1, R2, R3 : R1 * R2 -> R3
+  op mul_`,_`,_ : RegId RegId RegId -> BasicIns [ctor prec 15 format(!r o o o o o o)] .
+  *** muli R1, R2, I : R1 * I -> R2
+  op muli_`,_`,_ : RegId Int RegId -> BasicIns [ctor prec 15 format(!r o o o o o o)] .
+  *** and R1, R2, R3 : R1 and R2 -> R3
+  op and_`,_`,_ : RegId RegId RegId -> BasicIns [ctor prec 15 format(!r o o o o o o)] .
+  *** str R1, R2 : mem[R1] <- R2
+  op str_`,_ : RegId RegId -> BasicIns [ctor prec 15 format(!r o o o o)] .
+  *** load R1, R2 : mem[R1] -> R2
+  op load_`,_ : RegId RegId -> BasicIns [ctor prec 15 format(!r o o o o)] .
+  *** jr R1 : PC <- R12
+  op jr_ : RegId -> BasicIns [ctor prec 15 format(!r o o)] .
+  *** jmp I : PC <- I
+  op jmp_ : Imm -> BasicIns [ctor prec 15 format(!r o o)] .
+  *** beq R1, R2, I : PC <- I if R1 == R2
+  op beq_`,_`,_ : RegId RegId Imm -> BasicIns [ctor prec 15 format(!r o o o o o o)] .
+  op nop : -> BasicIns [ctor format(!r o)] .
+  op break : -> BasicIns [ctor format(!r o)] .
+
+  op __ : Qid BasicIns -> LabelIns [ctor prec 20 format(!b o o)] .
+
+  sort InsList .
+  subsort Ins < InsList .
+
+  op skip : -> InsList [ctor] .
+  op __ : InsList InsList -> InsList [ctor assoc id: skip prec 25 format(o n o)] .
+endfm)
+
+(fmod MEMORY is
+  pr INT .
+
+  sort MemCell .
+  op `[_`,_`] : Nat Int -> MemCell [ctor] .
+
+  sort Memory .
+  subsort MemCell < Memory .
+  op mtMem : -> Memory [ctor] .
+  op __ : Memory Memory -> Memory [ctor assoc comm id: mtMem] .
+
+  var  M : Memory .
+  vars I I' : Int .
+  var  N : Nat .
+
+***(
+  op _`[_`] : Memory Nat -> Int .
+  eq [lp1] : ([N, I] M) [N] = I .
+  eq [lp2] : M [N] = 0 [owise] .
+)
+
+  op set : Memory Nat Int -> Memory .
+  eq [set1] : set([N, I] M, N, I') = [N, I'] M .
+  eq [set2] : set(M, N, I) = [N, I] M [owise] .
+endfm)
+
+(mod SEMANTICS is
+  pr INS-SYNTAX .
+  pr MEMORY .
+
+  sort IndexIns .
+  op _:_ : Nat Ins -> IndexIns [ctor prec 25] .
+
+  sort IndexInsList .
+  subsort IndexIns < IndexInsList .
+
+  op skipIIL : -> IndexInsList [ctor] .
+  op _;_ : IndexInsList IndexInsList -> IndexInsList [ctor assoc id: skipIIL format(o o n o)] .
+
+  vars IIL IIL' IIL'' : IndexInsList .
+  var  IL : InsList .
+  var  INS : Ins .
+  vars N N' PC PC' : Nat .
+  var  BI : BasicIns .
+  vars Q Q' : Qid .
+  var  RI RI' RI'' : RegId .
+  vars RS RS' RS'' : Registers .
+  vars M M' : Memory .
+  vars I I' : Int .
+
+  sorts System Instructions .
+
+  subsort InsList IndexInsList < Instructions .
+
+  op `[_|_|_|_`] : Instructions Registers Memory Nat -> System [ctor] .
+
+  eq [prepare] : [ IL | RS | M | PC] =
+                 [ preprocess(IL) | RS | M | PC] .
+
+  crl [add] : [IIL | RS | M | PC]
+   =>         [IIL | RS'' | M | PC + 1]
+   if (add RI, RI', RI'') := getIns(IIL, PC) /\
+      < RI, I > < RI', I' > RS' := RS /\
+      RS'' := update(RI'', I + I', RS) .
+
+  crl [addi] : [IIL | RS | M | PC]
+   =>          [IIL | RS'' | M | PC + 1]
+   if (addi RI, I, RI') := getIns(IIL, PC) /\
+      < RI, I' > RS' := RS /\
+      RS'' := update(RI', I + I', RS) .
+
+  crl [sub] : [IIL | RS | M | PC]
+   =>         [IIL | RS'' | M | PC + 1]
+   if (sub RI, RI', RI'') := getIns(IIL, PC) /\
+      < RI, I > < RI', I' > RS' := RS /\
+      RS'' := update(RI'', I - I', RS) .
+
+  crl [subi] : [IIL | RS | M | PC]
+   =>          [IIL | RS'' | M | PC + 1]
+   if (subi RI, I, RI') := getIns(IIL, PC) /\
+      < RI, I' > RS' := RS /\
+      RS'' := update(RI', I' - I, RS) .
+
+  crl [mul] : [IIL | RS | M | PC]
+   =>         [IIL | RS'' | M | PC + 1]
+   if (mul RI, RI', RI'') := getIns(IIL, PC) /\
+      < RI, I > < RI', I' > RS' := RS /\
+      RS'' := update(RI'', I * I', RS) .
+
+  crl [muli] : [IIL | RS | M | PC]
+   =>          [IIL | RS'' | M | PC + 1]
+   if (muli RI, I, RI') := getIns(IIL, PC) /\
+      < RI, I' > RS' := RS /\
+      RS'' := update(RI', I * I', RS) .
+
+  crl [and] : [IIL | RS | M | PC]
+   =>         [IIL | RS'' | M | PC + 1]
+   if (and RI, RI', RI'') := getIns(IIL, PC) /\
+      < RI, I > < RI', I' > RS' := RS /\
+      RS'' := update(RI'', andWithInt(I, I'), RS) .
+
+  crl [str] : [IIL | RS | M | PC]
+   =>         [IIL | RS | M' | PC + 1]
+   if (str RI, RI') := getIns(IIL, PC) /\
+      < RI, N > < RI', I > RS' := RS /\
+      M' := set(M, N, I) .
+
+  crl [load] : [IIL | RS | M | PC]
+   =>          [IIL | RS' | M | PC + 1]
+   if (load RI, RI') := getIns(IIL, PC) /\
+      < RI, I > RS' := RS /\
+      [I, I'] M' := M /\
+      RS' := update(RI', I', RS) .
+
+  crl [jr] : [IIL | RS | M | PC]
+   =>        [IIL | RS | M | PC']
+   if (jr RI) := getIns(IIL, PC) /\
+      < RI, PC' > RS' := RS .
+
+  crl [jmp] : [IIL | RS | M | PC]
+   =>         [IIL | RS | M | PC']
+   if (jmp PC') := getIns(IIL, PC) .
+
+  crl [beq] : [IIL | RS | M | PC]
+   =>         [IIL | RS | M | PC']
+   if (beq RI, RI', N) := getIns(IIL, PC) /\
+      < RI', I > < RI'', I' > RS' := RS /\
+      PC' := if I == I'
+             then N
+             else PC + 1
+             fi .
+
+  crl [nop] : [ IIL | RS | M | PC]
+   =>          [ IIL | RS | M | PC + 1]
+   if nop := getIns(IIL, PC) .
+
+  op getIns : IndexInsList Nat ~> BasicIns .
+  eq getIns(IIL ; PC : BI ; IIL', PC) = BI .
+
+  *********************************************************************
+  ************************ Normalization steps ************************
+  *********************************************************************
+
+  op preprocess : InsList -> IndexInsList .
+  ceq preprocess(IL) = IIL''
+   if IIL := putIndices(IL) /\
+      IIL' := normalize(IIL) /\
+      IIL'' := clean(IIL') .
+
+  op putIndices : InsList -> IndexInsList .
+  eq putIndices(IL) = putIndices(IL, 0) .
+
+  op putIndices : InsList Nat -> IndexInsList .
+  eq putIndices(skip, N) = skipIIL .
+  eq putIndices(INS IL, N) = (N : INS) ; putIndices(IL, s(N)) .
+
+  op normalize : IndexInsList -> IndexInsList .
+  eq normalize(IIL) = normalize(IIL, IIL) .
+
+  op normalize : IndexInsList IndexInsList -> IndexInsList .
+  eq normalize(skipIIL, IIL) = IIL .
+  eq normalize(N : BI ; IIL, IIL') = normalize(IIL, IIL') .
+  ceq normalize(N : Q BI ; IIL, IIL') = normalize(IIL, IIL'')
+   if IIL'' := substitute(Q, N, IIL') .
+
+  op substitute : Qid Nat IndexInsList -> IndexInsList .
+  eq substitute(Q, N, skipIIL) = skipIIL .
+  eq substitute(Q, N, N' : INS ; IIL) = N' : substitute(Q, N, INS) ;
+                                        substitute(Q, N, IIL) .
+
+  op substitute : Qid Nat Ins -> Ins .
+  eq substitute(Q, N, Q' BI) = Q' substitute(Q, N, BI) .
+  eq substitute(Q, N, (addi RI, Q, RI')) = addi RI, N, RI' .
+  eq substitute(Q, N, (subi RI, Q, RI')) = subi RI, N, RI' .
+  eq substitute(Q, N, (beq RI, RI', Q)) = beq RI, RI', N .
+  eq substitute(Q, N, jmp Q) = jmp N .
+  eq substitute(Q, N, BI) = BI [owise] .
+
+  op clean : IndexInsList -> IndexInsList .
+  eq clean(skipIIL) = skipIIL .
+  eq clean(N : Q BI ; IIL) = N : BI ; clean(IIL) .
+  eq clean(N : BI ; IIL) = N : BI ; clean(IIL) .
+
+  op quitIndices : IndexInsList -> InsList .
+  eq quitIndices(skipIIL) = skip .
+  eq quitIndices((N : INS) ; IIL) = INS quitIndices(IIL) .
+
+  *********************************************************************
+  ************************ Auxiliary functions ************************
+  *********************************************************************
+  op andWithInt : Int Int -> Int [comm] .
+  eq andWithInt(0, I) = 0 .
+  eq andWithInt(I, I') = 1 [owise] .
+endm)
+
