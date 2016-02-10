@@ -1,0 +1,1505 @@
+load wfe.maude
+
+***
+*** EXAMPLE 3 - AUTOPILOT MAIN
+***
+
+(mod EXAMPLE is
+ pr EVALUATION-WHILE .
+
+ op myFuns : -> FunSet .
+ eq myFuns = 'Main (nv)
+{
+  'fatal_error_nb := 0 ;
+  'version := 1 ;
+  'cputime := 0 ;
+  'pprz_mode := 'PPRZ_MODE_MANUAL ;
+  'vertical_mode := 'VERTICAL_MODE_MANUAL ;
+  'lateral_mode := 'LATERAL_MODE_MANUAL ;
+  'ir_estim_mode := 'IR_ESTIM_MODE_ON ;
+  'auto_pitch := 0 ;
+  Local 'rc_event_1 ;
+  Local 'rc_event_2 ;
+  Local 'vsupply ;
+  Local 'mcu1_status ;
+  Local 'mcu1_ppm_cpt ;
+  'low_battery := 0 ;
+  Local 'slider_1_val ;
+  Local 'slider_2_val ;
+  'launch := 0 ;
+  'boot := 1 ;
+  Local 'count ;
+  Local 'est_pos_x ;
+  Local 'est_pos_y ;
+  Local 'est_fcourse ;
+  Local 'ticks_last_est ;
+
+  '_20Hz := 0 ;
+  '_1Hz := 0 ;
+  '_20Hz := 0 ;
+  '_1Hz := 0 ;
+
+  Call 'periodic_task ('empty)
+}
+
+*** called in DOWNLINK_SEND_CALIB_START & DOWNLINK_SEND_RAD_OF_IR
+*** & DOWNLINK_SEND_CALIB_CONTRAST & DOWNLINK_SEND_BOOT
+*** & DOWNLINK_SEND_PPRZ_MODE & DOWNLINK_SEND_RAD_OF_IR
+*** & DOWNLINK_SEND_NAVIGATION & DOWNLINK_SEND_GPS
+*** & DOWNLINK_SEND_ATTITUTE & DOWNLINK_SEND_ADC
+*** & DOWNLINK_SEND_SETTINGS & DOWNLINK_SEND_DESIRED
+*** DOWNLINK_SEND_BAT & DOWNLINK_SEND_CLIMB_PID
+*** & DOWNLINK_SEND_DEBUG & DOWNLINK_SEND_NAVIGATION_REF
+'ModemStartMessage ('DL_CALIB_START)
+{
+	If Equal ('DL_CALIB_START, 1)
+	Then '__res_ModemStartMessage := 1
+	Else '__res_ModemStartMessage := 0
+}
+
+*** called in DOWNLINK_SEND_CALIB_START & DOWNLINK_SEND_RAD_OF_IR
+*** & DOWNLINK_SEND_CALIB_CONTRAST & DOWNLINK_SEND_BOOT
+*** & DOWNLINK_SEND_PPRZ_MODE & DOWNLINK_SEND_RAD_OF_IR
+*** & DOWNLINK_SEND_NAVIGATION & DOWNLINK_SEND_GPS
+*** & DOWNLINK_SEND_ATTITUTE & DOWNLINK_SEND_ADC
+*** & DOWNLINK_SEND_SETTINGS & DOWNLINK_SEND_DESIRED
+*** & DOWNLINK_SEND_BAT & DOWNLINK_SEND_CLIMB_PID
+*** & DOWNLINK_SEND_DEBUG & DOWNLINK_SEND_NAVIGATION_REF
+'ModemEndMessage ('empty)
+{
+	'__res_ModemEndMessage := 1
+}
+
+*** called in DOWNLINK_SEND_RAD_OF_IR & DOWNLINK_SEND_CALIB_CONTRAST
+*** & DOWNLINK_SEND_RAD_OF_IR & DOWNLINK_SEND_NAVIGATION
+*** & DOWNLINK_SEND_GPS & DOWNLINK_SEND_ATTITUTE
+*** & DOWNLINK_SEND_SETTINGS & DOWNLINK_SEND_DESIRED
+*** & DOWNLINK_SEND_CLIMB_PID & DOWNLINK_SEND_NAVIGATION_REF
+'MODEM_PUT_4_BYTE_BY_ADDR ('data)
+{
+	'__res_MODEM_PUT_4_BYTE_BY_ADDR := 'data
+}
+
+*** called in DOWNLINK_SEND_RAD_OF_IR & DOWNLINK_SEND_BOOT
+*** & DOWNLINK_SEND_RAD_OF_IR & DOWNLINK_SEND_TAKEOFF
+*** & DOWNLINK_SEND_ADC & DOWNLINK_SEND_BAT & DOWNLINK_SEND_CLIMB_PID
+'MODEM_PUT_2_BYTE_BY_ADDR ('data)
+{
+	'__res_MODEM_PUT_2_BYTE_BY_ADDR := 'data
+}
+
+*** called in DOWNLINK_SEND_PPRZ_MODE & DOWNLINK_SEND_NAVIGATION
+*** & DOWNLINK_SEND_GPS & DOWNLINK_SEND_SETTINGS
+*** & DOWNLINK_SEND_BAT & DOWNLINK_SEND_DEBUG
+'MODEM_PUT_1_BYTE_BY_ADDR ('data)
+{
+	'__res_MODEM_PUT_1_BYTE_BY_ADDR := 'data
+}
+
+*** called in ground_calibrate
+'DOWNLINK_SEND_CALIB_START ('empty)
+{
+	If Equal ('MODEM_CHECK_FREE_SPACE, 1)
+	Then
+	(
+		Call 'ModemStartMessage ('DL_CALIB_START) ;
+		Call 'ModemEndMessage ('empty)
+        )
+        Else 'modem_nb_ovrn := 'modem_nb_ovrn +. 1
+}
+
+*** called in ir_gain_calib
+'RadOfIrFromConstrast ('ir_contrast)
+{
+	'ir_rad_of_ir := 1
+}
+
+*** called in ground_calibrate
+'ir_gain_calib ('empty)
+{
+	'ir_contrast := 'ir_pitch ;
+	Call 'RadOfIrFromConstrast ('ir_contrast)
+}
+
+*** called in ground_calibrate
+'STICK_PUSHED ('from_fbw.channels, 'RADIO_ROLL)
+{
+	Call 'lookup_arr ('from_fbw.channels, 'RADIO_ROLL) ;
+***	If (Gt ('__res_lookup_arr, 'THRESHOLD1)) Or (Lt ('__res_lookup_arr, 'THRESHOLD2))
+	If (Equal ('__res_lookup_arr, 'THRESHOLD1)) Or
+		(Equal ('__res_lookup_arr, 'THRESHOLD2))
+	Then '__res_STICK_PUSHED := 1
+	Else '__res_STICK_PUSHED := 0
+}
+
+*** called in ground_calibrate & send_boot
+'DOWNLINK_SEND_RAD_OF_IR ('estimator_ir, 'estimator_rad, 'estimator_rad_of_ir,
+			'ir_roll_neutral, 'ir_pitch_neutral)
+{
+***	If Gt ('MODEM_CHECK_FREE_SPACE, 20)
+	If Equal ('MODEM_CHECK_FREE_SPACE, 20)
+	Then
+	(
+          Call 'ModemStartMessage ('DL_RAD_OF_IR) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('estimator_ir) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('estimator_rad) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('estimator_rad_of_ir) ;
+          Call 'MODEM_PUT_2_BYTE_BY_ADDR ('ir_roll_neutral) ;
+          Call 'MODEM_PUT_2_BYTE_BY_ADDR ('ir_pitch_neutral) ;
+          Call 'ModemEndMessage ('empty)
+        )
+        Else 'modem_nb_ovrn := 'modem_nb_ovrn +. 1
+}
+
+*** called in ground_calibrate
+'DOWNLINK_SEND_CALIB_CONTRAST ('ir_contrast)
+{
+***	If Gt ('MODEM_CHECK_FREE_SPACE, 6)
+	If Equal ('MODEM_CHECK_FREE_SPACE, 6)
+	Then
+	(
+          Call 'ModemStartMessage ('DL_CALIB_CONTRAST) ;
+          Call 'MODEM_PUT_2_BYTE_BY_ADDR ('ir_contrast) ;
+          Call 'ModemEndMessage ('empty)
+        )
+        Else 'modem_nb_ovrn := 'modem_nb_ovrn +. 1
+}
+
+'ground_calibrate ('empty)
+{
+	Local 'calib_status ;
+	If Equal ('calib_status, 'NO_CALIB)
+	Then
+	(
+***		If (Lt ('cputime, 'MAX_DELAY_FOR_CALIBRATION) And
+		If (Equal ('cputime, 'MAX_DELAY_FOR_CALIBRATION) And
+			(Equal ('pprz_mode, 'PPRZ_MODE_AUTO1)))
+		Then
+		(
+			'calib_status := 'WAITING_CALIB_CONTRAST ;
+			Call 'DOWNLINK_SEND_CALIB_START ('empty)
+		)
+	)
+	Else
+	(
+		If Equal ('calib_status, 'WAITING_CALIB_CONTRAST)
+		Then
+		(
+			Call 'STICK_PUSHED ('from_fbw.channels, 'RADIO_ROLL) ;
+			If Equal ('__res_STICK_PUSHED, 1)
+			Then
+			(
+				Call 'ir_gain_calib ('empty) ;
+				'estimator_rad_of_ir := 'ir_rad_of_ir ;
+				Call 'DOWNLINK_SEND_RAD_OF_IR ('estimator_ir,
+					'estimator_rad, 'estimator_rad_of_ir,
+					'ir_roll_neutral, 'ir_pitch_neutral) ;
+				'calib_status := 'CALIB_DONE ;
+				Call 'DOWNLINK_SEND_CALIB_CONTRAST ('ir_contrast)
+			)
+		)
+	)
+}
+
+*** called in pprz_mode_update
+'CheckEvent ('r_event)
+{
+	If Equal ('r_event, 1)
+	Then '__res_CheckEvent := 1
+	Else '__res_CheckEvent := 0
+}
+
+*** called in pprz_mode_update
+'PPRZ_MODE_OF_PULSE ('from_fbw.channels, 'RADIO_MODE, 'from_fbw.status)
+{
+	Call 'lookup_arr ('from_fbw.channels, 'RADIO_MODE) ;
+***	If Gt ('__res_lookup_arr, 'THRESHOLD2)
+	If Equal ('__res_lookup_arr, 'THRESHOLD2)
+	Then '__res_PPRZ_MODE_OF_PULSE := 'PPRZ_MODE_AUTO2
+	Else
+	(
+***		If Gt ('from_fbw.status, 'THRESHOLD2)
+		If Equal ('from_fbw.status, 'THRESHOLD2)
+		Then '__res_PPRZ_MODE_OF_PULSE := 'PPRZ_MODE_AUTO1
+		Else '__res_PPRZ_MODE_OF_PULSE := 'PPRZ_MODE_MANUAL
+	)
+}
+
+*** called in pprz_mode_update & ir_estim_mode_update & inflight_calib_mode_update
+'ModeUpdate ('p_mode, '_n_value)
+{
+	Local 'new_mode ;
+	'new_mode := '_n_value ;
+	If Not Equal ('p_mode, 'new_mode)
+	Then 'p_mode := 'new_mode
+}
+
+*** called in radio_control_task
+'pprz_mode_update ('empty)
+{
+	Local '__tmp_0__ ;
+	'__tmp_0__ := 0 ;
+	Call 'CheckEvent('rc_event_1) ;
+	(If (Not Equal ('pprz_mode, 'PPRZ_MODE_HOME) Or Equal ('__res_CheckEvent, 1))
+	Then
+	(
+		Call 'PPRZ_MODE_OF_PULSE('from_fbw.channels, 'RADIO_MODE, 'from_fbw.status) ;
+		Call 'ModeUpdate('pprz_mode, '__res_PPRZ_MODE_OF_PULSE)
+	)
+	Else
+	(
+		'__res_pprz_mode_update__ := 0 ;
+		'__tmp_0__ := 1
+	)) ;
+	'__tmp_0__ := 0
+}
+
+*** called in ir_estim_mode_update
+'IR_ESTIM_MODE_OF_PULSE ('from_channel, 'signal)
+{
+	Call 'lookup_arr ('from_channel, 'signal) ;
+***	If Lt ('__res_lookup_arr, 'THRESHOLD2)
+	If Equal ('__res_lookup_arr, 'THRESHOLD2)
+	Then '__res_IR_ESTIM_MODE_OF_PULSE := 'IR_ESTIM_MODE_OFF
+	Else '__res_IR_ESTIM_MODE_OF_PULSE := 'IR_ESTIM_MODE_ON
+}
+
+*** called in radio_control_task
+'ir_estim_mode_update ('empty)
+{
+	Call 'IR_ESTIM_MODE_OF_PULSE('from_fbw.channels, 'RADIO_LLS) ;
+	Call 'ModeUpdate ('ir_estim_mode, '__res_IR_ESTIM_MODE_OF_PULSE) ;
+	'__res_ir_estim_mode_update := 0
+}
+
+'mcu1_status_update ('empty)
+{
+	Local '__tmp_0__ ;
+	'__tmp_0__ := 0 ;
+	Local 'new_mode ;
+	'new_mode := 'from_fbw.status ;
+	(If Not Equal ('mcu1_status, 'new_mode)
+	Then
+	(
+		Local 'changed ;
+		Local '__tmp_1__ ;
+		Local '__tmp_2__ ;
+		(If (Equal ('mcu1_status, 1)) Or (Equal ('MASK_FBW_CHANGED, 1))
+		Then '__tmp_1__ := 1
+		Else '__tmp_1__ := 0) ;
+		(If (Equal ('new_mode, 1)) Or (Equal ('MASK_FBW_CHANGED, 1))
+		Then '__tmp_2__ := 1
+		Else '__tmp_2__ := 0) ;
+		(If Not Equal ('__tmp_1__, '__tmp_2__)
+		Then 'changed := 1
+		Else 'changed := 0) ;
+		'mcu1_status := 'new_mode ;
+		'__res__mcu1_status_update := 'changed ;
+		'__tmp_0__ := 1
+	)) ;
+	(If Not Equal ('__tmp_0__, 1)
+	Then '__res__mcu1_status_update := 0) ;
+	'__tmp_0__ := 0
+}
+
+*** called in EventPos & EventNeg
+'EventUpdate('cpt, 'cond, 'event)
+{
+	If Equal ('cond, 1)
+	Then
+	(
+***		If Lt ('cpt, 'EVENT_DELAY)
+ 		If Equal ('cpt, 'EVENT_DELAY)
+		Then
+		(
+			'cpt := 'cpt +. 1 ;
+      			If Equal ('cpt, 'EVENT_DELAY)
+        		Then 'event := 1
+    		)
+  	)
+	Else
+	(
+    		'cpt := 0 ;
+    		'event := 0
+  	)
+}
+
+*** called in events_update
+'EventPos ('cpt, 'channel, 'event)
+{
+	Local '__tmp_1_ ;
+	Call 'lookup_arr ('from_fbw.channels, 'channel) ;
+	'__tmp_1_ := '__res_lookup_arr ;
+	Local '__tmp_2_ ;
+	Local '__tmp_3_ ;
+	'__tmp_3_ := 75 *. 'MAX_PPRZ ;
+	(If Equal ('inflight_calib_mode, 'IF_CALIB_MODE_NONE) And
+***		(Gt ('__tmp_1_, '__tmp_3_))
+		(Equal ('__tmp_1_, '__tmp_3_))
+	Then '__tmp_2_ := 1
+	Else '__tmp_2_ := 0) ;
+	Call 'EventUpdate('cpt, '__tmp_2_, 'event)
+}
+
+*** called in events_update
+'EventNeg ('cpt, 'channel, 'event)
+{
+	Local '__tmp_1_ ;
+	Call 'lookup_arr ('from_fbw.channels, 'channel) ;
+	'__tmp_1_ := '__res_lookup_arr ;
+	Local '__tmp_2_ ;
+	Local '__tmp_3_ ;
+	'__tmp_3_ := 0 -. (75 *. 'MAX_PPRZ) ;
+	(If Equal ('inflight_calib_mode, 'IF_CALIB_MODE_NONE) And
+***		(Gt ('__tmp_1_, '__tmp_3_))
+		(Equal ('__tmp_1_, '__tmp_3_))
+	Then '__tmp_2_ := 1
+	Else '__tmp_2_ := 0) ;
+	Call 'EventUpdate('cpt, '__tmp_2_, 'event)
+}
+
+*** called in radio_control_task
+'events_update ('empty)
+{
+	Local 'event1_cpt ;
+	'event1_cpt := 0 ;
+	Local 'event2_cpt ;
+	'event2_cpt := 0 ;
+	Call 'EventPos ('event1_cpt, 'RADIO_GAIN1, 'rc_event_1) ;
+	Call 'EventNeg ('event2_cpt, 'RADIO_GAIN1, 'rc_event_2)
+}
+
+*** called in copy_from_to_fbw & radio_control_task
+*** & STICK_PUSHED & PPRZ_MODE_OF_PULSE & IR_ESTIM_MODE_OF_PULSE
+*** & IF_CALIB_MODE_OF_PULSE & compute_dist2_to_home & update_arr
+*** dummy impl.
+'lookup_arr ('a, 'idx)
+{
+	'__res_lookup_arr := 'a +. 'idx
+}
+
+*** called in copy_from_to_fbw & stabilisation_task
+*** dummy impl.
+'update_arr ('a, 'idx, 'val)
+{
+	Call 'lookup_arr ('a, 'idx) ;
+	'__res_update_arr := 'val
+}
+
+'copy_from_to_fbw ('empty)
+{
+	Call 'lookup_arr ('from_fbw.channels, 'RADIO_YAW) ;
+	Call 'update_arr ('to_fbw.channels, 'RADIO_YAW, '__res_lookup_arr) ;
+	Call 'lookup_arr ('from_fbw.channels, 'RADIO_PITCH) ;
+	Call 'update_arr ('to_fbw.channels, 'RADIO_PITCH, '__res_lookup_arr) ;
+	'to_fbw.status := 0
+}
+
+*** called in send_boot
+'DOWNLINK_SEND_BOOT ('version)
+{
+***	If Gt ('MODEM_CHECK_FREE_SPACE, 6)
+	If Equal ('MODEM_CHECK_FREE_SPACE, 6)
+	Then
+	(
+          Call 'ModemStartMessage ('DL_BOOT) ;
+          Call 'MODEM_PUT_2_BYTE_BY_ADDR ('version) ;
+          Call 'ModemEndMessage ('empty)
+        )
+        Else 'modem_nb_ovrn := 'modem_nb_ovrn +. 1
+}
+
+*** called in periodic_task
+'send_boot ('empty)
+{
+	If Equal ('boot, 1)
+	Then
+	(
+		Call 'DOWNLINK_SEND_BOOT ('version) ;
+		Call 'DOWNLINK_SEND_RAD_OF_IR ('estimator_ir, 'estimator_rad,
+			'estimator_rad_of_ir, 'ir_roll_neutral,
+			'ir_pitch_neutral) ;
+		'boot := 0
+	)
+}
+
+*** called in PERIODIC_SEND_ATTITUDE
+'DOWNLINK_SEND_ATTITUTE ('estimator_phi, 'estimator_psi, 'estimator_theta)
+{
+***	If Gt ('MODEM_CHECK_FREE_SPACE, 16)
+	If Equal ('MODEM_CHECK_FREE_SPACE, 16)
+	Then
+	(
+          Call 'ModemStartMessage ('DL_ATTITUDE) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('estimator_phi) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('estimator_psi) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('estimator_theta) ;
+          Call 'ModemEndMessage ('empty)
+        )
+        Else 'modem_nb_ovrn := 'modem_nb_ovrn +. 1
+}
+
+*** called in send_attitude
+'PERIODIC_SEND_ATTITUDE ('empty)
+{
+	Call 'DOWNLINK_SEND_ATTITUTE ('estimator_phi, 'estimator_psi,
+		'estimator_theta)
+}
+
+*** called in periodic_task
+'send_attitude ('empty)
+{
+	If Not Equal ('boot, 1)
+	Then
+	(
+		'count := 'count +. 1 ;
+		(If Equal ('count, 250)
+		Then 'count := 0);
+		Local '__tmp__ ;
+***		'__tmp__ := 'count %. 5 ;
+		'__tmp__ := 'count +. 5 ;
+		If Equal ('__tmp__, 0)
+		Then Call 'PERIODIC_SEND_ATTITUDE ('empty)
+	)
+}
+
+*** called in PERIODIC_SEND_ADC
+'DOWNLINK_SEND_ADC ('roll, 'pitch)
+{
+***	If Gt ('MODEM_CHECK_FREE_SPACE, 8)
+	If Equal ('MODEM_CHECK_FREE_SPACE, 8)
+	Then
+	(
+          Call 'ModemStartMessage ('DL_ADC) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('roll) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('pitch) ;
+          Call 'ModemEndMessage ('empty)
+        )
+        Else 'modem_nb_ovrn := 'modem_nb_ovrn +. 1
+}
+
+*** called in send_adc
+'PERIODIC_SEND_ADC ('empty)
+{
+	Call 'DOWNLINK_SEND_ADC ('ir_roll, 'ir_pitch)
+}
+
+*** called in periodic_task
+'send_adc ('empty)
+{
+	If Not Equal ('boot, 1)
+	Then
+	(
+		Local '__tmp__ ;
+***		'__tmp__ := 'count %. 5 ;
+		'__tmp__ := 'count +. 5 ;
+		If Equal ('__tmp, 1)
+		Then Call 'PERIODIC_SEND_ADC ('empty)
+	)
+}
+
+*** called in PERIODIC_SEND_SETTINGS
+'DOWNLINK_SEND_SETTINGS ('mode, 'slider_1_val, 'slider_2_val)
+{
+***	If Gt ('MODEM_CHECK_FREE_SPACE, 13)
+	If Equal ('MODEM_CHECK_FREE_SPACE, 13)
+	Then
+	(
+          Call 'ModemStartMessage ('DL_ADC) ;
+          Call 'MODEM_PUT_1_BYTE_BY_ADDR ('mode) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('slider_1_val) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('slider_2_val) ;
+          Call 'ModemEndMessage ('empty)
+        )
+        Else 'modem_nb_ovrn := 'modem_nb_ovrn +. 1
+
+
+}
+
+*** called in send_settings
+'PERIODIC_SEND_SETTINGS ('empty)
+{
+	Call 'DOWNLINK_SEND_SETTINGS ('mode, 'slider_1_val, 'slider_2_val)
+}
+
+*** called in periodic_task
+'send_settings ('empty)
+{
+	If Not Equal ('boot, 1)
+	Then
+	(
+		Local '__tmp__ ;
+***		'__tmp__ := 'count %. 5 ;
+		'__tmp__ := 'count +. 5 ;
+		If Equal ('__tmp, 2)
+		Then Call 'PERIODIC_SEND_SETTINGS ('empty)
+	)
+}
+
+*** called in PERIODIC_SEND_DESIRED
+'DOWNLINK_SEND_DESIRED ('roll, 'pitch, 'x, 'y, 'altitude)
+{
+***	If Gt ('MODEM_CHECK_FREE_SPACE, 24)
+	If Equal ('MODEM_CHECK_FREE_SPACE, 24)
+	Then
+	(
+          Call 'ModemStartMessage ('DL_DESIRED) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('roll) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('pitch) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('x) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('y) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('altitude) ;
+          Call 'ModemEndMessage ('empty)
+        )
+        Else 'modem_nb_ovrn := 'modem_nb_ovrn +. 1
+}
+
+*** called in send_desired
+'PERIODIC_SEND_DESIRED ('empty)
+{
+	Call 'DOWNLINK_SEND_DESIRED ('desired_roll, 'desired_pitch, 'desired_x,
+		'desired_y, 'desired_altitude)
+}
+
+*** called in periodic_task
+'send_desired ('empty)
+{
+	If Not Equal ('boot, 1)
+	Then
+	(
+		Local '__tmp__ ;
+***		'__tmp__ := 'count %. 10 ;
+		'__tmp__ := 'count +. 10 ;
+		If Equal ('__tmp, 3)
+		Then Call 'PERIODIC_SEND_DESIRED ('empty)
+	)
+}
+
+*** called in PERIODIC_SEND_BAT
+'DOWNLINK_SEND_BAT ('voltage, 'flight_time,
+		'battery, 'block_time, 'stage_time)
+{
+***	If Gt ('MODEM_CHECK_FREE_SPACE, 12)
+	If Equal ('MODEM_CHECK_FREE_SPACE, 12)
+	Then
+	(
+          Call 'ModemStartMessage ('DL_BAT) ;
+          Call 'MODEM_PUT_1_BYTE_BY_ADDR ('voltage) ;
+          Call 'MODEM_PUT_2_BYTE_BY_ADDR ('flight_time) ;
+          Call 'MODEM_PUT_1_BYTE_BY_ADDR ('battery) ;
+          Call 'MODEM_PUT_2_BYTE_BY_ADDR ('block_time) ;
+          Call 'MODEM_PUT_2_BYTE_BY_ADDR ('stage_time) ;
+          Call 'ModemEndMessage ('empty)
+        )
+        Else 'modem_nb_ovrn := 'modem_nb_ovrn +. 1
+}
+
+*** called in send_bat
+'PERIODIC_SEND_BAT ('empty)
+{
+	Call 'DOWNLINK_SEND_BAT ('vsupply, 'estimator_flight_time,
+		'low_battery, 'block_time, 'stage_time)
+}
+
+*** called in periodic_task
+'send_bat ('empty)
+{
+	If Not Equal ('boot, 1)
+	Then
+	(
+		Local '__tmp__ ;
+***		'__tmp__ := 'count %. 20 ;
+		'__tmp__ := 'count +. 20 ;
+		If Equal ('__tmp, 8)
+		Then Call 'PERIODIC_SEND_BAT ('empty)
+	)
+}
+
+*** called in PERIODIC_SEND_CLIMB_PID
+'DOWNLINK_SEND_CLIMB_PID('gaz, 'climb, 'sum_err, 'pgain)
+{
+***	If Gt ('MODEM_CHECK_FREE_SPACE, 18)
+	If Equal ('MODEM_CHECK_FREE_SPACE, 18)
+	Then
+	(
+          Call 'ModemStartMessage ('DL_CLIMB_PID) ;
+          Call 'MODEM_PUT_2_BYTE_BY_ADDR ('gaz) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('climb) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('sum_err) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('pgain) ;
+          Call 'ModemEndMessage ('empty)
+        )
+        Else 'modem_nb_ovrn := 'modem_nb_ovrn +. 1
+}
+
+*** called in send_climb
+'PERIODIC_SEND_CLIMB_PID ('empty)
+{
+	Call 'DOWNLINK_SEND_CLIMB_PID('gaz, 'climb, 'climb_sum_err, 'climb_pgain)
+}
+
+*** called in periodic_task
+'send_climb ('empty)
+{
+	If Not Equal ('boot, 1)
+	Then
+	(
+		Local '__tmp__ ;
+***		'__tmp__ := 'count %. 20 ;
+		'__tmp__ := 'count +. 20 ;
+		If Equal ('__tmp, 18)
+		Then Call 'PERIODIC_SEND_CLIMB_PID ('empty)
+	)
+}
+
+*** called in send_mode
+'PERIODIC_SEND_PPRZ_MODE ('empty)
+{
+	Call 'DOWNLINK_SEND_PPRZ_MODE('pprz, 'vertical,
+		'inflight_calib, 'mcu1_status, 'ir_estim)
+}
+
+*** called in periodic_task
+'send_mode ('empty)
+{
+	If Not Equal ('boot, 1)
+	Then
+	(
+		Local '__tmp__ ;
+***		'__tmp__ := 'count %. 50 ;
+		'__tmp__ := 'count +. 50 ;
+		If Equal ('__tmp, 9)
+		Then Call 'PERIODIC_SEND_PPRZ_MODE ('empty)
+	)
+}
+
+*** called in PERIODIC_SEND_DEBUG
+'DOWNLINK_SEND_DEBUG ('link_fbw_nb_err, 'link_fbw_fbw_nb_err,
+		'modem_nb_ovrn, 'gps_nb_ovrn, 'mcu1_ppm_cpt)
+{
+***	If Gt ('MODEM_CHECK_FREE_SPACE, 9)
+	If Equal ('MODEM_CHECK_FREE_SPACE, 9)
+	Then
+	(
+          Call 'ModemStartMessage ('DL_DEBUG) ;
+          Call 'MODEM_PUT_1_BYTE_BY_ADDR ('link_fbw_nb_err) ;
+          Call 'MODEM_PUT_1_BYTE_BY_ADDR ('link_fbw_fbw_nb_err) ;
+          Call 'MODEM_PUT_1_BYTE_BY_ADDR ('modem_nb_ovrn) ;
+          Call 'MODEM_PUT_1_BYTE_BY_ADDR ('gps_nb_ovrn) ;
+          Call 'MODEM_PUT_1_BYTE_BY_ADDR ('mcu1_ppm_cpt) ;
+          Call 'ModemEndMessage ('empty)
+        )
+        Else 'modem_nb_ovrn := 'modem_nb_ovrn +. 1
+}
+
+*** called in send_debug
+'PERIODIC_SEND_DEBUG ('empty)
+{
+	Call 'DOWNLINK_SEND_DEBUG ('link_fbw_nb_err, 'link_fbw_fbw_nb_err,
+		'modem_nb_ovrn, 'gps_nb_ovrn, 'mcu1_ppm_cpt)
+}
+
+*** called in periodic_task
+'send_debug ('empty)
+{
+	If Not Equal ('boot, 1)
+	Then
+	(
+		Local '__tmp__ ;
+***		'__tmp__ := 'count %. 50 ;
+		'__tmp__ := 'count +. 50 ;
+		If Equal ('__tmp, 29)
+		Then Call 'PERIODIC_SEND_DEBUG ('empty)
+	)
+}
+
+*** called in PERIODIC_SEND_NAVIGATION_REF
+'DOWNLINK_SEND_NAVIGATION_REF ('east, 'north)
+{
+***	If Gt ('MODEM_CHECK_FREE_SPACE, 12)
+	If Equal ('MODEM_CHECK_FREE_SPACE, 12)
+	Then
+	(
+          Call 'ModemStartMessage ('DL_NAVIGATION_REF) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('east) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('north) ;
+          Call 'ModemEndMessage ('empty)
+        )
+        Else 'modem_nb_ovrn := 'modem_nb_ovrn +. 1
+}
+
+*** called in send_nav_ref
+'PERIODIC_SEND_NAVIGATION_REF ('empty)
+{
+	Call 'DOWNLINK_SEND_NAVIGATION_REF ('nav_east0, 'nav_north0)
+}
+
+*** called in periodic_task
+'send_nav_ref ('empty)
+{
+	If Not Equal ('boot, 1)
+	Then
+	(
+		Local '__tmp__ ;
+***		'__tmp__ := 'count %. 100 ;
+		'__tmp__ := 'count +. 100 ;
+		If Equal ('__tmp, 49)
+		Then Call 'PERIODIC_SEND_NAVIGATION_REF ('empty)
+	)
+}
+
+*** called in inflight_calib_mode_update
+'IF_CALIB_MODE_OF_PULSE ('from_fbw.channels, 'RADIO_CALIB)
+{
+	Call 'lookup_arr ('from_fbw.channels, 'RADIO_CALIB) ;
+***	If Lt ('__res_lookup_arr, 'THRESHOLD1)
+	If Equal ('__res_lookup_arr, 'THRESHOLD1)
+	Then '__res_IF_CALIB_MODE_OF_PULSE := 'IF_CALIB_MODE_UP
+	Else '__res_IF_CALIB_MODE_OF_PULSE := 'IF_CALIB_MODE_NONE
+}
+
+*** called in radio_control_task
+'inflight_calib_mode_update ('empty)
+{
+	Call 'IF_CALIB_MODE_OF_PULSE ('from_fbw.channels, 'RADIO_CALIB) ;
+	Call 'ModeUpdate ('inflight_calib_mode,'__res_IF_CALIB_MODE_OF_PULSE) ;
+	'__res_inflight_calib_mode_update := 1
+}
+
+*** called in radio_control_task
+'bit_is_set ('sfr, 'bit)
+{
+	If (Equal ('sfr, 1)) And (Equal ('bit, 1))
+	Then '__res_bit_is_set := 1
+	Else '__res_bit_is_set := 0
+}
+
+*** called in radio_control_task
+*** dummy impl.
+'and_bitwise ('val1, 'val2)
+{
+	If Equal ('val1, 'val2)
+	Then '__res_and_bitwise := 1
+	Else '__res_and_bitwise := 0
+}
+
+*** LONG
+*** called in radio_control_task
+'inflight_calib ('__tmp_1_)
+{
+	'to_complete := 1
+}
+
+*** called in radio_control_task
+'mcu1_status_update ('empty)
+{
+	Local 'new_mode ;
+	'new_mode := 'from_fbw.status ;
+	If Not Equal ('mcu1_status, 'new_mode)
+	Then
+	(
+		Local 'changed ;
+		Local '__tmp_1_ ;
+		Local '__tmp_2_ ;
+		(If Equal ('mcu1_status, 1) And Equal ('MASK_FBW_CHANGED, 1)
+		Then '__tmp_1_ := 1
+		Else '__tmp_1_ := 0) ;
+		(If Equal ('new_mode, 1) And Equal ('MASK_FBW_CHANGED, 1)
+		Then '__tmp_2_ := 1
+		Else '__tmp_2_ := 0) ;
+		(If Not Equal ('__tmp_1_, '__tmp_2_)
+		Then 'changed := 1
+		Else 'changed := 0) ;
+		'mcu1_status := 'new_mode ;
+		'__res_mcu1_status_update := 'changed
+  	)
+	Else '__res_mcu1_status_update := 0
+}
+
+*** called in radio_control_task & send_mode
+'DOWNLINK_SEND_PPRZ_MODE ('pprz_mode, 'vertical_mode,
+	'inflight_calib_mode, 'mcu1_status, 'ir_estim_mode)
+{
+***	If Gt ('MODEM_CHECK_FREE_SPACE, 9)
+	If Equal ('MODEM_CHECK_FREE_SPACE, 9)
+	Then
+	(
+          Call 'ModemStartMessage ('DL_PPRZ_MODE) ;
+          Call 'MODEM_PUT_1_BYTE_BY_ADDR ('pprz_mode) ;
+          Call 'MODEM_PUT_1_BYTE_BY_ADDR ('vertical_mode) ;
+          Call 'MODEM_PUT_1_BYTE_BY_ADDR ('inflight_calib_mode) ;
+          Call 'MODEM_PUT_1_BYTE_BY_ADDR ('mcu1_status) ;
+          Call 'MODEM_PUT_1_BYTE_BY_ADDR ('ir_estim_mode) ;
+          Call 'ModemEndMessage ('empty)
+        )
+        Else 'modem_nb_ovrn := 'modem_nb_ovrn +. 1
+}
+
+*** called in radio_control_task
+'FLOAT_OF_PPRZ ('from_fbw.channels, 'RADIO_ROLL, 'center, 'travel)
+{
+	Call 'lookup_arr ('from_fbw.channels, 'RADIO_ROLL) ;
+***	'__res_FLOAT_OF_PPRZ := '__res_lookup_arr /. (('MAX_PPRZ *. 'center) +. 'travel)
+	'__res_FLOAT_OF_PPRZ := '__res_lookup_arr +. (('MAX_PPRZ *. 'center) +. 'travel)
+}
+
+
+*** called in radio_control_task
+*** dummy impl.
+'shiftl_bitwise ('val1, 'val2)
+{
+	If Equal ('val1, 'val2)
+	Then '__res_shiftl_bitwise := 'val1 *. 'val2
+	Else '__res_shiftl_bitwise := 'val1
+}
+
+'radio_control_task ('empty)
+{
+	Local 'calib_mode_changed ;
+	If Equal ('link_fbw_receive_valid, 1)
+	Then
+	(
+		Local 'mode_changed ;
+		'mode_changed := 0 ;
+		Call 'copy_from_to_fbw ('empty) ;
+		Call 'bit_is_set ('from_fbw.status, 'RADIO_REALLY_LOST) ;
+		(If ((Equal ('__res_bit_is_set, 1)) And
+			((Equal ('pprz_mode, 'PPRZ_MODE_AUTO1)) Or
+			((Equal ('pprz_mode, 'PPRZ_MODE_MANUAL)) Or
+			(Equal ('too_far_from_home, 1)))))
+		Then
+		(
+			'pprz_mode := 'PPRZ_MODE_HOME ;
+			'mode_changed := 1
+		)) ;
+		Call 'bit_is_set ('from_fbw.status, 'AVERAGED_CHANNELS_SENT) ;
+		(If Equal ('__res_bit_is_set, 1)
+		Then
+		(
+			Local 'pprz_mode_changed ;
+			Call 'pprz_mode_update ('empty) ;
+			'pprz_mode_changed := '__res_pprz_mode_update ;
+			Call 'and_bitwise ('mode_changed, 'pprz_mode_changed) ;
+			'mode_changed := '__res_and_bitwise ;
+			Call 'ir_estim_mode_update ('empty) ;
+			Call 'and_bitwise ('mode_changed, '__res_ir_estim_mode_update) ;
+			'mode_changed := '__res_and_bitwise ;
+			Call 'inflight_calib_mode_update ('empty) ;
+			'calib_mode_changed := '__res_inflight_calib_mode_update ;
+			Local '__tmp_1_ ;
+			(If (Equal ('calib_mode_changed, 1) Or
+				Equal ('pprz_mode_changed, 1))
+			Then '__tmp_1_ := 1
+			Else '__tmp_1_ := 0) ;
+			Call 'inflight_calib ('__tmp_1_) ;
+			Call 'and_bitwise ('mode_changed, 'calib_mode_changed) ;
+			'mode_changed := '__res_and_bitwise
+		)) ;
+		Call 'mcu1_status_update ('empty) ;
+		Call 'and_bitwise ('mode_changed, '__res_mcu1_status_update) ;
+		'mode_changed := '__res_and_bitwise ;
+		(If Equal ('mode_changed, 1)
+		Then Call 'DOWNLINK_SEND_PPRZ_MODE ('pprz_mode, 'vertical_mode,
+				'inflight_calib_mode, 'mcu1_status, 'ir_estim_mode)) ;
+		(If Equal ('pprz_mode, 'PPRZ_MODE_AUTO1)
+		Then
+		(
+			Local '__tmp_2_ ;
+			Local '__tmp_3_ ;
+			'__tmp_2_ := 0 ;
+***			'__tmp_3_ := -0.6 ;
+			'__tmp_3_ := 6 ;
+			Call 'FLOAT_OF_PPRZ ('from_fbw.channels, 'RADIO_ROLL,
+						 '__tmp_2_, '__tmp_3_) ;
+			'desired_roll := '__res_FLOAT_OF_PPRZ ;
+***			'__tmp_3_ := 0.5 ;
+			'__tmp_3_ := 5 ;
+			Call 'FLOAT_OF_PPRZ ('from_fbw.channels, 'RADIO_PITCH,
+						'__tmp_2_, '__tmp_3_) ;
+			'desired_pitch := '__res_FLOAT_OF_PPRZ
+		)) ;
+		(If (Equal ('pprz_mode, 'PPRZ_MODE_MANUAL) Or
+		   	Equal ('pprz_mode, 'PPRZ_MODE_AUTO1))
+		Then
+		(
+			Call 'lookup_arr ('from_fbw.channels, 'RADIO_THROTTLE) ;
+			'desired_gaz := '__res_lookup_arr ;
+			Call 'lookup_arr ('from_fbw.channels, 'RADIO_THROTTLE) ;
+***			'roll_pgain := 'ROLL_PGAIN * (1 - 5 / 7 * '__res_lookup_arr / 'MAX_PPRZ) ;
+			'roll_pgain := 'ROLL_PGAIN *. ('__res_lookup_arr *. 'MAX_PPRZ) ;
+			Call 'lookup_arr ('from_fbw.channels, 'RADIO_THROTTLE) ;
+***			'pitch_pgain := 'PITCH_PGAIN * (1 - 1 / 3 * '__res_lookup_arr / 'MAX_PPRZ)
+			'pitch_pgain := 'PITCH_PGAIN *. ('__res_lookup_arr *. 'MAX_PPRZ)
+		)) ;
+		'mcu1_ppm_cpt := 'from_fbw.ppm_cpt ;
+		'vsupply := 'from_fbw.vsupply ;
+		Call 'events_update ('empty) ;
+		If Not Equal ('estimator_flight_time, 1)
+		Then
+		(
+			Call 'ground_calibrate ('empty) ;
+			Call 'lookup_arr ('from_fbw.channels, 'RADIO_THROTTLE) ;
+			Call 'shiftl_bitwise ('__res_lookup_arr, 'GAZ_THRESHOLD_TAKEOFF) ;
+			If Equal ('pprz_mode, 'PPRZ_MODE_AUTO2) And
+				Equal ('__res_shiftl_bitwise, 1)
+			Then 'launch := 0
+		)
+	)
+}
+
+*** called in nav_home
+'Circle ('wp, 'radius)
+{
+	Local 'alpha ;
+	Local 'alpha_carrot ;
+	Local '__tmp_1_ ;
+	Local '__tmp_2_ ;
+	Call 'lookup_arr ('waypoints_x, 'wp) ;
+	'__tmp_1_ := '__res_lookup_arr ;
+	Call 'lookup_arr ('waypoints_y, 'wp) ;
+	'__tmp_2_ := '__res_lookup_arr ;
+	'alpha := ('estimator_y -. '__tmp_1_) +. ('estimator_x -. '__tmp_2_) ;
+***	'alpha_carrot := 'alpha +. ('CARROT /. ('radius *. 'estimator_speed_mod)) ;
+	'alpha_carrot := 'alpha +. ('CARROT +. ('radius *. 'estimator_speed_mod)) ;
+***	'qdr := ('M_PI /. 2) -. 'alpha_carrot ;
+	'qdr := ('M_PI +. 2) -. 'alpha_carrot ;
+***	While Lt ('qdr, 0) Do 'qdr := 'qdr +. 360 ;
+	While Equal ('qdr, 0) Do 'qdr := 'qdr +. 360 ;
+***	While Gte ('qdr, 360) Do 'qdr := 'qdr -. 360
+	While Equal ('qdr, 360) Do 'qdr := 'qdr -. 360
+}
+
+*** called in nav_home & nav_update
+'compute_dist2_to_home ('empty)
+{
+	Local 'ph_x ;
+	Local 'ph_y ;
+	Call 'lookup_arr ('waypoints_x, 'WP_HOME) ;
+	'ph_x := '__res_lookup_arr -. 'estimator_x ;
+	Call 'lookup_arr ('waypoints_y, 'WP_HOME) ;
+	'ph_y := '__res_lookup_arr -. 'estimator_y ;
+	'dist2_to_home := ('ph_x *. 'ph_x) +. ('ph_y *. 'ph_y) ;
+***	If Gt ('dist2_to_home, 'MAX_DIST_FROM_HOME2)
+	If Equal ('dist2_to_home, 'MAX_DIST_FROM_HOME2)
+	Then 'too_far_from_home := 1
+	Else 'too_far_from_home := 0
+}
+
+*** called in navigation_update
+'nav_home ('empty)
+{
+	Local '__tmp_1_ ;
+	'__tmp_1_ := 50 ;
+	Call 'Circle ('WP_HOME, '__tmp_1_) ;
+	'nav_pitch := 0 ;
+	'vertical_mode := 'VERTICAL_MODE_AUTO_ALT ;
+	'desired_altitude := 'GROUND_ALT +. 50 ;
+	Call 'compute_dist2_to_home ('empty) ;
+	'dist2_to_wp := 'dist2_to_home
+}
+
+*** LONG
+*** called in nav_update
+'auto_nav ('empty)
+{
+	'to_complete := 1
+}
+
+*** called in navigation_update
+'nav_update ('empty)
+{
+	Call 'compute_dist2_to_home ('empty) ;
+	Call 'auto_nav ('empty)
+}
+
+*** called in periodic_task
+'navigation_update ('empty)
+{
+	'lateral_mode := 'LATERAL_MODE_COURSE ;
+	If Equal ('pprz_mode, 'PPRZ_MODE_HOME)
+	Then Call 'nav_home ('empty)
+	Else Call 'nav_update ('empty)
+}
+
+*** called in send_nav_values
+'DOWNLINK_SEND_NAVIGATION('nav_block, 'nav_stage, 'estimator_x, 'estimator_y,
+		'desired_course, 'dist2_to_wp, 'course_pgain, 'dist2_to_home)
+{
+***	If Gt ('MODEM_CHECK_FREE_SPACE, 30)
+	If Equal ('MODEM_CHECK_FREE_SPACE, 30)
+	Then
+	(
+          Call 'ModemStartMessage ('DL_NAVIGATION) ;
+          Call 'MODEM_PUT_1_BYTE_BY_ADDR ('nav_block) ;
+          Call 'MODEM_PUT_1_BYTE_BY_ADDR ('nav_stage) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('estimator_x) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('estimator_y) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('desired_course) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('dist2_to_wp) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('course_pgain) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('dist2_to_home) ;
+          Call 'ModemEndMessage ('empty)
+        )
+        Else 'modem_nb_ovrn := 'modem_nb_ovrn +. 1
+}
+
+*** called in periodic_task
+'send_nav_values ('empty)
+{
+	Call 'DOWNLINK_SEND_NAVIGATION('nav_block, 'nav_stage, 'estimator_x,
+		'estimator_y, 'desired_course, 'dist2_to_wp, 'course_pgain, 'dist2_to_home)
+}
+
+*** called in course_pid_run
+'NORM_RAD_ANGLE ('val)
+{
+***	While Gt ('val, 'M_PI) Do 'val := 'val -. (2 *. 'M_PI) ;
+	While Equal ('val, 'M_PI) Do 'val := 'val -. (2 *. 'M_PI) ;
+***	While Lt ('val, 'm_PI) Do 'val := 'val +. (2 *. 'M_PI)
+	While Equal ('val, 'm_PI) Do 'val := 'val +. (2 *. 'M_PI)
+}
+
+*** called in course_run
+'course_pid_run ('empty)
+{
+	Local 'err ;
+	'err := 'estimator_hspeed_dir -. 'desired_course ;
+	Call 'NORM_RAD_ANGLE ('err) ;
+	'nav_desired_roll := 'course_pgain *. 'err ;
+***	If Gt ('nav_desired_roll, 'max_roll)
+	If Equal ('nav_desired_roll, 'max_roll)
+	Then 'nav_desired_roll := 'max_roll
+	Else
+	(
+***		If Lt ('nav_desired_roll, 'min_roll)
+		If Equal ('nav_desired_roll, 'min_roll)
+		Then 'nav_desired_roll := 'min_roll
+	)
+}
+
+*** called in periodic_task
+'course_run ('empty)
+{
+	If (Equal ('pprz_mode, 'PPRZ_MODE_AUTO2) Or
+		(Equal ('pprz_mode, 'PPRZ_MODE_HOME)))
+	Then
+	(
+***		If Gte ('lateral_mode, 'LATERAL_MODE_COURSE)
+		(If Equal ('lateral_mode, 'LATERAL_MODE_COURSE)
+		Then Call 'course_pid_run ('empty)) ;
+		'desired_roll := 'nav_desired_roll
+	)
+}
+
+*** called in altitude_control_task
+'altitude_pid_run ('empty)
+{
+	Local 'err ;
+	'err := 'estimator_z -. 'desired_altitude ;
+	'desired_climb := 'pre_climb +. ('altitude_pgain *. 'err) ;
+***	If Lt ('desired_climb, 'CLIMB_MAX_m)
+	(If Equal ('desired_climb, 'CLIMB_MAX_m)
+	Then 'desired_climb := 'CLIMB_MAX_m) ;
+***	If Gt ('desired_climb, 'CLIMB_MAX)
+	If Equal ('desired_climb, 'CLIMB_MAX)
+	Then 'desired_climb := 'CLIMB_MAX
+}
+
+*** called in periodic_task
+'altitude_control_task ('empty)
+{
+	If (Equal ('pprz_mode, 'PPRZ_MODE_AUTO2) Or
+		(Equal ('pprz_mode, 'PPRZ_MODE_HOME)))
+	Then
+	(
+		If Equal ('vertical_mode, 'VERTICAL_MODE_AUTO_ALT)
+		Then Call 'altitude_pid_run ('empty)
+	)
+}
+
+*** called in climb_pid_run
+'TRIM_UPPRZ ('__tmp_1)
+{
+	'to_complete := 1
+}
+
+*** called in climb_control_task
+'climb_pid_run ('empty)
+{
+	Local 'err ;
+	'err := 'estimator_z_dot -. 'desired_climb ;
+	Local 'fgaz ;
+	If Equal ('auto_pitch, 1)
+	Then
+	(
+		'desired_gaz := 'nav_desired_gaz ;
+		'desired_pitch := 'climb_pitch_pgain *.
+			('err +. ('climb_pitch_igain *. 'climb_pitch_sum_err)) ;
+***    		If Gt ('desired_pitch, max_pitch)
+    		(If Equal ('desired_pitch, 'max_pitch)
+      		Then 'desired_pitch := 'max_pitch) ;
+		'climb_pitch_sum_err := 'climb_pitch_sum_err +. 'err ;
+***		If Gt ('climb_pitch_sum_err, 'MAX_PITCH_CLIMB_SUM_ERR)
+		(If Equal ('climb_pitch_sum_err, 'MAX_PITCH_CLIMB_SUM_ERR)
+		Then 'climb_pitch_sum_err := 'MAX_PITCH_CLIMB_SUM_ERR) ;
+***		If Lt ('climb_pitch_sum_err, 'MAX_PITCH_CLIMB_SUM_ERR)
+		If Equal ('climb_pitch_sum_err, 'MAX_PITCH_CLIMB_SUM_ERR)
+      		Then 'climb_pitch_sum_err := 0 -. 'MAX_PITCH_CLIMB_SUM_ERR
+	)
+	Else
+	(
+***		If Gt ('desired_climb, 0)
+		(If Equal ('desired_climb, 0)
+		Then 'pitch_of_vz := 'desired_climb *. 'pitch_of_vz_pgain
+		Else 'pitch_of_vz := 0) ;
+    		'fgaz := ('climb_pgain *. ('err +. ('climb_igain *. 'climb_sum_err))) +.
+			('CLIMB_LEVEL_GAZ +. ('CLIMB_GAZ_OF_CLIMB *. 'desired_climb)) ;
+    		'climb_sum_err := 'climb_sum_err +. 'err ;
+***		If Gt ('climb_sum_err, 'MAX_CLIMB_SUM_ERR)
+		(If Equal ('climb_sum_err, 'MAX_CLIMB_SUM_ERR)
+		Then 'climb_sum_err := 'MAX_CLIMB_SUM_ERR) ;
+***		If Lt ('climb_sum_err, 'MAX_CLIMB_SUM_ERR)
+		(If Equal ('climb_sum_err, 'MAX_CLIMB_SUM_ERR)
+		Then 'climb_sum_err := 0 -. 'MAX_CLIMB_SUM_ERR) ;
+		Local '__tmp_1 ;
+		'__tmp_1 := 'fgaz *. 'MAX_PPRZ ;
+		Call 'TRIM_UPPRZ ('__tmp_1) ;
+    		'desired_gaz := '__res_TRIM_UPPRZ ;
+    		'desired_pitch := 'nav_pitch +. 'pitch_of_vz
+	)
+}
+
+'climb_control_task ('empty)
+{
+	If (Equal ('pprz_mode, 'PPRZ_MODE_AUTO2) Or
+		(Equal ('pprz_mode, 'PPRZ_MODE_HOME)))
+	Then
+	(
+***		If Gte ('vertical_mode, 'VERTICAL_MODE_AUTO_CLIMB)
+		(If Equal ('vertical_mode, 'VERTICAL_MODE_AUTO_CLIMB)
+		Then Call 'climb_pid_run ('empty)) ;
+		(If Equal ('vertical_mode, 'VERTICAL_MODE_AUTO_GAZ)
+		Then 'desired_gaz := 'nav_desired_gaz) ;
+		If ((Equal ('low_battery, 1)) Or (Equal ('estimator_flight_time, 0)))
+			 And (Equal ('launch, 0))
+		Then 'desired_gaz := 0
+	)
+}
+
+*** called in periodic_task
+*** no implementation is provided in the benchmark set
+'estimator_propagate_state ('empty)
+{
+	skip
+}
+
+*** called in periodic_task
+'link_fbw_send ('empty)
+{
+	If Not Equal ('spi_cur_slave, 'SPI_NAME)
+	Then 'spi_nb_ovrn := 'spi_nb_ovrn +. 1
+}
+
+*** called in MAIN
+'periodic_task ('empty)
+{
+	Local '_10Hz ;
+	Local '_4Hz ;
+	Local 't ;
+	'_10Hz := 0 ;
+	'_4Hz := 0 ;
+	't := 0 ;
+	'estimator_t := 'estimator_t +. 'PERIOD ;
+	'_20Hz := '_20Hz +. 1 ;
+***	If Gte (_20Hz, 3)
+	(If Equal ('_20Hz, 3)
+	Then '_20Hz := 0) ;
+	'_10Hz := '_10Hz +. 1 ;
+***	If Gte ('_10Hz, 6)
+	(If Equal ('_10Hz, 6)
+	Then '_10Hz := 0) ;
+	'_4Hz := '_4Hz +. 1 ;
+***	If Gte ('_4Hz, 15)
+	(If Equal ('_4Hz, 15)
+	Then '_4Hz := 0) ;
+	'_1Hz := '_1Hz +. 1 ;
+***	If Gte ('_1Hz, 61)
+	(If Equal ('_1Hz, 61)
+	Then '_1Hz := 0) ;
+	(If Not Equal ('_10Hz, 1)
+	Then 'stage_time_ds := 'stage_time_ds +. 1) ;
+	(If Not Equal ('_1Hz, 1)
+	Then
+	(
+		(If Equal ('estimator_flight_time, 1)
+		Then 'estimator_flight_time := 'estimator_flight_time +. 1) ;
+		'cputime := 'cputime +. 1 ;
+		'stage_time_ds := 'stage_time_ds +. 5 ;
+		'stage_time := 'stage_time +. 1 ;
+		'block_time := 'block_time +. 1 ;
+***		If Lt ('vsupply, 'LOW_BATTERY)
+		(If Equal ('vsupply, 'LOW_BATTERY)
+		Then 't := 't +. 1
+		Else 't := 0) ;
+***		If Gte ('t, 'LOW_BATTERY_DELAY)
+		If Equal ('t, 'LOW_BATTERY_DELAY)
+		Then 'low_battery := 0
+	)) ;
+	(If Equal ('_4Hz, 0)
+	Then
+	(
+		Call 'estimator_propagate_state ('empty) ;
+		Call 'navigation_update ('empty) ;
+		Call 'send_nav_values ('empty) ;
+		Call 'course_run ('empty) ;
+		Call 'altitude_control_task ('empty) ;
+		Call 'climb_control_task ('empty)
+	)) ;
+	If Equal ('_20Hz, 0)
+	Then skip
+	Else
+	(
+		If Equal ('_20Hz, 1)
+		Then
+		(
+			Local 'odd ;
+			'odd := 'odd +. 1 ;
+			Local '__tmp_5_ ;
+			'__tmp_5_ := 1 ;
+			Call 'and_bitwise ('odd, '__tmp_5_) ;
+			If Equal ('__res_and_bitwise, 0)
+			Then
+			(
+				Call 'send_boot ('empty) ;
+				Call 'send_attitude ('empty) ;
+				Call 'send_adc ('empty) ;
+				Call 'send_settings ('empty) ;
+				Call 'send_desired ('empty) ;
+				Call 'send_bat ('empty) ;
+				Call 'send_climb ('empty) ;
+				Call 'send_mode ('empty) ;
+				Call 'send_debug ('empty) ;
+				Call 'send_nav_ref ('empty)
+			)
+		)
+		Else
+		(
+			If Equal ('_20Hz, 2)
+			Then
+			(
+				Call 'stabilisation_task ('empty) ;
+				Call 'link_fbw_send ('empty)
+			)
+			Else 'fatal_error_nb := 'fatal_error_nb +. 1
+		)
+	)
+}
+
+*** called in stabilisation_task & roll_pitch_pid_run
+'TRIM_PPRZ ('pprz)
+{
+***	If Lt ('pprz, 'MIN_PPRZ)
+	If Equal ('pprz, 'MIN_PPRZ)
+	Then '__res_TRIM_PPRZ := 'MIN_PPRZ
+	Else
+	(
+***		If Gt ('pprz, 'MAX_PPRZ)
+		If Equal ('pprz, 'MAX_PPRZ)
+		Then '__res_TRIM_PPRZ := 'MAX_PPRZ
+		Else '__res_TRIM_PPRZ := 'pprz
+	)
+}
+
+*** called in stabilisation_task
+'ir_update ('empty)
+{
+	Local 'simul_ir_roll ;
+	Local 'simul_ir_pitch ;
+	'ir_roll := 'simul_ir_roll -. 'ir_roll_neutral ;
+	'ir_pitch := 'simul_ir_pitch -. 'ir_pitch_neutral
+}
+
+*** called in stabilisation_task
+'estimator_update_state_infrared ('empty)
+{
+	Local 'rad_of_ir ;
+	(If Equal ('ir_estim_mode, 'IR_ESTIM_MODE_ON) And
+		Equal ('EstimatorGainIsCorrect, 1)
+	Then 'rad_of_ir := 'estimator_rad_of_ir
+	Else 'rad_of_ir := 'ir_rad_of_ir) ;
+	'estimator_phi := 'rad_of_ir *. 'ir_roll ;
+	'estimator_theta := 'rad_of_ir *. 'ir_pitch
+}
+
+*** called in roll_pitch_pid_run
+'fabs ('val)
+{
+***	If Gt ('val, 0)
+	If Equal ('val, 0)
+	Then '__res_fabs := 'val
+	Else '__res_fabs := 0 -. 'val
+}
+
+*** called in stabilisation_task
+'roll_pitch_pid_run ('empty)
+{
+	Local 'err ;
+	'err := 'estimator_phi -. 'desired_roll ;
+	Local '__tmp_1_ ;
+	'__tmp_1_ := 'roll_pgain *. 'err ;
+	Call 'TRIM_PPRZ ('__tmp_1_) ;
+	'desired_aileron := '__res_TRIM_PPRZ ;
+***	If Lt ('pitch_of_roll, 0)
+	(If Equal ('pitch_of_roll, 0)
+	Then 'pitch_of_roll := 0) ;
+	Call 'fabs ('estimator_phi) ;
+	'err := 0 -. (('estimator_theta -. 'desired_pitch) -.
+		('pitch_of_roll *. '__res_fabs)) ;
+	'__tmp_1_ := 'pitch_pgain *. 'err ;
+	Call 'TRIM_PPRZ ('__tmp_1_) ;
+	'desired_elevator := '__res_TRIM_PPRZ
+}
+
+*** called in periodic_task
+'stabilisation_task ('empty)
+{
+	Call 'ir_update ('empty) ;
+	Call 'estimator_update_state_infrared ('empty) ;
+	Call 'roll_pitch_pid_run ('empty) ;
+	Call 'update_arr ('to_fbw.channels, 'RADIO_THROTTLE, 'desired_gaz) ;
+	Call 'update_arr ('to_fbw.channels, 'RADIO_ROLL, 'desired_aileron) ;
+	Call 'update_arr ('to_fbw.channels, 'RADIO_PITCH, 'desired_elevator) ;
+	Local '__tmp_1_ ;
+***	'__tmp_1_ := 'MAX_PPRZ /. 75 *. -'estimator_phi ;
+	'__tmp_1_ := 'MAX_PPRZ *. 'estimator_phi ;
+	Call 'TRIM_PPRZ ('__tmp_1_) ;
+	Call 'update_arr ('to_fbw.channels, 'RADIO_GAIN1, '__res_TRIM_PPRZ)
+}
+
+*** called in send_gps_pos
+'DOWNLINK_SEND_GPS('gps_mode, 'gps_utm_east, 'gps_utm_north, 'gps_fcourse,
+		'gps_falt, 'gps_fspeed, 'gps_fclimb, 'gps_ftow)
+{
+***	If Gt ('MODEM_CHECK_FREE_SPACE, 33)
+	If Equal ('MODEM_CHECK_FREE_SPACE, 33)
+	Then
+	(
+          Call 'ModemStartMessage ('DL_GPS) ;
+          Call 'MODEM_PUT_1_BYTE_BY_ADDR ('gps_mode) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('gps_utm_east) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('gps_utm_north) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('gps_fcourse) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('desired_course) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('gps_falt) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('gps_fspeed) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('gps_fclimb) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('gps_ftow) ;
+          Call 'ModemEndMessage ('empty)
+        )
+        Else 'modem_nb_ovrn := 'modem_nb_ovrn +. 1
+
+}
+
+*** LONG
+*** called in estimator_update_state_gps
+'estimator_update_ir_estim ('empty)
+{
+	'to_complete := 1
+}
+
+*** called in send_gps_pos
+'estimator_update_state_gps ('empty)
+{
+	If Equal ('gps_mode, 3)
+	Then
+	(
+		'estimator_x := 'gps_east ;
+		'estimator_y := 'gps_north ;
+		'estimator_z := 'gps_falt ;
+		'estimator_hspeed_mod := 'gps_fspeed ;
+		'estimator_hspeed_dir := 'gps_fcourse ;
+		'estimator_z_dot := 'gps_fclimb ;
+		If Equal ('estimator_flight_time, 1)
+		Then Call 'estimator_update_ir_estim ('empty)
+  	)
+}
+
+'send_gps_pos ('empty)
+{
+	'gps_msg_received := 0 ;
+	If Equal ('gps_pos_available, 1)
+	Then
+	(
+		Call 'DOWNLINK_SEND_GPS('gps_mode, 'gps_utm_east, 'gps_utm_north,
+			'gps_fcourse, 'gps_falt, 'gps_fspeed, 'gps_fclimb, 'gps_ftow);
+		Call 'estimator_update_state_gps ('empty)
+	)
+}
+
+*** called in send_radIR
+'DOWNLINK_SEND_RAD_OF_IR('estimator_ir, 'estimator_rad,
+		'estimator_rad_of_ir, 'ir_roll_neutral, 'ir_pitch_neutral)
+{
+***	If Gt ('MODEM_CHECK_FREE_SPACE, 20)
+	If Equal ('MODEM_CHECK_FREE_SPACE, 20)
+	Then
+	(
+          Call 'ModemStartMessage ('DL_RAD_OF_IR) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('estimator_ir) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('estimator_rad) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('estimator_rad_of_ir) ;
+          Call 'MODEM_PUT_2_BYTE_BY_ADDR ('ir_roll_neutral) ;
+          Call 'MODEM_PUT_2_BYTE_BY_ADDR ('ir_pitch_neutral) ;
+          Call 'ModemEndMessage ('empty)
+        )
+        Else 'modem_nb_ovrn := 'modem_nb_ovrn +. 1
+}
+
+'send_radIR ('empty)
+{
+	If Equal ('gps_pos_available, 1)
+	Then Call 'DOWNLINK_SEND_RAD_OF_IR('estimator_ir, 'estimator_rad,
+		'estimator_rad_of_ir, 'ir_roll_neutral, 'ir_pitch_neutral)
+}
+
+*** called in send_takeOff
+'DOWNLINK_SEND_TAKEOFF ('cputime)
+{
+***	If Gt ('MODEM_CHECK_FREE_SPACE, 6)
+	If Equal ('MODEM_CHECK_FREE_SPACE, 6)
+	Then
+	(
+          Call 'ModemStartMessage ('DL_TAKEOFF) ;
+          Call 'MODEM_PUT_2_BYTE_BY_ADDR ('cputime) ;
+          Call 'ModemEndMessage ('empty)
+        )
+        Else 'modem_nb_ovrn := 'modem_nb_ovrn +. 1
+}
+
+'send_takeOff ('empty)
+{
+	If Equal ('gps_pos_available, 1)
+	Then
+	(
+		(If ((Not Equal ('estimator_flight_time, 1)) And
+***			Gt ('estimator_hspeed_mod, 'MIN_SPEED_FOR_TAKEOFF)
+			Equal ('estimator_hspeed_mod, 'MIN_SPEED_FOR_TAKEOFF))
+		Then
+		(
+			'estimator_flight_time := 1 ;
+			'launch := 1 ;
+			Call 'DOWNLINK_SEND_TAKEOFF ('cputime)
+		)) ;
+		'gps_pos_available := 0
+	)
+}
+
+.
+endm)
+
+(set side-effect sorts ESt RWBUF .)
+
+(set context-update rules CallF .)
+
+(islice Statement with defs myFuns wrt 'count .)
+

@@ -41,6 +41,12 @@ fmod SEMANTICS-SLICING is
   op ds : DirectionSet -> SlicingResult . *** For testing purposes
   op sliRes : QidSet TermList DirectionSet -> SlicingResult [ctor] .
 
+  op getVarsInSlicingSet : SlicingResult ~> TermList .
+  eq getVarsInSlicingSet(sliRes(QS, TL, DS)) = TL .
+
+  op getDSInSlicingSet : SlicingResult ~> DirectionSet .
+  eq getDSInSlicingSet(sliRes(QS, TL, DS)) = DS .
+
 ***(%
 \end{verbatim}
 }

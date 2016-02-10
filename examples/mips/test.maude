@@ -3,6 +3,37 @@ load assembly.maude
 (mod TEST is
   pr SEMANTICS .
 
+  op testIns : -> InsList .
+  eq testIns = addi R1, R1, 5
+               addi R2, R2, 10
+               add  R3, R1, R2
+        'loop  subi R4, R3, 10
+               j   'loop
+               break
+  .
+
+  *** Let x be the value in Mem[0] and y the value in Mem[1]
+  *** It computes x ** y and stores it in Mem[2]
+  op pow : -> InsList .
+  eq pow = sub  R1, R1, R1       *** Make sure R1 contains 0
+           load R1, R1           *** Load M[0] in R1 (function from left to right)
+           sub  R2, R2, R2       *** Make sure R2 contains 0
+           addi R2, R2, 1        *** Add 1 and save it in R2
+           load R2, R2           *** Load M[1] in R2
+           sub  R3, R3, R3       *** For comparing with 0
+           sub  R4, R4, R4       *** Initialize R4
+           addi R4, R4, 1        *** Add 1 and save it in R4
+  'loop    beq  R2, R3, 'out     *** Jump to out when R2 and R3 are equal
+           mul  R4, R4, R1       *** Store in R4 the result of R4 * R1
+           subi R2, R2, 1        *** Update the counter
+           j    'loop            *** Jump to loop
+  'out     sub  R5, R5, R5       *** Make sure R5 contains 0
+           addi R5, R5, 2        *** Add 2 and save it in R5
+           str  R5, R4           *** Store the value of R4 in position R5
+                                 *** (function from right to left)
+           break
+  .
+
   op test : -> InsList .
   eq test =
       'inc
@@ -95,8 +126,10 @@ load assembly.maude
 			addiu   sp,sp,24
 			jr      ra
 			nop
+		.
 
-
+  op main : -> InsList .
+  eq main =
      'main
 				addiu   sp,sp,-40
 				sw      ra,36(sp)
@@ -136,18 +169,23 @@ load assembly.maude
 				nop
  .
 
-  op test2 : -> InsList .
-  eq test2 =
-      'inc    sw    s8,24(sp)
- .
+  op ifm-test : -> InsList .
+  eq ifm-test = test main .
 
   op testSys : -> System .
-  eq testSys = [ preprocess(test) | mtReg | mtMem | 0 ] .
+  eq testSys = [ preprocess(ifm-test) | mtReg | mtMem | 0 ] .
 
-  op testSys2 : -> System .
-  eq testSys2 = [ preprocess(test2) | mtReg | mtMem | 0 ] .
+  op testMain : -> System .
+  eq testMain = [ preprocess(main) | mtReg | mtMem | 0 ] .
+
+  op testPow : -> System .
+  eq testPow = [ preprocess(pow) | mtReg | [0, 3] [1, 5] | 0 ] .
 endm)
 
 (set side-effect sorts Memory Registers .)
 
-(slice testSys wrt s8 .)
+(dataflow inferences InsList .)
+
+(slice testMain wrt v0 .)
+
+(slice ifm-test wrt v0 .)

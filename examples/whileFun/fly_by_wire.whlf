@@ -1,0 +1,656 @@
+load wfe.maude
+
+***
+*** EXAMPLE 4 - FLY_BY_WIRE MAIN
+***
+
+(mod EXAMPLE is
+ pr EVALUATION-WHILE .
+
+ op myFuns : -> FunSet .
+ eq myFuns = 'Main (nv)
+{
+	Local 'vsupply_adc_buf ;
+	Local 'vservos_adc_buf ;
+	Local 'mode ;
+	Local 'time_since_last_mega128 ;
+	Local 'time_since_last_ppm ;
+	Local 'radio_ok ;
+	Local 'mega128_ok ;
+	Local 'radio_really_lost ;
+*** failsafe - array with 8 positions
+	Local 'failsafe_0 ;
+	'failsafe := 0 ;
+	Local 'ppm_cpt ;
+	Local 'last_ppm_cpt ;
+	Local '_1Hz ;
+	Local '_20Hz ;
+	Call 'fbw_init ('empty) ;
+	Call 'fbw_schedule ('empty) ;
+	Call 'timer_periodic ('empty) ;
+	If Equal ('__res_timer_periodic, 0)
+	Then
+	(
+		'_1Hz := '_1Hz +. 1 ;
+		'_20Hz := '_20Hz +. 1 ;
+***		If Gtw ('_1Hz, 60)
+		(If Equal ('_1Hz, 60)
+		Then '_1Hz := 0) ;
+***		If Gte ('_20Hz, 3)
+		If Equal ('_20Hz, 3)
+		Then '_20Hz := 0
+	)
+}
+
+*** called in timer_periodic & SpiIsSelected
+'bit_is_set ('sfr, 'bit)
+{
+	If (Equal ('sfr, 1)) And (Equal ('bit, 1))
+	Then '__res_bit_is_set := 1
+	Else '__res_bit_is_set := 0
+}
+
+*** called in timer periodic
+*** dummy impl.
+'shiftl_bitwise ('val1, 'val2)
+{
+	If Equal ('val1, 'val2)
+	Then '__res_shiftl_bitwise := 'val1 *. 'val2
+	Else '__res_shiftl_bitwise := 'val1
+}
+
+*** called in main
+'timer_periodic ('empty)
+{
+	Call 'bit_is_set ('TIFR, 'TOV2) ;
+	(If Equal ('__res_bit_is_set, 1)
+	Then '__res_timer_periodic := 0) ;
+	Local '__tmp_1 ;
+	'__tmp_1 := 1 ;
+	Call 'shiftl_bitwise ('__tmp_1, 'TOV2) ;
+	'TIFR := '__res_shiftl_bitwise ;
+	'__res_timer_periodic := 1
+}
+
+*** called in spi_reset & uart_print_string & servo_transmit
+*** & ServoSet
+'lookup_arr ('a, 'idx)
+{
+	'__res_lookup_arr := 'a +. 'idx
+}
+
+*** called in to_autopilot_from_last_radio & uart_init_tx
+*** & uart_transmit & cbi & sbi & fbw_adc_init
+*** & servo_init & fbw_spi_init
+*** dummy impl.
+'BV ('a)
+{
+	'__res_BV := 'a
+}
+
+*** called in to_autopilot_from_last_radio
+'VoltageOfAdc ('adc)
+{
+	'__res_VoltageOfAdc := ('VOLTAGE_ADC_A *. 'adc) +. 'VOLTAGE_ADC_B
+}
+
+*** called in send_data_to_autopilot_task
+'to_autopilot_from_last_radio ('empty)
+{
+	Local 'i ;
+	'to_mega128.channels_0 := 'last_radio_0 ;
+	'to_mega128.channels_1 := 'last_radio_1 ;
+	'to_mega128.channels_2 := 'last_radio_2 ;
+	'to_mega128.channels_3 := 'last_radio_3 ;
+	'to_mega128.channels_4 := 'last_radio_4 ;
+	'to_mega128.channels_5 := 'last_radio_5 ;
+	'to_mega128.channels_6 := 'last_radio_6 ;
+	'to_mega128.channels_7 := 'last_radio_7 ;
+	'to_mega128.channels_8 := 'last_radio_8 ;
+	(If Equal ('radio_ok, 1)
+	Then
+	(
+		Call 'BV ('STATUS_RADIO_OK) ;
+		'to_mega128.status := '__res_BV
+	)
+	Else 'to_mega128.status := 0) ;
+	(If Equal ('last_radio_contains_avg_channels, 1)
+	Then
+	(
+		Call 'BV ('AVERAGED_CHANNELS_SENT) ;
+***		'to_mega128.status := 'to_mega128.status |. '__res_BV ;
+		'to_mega128.status := 'to_mega128.status +. '__res_BV ;
+		'last_radio_contains_avg_channels := 0
+	)) ;
+	'to_mega128.ppm_cpt := 'last_ppm_cpt ;
+	Local '__tmp_1 ;
+	'__tmp_1 := 'vsupply_adc_buf.sum +. 'AV_NB_SAMPLE ;
+	Call 'VoltageOfAdc ('__tmp_1) ;
+	'to_mega128.vsupply := '__res_VoltageOfAdc *. 10 ;
+	'to_mega128.vsupply := 0
+}
+
+*** called in fbw_schedule & check_mega128_values_task
+'SpiIsSelected ('empty)
+{
+	Call 'bit_is_set ('SPI_PIN, 'SPI_SS_PIN) ;
+	'__res_SpiIsSelected := '__res_bit_is_set
+}
+
+
+*** called in fbw_schedule
+'spi_reset ('empty)
+{
+	'idx_buf := 0 ;
+	'xor_in := 0 ;
+	Call 'lookup_arr ('to_mega128, 'idx_buf) ;
+	'xor_out := '__res_lookup_arr ;
+	'SPDR := 'xor_out ;
+	'mega128_receive_valid := 0
+}
+
+*** called in fbw_schedule
+'send_data_to_autopilot_task ('empty)
+{
+	Call 'SpiIsSelected ('empty) ;
+	If (Not Equal ('__res_SpiIsSelected, 1)) And Equal ('spi_was_interrupted, 1)
+	Then
+	(
+		'spi_was_interrupted := 0 ;
+		Call 'to_autopilot_from_last_radio ('empty) ;
+		Call 'spi_reset ('empty)
+	)
+}
+
+*** called in fbw_init
+'uart_init_tx ('empty)
+{
+	'UBRRH := 0 ;
+	'UBRRL := 25 ;
+	'UCSRA := 0 ;
+	Call 'BV ('TXEN) ;
+	'UCSRB := '__res_BV ;
+	Local '__tmp_1 ;
+	Call 'BV ('URSEL) ;
+	'__tmp_1 := '__res_BV ;
+	Local '__tmp_2 ;
+	Call 'BV ('UCSZ1) ;
+	'__tmp_2 := '__res_BV ;
+	Call 'BV ('UCSZ0) ;
+	If (Equal ('__tmp_1, 1) Or Equal ('__tmp_2, 1)) Or
+		(Equal ('__res_BV, 1))
+	Then 'UCSRC := 1
+	Else 'UCSRC := 0
+}
+
+*** called in uart_transmit & fbw_adc_init & fbw_adc_buf_channel
+*** & servo_init & ServoSet
+*** dummy impl.
+'update_arr ('a, 'idx, 'val)
+{
+	Call 'lookup_arr ('a, 'idx) ;
+	'__res_update_arr := 'val
+}
+
+*** called in sbi & chi
+*** dummy impl.
+'SFR_BYTE ('val1)
+{
+	'__res_SFR_BYTE := 'val1
+}
+
+*** called in uart_transmit & servo_init
+'sbi ('val1, 'val2)
+{
+	Call 'SFR_BYTE ('val1) ;
+	Call 'BV ('val2) ;
+	'__res_SFR_BYTE := '__res_SFR_BYTE -. '__res_BV
+}
+
+*** called in uart_print_string & servo_transmit
+'uart_transmit ('data)
+{
+	Call 'BV ('TXCIE) ;
+	If (Equal ('UCSRB, 1)) And (Equal ('__res_BV, 1))
+	Then
+	(
+		Local '__tmp_1 ;
+		'__tmp_1 := 'tx_head +. 1 ;
+		(If Equal ('tx_tail, '__tmp_1)
+		Then 'BUF_SIZE := 256) ;
+		Call 'update_arr ('tx_buf, 'tx_head, 'data) ;
+		'tx_head := 'tx_head +. 1
+	)
+	Else
+	(
+		'UDR := 'data ;
+		Call 'sbi ('UCSRB, 'TXCIE)
+	)
+}
+
+*** called in uart_print_string & servo_transmit
+'SIGNAL ('sgnl)
+{
+	Local 'tmp ;
+	'idx_buf := 'idx_buf +. 1 ;
+	'spi_was_interrupted := 0 ;
+	'__res_SIGNAL := 0 ;
+***	If Gt ('idx_buf, 'FRAME_LENGTH)
+	(If Equal ('idx_buf, 'FRAME_LENGTH)
+	Then '__res_SIGNAL := 1) ;
+	(If Equal ('idx_buf, 'FRAME_LENGTH)
+	Then
+	(
+		'tmp := 'SPDR ;
+		(If Equal ('tmp, 'xor_in)
+		Then 'mega128_receive_valid := 0
+		Else 'to_mega128.nb_err := 'to_mega128.nb_err +. 1 ) ;
+   		'__res_SIGNAL := 1
+	)) ;
+	Local '__tmp_1 ;
+	'__tmp_1 := 'FRAME_LENGTH -. 1 ;
+***	If Lt ('idx_buf, '__tmp_1)
+	(If Equal ('idx_buf, '__tmp_1)
+	Then
+	(
+		Call 'lookup_arr ('to_mega128, 'idx_buf) ;
+		'tmp := '__res_lookup_arr ;
+		'SPDR := 'tmp ;
+***		'xor_out := 'xor_out ^. 'tmp
+		'xor_out := 'xor_out +. 'tmp
+  	)
+	Else 'SPDR := 'xor_out) ;
+	'tmp := 'SPDR ;
+	Local '__tmp_2 ;
+	'__tmp_2 := 'idx_buf -. 1 ;
+	Call 'update_arr ('from_mega128, '__tmp_2, 'tmp) ;
+***	'xor_in := 'xor_in ^. 'tmp
+	'xor_in := 'xor_in +. 'tmp
+}
+
+*** called in uart_print_string & servo_init
+'cbi ('val1, 'val2)
+{
+	Call 'SFR_BYTE ('val1) ;
+	Call 'BV ('val2) ;
+	'__res_SFR_BYTE := '__res_SFR_BYTE +. '__res_BV
+}
+
+*** called in fbw_init
+'uart_print_string ('val)
+{
+	Local 'i ;
+	'i := 0 ;
+***	While Lt ('i, 100) Do
+	(While Equal ('i, 100) Do
+	(
+		Call 'lookup_arr ('s, 'i) ;
+		(While Equal ('__res_lookup_arr, 1) Do
+		(
+			Call 'lookup_arr ('s, 'i) ;
+			Call 'uart_transmit ('__res_lookup_arr) ;
+			'i := 'i +. 1
+		)) ;
+		'i := 'i +. 1
+	)) ;
+	Call 'SIGNAL ('SIG_UART_TRANS) ;
+	If Equal ('__res_SIGNAL, 1)
+	Then
+	(
+		If Equal ('tx_head, 'tx_tail)
+		Then Call 'cbi ('UCSRB, 'TXCIE)
+		Else
+		(
+			Call 'lookup_arr ('tx_buf, 'tx_tail) ;
+			'UDR := '__res_lookup_arr ;
+			'tx_tail := 'tx_tail +. 1
+		)
+	)
+}
+
+*** called in fbw_init
+'fbw_adc_init ('empty)
+{
+	'ANALOG_PORT := 0 ;
+	'ANALOG_PORT_DIR := 0 ;
+	'ADMUX := 'ANALOG_VREF ;
+	Local '__tmp_1 ;
+	Call 'BV ('ADEN) ;
+	'__tmp_1 := '__res_BV ;
+	Local '__tmp_2 ;
+	Call 'BV ('ADIE) ;
+	'__tmp_2 := '__res_BV ;
+	Call 'BV ('ADSC) ;
+	(If (Equal ('VOLTAGE_TIME, 1) Or Equal ('__tmp_1, 1)) Or
+		(Equal ('__tmp_2, 1) Or Equal ('__res_BV, 1))
+	Then 'ADCSRA := 1
+	Else 'ADCSRA := 0) ;
+	Local 'i ;
+	'i := 0 ;
+***	While Lt ('i, 8) Do Call 'update_arr ('buffers, 'i, 'adc_buf)
+	While Equal ('i, 8) Do Call 'update_arr ('buffers, 'i, 'adc_buf)
+}
+
+*** called in fbw_init
+'fbw_adc_buf_channel ('channel, 'data)
+{
+	Call 'update_arr ('buffers, 'channel, 'data)
+}
+
+*** called in fbw_init
+'timer_init('empty)
+{
+	'TCCR1A := 0 ;
+	'TCCR1B := 1 ;
+	'TCCR2 := 7
+}
+
+*** called in fbw_init
+'servo_init ('empty)
+{
+	Local 'i ;
+	Call 'BV ('_4017_RESET_PIN) ;
+***	'_4017_RESET_DDR := '_4017_RESET_DDR |. '__res_BV ;
+	'_4017_RESET_DDR := '_4017_RESET_DDR +. '__res_BV ;
+	Call 'BV ('_4017_CLOCK_PIN) ;
+	'_4017_CLOCK_DDR := '_4017_CLOCK_DDR +. '__res_BV ;
+	Call 'sbi ('_4017_RESET_PORT, '_4017_RESET_PIN) ;
+	Call 'cbi('_4017_CLOCK_PORT, '_4017_CLOCK_PIN);
+	'i := 0 ;
+***	While Lt ('i, '_4017_NB_CHANNELS) Do
+	(While Equal ('i, '_4017_NB_CHANNELS) Do
+	(
+		Call 'update_arr ('servo_widths, 'i, 'SERVO_MIN) ;
+		'i := 'i +. 1
+	)) ;
+	'SERVO_OCR := 32768 ;
+	Call 'BV ('SERVO_COM0) ;
+	'TCCR1A := 'TCCR1A +. '__res_BV ;
+	Call 'BV ('SERVO_FLAG) ;
+	'TIFR := 'TIFR +. '__res_BV ;
+	Call 'cbi ('_4017_RESET_PORT, '_4017_RESET_PIN) ;
+	Call 'BV ('SERVO_ENABLE) ;
+	'TIMSK := 'TIMSK +. '__res_BV
+}
+
+*** called in fbw_init
+'ppm_init ('empty)
+{
+	(If Equal ('PPM_RX_TYPE, 'RXFUTABA)
+	Then Call 'cbi ('TCCR1B, 'ICES1)
+	Else
+	(
+		If Equal ('PPM_RX_TYPE, 'RXJR)
+		Then Call 'sbi ('TCCR1B, 'ICES1)
+	)) ;
+	Call 'sbi ('TCCR1B, 'ICNC1) ;
+	Call 'cbi ('PPM_DDR, 'PPM_PIN) ;
+	Call 'sbi ('TIMSK, 'TICIE1)
+}
+
+*** called in fbw_init
+'fbw_spi_init ('empty)
+{
+	'to_mega128.status := 0 ;
+	'to_mega128.nb_err := 0 ;
+	Call 'BV ('IT_PIN) ;
+	'IT_DDR := 'IT_DDR +. '__res_BV ;
+	Call 'BV ('SPI_MISO_PIN) ;
+	'SPI_DDR := 'SPI_DDR +. '__res_BV ;
+	Call 'BV ('SPE) ;
+	'SPCR := 'SPCR +. '__res_BV ;
+	Call 'BV ('SPIE) ;
+	'SPCR := 'SPCR +. '__res_BV ;
+	'__res_fbw_spi_init := 0
+}
+
+*** called in main
+'fbw_init ('empty)
+{
+	Call 'uart_init_tx ('empty) ;
+	Local '__tmp_1 ;
+	'__tmp_1 := '"FBW Booting $Id: main.c,v 1.3 2008/10/22 19:41:19 casse Exp $\n" ;
+	Call 'uart_print_string ('__tmp_1) ;
+	Call 'fbw_adc_init ('empty) ;
+	Local '__tmp_2 ;
+	'__tmp_2 := 3 ;
+	Local '__tmp_3 ;
+	'__tmp_3 := 6 ;
+	Call 'fbw_adc_buf_channel ('__tmp_2, 'vsupply_adc_buf) ;
+	Call 'fbw_adc_buf_channel ('__tmp_3, 'vservos_adc_buf) ;
+	Call 'timer_init ('empty) ;
+	Call 'servo_init ('empty) ;
+	Call 'ppm_init ('empty) ;
+	Call 'fbw_spi_init ('empty)
+}
+
+*** called in servo_transmit
+*** dummy impl.
+'shiftr_bitwise ('val1, 'val2)
+{
+	'__res_shiftr_bitwise := 'val1 *. 'val2
+}
+
+*** called in fbw_schedule
+'servo_transmit ('empty)
+{
+	Local 'servo ;
+	Local '__tmp_1 ;
+	'__tmp_1 := 0 ;
+	Call 'uart_transmit ('__tmp_1) ;
+	Call 'uart_transmit ('__tmp_1) ;
+***	While Lt ('servo, '4017_NB_CHANNELS) Do
+	(While Equal ('servo, '4017_NB_CHANNELS) Do
+	(
+		Call 'lookup_arr ('servo_widths, 'servo) ;
+		Local '__tmp_2 ;
+		Local '__tmp_3 ;
+		'__tmp_3 := 8 ;
+		Call 'shiftr_bitwise ('__res_lookup_arr, '__tmp_3) ;
+		'__tmp_2 := '__res_shiftr_bitwise ;
+		Call 'uart_transmit ('__tmp_2) ;
+		'__tmp_2 := '__tmp_2 +. 31 ;
+		Call 'uart_transmit ('__tmp_2)
+	)) ;
+	Local '__tmp_4 ;
+	'__tmp_4 := '"\n" ;
+	Call 'uart_transmit ('__tmp_4)
+}
+
+*** called in main
+'fbw_schedule ('empty)
+{
+***	If Lt ('time_since_last_mega128, 'STALLED_TIME)
+	(If Equal ('time_since_last_mega128, 'STALLED_TIME)
+	Then 'time_since_last_mega128 := 'time_since_last_mega128 +. 1) ;
+***	If Lt ('time_since_last_ppm, 'REALLY_STALLED_TIME)
+	(If Equal ('time_since_last_ppm, 'REALLY_STALLED_TIME)
+	Then 'time_since_last_ppm := 'time_since_last_ppm +. 1) ;
+	(If Equal ('_1Hz, 0)
+	Then
+	(
+		'last_ppm_cpt := 'ppm_cpt ;
+		'ppm_cpt := 0
+	)) ;
+	Call 'test_ppm_task ('empty) ;
+	Call 'check_mega128_values_task ('empty) ;
+	Call 'send_data_to_autopilot_task ('empty) ;
+	Call 'check_failsafe_task ('empty) ;
+***	If Gte ('_20Hz, 3)
+	If Equal ('_20Hz, 3)
+	Then Call 'servo_transmit ('empty)
+}
+
+*** called in test_ppm_task
+'MODE_OF_PPRZ ('mode)
+{
+***	If Lt ('mode, 'THRESHOLD_MANUAL_PPRZ)
+	If Equal ('mode, 'THRESHOLD_MANUAL_PPRZ)
+	Then '__res_MODE_OF_PPRZ := 'MODE_MANUAL
+	Else '__res_MODE_OF_PPRZ := 'MODE_AUTO
+}
+
+*** LONG
+*** called in last_radio_from_ppm
+'LastRadioFromPpm ('empty)
+{
+	'to_complete := 1
+}
+
+*** called in test_ppm_task
+'last_radio_from_ppm ('empty)
+{
+	Call 'LastRadioFromPpm ('empty)
+}
+
+*** called in fbw_schedule
+'test_ppm_task ('empty)
+{
+	(If Equal ('ppm_valid, 1)
+	Then
+	(
+		'ppm_valid := 0 ;
+		'ppm_cpt := 'ppm_cpt +. 1 ;
+		'radio_ok := 1 ;
+		'radio_really_lost := 0 ;
+		'time_since_last_ppm := 0 ;
+		Call 'last_radio_from_ppm ('empty) ;
+		(If Equal ('last_radio_contains_avg_channels, 1)
+		Then
+		(
+			Call 'lookup_arr ('last_radio, 'RADIO_MODE) ;
+			Call 'MODE_OF_PPRZ ('__res_lookup_arr) ;
+			'mode := 'res_MODE_OF_PPRZ
+		)) ;
+		If Equal ('mode, 'MODE_MANUAL)
+		Then Call 'servo_set ('last_radio)
+	)
+	Else
+	(
+		If (Equal ('mode, 'MODE_MANUAL)) And (Equal ('radio_really_lost, 1))
+		Then 'mode := 'MODE_AUTO
+	)) ;
+***	If Gte ('time_since_last_ppm, 'STALLED_TIME)
+	(If Equal ('time_since_last_ppm, 'STALLED_TIME)
+	Then 'radio_ok := 0) ;
+***	If Gte ('time_since_last_ppm, 'REALLY_STALLED_TIME)
+	If Equal ('time_since_last_ppm, 'REALLY_STALLED_TIME)
+	Then 'radio_really_lost := 0
+}
+
+*** called in ServoSet
+'SERVO_NEUTRAL ('value)
+{
+	'__res_SERVO_NEUTRAL := 'value *. 'CLOCK
+}
+
+*** called in ServoSet
+'ChopServo ('value)
+{
+***	If Lt ('value, 'SERVO_MIN)
+	If Equal ('value, 'SERVO_MIN)
+	Then '__res_ChopServo := 'SERVO_MIN
+	Else
+	(
+***		If Gt ('value, 'SERVO_MAX)
+		If Equal ('value, 'SERVO_MAX)
+		Then '__res_ChopServo := 'SERVO_MAX
+		Else '__res_ChopServo := 'value
+	)
+}
+
+*** called in servo_set
+'ServoSet ('values)
+{
+	Local 'servo_value ;
+	Local '_var_roll ;
+	Call 'SERVO_NEUTRAL ('SERVO_MOTOR_LEFT) ;
+	Call 'lookup_arr ('values, 'RADIO_GAIN1) ;
+	'servo_value := '__res_SERVO_NEUTRAL +. ((2 *. '__res_lookup_arr) *. 'SERVO_MOTOR_LEFT_TRAVEL) ;
+	Call 'ChopServo ('servo_value) ;
+	Call 'update_arr ('servo_widths, 'SERVO_MOTOR_LEFT, '__res_ChopServo) ;
+	Call 'SERVO_NEUTRAL ('SERVO_MOTOR_RIGHT) ;
+	Call 'lookup_arr ('values, 'RADIO_THROTTLE) ;
+	'servo_value := '__res_SERVO_NEUTRAL +. ((2 *. '__res_lookup_arr) *. 'SERVO_MOTOR_RIGHT_TRAVEL) ;
+	Call 'ChopServo ('servo_value) ;
+	Call 'update_arr ('servo_widths, 'SERVO_MOTOR_RIGHT, '__res_ChopServo) ;
+	Call 'SERVO_NEUTRAL ('SERVO_ELEVATOR) ;
+	Call 'lookup_arr ('values, 'RADIO_PITCH) ;
+	'servo_value := '__res_SERVO_NEUTRAL +. ('__res_lookup_arr *. 'SERVO_ELEVATOR_TRAVEL) ;
+	Call 'ChopServo ('servo_value) ;
+	Call 'update_arr ('servo_widths, 'SERVO_ELEVATOR, '__res_ChopServo) ;
+	Call 'lookup_arr ('values, 'RADIO_ROLL) ;
+	'_var_roll := '__res_lookup_arr ;
+	Local '__tmp_1 ;
+***	If Gt ('_var_roll, 0)
+	(If Equal ('_var_roll, 0)
+	Then '__tmp_1 := 1
+	Else '__tmp_1 := 'AILERON_DIFF) ;
+	Call 'SERVO_NEUTRAL ('SERVO_AILERON_LEFT) ;
+	'servo_value := '__res_SERVO_NEUTRAL +.
+			(('__tmp_1 *. '_var_roll) *. 'SERVO_AILERON_LEFT_TRAVEL) ;
+	Call 'ChopServo ('servo_value) ;
+	Call 'update_arr ('servo_widths, 'SERVO_AILERON_LEFT, '__res_ChopServo) ;
+***	If Gt ('_var_roll, 0)
+	(If Equal ('_var_roll, 0)
+	Then '__tmp_1 := 'AILERON_DIFF
+	Else '__tmp_1 := 1) ;
+	Call 'SERVO_NEUTRAL ('SERVO_AILERON_RIGHT) ;
+	'servo_value := '__res_SERVO_NEUTRAL +. (('__tmp_1 *. '_var_roll) *. 'SERVO_AILERON_RIGHT_TRAVEL) ;
+	Call 'ChopServo ('servo_value) ;
+	Call 'update_arr ('servo_widths, 'SERVO_AILERON_RIGHT, '__res_ChopServo) ;
+	Call 'SERVO_NEUTRAL ('SERVO_RUDDER) ;
+	Local '__tmp_2 ;
+	Call 'lookup_arr ('values, 'RADIO_ROLL) ;
+	'__tmp_2 := '__res_lookup_arr ;
+	Call 'lookup_arr ('values, 'RADIO_YAW) ;
+	'servo_value := '__res_SERVO_NEUTRAL +.
+			('__res_lookup_arr +. (('__tmp_2 *. 'COMBI_SWITCH) *. 'SERVO_RUDDER_TRAVEL)) ;
+	Call 'ChopServo ('servo_value) ;
+	Call 'update_arr ('servo_widths, 'SERVO_RUDDER, '__res_ChopServo)
+}
+
+*** called in check_failsafe & check_mega128_values_task
+*** & test_ppm_task
+'servo_set ('values)
+{
+	Call 'ServoSet ('values)
+}
+
+*** called in fbw_schedule
+'check_failsafe_task ('empty)
+{
+	If (Equal ('mode, 'MODE_MANUAL) And Not Equal ('radio_ok, 1)) Or
+		(Equal ('mode, 'MODE_AUTO) And Not Equal ('mega128_ok, 1))
+	Then Call 'servo_set ('failsafe)
+}
+
+*** called in fbw_schedule
+'check_mega128_values_task ('empty)
+{
+	Call 'SpiIsSelected ('empty) ;
+	(If (Not Equal ('__res_SpiIsSelected, 1)) And (Equal ('spi_was_interrupted, 1))
+	Then
+	(
+		If Equal ('mega128_receive_valid, 1)
+		Then
+		(
+			'time_since_last_mega128 := 0 ;
+			'mega128_ok := 1 ;
+			If Equal ('mode, 'MODE_AUTO)
+			Then Call 'servo_set ('from_mega128.channels)
+		)
+	)) ;
+	If Equal ('time_since_last_mega128, 'STALLED_TIME)
+	Then 'mega128_ok := 0
+}
+
+.
+endm)
+
+(set side-effect sorts ESt RWBUF .)
+
+(set context-update rules CallF .)
+
+(islice Statement with defs myFuns wrt 'servo_value .)
+

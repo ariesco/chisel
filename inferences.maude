@@ -58,6 +58,7 @@ fmod SEMANTIC-INFERENCE is
  vars ValSrt MemSrt S S' S2 S3 InsSort CandidateSort : Sort .
  vars TS TS' TS'' TSE : STermSet .
  vars T T' T'' T1 T2 : Term .
+ vars DS DS' : DirectionSet .
  vars SS SS' CS : SortSet .
  vars AtS AtS' : AttrSet .
  vars TL TL' : TermList .
@@ -237,6 +238,14 @@ fmod SEMANTIC-INFERENCE is
      op Q : TyL -> S [AtS] . ODS := getOps(M) /\
      CandidateSort in TyL .
  eq isInstructionSort(M, CandidateSort, InsSort) = false [owise] .
+
+ op getDirectionRules : Module SortSet -> DirectionSet .
+ eq getDirectionRules(M, SS) = getDirectionRulesAux(M, SS, SS, mtDS) .
+
+ op getDirectionRulesAux : Module SortSet SortSet DirectionSet -> DirectionSet .
+ eq getDirectionRulesAux(M, SS, none, DS) = DS .
+ ceq getDirectionRulesAux(M, SS, S ; SS', DS) = getDirectionRulesAux(M, SS, SS', DS DS')
+  if DS' := getDirectionRules(M, S, SS) .
 
  op getDirectionRules : Module Sort SortSet -> DirectionSet .
  ceq getDirectionRules(M, InsSort, SS) = getDirectionRules(M, InsSort, SS, RS, OIL)

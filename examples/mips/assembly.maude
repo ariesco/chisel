@@ -1,4 +1,4 @@
-load ../slicing.prj
+load ../../slicing.prj
 
 (fmod REGISTERS is
   pr INT .

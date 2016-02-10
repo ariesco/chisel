@@ -6,7 +6,7 @@ fmod SLI-SIGNATURE is
   op set`variables`sort_. : @Token@ -> @Command@ .
   op set`side-effect`sorts_. : @NeTokenList@ -> @Command@ .
   op set`context-update`rules_. : @NeTokenList@ -> @Command@ .
-  op infer_. : @Token@ -> @Command@ . *** For testing purposes
+  op dataflow`inferences_. : @Token@ -> @Command@ .
 endfm
 
 fmod META-SLI-SIGN is
@@ -23,6 +23,7 @@ fmod SLI-COMMAND-PROCESSING is
   pr DATABASE-DECLS .
   pr META-LEVEL .
   pr MAYBE{Module} .
+  pr MAYBE{Term} * (op maybe to noTerm) .
 
   vars T T' T'' T3 : Term .
   var  T? : [Term] .
@@ -40,6 +41,7 @@ fmod SLI-COMMAND-PROCESSING is
 
   sort SlicingTuple .
   op <_,_,_,_> : SlicingResult Maybe{Module} TermList QidList -> SlicingTuple [ctor] .
+  op <_,_,_,_,_> : SlicingResult Maybe{Term} Maybe{Module} TermList QidList -> SlicingTuple [ctor] .
 
   op procSlicing : Term Term SortSet ModuleExpression Database -> SlicingTuple .
   eq procSlicing(T, T', SS, ME, DB) = if compiledModule(ME, DB)
@@ -50,7 +52,7 @@ fmod SLI-COMMAND-PROCESSING is
              getVars(modExp(evalModExp(ME, DB)),
                database(evalModExp(ME, DB))))
       fi .
-  eq procSlicing(T, T', SS, ME, DB) = < noResult, maybe, empty, 'Slicing 'process
+  eq procSlicing(T, T', SS, ME, DB) = < noResult, noTerm, maybe, empty, 'Slicing 'process
                                                                    'aborted. > [owise] .
 
   op procSli : Term Term SortSet ModuleExpression Database Module OpDeclSet
@@ -58,8 +60,8 @@ fmod SLI-COMMAND-PROCESSING is
   eq procSli(T, T', SS, ME, DB, M, VDS)
     = solveBubblesSli(T, T', SS, DB, M, VDS,
                included('META-MODULE, getImports(getTopModule(ME, DB)), DB)) .
-  eq procSli(T, T', SS, ME, DB, unitError(QIL), VDS) = < noResult, maybe, empty, QIL > .
-  eq procSli(T, T', SS, ME, DB, noModule, VDS) = < noResult, maybe, empty,
+  eq procSli(T, T', SS, ME, DB, unitError(QIL), VDS) = < noResult, noTerm, maybe, empty, QIL > .
+  eq procSli(T, T', SS, ME, DB, noModule, VDS) = < noResult, noTerm, maybe, empty,
                                                       ('\n '\r 'Error: '\o getMsg(DB)) > .
 
   op solveBubblesSli : Term Term SortSet Database Module OpDeclSet Bool
@@ -78,7 +80,7 @@ fmod SLI-COMMAND-PROCESSING is
   ceq solveBubblesSli(T, T', SS, DB, M, VDS, B) =
         if T? :: Term
         then solveBubblesSli2(T?, T', SS, DB, M, VDS, B)
-        else < noResult, maybe, empty, ('\n '\r 'Error: '\o getMsg(T?)) >
+        else < noResult, noTerm, maybe, empty, ('\n '\r 'Error: '\o getMsg(T?)) >
         fi
    if T? := solveBubbles(T, M, B, VDS, DB) .
 
@@ -88,12 +90,12 @@ fmod SLI-COMMAND-PROCESSING is
       if unitInDb(ME, DB')
       then solveBubblesSli2(T', T'', SS, DB', getFlatModule(ME, DB'), getVars(ME, DB'),
                        included('META-MODULE, getImports(getTopModule(ME, DB')), DB'))
-      else < noResult, maybe, empty, ('\n '\r 'Error: '\o  'It 'is 'not 'possible 'to
+      else < noResult, noTerm, maybe, empty, ('\n '\r 'Error: '\o  'It 'is 'not 'possible 'to
                                       'compile eMetaPrettyPrint(ME) '. '\n) >
       fi
     if < DB' ; ME > := evalModExp(parseModExp(T), DB) .
   eq solveBubblesSliIn('in_:_.[T, T'], T'', SS, DB, M, VDS) =
-      < noResult, maybe, empty, ('\n '\r 'Error: '\o 'It 'is 'not 'possible 'to 'compile
+      < noResult, noTerm, maybe, empty, ('\n '\r 'Error: '\o 'It 'is 'not 'possible 'to 'compile
                                  eMetaPrettyPrint(parseModExp(T)) '. '\n) > [owise] .
 
   op solveBubblesSli2 : Term Term SortSet Database Module OpDeclSet Bool
@@ -102,11 +104,11 @@ fmod SLI-COMMAND-PROCESSING is
                                              solveBubblesSli3(T, TL, SS, M)
    if TL := getVars(M, T') .
   eq solveBubblesSli2(T, T', SS, DB, M, VDS, B) =
-           < noResult, maybe, empty,
+           < noResult, noTerm, maybe, empty,
              '\n '\r 'Error: '\b 'the 'variables 'do 'not 'parse. '\o '\n > .
 
   op solveBubblesSli3 : Term TermList SortSet Module -> SlicingTuple .
-  ceq solveBubblesSli3(T, TL, SS, M) = < SR, M, TL, nil >
+  ceq solveBubblesSli3(T, TL, SS, M) = < SR, T, M, TL, nil >
    if SR := slice(M, T, TL, SS) .
 
   ***********************************************************************
@@ -242,7 +244,7 @@ mod SLI-DATABASE-HANDLING is
   vars ME ME' : ModuleExpression .
   var  SDC : SLIDatabaseClass .
   var  O : Oid .
-  vars T T' T'' : Term .
+  vars T T' T'' TN : Term .
   vars TL VL : TermList .
   var  AtS : AttributeSet .
   var  DB : Database .
@@ -263,14 +265,17 @@ mod SLI-DATABASE-HANDLING is
       < O : SDC | db : DB, input : ('slice_wrt_.[T, T']), output : nil,
                   default : ME, sideEffectSorts : SS, AtS >
    => if QIL == nil then
-      < O : SDC | db : DB, input : nilTermList, output : printSlicingResult(M, VL, SR),
+      < O : SDC | db : DB, input : nilTermList, output : slicedCode(M, TN, TL, DS), *** printSlicingResult(M, VL, SR),
                   default : ME, sideEffectSorts : SS, AtS >
       else
       < O : SDC | db : DB, input : nilTermList, output : QIL,
                   default : ME, sideEffectSorts : SS, AtS >
       fi
    if SS =/= none /\
-      < SR, M, VL, QIL > := procSlicing(T, T', SS, ME, DB) .
+      < SR, T'', M, VL, QIL > := procSlicing(T, T', SS, ME, DB) /\
+      TN := getTerm(metaReduce(M, T'')) /\
+      TL := getVarsInSlicingSet(SR) /\
+      DS := getDSInSlicingSet(SR) .
 
   rl [start-slicing-error-side-effects] :
      < O : SDC | input : ('slice_wrt_.[TL]), output : nil, sideEffectSorts : none, AtS >
@@ -369,14 +374,14 @@ mod SLI-DATABASE-HANDLING is
 **********************************************************************************
 ******************************** DIRECTION INFERENCE *****************************
 **********************************************************************************
+
   crl [infer] :
-      < O : SDC | db : DB, input : ('infer_.['token[T]]), output : nil,
+      < O : SDC | db : DB, input : ('dataflow`inferences_.['token[T]]), output : nil,
                   sideEffectSorts : SS, default : ME, AtS >
-   => < O : SDC | db : DB, input : nilTermList, output : ('\n '\b ds(OIL, DS) '\o '\n),
+   => < O : SDC | db : DB, input : nilTermList, output : ('\n printDirection(M, DS) '\o '\n),
                   sideEffectSorts : SS, default : ME, AtS >
    if Q := downQid(T) /\
       M := getFlatModule(modExp(evalModExp(ME, DB)), database(evalModExp(ME, DB))) /\
-      OIL := getOperatorUpdateInfo(M, SS) /\
       DS := getDirectionRules(M, Q, SS) .
 
  var DS : DirectionSet .

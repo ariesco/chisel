@@ -1,0 +1,367 @@
+*** Evaluation semantics for WhileL
+
+(fmod WHILE-SYNTAX-EVAL is
+  protecting QID .
+
+  sorts Var Num Op Exp BVar Boolean BOp BExp VarL Com FunId Prog ExpL .
+
+  subsorts Qid < Var < Exp .
+  subsort Nat < Num < Exp .
+  subsort Qid < FunId .
+
+  subsort Com < Prog .
+  subsort Var < VarL .
+  subsort Exp < ExpL .
+  subsort VarL < ExpL .
+
+  ops a b c d e i j k l m o p q r s t u w x y z : -> Var .
+
+  ops f g h : -> FunId [ctor] .
+
+  ops +. -. *. %. /. : -> Op .
+
+  op ___ : Exp Op Exp -> Exp [prec 10] .
+
+  op nv : -> VarL [ctor] .
+  op _`,_ : VarL VarL -> VarL [ctor assoc id: nv prec 15] .
+
+  op _`,_ : ExpL ExpL -> ExpL [ctor assoc id: nv prec 15] .
+
+  subsorts Qid < BVar < BExp .
+  subsort Boolean < BExp .
+
+  ops T F : -> Boolean .
+  ops And Or : -> BOp [format(! o)] .
+  op ___ : BExp BOp BExp -> BExp [prec 20] .
+  op Not_ : BExp -> BExp [prec 15 format(! o o)] .
+  op Equal : Exp Exp -> BExp [format(! o)] .
+  op Lt : Exp Exp -> BExp [format(! o)] .
+  op Lte : Exp Exp -> BExp [format(! o)] .
+  op Gt : Exp Exp -> BExp [format(! o)] .
+  op Gte : Exp Exp -> BExp [format(! o)] .
+
+  op skip : -> Com [format(!r o)] .
+  op _=:_ : Exp Var -> Com [prec 30 format(i d d d)] .
+  op _;_ : Com Com -> Com [prec 60 gather(e E) format(i d ni d)] .
+  op If_Then_Else_ : BExp Com Com -> Com [prec 50 format(i! o ! on++ --!n on++ --o)] .
+  op If_Then_ : BExp Com -> Com [prec 50 format(i! o ! on++ --o)] .
+  op While_Do_ : BExp Com -> Com [prec 55 format(i! o ! on++ --no)] .
+  op Call_`(_`) : FunId ExpL -> Com [prec 20 format(r! o o o o o)] .
+  op Local_ : VarL -> Com [prec 35 format(! o o)] .
+
+  op _+=_ : Var Exp -> Com [prec 15] .
+  op _++ : Var -> Com [prec 15] .
+
+  op Read_ : Var -> Com [prec 30 format(i d d)] .
+  op Write_ : Exp -> Com [prec 30 format(i d d)] .
+endfm)
+
+(fmod AP-EVAL is
+  protecting WHILE-SYNTAX-EVAL .
+
+  op Ap : Op Num Num -> Num .
+
+  vars n n' : Num .
+
+  eq [plus] : Ap(+., n, n') = n + n' .
+  eq [times] : Ap(*., n, n') = n * n' .
+  eq [minus] : Ap(-., n, n') = if n < n' then 0 else sd(n, n') fi .
+  eq [plus] : Ap(/., n, n') = n quo n' .
+  eq [plus] : Ap(%., n, n') = n rem n' .
+
+  op Ap : BOp Boolean Boolean -> Boolean .
+
+  var bv bv' : Boolean .
+
+  eq [ap-and1] : Ap(And, T, bv) = bv .
+  eq [ap-and2] : Ap(And, F, bv) = F .
+  eq [ap-or1] : Ap(Or, T, bv) = T .
+  eq [ap-or2] : Ap(Or, F, bv) = bv .
+endfm)
+
+(fmod ENV-EVAL is
+  protecting WHILE-SYNTAX-EVAL .
+
+  sorts Value Variable .
+
+  subsorts Num Boolean < Value .
+  subsorts Var BVar < Variable < VarL .
+
+  sorts Env ESt .
+  subsort Env < ESt .
+
+  op nd : -> Value [ctor] .
+  op mt : -> Env [ctor] .
+  op _=_ : Variable Value -> Env [ctor prec 20] .
+
+  op __ : Env Env -> Env [ctor comm assoc id: mt prec 25] .
+
+  op _|_ : ESt ESt -> ESt [ctor assoc prec 30] .
+
+  vars X X' : Variable .
+  vars V V' : Value .
+  vars ro ro' ro'' : Env .
+  vars mu mu' mu'' : ESt .
+  vars Vs VVs : VarL .
+
+  op remove : Env Variable -> Env .
+  eq [rmv1] : remove(mt, X) = mt .
+  eq [rmv2] : remove(X = V ro, X') = if X == X' then ro else X = V remove(ro, X') fi .
+
+  op _`[_/_`] : ESt Value Variable -> ESt [prec 35] .
+  eq [upd1] : (mu | X = V' ro) [V / X] = mu | X = V ro .
+  eq [upd2] : (X = V' ro) [V / X] = X = V ro .
+  eq [upd3] : (mu | ro) [V / X] = (mu [V / X]) | ro [owise] .
+
+  op _`(_`) : ESt Variable -> Value .
+  eq [lkp1] : (mu | X = V ro)(X) = V .
+  eq [lkp2] : (X = V ro)(X) = V .
+  eq [lkp3] : (mu | ro)(X) = mu (X) [owise] .
+
+  op allocateLocals : VarL ESt -> ESt .
+  eq [aloc1] : allocateLocals(nv, mu | ro) = mu | ro .
+  eq [aloc2] : allocateLocals((X,Vs), mu | ro) =
+     	       allocateLocals(Vs, mu | remove(ro, X) (X = nd)) .
+  eq [aloc3] : allocateLocals((X,Vs), ro) = allocateLocals(Vs, (X = nd) ro) .
+  eq [aloc4] : allocateLocals(nv, ro) = ro .
+
+
+  sorts RWBUF PairValueRWBUF .
+  subsort Value < RWBUF .
+
+  op nb : -> RWBUF [ctor] .
+  op __ : RWBUF RWBUF -> RWBUF [ctor assoc id: nb prec 30] .
+
+  op err : ~> PairValueRWBUF [ctor] .
+  op `(_`,_`) : Value RWBUF -> PairValueRWBUF [ctor] .
+
+  op insert : Value RWBUF -> RWBUF .
+  op extract : RWBUF -> PairValueRWBUF .
+
+  var buf : RWBUF .
+
+  eq [ins] : insert(V, buf) = buf V .
+  eq [ex1] : extract(nb) = err .
+  eq [ex2] : extract(V buf) = (V, buf) .
+
+  sorts Fun FunSet .
+  subsort Fun < FunSet .
+
+  var  Fn : FunId .
+  vars Fs Fs' : FunSet .
+  var  B : Com .
+  var  E : Exp .
+  var  EL : ExpL .
+  var  N : Num .
+
+  op _`(_`)`{_`} : FunId VarL Com -> Fun [ctor prec 20] .
+  op nf : -> FunSet [ctor] .
+  op __ : FunSet FunSet -> FunSet [ctor comm assoc id: nf prec 30 format(o n i++)] .
+
+  op assignPrms : ExpL VarL ESt -> ESt .
+  eq [asgP1]  : assignPrms(nv, Vs, mu | ro) = allocateLocals(Vs, mu | ro) .
+  ceq [asgP2] : assignPrms((X,EL), (X',VVs), mu | ro) =
+       	        assignPrms(EL, VVs, mu | remove(ro, X') (X' = V))
+   if V := mu(X) .
+  eq [asgP3] : assignPrms((N,EL), (X',VVs), mu | ro) =
+      	        assignPrms(EL, VVs, mu | remove(ro, X') (X' = N)) .
+
+  op releasePrms : Env VarL ESt -> ESt .
+  eq [rlsP0] : releasePrms(mt, Vs, mu) = mu .
+  eq [rlsP1] : releasePrms((X = V ro'), (Vs,X,VVs), ro) = releasePrms(ro', (Vs,X,VVs), ro[V / X]) .
+  eq [rlsP2] : releasePrms((X = V ro'), (Vs,X,VVs), mu | ro) = releasePrms(ro', (Vs,X,VVs), mu | (ro[V / X])) .
+  eq [rlsP3] : releasePrms((X = V ro'), Vs, mu) = releasePrms(ro', Vs, mu) .
+
+
+endfm)
+
+(mod EVALUATION-EXP-EVAL is
+  protecting ENV-EVAL .
+  protecting AP-EVAL .
+
+  sort ExpSt .
+  subsorts Value < ExpSt .
+
+  op <_`,_> : Exp ESt -> ExpSt [ctor] .
+  op <_`,_> : BExp ESt -> ExpSt [ctor] .
+
+  vars n n' : Num .
+  var  X : Var .
+  vars st st' st'' : ESt .
+  vars e e' : Exp .
+  var  op : Op .
+  vars v v' : Num .
+  var  bx : BVar .
+  vars bv bv' : Boolean .
+  var  bop : BOp .
+  vars be be' : BExp .
+
+  *** Evaluation semantics for expressions, page 92
+
+  rl [VarR] : < X, st > =>  < st(X), st > .
+
+  crl [OpR] : < e op e', st > => < Ap(op,v,v'), st'' >
+   if < e, st > => < v, st' > /\
+      < e', st' > => < v', st'' > .
+
+  rl [BVarR] : < bx, st > => < st(bx), st > .
+
+  crl [BOpR] : < be bop be', st > => < Ap(bop,bv,bv'), st >
+   if < be, st > => < bv, st > /\
+      < be', st > => < bv', st > .
+
+  crl [EqR1] : < Equal(e,e'), st > => < T, st >
+   if < e, st > => < v, st' > /\
+      < e', st' > => < v, st'' > .
+
+  crl [EqR2] : < Equal(e,e'), st > => < F, st >
+   if < e, st > => < v, st' > /\
+      < e', st' > => < v', st'' > /\
+      v =/= v' .
+
+  crl [Not1] : < Not be, st > => < F, st >
+   if < be, st > => < T, st > .
+
+  crl [Not2] : < Not be, st > => < T, st >
+   if < be, st > => < F, st > .
+
+  crl [Lt1] : < Lt(e,e'), st > => < T, st >
+   if < e, st > => < n, st' > /\
+      < e', st' > => < n', st'' > /\
+      n < n' .
+
+  crl [Lt2] : < Lt(e,e'), st > => < F, st >
+   if < e, st > => < n, st' > /\
+      < e', st' > => < n', st'' > /\
+      n >= n' .
+
+  crl [Lte1] : < Lte(e,e'), st > => < T, st >
+   if < e, st > => < n, st' > /\
+      < e', st' > => < n', st'' > /\
+      n <= n' .
+
+  crl [Lte2] : < Lte(e,e'), st > => < F, st >
+   if < e, st > => < n, st' > /\
+      < e', st' > => < n', st'' > /\
+      n > n' .
+
+  crl [Gt1] : < Gt(e,e'), st > => < T, st >
+   if < e, st > => < n, st' > /\
+      < e', st' > => < n', st'' > /\
+      n > n' .
+
+  crl [Gt2] : < Gt(e,e'), st > => < F, st >
+   if < e, st > => < n, st' > /\
+      < e', st' > => < n', st'' > /\
+      n <= n' .
+
+  crl [Gte1] : < Gte(e,e'), st > => < T, st >
+   if < e, st > => < n, st' > /\
+      < e', st' > => < n', st'' > /\
+      n >= n' .
+
+  crl [Gte2] : < Gte(e,e'), st > => < F, st >
+   if < e, st > => < n, st' > /\
+      < e', st' > => < n', st'' > /\
+      n < n' .
+endm)
+
+(mod EVALUATION-WHILE is
+  pr EVALUATION-EXP-EVAL .
+
+  sort Statement .
+
+  op <_`,_`,_`,_> : Com ESt RWBUF FunSet -> Statement .
+
+  var  X : Var .
+  vars lenv lenv' : Env .
+  vars st st' st'' stLocal stLocal' : ESt .
+  var  e : Exp .
+  vars v v' : Num .
+  var  be : BExp .
+  vars C C' C'' : Com .
+  vars rwb rwb' rwb'' : RWBUF .
+  vars fs fs' : FunSet .
+  var  fn : FunId .
+  var  Prms vl : VarL .
+  var  actPrms : ExpL .
+
+  *** Evaluation semantics for WhileL, page 93
+
+***  rl [SkipR] : < skip, st, rwb, fs > => st .
+
+  crl [AsR] : <  e =: X, st, rwb, fs > => < skip, st'[v / X], rwb, fs >
+   if < e, st > => < v, st' > .
+
+  crl [Inc1] : < X ++, st, rwb, fs > => < skip, st[ Ap(+., v, 1) / X ], rwb, fs >
+   if < X, st > => < v, st > .
+
+  crl [Inc2] : < X ++, st, rwb, fs > => < skip, st, rwb, fs >
+   if < X, st > => < mt(X), st > .
+
+  *** The side effects can only appear when evaluating the state, so we use st''
+  *** in the righthand side.
+  crl [SdE] : < X += e, st, rwb, fs > => < skip, st''[ Ap(+.,v,v') / X ], rwb, fs >
+   if < X, st > => < v, st' > /\
+      < e, st' > => < v', st'' > .
+
+  crl [IfR11] : < If be Then C Else C', st, rwb, fs > => < skip, st', rwb', fs >
+   if < be, st > => < T, st > /\
+      < C, st, rwb, fs > => < skip, st', rwb', fs > .
+  crl [IfR12] : < If be Then C Else C', st, rwb, fs > => < skip, st', rwb', fs >
+   if < be, st > => < F, st > /\
+      < C', st, rwb, fs > => < skip, st', rwb', fs > .
+
+  crl [IfR21] : < If be Then C , st, rwb, fs > => < skip, st', rwb', fs >
+   if < be, st > => < T, st > /\
+      < C, st, rwb, fs > => < skip, st', rwb', fs > .
+  crl [IfR22] : < If be Then C , st, rwb, fs > => < skip, st, rwb, fs >
+   if < be, st > => < F, st > .
+
+  crl [ComR] : < C ; C', st, rwb, fs > => < skip, st'', rwb'', fs >
+   if < C, st, rwb, fs > => < skip, st', rwb', fs > /\
+      < C', st', rwb', fs > => < skip, st'', rwb'', fs > .
+
+  crl [WhileR1] : < While be Do C, st, rwb, fs > => < skip, st, rwb, fs >
+               if < be, st > => < F, st > .
+
+  crl [WhileR2] : < While be Do C, st, rwb, fs > => < skip, st', rwb', fs >
+   if < be, st > => < T, st > /\
+      < C ; (While be Do C), st, rwb, fs > => < skip, st', rwb', fs > .
+
+  crl [WriteR] : < Write e, st, rwb, fs > => < skip, st', insert(v, rwb), fs >
+   if < e, st > => < v, st' > .
+
+  crl [ReadR1] : < Read X, st, rwb, fs > => < skip, st[v / X], rwb', fs >
+   if (v, rwb') := extract(rwb) .
+
+  crl [ReadR2] : < Read X, st, rwb, fs > => < skip, st, rwb, fs >
+   if err := extract(rwb) .
+
+  crl [CallF] : < Call fn(actPrms), st, rwb, fs > => < skip, st'', rwb', fs >
+   if fn(Prms){ C } fs' := fs /\
+      st' := assignPrms(actPrms, Prms, st | mt) /\
+      < C, st', rwb, fs > => < skip, st'' | lenv', rwb', fs >  .
+
+  crl [LocV] : < Local vl, st, rwb, fs > => < skip, st', rwb, fs >
+   if st' := allocateLocals(vl, st) .
+
+endm)
+
+(fmod TEST is
+  pr EVALUATION-WHILE .
+
+  op pow : -> Com .
+  eq pow = 1 =: x ;
+           y =: i ;
+           While Not Equal(x, 0) Do
+             x *. y =: x ;
+             i -. 1 =: i .
+
+  op testPow : -> Statement .
+  eq testPow = < pow, y = 5, nb, nf > .
+endfm)
+
+(set side-effect sorts ESt RWBUF .)
+
+(slice testPow wrt x .)

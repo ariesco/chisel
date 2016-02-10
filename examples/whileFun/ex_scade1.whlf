@@ -1,0 +1,316 @@
+load wfe.maude
+
+(mod EXAMPLE is
+ pr EVALUATION-WHILE .
+
+ op myFuns : -> FunSet .
+ eq myFuns = 'Main (nv)
+{
+  'tmp_res := 0 ;
+  Call 'Two ('a1, 'a2, 'a3, 'outi, 'outc, 'outd, 'out1_nxt, 'out2_nxt, 'out1_act, 'out2_act)
+}
+'Two_helper ('in1, 'cond)
+{
+	If Equal ('cond, 0)
+  	Then 'tmp_res := 12
+	Else 'tmp_res := 12 *. 'in1
+}
+'Two ('inC_a1, 'inC_a2, 'inC_a3, 'outC_init, 'outC_c, 'outC_d,'outC_SMOne_state_nxt,  'outC_SMTwo_state_nxt, 'outC_SMOne_state_act, 'outC_SMTwo_state_act) {
+        Local '__tmp_0__ ;
+        Local '__tmp_2__ ;
+        Local '__tmp_3__ ;
+        Local '__tmp_1__ ;
+        Local '__tmp_4__ ;
+        Local '__tmp_6__ ;
+        Local '__tmp_11__ ;
+        Local '__tmp_7__ ;
+        Local '__tmp_9__ ;
+        Local '__tmp_10__ ;
+        Local '__tmp_8__ ;
+        Local '__tmp_5__ ;
+        Local '__tmp_12__ ;
+        Local '__tmp_14__ ;
+        Local '__tmp_15__ ;
+        Local '__tmp_13__ ;
+        Local '_L3_SMOne_S2 ;
+        Local 'selectorS3 ;
+        Local 'selectorS2 ;
+        Local 'selectorS1 ;
+        Local 'SMOne_state_act ;
+        Local 'SMTwo_state_act ;
+        (If Not (Equal ('outC_init, 0))
+	Then
+        (
+                'outC_init := 0 ;
+                'SMTwo_state_act := 'SSM_st_A_SMTwo ;
+                'SMOne_state_act := 'SSM_st_S1_SMOne
+        )
+        Else
+        (
+                'SMTwo_state_act := 'outC_SMTwo_state_nxt ;
+                'SMOne_state_act := 'outC_SMOne_state_nxt
+        )) ;
+	Local '__tag_0__ ;
+        '__tag_0__ := 'SMOne_state_act ;
+        (If Equal ('__tag_0__, 'SSM_st_S3_SMOne)
+        Then '__tmp_0__ := 0
+        Else
+        (
+        	If Equal ('__tag_0__, 'SSM_st_S2_SMOne)
+        	Then '__tmp_2__ := 0
+                Else
+                (
+                	If Equal ('__tag_0__, 'SSM_st_S1_SMOne)
+                        Then '__tmp_3__ := 1
+                        Else '__tmp_3__ := 0
+                )
+        )) ;
+	(If (Equal ('__tmp_0__, 1) Or
+	       ((Equal ('__tmp_2__, 1)) Or (Equal ('__tmp_3__, 1))))
+	Then
+	(
+		If Not (Equal ('__tmp_3__, 0))
+		Then
+		(
+			If Not (Equal ('__tmp_2__, 0))
+			Then
+			(
+				'__tmp_0__ := 0 ;
+				'selectorS2 := 0 ;
+				'selectorS1 := 0 ;
+				'__tmp_1__ := 0
+			) ;
+			If Not (Equal ('__tmp_1__, 0))
+			Then
+			(
+				'__tmp_2__ := 0 ;
+				'selectorS2 := 0
+			) ;
+			If Not (Equal ('__tmp_1__, 0))
+			Then
+			(
+				'selectorS1 := 0 ;
+				Call 'Two_helper ('inC_a2, 'inC_a3) ;
+				'_L3_SMOne_S2 := 'tmp_res ;
+				'__tmp_1__ := 0
+			)
+		) ;
+		If Not (Equal ('__tmp_1__, 0))
+		Then
+		(
+			'__tmp_3__ := 0 ;
+			'selectorS2 := 0
+		) ;
+		If Not (Equal ('__tmp_1__, 0))
+		Then
+		(
+			'selectorS1 := 0 ;
+			'__tmp_1__ := 0
+		)
+	)) ;
+	'__tmp_1__ := 0 ;
+	Local '__tag_2__ ;
+	'__tag_2__ := 'SMTwo_state_act ;
+	(If Equal ('__tag_2__, 'SSM_st_D_SMTwo)
+	Then '__tmp_4__ := 1
+	Else
+	(
+		If Equal ('__tag_2__, 'SSM_st_C_SMTwo)
+		Then '__tmp_6__ := 1
+		Else
+		(
+			If Equal ('__tag_2__, 'SSM_st_A_SMTwo)
+			Then '__tmp_11__ := 1
+			Else '__tmp_11__ := 0
+		)
+	)) ;
+	(If (Equal ('__tmp_4__, 1) Or
+	       ((Equal ('__tmp_6__, 1)) Or (Equal ('__tmp_11__, 1))))
+	Then
+	(
+		(If Not (Equal ('__tmp_11__, 1))
+		Then
+		(
+			(If Not (Equal ('__tmp_6__, 1))
+			Then
+			(
+				'__tmp_4__ := 0 ;
+				'outC_SMTwo_state_nxt := 'SSM_st_A_SMTwo ;
+				'outC_d := 'inC_a2 +. 2 ;
+				'selectorS3 := 0 ;
+				'selectorS2 := 0 ;
+				'selectorS1 := 1 ;
+				'__tmp_5__ := 1
+			)) ;
+			(If Not (Equal ('__tmp_5__, 1))
+			Then
+			(
+				'__tmp_6__ := 0 ;
+				If ((Equal ('selectorS1, 1)) And
+					(Equal ('selectorS2, 1)))
+				Then 'outC_SMTwo_state_nxt := 'SSM_st_D_SMTwo
+				Else 'outC_SMTwo_state_nxt := 'SSM_st_C_SMTwo
+			)) ;
+			If Not (Equal ('__tmp_5__, 1))
+			Then
+			(
+				'outC_d := 'inC_a1 ;
+				'selectorS3 := 0 ;
+				'selectorS2 := 1 ;
+				'selectorS1 := 0 ;
+				'__tmp_5__ := 1
+			)
+		)) ;
+		(If Not (Equal ('__tmp_5__, 1))
+		Then
+		(
+			'__tmp_11__ := 0 ;
+			If Equal ('selectorS1, 1)
+			Then 'outC_SMTwo_state_nxt := 'SSM_st_A_SMTwo
+			Else
+			(
+				Local '__tag_1__ ;
+				'__tag_1__ := 'SMOne_state_act ;
+				(If Equal ('__tag_1__, 'SSM_st_S1_SMOne)
+				Then '__tmp_7__ := 1
+				Else
+				(
+					If Equal ('__tag_1__, 'SSM_st_S2_SMOne)
+					Then '__tmp_9__ := 1
+					Else
+					(
+						If Equal ('__tag_1__, 'SSM_st_S3_SMOne)
+						Then '__tmp_10__ := 1
+						Else '__tmp_10__ := 0
+					)
+				)) ;
+				(If (Equal ('__tmp_7__, 1) Or
+	       				((Equal ('__tmp_9__, 1)) Or
+						(Equal ('__tmp_10__, 1))))
+				Then
+				(
+					(If Not (Equal ('__tmp_10__, 1))
+					Then
+					(
+						(If Not (Equal ('__tmp_9__, 1))
+						Then
+						(
+							'__tmp_7__ := 0 ;
+							'selectorS3 := 0 ;
+							'__tmp_8__ := 1
+						)) ;
+						(If Not (Equal ('__tmp_8__, 1))
+						Then
+						(
+							'__tmp_9__ := 0 ;
+							'selectorS3 := 1
+						)) ;
+						If Not (Equal ('__tmp_8__, 1))
+						Then '__tmp_8__ := 1
+					)) ;
+					(If Not (Equal ('__tmp_8__, 1))
+					Then
+					(
+						'__tmp_10__ := 0 ;
+						'selectorS3 := 0
+					)) ;
+					If Not (Equal ('__tmp_8__, 1))
+					Then '__tmp_8__ := 1
+				)) ;
+				'__tmp_8__ := 0 ;
+				If Equal ('selectorS3, 1)
+				Then 'outC_SMTwo_state_nxt := 'SSM_st_D_SMTwo
+				Else
+				(
+					If Equal ('selectorS2, 1)
+					Then 'outC_SMTwo_state_nxt := 'SSM_st_C_SMTwo
+					Else 'outC_SMTwo_state_nxt := 'SSM_st_A_SMTwo
+				)
+		)) ;
+		If Not (Equal ('__tmp_5__, 1))
+		Then
+		(
+			'outC_d := 'inC_a1 -. 'inC_a2 ;
+			'selectorS3 := 1 ;
+			'selectorS2 := 0 ;
+			'selectorS1 := 0 ;
+			'__tmp_5__ := 1
+		)
+	)) ;
+	'__tmp_5__ := 0
+	) ;
+	Local '__tag_3__ ;
+	'__tag_3__ := 'SMOne_state_act ;
+	(If Equal ('__tag_3__, 'SSM_st_S1_SMOne)
+	Then '__tmp_12__ := 1
+	Else
+	(
+		If Equal ('__tag_3__, 'SSM_st_S2_SMOne)
+		Then '__tmp_14__ := 1
+		Else
+		(
+			If Equal ('__tag_3__, 'SSM_st_S3_SMOne)
+			Then '__tmp_15__ := 1
+			Else '__tmp_15__ := 0
+		)
+	)) ;
+	(If (Equal ('__tmp_12__, 1) Or
+	       ((Equal ('__tmp_14__, 1)) Or (Equal ('__tmp_15__, 1))))
+	Then
+	(
+		(If Not (Equal ('__tmp_15__, 1))
+		Then
+		(
+			(If Not (Equal ('__tmp_14__, 1))
+			Then
+			(
+				'__tmp_12__ := 0 ;
+				(If Equal ('selectorS2, 1)
+				Then 'outC_SMOne_state_nxt := 'SSM_st_S3_SMOne
+				Else
+				(
+					If Equal ('selectorS3, 1)
+					Then 'outC_SMOne_state_nxt := 'SSM_st_S2_SMOne
+					Else 'outC_SMOne_state_nxt := 'SSM_st_S1_SMOne
+				)) ;
+				'outC_c := 'inC_a1 ;
+				'__tmp_13__ := 1
+			)) ;
+			(If Not (Equal ('__tmp_13__, 1))
+			Then
+			(
+				'__tmp_14__ := 0 ;
+				If Equal ('selectorS1, 1)
+				Then 'outC_SMOne_state_nxt := 'SSM_st_S3_SMOne
+				Else 'outC_SMOne_state_nxt := 'SSM_st_S2_SMOne
+			)) ;
+			If Not (Equal ('__tmp_13__, 1))
+			Then
+			(
+				'outC_c := '_L3_SMOne_S2 ;
+				'__tmp_13__ := 1
+			)
+		)) ;
+		(If Not (Equal ('__tmp_13__, 1))
+		Then
+		(
+			'__tmp_15__ := 0 ;
+			'outC_SMOne_state_nxt := 'SSM_st_S1_SMOne
+		)) ;
+		If Not (Equal ('__tmp_13__, 1))
+		Then
+		(
+			'outC_c := 'inC_a2 ;
+			'__tmp_13__ := 1
+		)
+	)) ;
+	'__tmp_13__ := 0
+}
+.
+endm)
+
+(set side-effect sorts ESt RWBUF .)
+
+(set context-update rules CallF .)
+
+(islice Statement with defs myFuns wrt 'outC_c .)
