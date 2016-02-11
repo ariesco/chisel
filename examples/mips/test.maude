@@ -186,6 +186,6 @@ endm)
 
 (dataflow inferences InsList .)
 
-(slice testMain wrt v0 .)
+(slice main wrt v0 .)
 
 (slice ifm-test wrt v0 .)

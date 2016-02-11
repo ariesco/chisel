@@ -1,5 +1,7 @@
 *** Evaluation semantics for WhileL
 
+load ../../slicing.prj
+
 (fmod WHILE-SYNTAX-EVAL is
   protecting QID .
 
@@ -85,7 +87,6 @@ endfm)
   sorts Value Variable .
 
   subsorts Num Boolean < Value .
-*** ### attn: here the subsorting could introduce ambiguity?
   subsorts Var BVar < Variable < VarL .
 
   sorts Env ESt .
@@ -110,12 +111,12 @@ endfm)
   eq [rmv2] : remove(X = V ro, X') = if X == X' then ro else X = V remove(ro, X') fi .
 
   *** This function is now partial, because the variable has to be declared beforehand.
-  op _`[_/_`] : ESt Value Variable ~> ESt [prec 35] .
+  op _`[_/_`] : ESt Value Variable -> ESt [prec 35] .
   eq [upd1] : (mu | X = V' ro) [V / X] = mu | X = V ro .
   eq [upd2] : (X = V' ro) [V / X] = X = V ro .
   eq [upd3] : (mu | ro) [V / X] = (mu [V / X]) | ro [owise] .
 
-  op _`(_`) : ESt Var -> Num .
+  op _`(_`) : ESt Variable -> Value .
   eq [lkp1] : (mu | X = V ro)(X) = V .
   eq [lkp2] : (X = V ro)(X) = V .
   eq [lkp3] : (mu | ro)(X) = mu (X) [owise] .
@@ -273,7 +274,7 @@ endm)
 
   sort Statement .
 
-  op <_`,_`,_`,_> : Com ESt RWBUF FunSet -> Statement .
+  op <_`,_`,_`,_> : Com ESt RWBUF FunSet -> Statement [ctor] .
 
   var  X : Var .
   vars lenv lenv' : Env .
@@ -340,7 +341,7 @@ endm)
   crl [ReadR2] : < Read X, st, rwb, fs > => < skip, st, rwb, fs >
    if err := extract(rwb) .
 
-  crl [CallF] : < Call fn(actPrms), st, rwb, fs > => < skip, st'', rwb', fs > *** < skip, removePrms(lenv', Prms, st''), rwb', fs >
+  crl [CallF] : < Call fn(actPrms), st, rwb, fs > => < skip, st'', rwb', fs >
    if fn(Prms){ C } fs' := fs /\
       st' := assignPrms(actPrms, Prms, st | mt) /\
       < C, st', rwb, fs > => < skip, st'' | lenv', rwb', fs >  .

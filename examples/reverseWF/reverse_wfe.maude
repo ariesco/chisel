@@ -273,7 +273,7 @@ endm)
 
   sort Statement .
 
-  op <_`,_`,_`,_> : Com ESt RWBUF FunSet -> Statement .
+  op <_`,_`,_`,_> : Com ESt RWBUF FunSet -> Statement [ctor] .
 
   var  X : Var .
   vars lenv lenv' : Env .

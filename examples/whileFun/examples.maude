@@ -1,178 +1,34 @@
 load wfe.maude
 
-(mod EXAMPLE is
- pr EVALUATION-WHILE .
+(fmod TEST is
+  pr EVALUATION-WHILE .
 
- op myFuns : -> FunSet .
- eq myFuns = 'Main (nv) { Local i ;
-                          Local j ;
-                          'sum := 0 ;
-                          i := 1 ;
-                          j := 2 ;
-                          While (Not Equal(i, 11)) Do
-                            Call 'A ('sum, i ) ;
-                            Call 'B ('sum, j ) ;
-                            Call 'A (j, i ) }
-             'A (x, y ) { If (Not Equal(x, 1))
-                          Then Call 'Add ( x, y ) ;
-                               Call 'Inc ( y ) }
-             'B (x, y ) { If (Not Equal(x, 0))
-                          Then Call 'B ( (x +. y), y )
-                        }
-             'Add (a, b) { a := a +. b }
-             'Foo(c) {Call 'Foo2( nv ) }
-             'Foo2(nv) {Local 'foo2 ; Call 'Foo(1) }
-             'Inc (z) { Local i ;
-                        Local j ;
-                        i := 1 ;
-                        j := i ;
-                        Call 'Add ( z, i );
-                        Call 'Inc (j) } .
+  op pow : -> Com .
+  eq pow = x := 1 ;
+           i := y ;
+           While Not Equal(x, 0) Do
+             x := x *. y ;
+             i := i -. 1 .
 
- op myFuns0 : -> FunSet .
- eq myFuns0 = 'Main (nv){ 'tmp_res := 0 } .
+  op foo : -> Com .
+  eq foo = x := 1 ;
+           y := 2 ;
+           z := x +. y ;
+           If Not Equal(x, y)
+           Then w := 0 .
 
- op myFuns1 : -> FunSet .
- eq myFuns1 = 'Main (nv) { Local i ;
-                           Read 'n ;
-                           'sum := 0 ;
-			   'product := 1 ;
-                           While (Lte(i, 'n)) Do
-                           ( Call 'Add ('sum, i) ;
-                             Call 'Multiply ('product, i) ;
-                             Call 'Add (i, 1)
-			   )}
-              'Add (a, b) { a := a +. b }
-              'Multiply (c, d) { Local j ;
-                         	 Local k ;
-                        	 j := 1 ;
-                        	 k := 0 ;
-				 While (Lte(j,d)) Do
-	                         ( Call 'Add (k, c);
-                        	   Call 'Add (j, 1)
-				 )} .
+  op testPow : -> Statement .
+  eq testPow = < pow, y = 5, nb, nf > .
 
- op myFuns2 : -> FunSet .
- eq myFuns2 = 'Main (nv) { Local i ;
-                           'sum := 0 ;
-			   i := 1 ;
-                           While (Lt(i, 11)) Do
-                           ( Call 'Add ('sum, i)
-			   );
-			   Write 'sum
-			 }
-	      'A (x, y) { Call 'Add(x, y);
-			  Call 'Inc(y)
-			}
-              'Add (a, b) { a := a +. b }
-              'Inc (z) { Local i ;
-			 i := 1 ;
-			 If (Lt(i,z)) Then Call 'Add(z, 1)
-			} .
-
- op myFuns3 : -> FunSet .
- eq myFuns3 = 'Main (nv) { a := 1 ;
-			   b := 0 ;
-                           Call 'P1 (a, b) ;
-			   z := b
-			 }
-	      'P1 (x, y) { If (Equal(y, 0)) Then (Call 'P2(x)) ;
-			   y := y +. 1
-			 }
-              'P2 ('xy) { If (Equal('xy, 0)) Then (Call 'P2('xy)) ;
-			  'xy := 'xy +. 1
-			} .
-
-endm)
-
-
+  op testFoo : -> Statement .
+  eq testFoo = < foo, mt, nb, nf > .
+endfm)
 
 (set side-effect sorts ESt RWBUF .)
 
-(set context-update rules CallF .)
+(dataflow inferences Prog .)
 
-(islice Statement with defs myFuns wrt z .)
+(slice testPow wrt x .)
 
-eof
-
-(rew < Call 'Foo( 1 ), mt, nb, myFuns > .)
-
-eof
-
-(set variables sort Var .)
-
-(slice (< a := a +. b, X:ESt, Y:RWBUF, nf >) wrt b .)
-
-eof
-
-(slice < a := a +. b, X:ESt, Y:RWBUF, myFuns > wrt a .)
-
-red in SEMANTICS-SLICING : traverseHypernode(upModule('EVALUATION-WHILE, true),
-              'ComR, '<_`,_`,_>['V0:Com,'V1:ENV,'V2:RWBUF],
-              < '_`[_/_`] ; 'insert ; 'remove,'ins ; 'rmv1 ; 'rmv2 ; 'upd,'AsR ; 'Inc1 ; 'ReadR1 ; 'SdE ; 'WriteR >,
-              < none, none, true >) .
-
-red getCondition(upModule('EVALUATION-WHILE, true), 'ComR) .
-
-red freshTerm('<_`,_`,_>['C:Com,'st:ENV,'rwb:RWBUF]) .
-
-red getRulesUnifying(upModule('EVALUATION-WHILE, true),
-                     '<_`,_`,_>['C##:Com,'st##:ENV,'rwb##:RWBUF],
-                     getRls(upModule('EVALUATION-WHILE, true)),
-                     '<_`,_`,_>['V0:Com,'V1:ENV,'V2:RWBUF]) .
-
-red emptyHypernode(upModule('EVALUATION-WHILE, true),
-                   getCondition(upModule('EVALUATION-WHILE, true), 'ComR),
-                   '<_`,_`,_>['V0:Com,'V1:ENV,'V2:RWBUF]) .
-
-eof
-
-(rew < Read i ; Read j ;
-       s := 0 ; p := 1 ;
-       (While Not Equal(i, 0) Do
-         Write (i -. j) ;
-         s := s +. i ;
-         p := p *. i ;
-         Read i), mt, 1 2 > .)
-
-
-Step 1: Inference of the side effect operators.
-
-        Input: side effect source  _`[_/_`] in the right-hand-side of a rewrite rule
-               the initial configuration INIT ::= < Program, InState, InReadWriteBuffer >
-               A set CHECKED ::= empty set
-               A set of lists RuleCHAINS ::= empty set
-               A list CallingCHAIN ::= empty list
-
-        Output: side effect operators
-                    _:=_   (directly from the rule AsR)
-                    Read_  (!we have to see if we need to say "only for ReadR1"!)
-                    Write_ (indirectly from the rule Inc1)
-                    Equal  (indirectly from the rule Inc1)
-
-        Procedure 1 :
-
-     a) TEMP ::= all the rules R : left0 => right0 if cnd0  such that INIT matches left0 and R not in CHECKED
-
-     b) CallingCHAINS ::= (CallingCHAINS - CallingCHAIN ) U {CallingCHAIN++R | R in TEMP}
-
-     c) CHECKED ::= CHECKED U TEMP
-
-     d) Take a rule (R : left0 => right0 if cnd0) from TEMP and try to find _`[_/_`] in the right-hand-side:
-
-       - If _`[_/_`] appears in right0 then Output ::= Output + head(R-chain)<<Prog
-         where R-chain is the list of the rules calling R
-               head(R-chain) is the head of the list
-               (R:left0 => right0 if cnd0)<<Prog is the component in left0 of sort Com
-       - Else
-         + call Procedure 1 with INIT as any of the operators used in right0
-         + for crl, when cnd0 is left1 => right1 /\.../\ leftN => rightN
-           call Procedure 1 with INIT ::= leftI, I=1,N when Ri not in CHECKED
-
-
-Step 2: Inference of the sliced program .
-        Input: The initial configuration < Program, InState, InReadWriteBuffer >
-               The variable(s) of interest
-               The output from Step 1 as input.
-
+(slice foo wrt x y .)
 
