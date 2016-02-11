@@ -22692,12 +22692,13 @@ fmod PRINTING-FUNCTIONS is
   eq slice(M, V, SV, DS) = V .
   ceq slice(M, Q[TL], SV, [ Q[TL'], NL ] DS) = C
    if Q =/= 'j_ /\ Q =/= 'jal_ /\
-      not anyEqual(getInnocentTerms(TL, NL), SV) /\
+      not (anyEqual(getInnocentTerms(TL, NL), SV) and anyEqual(getCulpritTerms(TL, NL), SV)) /\
       Ty := getType(metaReduce(M, Q[TL])) /\
       C := qid(undefSymbol + string(Ty) + "." + string(Ty)) .
   ceq slice(M, Q[TL], SV, [ Q[TL'], NL ] DS) = Q[slice*(M, TL, SV, DS)]
    if Q =/= 'j_ /\ Q =/= 'jal_ /\
-      anyEqual(getInnocentTerms(TL, NL), SV) .
+      anyEqual(getInnocentTerms(TL, NL), SV) /\
+      anyEqual(getCulpritTerms(TL, NL), SV) .
   eq slice(M, 'j_[TL], SV, DS) = 'j_[TL] .
   eq slice(M, 'jal_[TL], SV, DS) = 'jal_[TL] .
   ceq slice(M, Q[TL], SV, DS) =
