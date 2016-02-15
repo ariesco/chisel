@@ -2050,4 +2050,4 @@ endm)
 
 (set side-effect sorts Memory Registers .)
 
-(slice fbwSystem wrt sp .)
+(slice fly-by-wire wrt v0 v1 a0 a1 .)

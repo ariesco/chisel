@@ -16,7 +16,7 @@ load ../../slicing.prj
   subsort Exp < ExpL .
   subsort VarL < ExpL .
 
-  ops a b c d e i j k l m o p q r s t u w x y z : -> Var .
+  ops a b c d e i j k l m o p q r s t u w x y z sum : -> Var .
 
   ops f g h : -> FunId [ctor] .
 

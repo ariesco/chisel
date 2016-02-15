@@ -1,0 +1,895 @@
+load assembly.maude
+
+(mod TEST is
+  pr SEMANTICS .
+
+  op periodic : -> InsList .
+  eq periodic =
+     'main_autopilot
+	       addiu   sp,sp,-24
+        sw      ra,20(sp)
+        sw      s8,16(sp)
+        move    s8,sp
+        jal     'periodic_task
+        nop
+        move    v0,zero
+        move    sp,s8
+        lw      ra,20(sp)
+        lw      s8,16(sp)
+        addiu   sp,sp,24
+        jr      ra
+        nop
+
+     'send_boot
+       	addiu   sp,sp,-40
+        sw      ra,36(sp)
+        sw      s8,32(sp)
+        move    s8,sp
+        lbu     v0,-1(gp)
+        beqz    v0, 'send_boot_0x150
+        nop
+        lhu     v0,-4(gp)
+        andi    v0,v0,255
+        move    a0,v0
+        jal     '_DOWNLINK_SEND_BOOT
+        nop
+        lbu     a2,24(s8)
+        lui     v0,65284
+        lw      v0,0(v0)
+        lui     v1,65284
+        lw      a0,520(v1)
+        mtc1    v0,$f0
+        mtc1    a0,$f1
+        c.le.s  $f1,$f0
+        lui     v1,65284
+        movf    v1,zero,$f0
+        mtc1    v1,$f0
+        mtc1    zero,$f2
+        c.lt.s  $f2,$f0
+        bc1t    'send_boot_0x80
+        nop
+        mtc1    v0,$f0
+        trunc.w.s       $f0,$f0
+        mfc1    v0,$f0
+        j       'send_boot_0xa4
+        nop
+     'send_boot_0x80
+        mtc1    v0,$f1
+        mtc1    a0,$f2
+        sub     $f1,$f1,$f2
+        mfc1    v0,$f1
+        lui     v1,65284
+        mtc1    v0,$f3
+        trunc.w.s       $f3,$f3
+        mfc1    v0,$f3
+        or      v0,v0,v1
+     'send_boot_0xa4
+        andi    v0,v0,255
+        move    a1,v0
+        lui     v0,65284
+        lw      v0,0(v0)
+        lui     v1,65284
+        lw      a0,520(v1)
+        mtc1    v0,$f0
+        mtc1    a0,$f1
+        c.le.s  $f1,$f0
+        lui     v1,65284
+        movf    v1,zero,$f0
+        mtc1    v1,$f0
+        mtc1    zero,$f2
+        c.lt.s  $f2,$f0
+        bc1t    'send_boot_0xf8
+        nop
+        mtc1    v0,$f0
+        trunc.w.s       $f0,$f0
+        mfc1    v0,$f0
+        j       'send_boot_0x11c
+        nop
+     'send_boot_0xf8
+        mtc1    v0,$f1
+        mtc1    a0,$f2
+        sub     $f1,$f1,$f2
+        mfc1    v0,$f1
+        lui     v1,65284
+        mtc1    v0,$f3
+        trunc.w.s       $f3,$f3
+        mfc1    v0,$f3
+        or      v0,v0,v1
+     'send_boot_0x11c
+        andi    v0,v0,255
+        move    v1,v0
+        lh      v0,-8(gp)
+        andi    v0,v0,255
+        lh      a0,-6(gp)
+        andi    a0,a0,255
+        sw      a0,16(sp)
+        move    a0,a2
+        move    a2,v1
+        move    a3,v0
+        jal     '_DOWNLINK_SEND_RAD_OF_IR
+        nop
+        sb      zero,-1(gp)
+     'send_boot_0x150
+        move    sp,s8
+        lw      ra,36(sp)
+        lw      s8,32(sp)
+        addiu   sp,sp,40
+        jr      ra
+        nop
+
+
+'_DOWNLINK_SEND_BOOT
+       	addiu   sp,sp,-32
+        sw      ra,28(sp)
+        sw      s8,24(sp)
+        move    s8,sp
+        move    v0,a0
+        sb      v0,32(s8)
+        lbu     v0,16(s8)
+        sltiu   v0,v0,7
+        bnez    v0, '_DOWNLINK_SEND_BOOT_0x54
+        nop
+        li      a0,1
+        jal     '_ModemStartMessage
+        nop
+        lbu     v0,32(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_2_BYTE_BY_ADDR
+        nop
+        jal     '_ModemEndMessage
+        nop
+        j       '_DOWNLINK_SEND_BOOT_0x64
+        nop
+     '_DOWNLINK_SEND_BOOT_0x54
+        lbu     v0,73(gp)
+        addiu   v0,v0,1
+        andi    v0,v0,255
+        sb      v0,73(gp)
+     '_DOWNLINK_SEND_BOOT_0x64
+        move    sp,s8
+        lw      ra,28(sp)
+        lw      s8,24(sp)
+        addiu   sp,sp,32
+        jr      ra
+        nop
+
+
+'_DOWNLINK_SEND_RAD_OF_IR
+       	addiu   sp,sp,-40
+        sw      ra,36(sp)
+        sw      s8,32(sp)
+        move    s8,sp
+        move    t0,a0
+        move    a0,a2
+        move    v1,a3
+        lw      v0,56(s8)
+        sb      t0,40(s8)
+        sb      a1,44(s8)
+        sb      a0,48(s8)
+        sb      v1,52(s8)
+        sb      v0,24(s8)
+        lhu     v0,16(s8)
+        sltiu   v0,v0,21
+        bnez    v0, '_DOWNLINK_SEND_RAD_OF_IR_0xb0
+        nop
+        li      a0,5
+        jal     '_ModemStartMessage
+        nop
+        lbu     v0,40(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_4_BYTE_BY_ADDR
+        nop
+        lbu     v0,44(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_4_BYTE_BY_ADDR
+        nop
+        lbu     v0,48(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_4_BYTE_BY_ADDR
+        nop
+        lbu     v0,52(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_2_BYTE_BY_ADDR
+        nop
+        lbu     v0,24(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_2_BYTE_BY_ADDR
+        nop
+        jal     '_ModemEndMessage
+        nop
+        j       '_DOWNLINK_SEND_RAD_OF_IR_0xc0
+        nop
+     '_DOWNLINK_SEND_RAD_OF_IR_0xb0
+        lbu     v0,73(gp)
+        addiu   v0,v0,1
+        andi    v0,v0,255
+        sb      v0,73(gp)
+     '_DOWNLINK_SEND_RAD_OF_IR_0xc0
+        move    sp,s8
+        lw      ra,36(sp)
+        lw      s8,32(sp)
+        addiu   sp,sp,40
+        jr      ra
+        nop
+
+
+     '_DOWNLINK_SEND_CALIB_CONTRAST
+       	addiu   sp,sp,-32
+        sw      ra,28(sp)
+        sw      s8,24(sp)
+        move    s8,sp
+        move    v0,a0
+        sb      v0,32(s8)
+        lbu     v0,16(s8)
+        sltiu   v0,v0,7
+        bnez    v0, '_DOWNLINK_SEND_CALIB_CONTRAST_0x54
+        nop
+        li      a0,3
+        jal     '_ModemStartMessage
+        nop
+        lbu     v0,32(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_2_BYTE_BY_ADDR
+        nop
+        jal     '_ModemEndMessage
+        nop
+        j       '_DOWNLINK_SEND_CALIB_CONTRAST_0x64
+        nop
+     '_DOWNLINK_SEND_CALIB_CONTRAST_0x54
+        lbu     v0,73(gp)
+        addiu   v0,v0,1
+        andi    v0,v0,255
+        sb      v0,73(gp)
+     '_DOWNLINK_SEND_CALIB_CONTRAST_0x64
+        move    sp,s8
+        lw      ra,28(sp)
+        lw      s8,24(sp)
+        addiu   sp,sp,32
+        jr      ra
+        nop
+
+
+     '_DOWNLINK_SEND_CALIB_START
+       	addiu   sp,sp,-24
+        sw      ra,20(sp)
+        sw      s8,16(sp)
+        move    s8,sp
+        lbu     v1,86(gp)
+        lbu     v0,112(gp)
+        andi    v0,v0,255
+        sltu    v0,v1,v0
+        bnez    v0, '_DOWNLINK_SEND_CALIB_START_0x54
+        nop
+        lbu     v0,112(gp)
+        andi    v0,v0,255
+        move    v1,v0
+        lbu     v0,86(gp)
+        subu    v0,v1,v0
+        addiu   v0,v0,255
+        slti    v0,v0,5
+        xori    v0,v0,1
+        andi    v0,v0,255
+        j        '_DOWNLINK_SEND_CALIB_START_0x74
+        nop
+     '_DOWNLINK_SEND_CALIB_START_0x54
+        lbu     v0,112(gp)
+        andi    v0,v0,255
+        move    v1,v0
+        lbu     v0,86(gp)
+        subu    v0,v1,v0
+        slti    v0,v0,5
+        xori    v0,v0,1
+        andi    v0,v0,255
+     '_DOWNLINK_SEND_CALIB_START_0x74
+        beqz    v0, '_DOWNLINK_SEND_CALIB_START_0x98
+        nop
+        li      a0,2
+        jal     '_ModemStartMessage
+        nop
+        jal     '_ModemEndMessage
+        nop
+        j       '_DOWNLINK_SEND_CALIB_START_0xa8
+        nop
+     '_DOWNLINK_SEND_CALIB_START_0x98
+        lbu     v0,73(gp)
+        addiu   v0,v0,1
+        andi    v0,v0,255
+        sb      v0,73(gp)
+     '_DOWNLINK_SEND_CALIB_START_0xa8
+        move    sp,s8
+        lw      ra,20(sp)
+        lw      s8,16(sp)
+        addiu   sp,sp,24
+        jr      ra
+        nop
+
+
+     '_DOWNLINK_SEND_ATTITUDE
+       	addiu   sp,sp,-32
+        sw      ra,28(sp)
+        sw      s8,24(sp)
+        move    s8,sp
+        move    v1,a1
+        move    v0,a2
+        sb      a0,32(s8)
+        sb      v1,36(s8)
+        sb      v0,40(s8)
+        lbu     v0,16(s8)
+        sltiu   v0,v0,17
+        bnez    v0, '_DOWNLINK_SEND_ATTITUDE_0x80
+        nop
+        li      a0,6
+        jal     '_ModemStartMessage
+        nop
+        lbu     v0,32(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_4_BYTE_BY_ADDR
+        nop
+        lbu     v0,36(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_4_BYTE_BY_ADDR
+        nop
+        lbu     v0,40(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_4_BYTE_BY_ADDR
+        nop
+        jal     '_ModemEndMessage
+        nop
+        j       '_DOWNLINK_SEND_ATTITUDE_0x90
+        nop
+     '_DOWNLINK_SEND_ATTITUDE_0x80
+        lbu     v0,73(gp)
+        addiu   v0,v0,1
+        andi    v0,v0,255
+        sb      v0,73(gp)
+     '_DOWNLINK_SEND_ATTITUDE_0x90
+        move    sp,s8
+        lw      ra,28(sp)
+        lw      s8,24(sp)
+        addiu   sp,sp,32
+        jr      ra
+        nop
+
+
+     '_DOWNLINK_SEND_ADC
+	       addiu   sp,sp,-32
+        sw      ra,28(sp)
+        sw      s8,24(sp)
+        move    s8,sp
+        move    v1,a0
+        move    v0,a1
+        sb      v1,32(s8)
+        sb      v0,36(s8)
+        lbu     v0,16(s8)
+        sltiu   v0,v0,9
+        bnez    v0, '_DOWNLINK_SEND_ADC_0x6c
+        nop
+        li      a0,7
+        jal     '_ModemStartMessage
+        nop
+        lbu     v0,32(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_2_BYTE_BY_ADDR
+        nop
+        lbu     v0,36(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_2_BYTE_BY_ADDR
+        nop
+        jal     '_ModemEndMessage
+        nop
+        j       '_DOWNLINK_SEND_ADC_0x7c
+        nop
+     '_DOWNLINK_SEND_ADC_0x6c
+        lbu     v0,73(gp)
+        addiu   v0,v0,1
+        andi    v0,v0,255
+        sb      v0,73(gp)
+     '_DOWNLINK_SEND_ADC_0x7c
+        move    sp,s8
+        lw      ra,28(sp)
+        lw      s8,24(sp)
+        addiu   sp,sp,32
+        jr      ra
+        nop
+
+
+     '_DOWNLINK_SEND_SETTINGS
+       	addiu   sp,sp,-32
+        sw      ra,28(sp)
+        sw      s8,24(sp)
+        move    s8,sp
+        move    v1,a1
+        move    v0,a2
+        sb      a0,32(s8)
+        sb      v1,36(s8)
+        sb      v0,40(s8)
+        lbu     v0,16(s8)
+        sltiu   v0,v0,14
+        bnez    v0, '_DOWNLINK_SEND_SETTINGS_0x80
+        nop
+        li      a0,17
+        jal     '_ModemStartMessage
+        nop
+        lbu     v0,32(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_1_BYTE_BY_ADDR
+        nop
+        lbu     v0,36(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_4_BYTE_BY_ADDR
+        nop
+        lbu     v0,40(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_4_BYTE_BY_ADDR
+        nop
+        jal     '_ModemEndMessage
+        nop
+        j       '_DOWNLINK_SEND_SETTINGS_0x90
+        nop
+     '_DOWNLINK_SEND_SETTINGS_0x80
+        lbu     v0,73(gp)
+        addiu   v0,v0,1
+        andi    v0,v0,255
+        sb      v0,73(gp)
+     '_DOWNLINK_SEND_SETTINGS_0x90
+        move    sp,s8
+        lw      ra,28(sp)
+        lw      s8,24(sp)
+        addiu   sp,sp,32
+        jr      ra
+        nop
+
+
+     '_DOWNLINK_SEND_DESIRED
+       	addiu   sp,sp,-40
+        sw      ra,36(sp)
+        sw      s8,32(sp)
+        move    s8,sp
+        move    t0,a0
+        move    a0,a2
+        move    v1,a3
+        lw      v0,56(s8)
+        sb      t0,40(s8)
+        sb      a1,44(s8)
+        sb      a0,48(s8)
+        sb      v1,52(s8)
+        sb      v0,24(s8)
+        lbu     v0,16(s8)
+        sltiu   v0,v0,25
+        bnez    v0, '_DOWNLINK_SEND_DESIRED_0xb0
+        nop
+        li      a0,18
+        jal     '_ModemStartMessage
+        nop
+        lbu     v0,40(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_4_BYTE_BY_ADDR
+        nop
+        lbu     v0,44(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_4_BYTE_BY_ADDR
+        nop
+        lbu     v0,48(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_4_BYTE_BY_ADDR
+        nop
+        lbu     v0,52(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_4_BYTE_BY_ADDR
+        nop
+        lbu     v0,24(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_4_BYTE_BY_ADDR
+        nop
+        jal     '_ModemEndMessage
+        nop
+        j       '_DOWNLINK_SEND_DESIRED_0xc0
+        nop
+     '_DOWNLINK_SEND_DESIRED_0xb0
+        lbu     v0,73(gp)
+        addiu   v0,v0,1
+        andi    v0,v0,255
+        sb      v0,73(gp)
+     '_DOWNLINK_SEND_DESIRED_0xc0
+        move    sp,s8
+        lw      ra,36(sp)
+        lw      s8,32(sp)
+        addiu   sp,sp,40
+        jr      ra
+        nop
+
+
+    '_DOWNLINK_SEND_BAT
+       	addiu   sp,sp,-40
+        sw      ra,36(sp)
+        sw      s8,32(sp)
+        move    s8,sp
+        move    t0,a0
+        move    a0,a2
+        move    v1,a3
+        lw      v0,56(s8)
+        sb      t0,40(s8)
+        sb      a1,44(s8)
+        sb      a0,48(s8)
+        sb      v1,52(s8)
+        sb      v0,24(s8)
+        lbu     v0,16(s8)
+        sltiu   v0,v0,13
+        bnez    v0, '_DOWNLINK_SEND_BAT_0xb0
+        nop
+        li      a0,12
+        jal     '_ModemStartMessage
+        nop
+        lbu     v0,40(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_1_BYTE_BY_ADDR
+        nop
+        lbu     v0,44(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_2_BYTE_BY_ADDR
+        nop
+        lbu     v0,48(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_1_BYTE_BY_ADDR
+        nop
+        lbu     v0,52(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_2_BYTE_BY_ADDR
+        nop
+        lbu     v0,24(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_2_BYTE_BY_ADDR
+        nop
+        jal     '_ModemEndMessage
+        nop
+        j       '_DOWNLINK_SEND_BAT_0xc0
+        nop
+     '_DOWNLINK_SEND_BAT_0xb0
+        lbu     v0,73(gp)
+        addiu   v0,v0,1
+        andi    v0,v0,255
+        sb      v0,73(gp)
+     '_DOWNLINK_SEND_BAT_0xc0
+        move    sp,s8
+        lw      ra,36(sp)
+        lw      s8,32(sp)
+        addiu   sp,sp,40
+        jr      ra
+        nop
+
+
+     '_DOWNLINK_SEND_CLIMB_PID
+       	addiu   sp,sp,-32
+        sw      ra,28(sp)
+        sw      s8,24(sp)
+        move    s8,sp
+        move    t0,a0
+        move    a0,a1
+        move    v1,a2
+        move    v0,a3
+        sb      t0,32(s8)
+        sb      a0,36(s8)
+        sb      v1,40(s8)
+        sb      v0,44(s8)
+        lbu     v0,16(s8)
+        sltiu   v0,v0,19
+        bnez    v0, '_DOWNLINK_SEND_CLIMB_PID_0x9c
+        nop
+        li      a0,14
+        jal     '_ModemStartMessage
+        nop
+        lbu     v0,32(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_2_BYTE_BY_ADDR
+        nop
+        lbu     v0,36(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_4_BYTE_BY_ADDR
+        nop
+        lbu     v0,40(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_4_BYTE_BY_ADDR
+        nop
+        lbu     v0,44(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_4_BYTE_BY_ADDR
+        nop
+        jal     '_ModemEndMessage
+        nop
+        j       '_DOWNLINK_SEND_CLIMB_PID_0xac
+        nop
+     '_DOWNLINK_SEND_CLIMB_PID_0x9c
+        lbu     v0,73(gp)
+        addiu   v0,v0,1
+        andi    v0,v0,255
+        sb      v0,73(gp)
+     '_DOWNLINK_SEND_CLIMB_PID_0xac
+        move    sp,s8
+        lw      ra,28(sp)
+        lw      s8,24(sp)
+        addiu   sp,sp,32
+        jr      ra
+        nop
+
+
+     '_DOWNLINK_SEND_DEBUG
+       	addiu   sp,sp,-40
+        sw      ra,36(sp)
+        sw      s8,32(sp)
+        move    s8,sp
+        move    t0,a0
+        move    a0,a2
+        move    v1,a3
+        lw      v0,56(s8)
+        sb      t0,40(s8)
+        sb      a1,44(s8)
+        sb      a0,48(s8)
+        sb      v1,52(s8)
+        sb      v0,24(s8)
+        lbu     v0,16(s8)
+        sltiu   v0,v0,10
+        bnez    v0, '_DOWNLINK_SEND_DEBUG_0xb0
+        nop
+        li      a0,13
+        jal     '_ModemStartMessage
+        nop
+        lbu     v0,40(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_1_BYTE_BY_ADDR
+        nop
+        lbu     v0,44(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_1_BYTE_BY_ADDR
+        nop
+        lbu     v0,48(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_1_BYTE_BY_ADDR
+        nop
+        lbu     v0,52(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_1_BYTE_BY_ADDR
+        nop
+        lbu     v0,24(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_1_BYTE_BY_ADDR
+        nop
+        jal     '_ModemEndMessage
+        nop
+        j       '_DOWNLINK_SEND_DEBUG_0xc0
+        nop
+     '_DOWNLINK_SEND_DEBUG_0xb0
+        lbu     v0,73(gp)
+        addiu   v0,v0,1
+        andi    v0,v0,255
+        sb      v0,73(gp)
+     '_DOWNLINK_SEND_DEBUG_0xc0
+        move    sp,s8
+        lw      ra,36(sp)
+        lw      s8,32(sp)
+        addiu   sp,sp,40
+        jr      ra
+        nop
+
+
+    '_DOWNLINK_SEND_NAVIGATION_REF
+       	addiu   sp,sp,-32
+        sw      ra,28(sp)
+        sw      s8,24(sp)
+        move    s8,sp
+        move    v1,a0
+        move    v0,a1
+        sb      v1,32(s8)
+        sb      v0,36(s8)
+        lbu     v0,16(s8)
+        sltiu   v0,v0,13
+        bnez    v0, '_DOWNLINK_SEND_NAVIGATION_REF_0x6c
+        nop
+        li      a0,9
+        jal     '_ModemStartMessage
+        nop
+        lbu     v0,32(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_4_BYTE_BY_ADDR
+        nop
+        lbu     v0,36(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_4_BYTE_BY_ADDR
+        nop
+        jal     '_ModemEndMessage
+        nop
+        j       '_DOWNLINK_SEND_NAVIGATION_REF_0x7c
+        nop
+     '_DOWNLINK_SEND_NAVIGATION_REF_0x6c
+        lbu     v0,73(gp)
+        addiu   v0,v0,1
+        andi    v0,v0,255
+        sb      v0,73(gp)
+     '_DOWNLINK_SEND_NAVIGATION_REF_0x7c
+        move    sp,s8
+        lw      ra,28(sp)
+        lw      s8,24(sp)
+        addiu   sp,sp,32
+        jr      ra
+        nop
+
+
+     '_DOWNLINK_SEND_PPRZ_MODE
+       	addiu   sp,sp,-40
+        sw      ra,36(sp)
+        sw      s8,32(sp)
+        move    s8,sp
+        move    t0,a0
+        move    a0,a2
+        move    v1,a3
+        lw      v0,56(s8)
+        sb      t0,40(s8)
+        sb      a1,44(s8)
+        sb      a0,48(s8)
+        sb      v1,52(s8)
+        sb      v0,24(s8)
+        lbu     v0,16(s8)
+        sltiu   v0,v0,10
+        bnez    v0, '_DOWNLINK_SEND_PPRZ_MODE_0xb0
+        nop
+        li      a0,11
+        jal     '_ModemStartMessage
+        nop
+        lbu     v0,40(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_1_BYTE_BY_ADDR
+        nop
+        lbu     v0,44(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_1_BYTE_BY_ADDR
+        nop
+        lbu     v0,48(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_1_BYTE_BY_ADDR
+        nop
+        lbu     v0,52(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_1_BYTE_BY_ADDR
+        nop
+        lbu     v0,24(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_1_BYTE_BY_ADDR
+        nop
+        jal     '_ModemEndMessage
+        nop
+        j       '_DOWNLINK_SEND_PPRZ_MODE_0xc0
+        nop
+     '_DOWNLINK_SEND_PPRZ_MODE_0xb0
+        lbu     v0,73(gp)
+        addiu   v0,v0,1
+        andi    v0,v0,255
+        sb      v0,73(gp)
+     '_DOWNLINK_SEND_PPRZ_MODE_0xc0
+        move    sp,s8
+        lw      ra,36(sp)
+        lw      s8,32(sp)
+        addiu   sp,sp,40
+        jr      ra
+        nop
+
+    '_DOWNLINK_SEND_NAVIGATION_REF
+       	addiu   sp,sp,-32
+        sw      ra,28(sp)
+        sw      s8,24(sp)
+        move    s8,sp
+        move    v1,a0
+        move    v0,a1
+        sb      v1,32(s8)
+        sb      v0,36(s8)
+        lbu     v0,16(s8)
+        sltiu   v0,v0,13
+        bnez    v0, '_DOWNLINK_SEND_NAVIGATION_REF_0x6c
+        nop
+        li      a0,9
+        jal     '_ModemStartMessage
+        nop
+        lbu     v0,32(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_4_BYTE_BY_ADDR
+        nop
+        lbu     v0,36(s8)
+        move    a0,v0
+        jal     '_MODEM_PUT_4_BYTE_BY_ADDR
+        nop
+        jal     '_ModemEndMessage
+        nop
+        j       '_DOWNLINK_SEND_NAVIGATION_REF_0x7c
+        nop
+     '_DOWNLINK_SEND_NAVIGATION_REF_0x6c
+        lbu     v0,73(gp)
+        addiu   v0,v0,1
+        andi    v0,v0,255
+        sb      v0,73(gp)
+     '_DOWNLINK_SEND_NAVIGATION_REF_0x7c
+        move    sp,s8
+        lw      ra,28(sp)
+        lw      s8,24(sp)
+        addiu   sp,sp,32
+        jr      ra
+        nop
+
+
+     '_ModemStartMessage
+	       addiu   sp,sp,-8
+        sw      s8,4(sp)
+        move    s8,sp
+        move    v0,a0
+        sb      v0,8(s8)
+        lbu     v1,8(s8)
+        li      v0,1
+        bne     v1,v0, '_ModemStartMessage_0x30
+        nop
+        li      v0,1
+        j        '_ModemStartMessage_0x30
+        nop
+    '_ModemStartMessage_0x30
+        move    sp,s8
+        lw      s8,4(sp)
+        addiu   sp,sp,8
+        jr      ra
+        nop
+
+
+     '_ModemEndMessage
+       	addiu   sp,sp,-8
+        sw      s8,4(sp)
+        move    s8,sp
+        li      v0,1
+        move    sp,s8
+        lw      s8,4(sp)
+        addiu   sp,sp,8
+        jr      ra
+        nop
+
+
+     '_MODEM_PUT_2_BYTE_BY_ADDR
+       	addiu   sp,sp,-8
+        sw      s8,4(sp)
+        move    s8,sp
+        move    v0,a0
+        sb      v0,8(s8)
+        lbu     v0,8(s8)
+        move    sp,s8
+        lw      s8,4(sp)
+        addiu   sp,sp,8
+        jr      ra
+        nop
+
+
+     '_MODEM_PUT_4_BYTE_BY_ADDR
+       	addiu   sp,sp,-8
+        sw      s8,4(sp)
+        move    s8,sp
+        move    v0,a0
+        sb      v0,8(s8)
+        lbu     v0,8(s8)
+        move    sp,s8
+        lw      s8,4(sp)
+        addiu   sp,sp,8
+        jr      ra
+        nop
+
+
+     '_MODEM_PUT_1_BYTE_BY_ADDR
+       	addiu   sp,sp,-8
+        sw      s8,4(sp)
+        move    s8,sp
+        move    v0,a0
+        sb      v0,8(s8)
+        lbu     v0,8(s8)
+        move    sp,s8
+        lw      s8,4(sp)
+        addiu   sp,sp,8
+        jr      ra
+        nop
+.
+
+endm)
+
+(set side-effect sorts Memory Registers .)
+
+(slice periodic wrt v0 v1 a0 a1 .)

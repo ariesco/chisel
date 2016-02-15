@@ -1,7 +1,7 @@
 load wfe.maude
 
-(fmod TEST is
-  pr EVALUATION-WHILE .
+(mod EXAMPLE is
+ pr EVALUATION-WHILE .
 
   op pow : -> Com .
   eq pow = x := 1 ;
@@ -22,13 +22,39 @@ load wfe.maude
 
   op testFoo : -> Statement .
   eq testFoo = < foo, mt, nb, nf > .
-endfm)
+
+ op myFuns : -> FunSet .
+ eq myFuns = 'Main (nv) { Local i ;
+                          Local j ;
+                          sum := 0 ;
+                          i := 1 ;
+                          j := 2 ;
+                          While (Not Equal(i, 11)) Do
+                            Call 'A (sum, i ) ;
+                            Call 'B (sum, j ) ;
+                            Call 'A (j, i ) }
+             'A (x, y ) { If (Not Equal(x, 1))
+                          Then Call 'Add ( x, y ) ;
+                               Call 'Inc ( y ) }
+             'B (x, y ) { If (Not Equal(x, 0))
+                          Then Call 'B ( (x +. y), y )
+                        }
+             'Add (a, b) { a := a +. b }
+             'Inc (z) { Local i ;
+                        Local j ;
+                        i := 1 ;
+                        j := i ;
+                        Call 'Add ( z, i );
+                        Call 'Inc (j) } .
+
+endm)
+
 
 (set side-effect sorts ESt RWBUF .)
 
-(dataflow inferences Prog .)
+(dataflow inferences Com .)
 
-(slice testPow wrt x .)
+(set context-update rules CallF .)
 
-(slice foo wrt x y .)
+(islice Statement with defs myFuns wrt i .)
 

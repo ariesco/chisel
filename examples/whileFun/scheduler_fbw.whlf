@@ -1,0 +1,185 @@
+load wfe.maude
+
+***
+*** EXAMPLE 5 - SCHEDULER FLY_BY_WIRE
+***
+
+(mod EXAMPLE is
+ pr EVALUATION-WHILE .
+
+ op myFuns : -> FunSet .
+ eq myFuns = 'Main (nv)
+{
+	Local 'vsupply_adc_buf ;
+	Local 'vservos_adc_buf ;
+	Local 'mode ;
+	Local 'time_since_last_mega128 ;
+	Local 'time_since_last_ppm ;
+	Local 'radio_ok ;
+	Local 'mega128_ok ;
+	Local 'radio_really_lost ;
+*** failsafe - array with 8 positions
+	Local 'failsafe_0 ;
+	'failsafe := 0 ;
+	Call 'fbw_schedule ('empty)
+}
+
+
+'fbw_schedule ('empty)
+{
+	(If Lt ('time_since_last_mega128, 'STALLED_TIME)
+	Then 'time_since_last_mega128 := 'time_since_last_mega128 +. 1) ;
+	(If Lt ('time_since_last_ppm, 'REALLY_STALLED_TIME)
+	Then 'time_since_last_ppm := 'time_since_last_ppm +. 1) ;
+	(If Equal ('_1Hz, 0)
+	Then
+	(
+		'last_ppm_cpt := 'ppm_cpt ;
+		'ppm_cpt := 0
+	)) ;
+	Call 'test_ppm_task ('empty) ;
+	Call 'check_mega128_values_task ('empty) ;
+	Call 'send_data_to_autopilot_task ('empty) ;
+	Call 'check_failsafe_task ('empty) ;
+	If Gte ('_20Hz, 3)
+	Then Call 'servo_transmit ('empty)
+}
+
+'test_ppm_task ('empty)
+{
+	(If Equal ('ppm_valid, 1)
+	Then
+	(
+		'ppm_valid := 0 ;
+		'ppm_cpt := 'ppm_cpt +. 1 ;
+		'radio_ok := 1 ;
+		'radio_really_lost := 0 ;
+		'time_since_last_ppm := 0 ;
+		Call 'last_radio_from_ppm ('empty) ;
+		(If Equal ('last_radio_contains_avg_channels, 1)
+		Then
+		(
+			Call 'lookup_arr ('last_radio, 'RADIO_MODE)
+		)) ;
+		If Equal ('mode, 'MODE_MANUAL)
+		Then Call 'servo_set ('last_radio)
+	)
+	Else
+	(
+		If (Equal ('mode, 'MODE_MANUAL)) And (Equal ('radio_really_lost, 1))
+		Then 'mode := 'MODE_AUTO
+	)) ;
+	(If Gte ('time_since_last_ppm, 'STALLED_TIME)
+	Then 'radio_ok := 0) ;
+	If Gte ('time_since_last_ppm, 'REALLY_STALLED_TIME)
+	Then 'radio_really_lost := 0
+}
+
+
+'SpiIsSelected ('empty)
+{
+	Call 'bit_is_set ('SPI_PIN, 'SPI_SS_PIN) ;
+	'__res_SpiIsSelected := '__res_bit_is_set
+}
+
+'send_data_to_autopilot_task ('empty)
+{
+	Call 'SpiIsSelected ('empty) ;
+	If (Not Equal ('__res_SpiIsSelected, 1)) And Equal ('spi_was_interrupted, 1)
+	Then
+	(
+		'spi_was_interrupted := 0 ;
+		Call 'spi_reset ('empty)
+	)
+}
+
+'spi_reset ('empty)
+{
+	'idx_buf := 0 ;
+	'xor_in := 0 ;
+	Call 'lookup_arr ('to_mega128, 'idx_buf) ;
+	'xor_out := '__res_lookup_arr ;
+	'SPDR := 'xor_out ;
+	'mega128_receive_valid := 0
+}
+
+'servo_transmit ('empty)
+{
+	Local 'servo ;
+	Local '__tmp_1 ;
+	'__tmp_1 := 0 ;
+	(While Lt ('servo, '4017_NB_CHANNELS) Do
+	(
+		Call 'lookup_arr ('servo_widths, 'servo) ;
+		Local '__tmp_2 ;
+		Local '__tmp_3 ;
+		'__tmp_3 := 8 ;
+		Call 'shiftr_bitwise ('__res_lookup_arr, '__tmp_3) ;
+		'__tmp_2 := '__res_shiftr_bitwise
+	)) ;
+	Local '__tmp_4 ;
+	'__tmp_4 := '"\n"
+}
+
+'check_mega128_values_task ('empty)
+{
+	Call 'SpiIsSelected ('empty) ;
+	(If (Not Equal ('__res_SpiIsSelected, 1)) And (Equal ('spi_was_interrupted, 1))
+	Then
+	(
+		If Equal ('mega128_receive_valid, 1)
+		Then
+		(
+			'time_since_last_mega128 := 0 ;
+			'mega128_ok := 1 ;
+			If Equal ('mode, 'MODE_AUTO)
+			Then Call 'servo_set ('from_mega128.channels)
+		)
+	)) ;
+	If Equal ('time_since_last_mega128, 'STALLED_TIME)
+	Then 'mega128_ok := 0
+}
+
+'check_failsafe_task ('empty)
+{
+	If (Equal ('mode, 'MODE_MANUAL) And Not Equal ('radio_ok, 1)) Or
+		(Equal ('mode, 'MODE_AUTO) And Not Equal ('mega128_ok, 1))
+	Then Call 'servo_set ('failsafe)
+}
+
+'servo_set ('values)
+{
+	'to_complete := 1
+}
+
+'last_radio_from_ppm ('empty)
+{
+	'to_complete := 1
+}
+
+'bit_is_set ('sfr, 'bit)
+{
+	If (Equal ('sfr, 1)) And (Equal ('bit, 1))
+	Then '__res_bit_is_set := 1
+	Else '__res_bit_is_set := 0
+}
+
+'shiftr_bitwise ('val1, 'val2)
+{
+	'__res_shiftr_bitwise := 'val1 *. 'val2
+}
+
+'lookup_arr ('a, 'idx)
+{
+	'__res_lookup_arr := 'a +. 'idx
+}
+
+.
+endm)
+
+(set side-effect sorts ESt RWBUF .)
+
+(set context-update rules CallF .)
+
+(islice Statement with defs myFuns wrt 'time_since_last_mega128 'time_since_last_ppm 'time_since_last_ppm .)
+

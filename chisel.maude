@@ -22144,7 +22144,7 @@ fmod INTER-PROCEDURAL-SLICING is
       HTR := traverseHypernode(M, QS, TV, SET, < none, none, true >) /\
       Orange := getOrange(HTR) /\
       ST := createTable(DEFS, SV) /\
-      DS := getDirectionRules(M, S, SS) /\
+      DS := getDirectionRules(M, typeFromDefs(M, DEFS), SS) /\
       ST' := fixpoint(M, ST, SV, TV, DEFS, S, Orange, CO, mtGraph, DS) .
 
  op fixpoint : Module SlicingTable TermList Term Term Sort QidSet Qid Graph
@@ -22157,7 +22157,7 @@ fmod INTER-PROCEDURAL-SLICING is
   if < ST1, G1 > := phase1(M, ST, TV, Orange, S, G, DS) /\
      < ST2, G2 > := phase2(M, ST1, DEFS, CO, S, G1) /\
      < ST3, G3 > := phase3(M, ST2, ORIGSV, DEFS, CO, S, G2) /\
-     ST4 := phase4(ST3, DEFS) .
+     ST4 := ST3 . *** phase4(ST3, DEFS) . *** For global variables
 
  op phase1 : Module SlicingTable Term QidSet Sort Graph DirectionSet
              -> StepResult .
@@ -22472,6 +22472,9 @@ fmod INTER-PROCEDURAL-SLICING is
  op getCalls* : TermList Qid -> TermList .
  eq getCalls*(empty, CO) = empty .
  eq getCalls*((T, TL), CO) = getCalls(T, CO), getCalls*(TL, CO) .
+
+ op typeFromDefs : Module Term -> Type .
+ eq typeFromDefs(M, Q[TL, Q'[TL', T]]) = getType(metaReduce(M, T)) .
 endfm
 
 fmod MAYBE{X :: TRIV} is
