@@ -2,6 +2,7 @@ load ../../slicing.prj
 
 (fmod REGISTERS is
   pr INT .
+  pr FLOAT .
 
   sort RegId .
 
@@ -15,8 +16,11 @@ load ../../slicing.prj
   ops zero gp ra sp $fcc0 : -> RegId [ctor] .
   ops hi lo acc : -> RegId [ctor] .
 
+  sort Value .
+  subsort Float Int < Value .
+
   sort Register .
-  op <_`,_> : RegId Int -> Register [ctor] .
+  op <_`,_> : RegId Value -> Register [ctor] .
 
   sort Registers .
   subsort Register < Registers .
@@ -25,15 +29,15 @@ load ../../slicing.prj
 
   vars R R' : RegId .
   var  RS : Registers .
-  vars I I' : Int .
+  vars V V' : Int .
 
-  op _`[_`] : Registers RegId -> Int .
-  eq [lur1] : (< R, I > RS) [R] = I .
+  op _`[_`] : Registers RegId -> Value .
+  eq [lur1] : (< R, V > RS) [R] = V .
   eq [lur2] : RS [R] = 0 [owise] .
 
-  op update : RegId Int Registers -> Registers .
-  eq [upd_int1] : update(R, I, < R, I' > RS) = < R, I > RS .
-  eq [upd_int2] : update(R, I, RS) = < R, I > RS [owise] .
+  op update : RegId Value Registers -> Registers .
+  eq [upd_int1] : update(R, V, < R, V' > RS) = < R, V > RS .
+  eq [upd_int2] : update(R, V, RS) = < R, V > RS [owise] .
 endfm)
 
 (fmod INS-SYNTAX is

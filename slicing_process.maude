@@ -1,9 +1,7 @@
-fmod SEMANTICS-SLICING is
+fmod SIDE-EFFECTS-ANALYSIS is
   pr SEMANTIC-INFERENCE .
   pr META-LEVEL .
-  pr CONVERSION .
 
-  vars HTR HTR' HTR'' : HypernodeTraversalResult .
   vars QS QS' QS1 QS2 Orange : QidSet .
   vars SET SET' : SideEffectsTuple .
   vars TL TL' TL'' TL3 : TermList .
@@ -31,21 +29,7 @@ fmod SEMANTICS-SLICING is
   vars N N' : Nat .
   var  R : Rule .
 
-  sorts SlicingResult SideEffectsTuple .
-
-  op noResult : -> SlicingResult [ctor] .
-  op sr : SideEffectsTuple -> SlicingResult . *** For testing purposes
-  op hypernode : QidSet -> SlicingResult . *** For testing purposes
-  op term : Term -> SlicingResult . *** For testing purposes
-  op htr : HypernodeTraversalResult TermList -> SlicingResult . *** For testing purposes
-  op ds : DirectionSet -> SlicingResult . *** For testing purposes
-  op sliRes : QidSet TermList DirectionSet -> SlicingResult [ctor] .
-
-  op getVarsInSlicingSet : SlicingResult ~> TermList .
-  eq getVarsInSlicingSet(sliRes(QS, TL, DS)) = TL .
-
-  op getDSInSlicingSet : SlicingResult ~> DirectionSet .
-  eq getDSInSlicingSet(sliRes(QS, TL, DS)) = DS .
+  sort SideEffectsTuple .
 
 ***(%
 \end{verbatim}
@@ -59,68 +43,6 @@ of equation labels, and the set of rule labels generating side effects:
 %)
 
   op <_,_,_> : QidSet QidSet QidSet -> SideEffectsTuple [ctor] .
-
-***(%
-\end{verbatim}
-}
-
-The projection functions for the \texttt{SideEffectsTuple} are \texttt{getOps},
-\texttt{getEqLbls}, and \texttt{getRlLbls}:
-
-{\codesize
-\begin{verbatim}
-%)
-
-  ops getOps getEqLbls getRlLbls : SideEffectsTuple -> QidSet .
-  eq getOps(< OS, ELS, RLS >) = OS .
-  eq getEqLbls(< OS, ELS, RLS >) = ELS .
-  eq getRlLbls(< OS, ELS, RLS >) = RLS .
-
-***(%
-\end{verbatim}
-}
-
-The main function in the module is \texttt{slice}, which receives as arguments
-the module where slicing takes place, the term to be analyzed, the list of terms
-standing for the variables used in the slicing process,
-and the set of sorts involving side effects. It returns
-
-{\codesize
-\begin{verbatim}
-%)
-
-  op slice : Module Term TermList SortSet -> SlicingResult .
-  ceq slice(M, T, TL, SS) = sliRes(Orange, TL', DS) *** ds(DS) *** htr(HTR, TL') *** hypernode(QS) *** sr(SET)
-   if SET := getSETuple(M, getSubsorts(M, SS) ; SS) /\
-      TN := getTerm(metaReduce(M, T)) /\
-      TV := createVarTerm(M, TN) /\
-      QS := getRulesUnifying(M, TV, getRls(M), empty) /\
-      HTR := traverseHypernode(M, QS, TV, SET, < none, none, true >) /\
-      Orange := getOrange(HTR) /\
-      S := firstSort(M, TN) /\
-      DS := getDirectionRules(M, S, SS) /\
-      TL' := step2(M, TN, getOpsFromRules(M, Orange), TL, varsType(M, TL), DS) .
-
-  op firstSort : Module Term ~> Sort .
-  eq firstSort(M, Q[T, TL]) = getType(metaReduce(M, T)) .
-
-***(%
-\end{verbatim}
-}
-
-The function \texttt{getSubsorts} returns the subsorts of the set of sorts given as
-argument:
-
-{\codesize
-\begin{verbatim}
-%)
-
-  op getSubsorts : Module SortSet -> SortSet .
-  eq getSubsorts(M, SS) = getSubsorts(getSubsorts(M), SS) .
-
-  op getSubsorts : SubsortDeclSet SortSet -> SortSet .
-  eq getSubsorts(subsort S < S' . SSDS, S' ; SS) = S ; getSubsorts(SSDS, S' ; SS) .
-  eq getSubsorts(SSDS, SS) = none [owise] .
 
 ***(%
 \end{verbatim}
@@ -214,6 +136,201 @@ this tuple by checking whether any equation is applied to this operator at the t
    if metaUnify(M, T =? T', 0, 0) :: UnificationPair /\
       notUnification(M, T', TL) . *** metaMatch(M, T, T', nil, 0) :: Substitution .
   eq getRulesUnifying(M, T, RS, TL) = none [owise] .
+
+***(%
+\end{verbatim}
+}
+
+The auxiliary function \texttt{notUnification} checks whether the term given
+as second argument unifies with any of the terms in the termlist:
+
+{\codesize
+\begin{verbatim}
+%)
+
+  op notUnification : Module Term TermList -> Bool .
+  eq notUnification(M, T, empty) = true .
+  eq notUnification(M, T, (T', TL)) = if metaUnify(M, T' =? T, 0, 0) :: UnificationPair
+                                      then false
+                                      else notUnification(M, T, TL)
+                                      fi .
+
+  op getLHS : Module Qid ~> Term .
+  ceq getLHS(M, Q) = getLHS(Eq)
+   if Eq := getEq(M, Q) .
+  ceq getLHS(M, Q) = getLHS(R)
+   if R := getRl(M, Q) .
+
+  op getLHS : Equation -> Term .
+  eq getLHS(eq T = T' [AtS] .) = T .
+  eq getLHS(ceq T = T' if COND [AtS] .) = T .
+
+  op getLHS : Rule -> Term .
+  eq getLHS(rl T => T' [AtS] .) = T .
+  eq getLHS(crl T => T' if COND [AtS] .) = T .
+
+  op getRHS : Module Qid ~> Term .
+  ceq getRHS(M, Q) = getRHS(Eq)
+   if Eq := getEq(M, Q) .
+  ceq getRHS(M, Q) = getRHS(R)
+   if R := getRl(M, Q) .
+
+  op getRHS : Equation -> Term .
+  eq getRHS(eq T = T' [AtS] .) = T' .
+  eq getRHS(ceq T = T' if COND [AtS] .) = T' .
+
+  op getRHS : Rule -> Term .
+  eq getRHS(rl T => T' [AtS] .) = T' .
+  eq getRHS(crl T => T' if COND [AtS] .) = T' .
+
+  op getEq : Module Qid -> EquationSet .
+  eq getEq(M, Q) = getEq(getEqs(M), Q) .
+
+  op getEq : EquationSet Qid -> EquationSet .
+  eq getEq(eq T = T' [label(Q) AtS] . EqS, Q) =
+                                        eq T = T' [label(Q) AtS] . .
+  eq getEq(ceq T = T' if COND [label(Q) AtS] . EqS, Q) =
+                                        ceq T = T' if COND [label(Q) AtS] . .
+  eq getEq(EqS, Q) = none [owise] .
+
+  op getRl : Module Qid -> RuleSet .
+  eq getRl(M, Q) = getRl(getRls(M), Q) .
+
+  op getRl : RuleSet Qid -> RuleSet .
+  eq getRl(rl T => T' [label(Q) AtS] . RS, Q) =
+                                        rl T => T' [label(Q) AtS] . .
+  eq getRl(crl T => T' if COND [label(Q) AtS] . RS, Q) =
+                                        crl T => T' if COND [label(Q) AtS] . .
+  eq getRl(RS, Q) = none [owise] .
+
+  op checkTerm : Term QidSet -> Bool .
+  eq checkTerm(C, QS) = false .
+  eq checkTerm(V, QS) = false .
+  eq checkTerm(Q[TL], Q ; QS) = true .
+  eq checkTerm(Q[TL], QS) = checkTerm*(TL, QS) [owise] .
+
+  op checkTerm* : Term QidSet -> Bool .
+  eq checkTerm*(empty, QS) = false .
+  eq checkTerm*((T, TL), QS) = checkTerm(T, QS) or-else checkTerm*(TL, QS) .
+
+  op checkCond : Condition QidSet -> Bool .
+  eq checkCond(nil, QS) = false .
+  eq checkCond(T = T' /\ COND, QS) = checkCond(COND, QS) .
+  eq checkCond(T := T' /\ COND, QS) = checkTerm(T', QS) or-else checkCond(COND, QS) .
+  eq checkCond(T : S /\ COND, QS) = checkCond(COND, QS) .
+  eq checkCond(T => T' /\ COND, QS) = checkTerm(T, QS) or-else checkCond(COND, QS) .
+
+endfm
+
+fmod SEMANTICS-SLICING is
+  pr SIDE-EFFECTS-ANALYSIS .
+  pr CONVERSION .
+
+  vars HTR HTR' HTR'' : HypernodeTraversalResult .
+  vars QS QS' QS1 QS2 Orange : QidSet .
+  vars SET SET' : SideEffectsTuple .
+  vars TL TL' TL'' TL3 : TermList .
+  vars T T' T'' TV TN : Term .
+  var  SSDS : SubsortDeclSet .
+  var  OS ELS RLS : QidSet .
+  var  DS : DirectionSet .
+  var  EqS : EquationSet .
+  var  COND : Condition .
+  var  OIL : OpInfoList .
+  var  ODS : OpDeclSet .
+  var  TyL : TypeList .
+  vars Q Q' Q'' : Qid .
+  vars Ty Ty' : Type .
+  var  Eq : Equation .
+  var  AtS : AttrSet .
+  var  C : Constant .
+  var  V : Variable .
+  var  SS : SortSet .
+  var  RS : RuleSet .
+  var  NL : NatList .
+  vars S S' : Sort .
+  vars B B' : Bool .
+  var  M : Module .
+  vars N N' : Nat .
+  var  R : Rule .
+
+  sorts SlicingResult .
+
+  op noResult : -> SlicingResult [ctor] .
+  op sr : SideEffectsTuple -> SlicingResult . *** For testing purposes
+  op hypernode : QidSet -> SlicingResult . *** For testing purposes
+  op term : Term -> SlicingResult . *** For testing purposes
+  op htr : HypernodeTraversalResult TermList -> SlicingResult . *** For testing purposes
+  op ds : DirectionSet -> SlicingResult . *** For testing purposes
+  op sliRes : QidSet TermList DirectionSet -> SlicingResult [ctor] .
+
+  op getVarsInSlicingSet : SlicingResult ~> TermList .
+  eq getVarsInSlicingSet(sliRes(QS, TL, DS)) = TL .
+
+  op getDSInSlicingSet : SlicingResult ~> DirectionSet .
+  eq getDSInSlicingSet(sliRes(QS, TL, DS)) = DS .
+
+***(%
+\end{verbatim}
+}
+
+The projection functions for the \texttt{SideEffectsTuple} are \texttt{getOps},
+\texttt{getEqLbls}, and \texttt{getRlLbls}:
+
+{\codesize
+\begin{verbatim}
+%)
+
+  ops getOps getEqLbls getRlLbls : SideEffectsTuple -> QidSet .
+  eq getOps(< OS, ELS, RLS >) = OS .
+  eq getEqLbls(< OS, ELS, RLS >) = ELS .
+  eq getRlLbls(< OS, ELS, RLS >) = RLS .
+
+***(%
+\end{verbatim}
+}
+
+The main function in the module is \texttt{slice}, which receives as arguments
+the module where slicing takes place, the term to be analyzed, the list of terms
+standing for the variables used in the slicing process,
+and the set of sorts involving side effects. It returns
+
+{\codesize
+\begin{verbatim}
+%)
+
+  op slice : Module Term TermList SortSet -> SlicingResult .
+  ceq slice(M, T, TL, SS) = sliRes(Orange, TL', DS) *** ds(DS) *** htr(HTR, TL') *** hypernode(QS) *** sr(SET)
+   if SET := getSETuple(M, getSubsorts(M, SS) ; SS) /\
+      TN := getTerm(metaReduce(M, T)) /\
+      TV := createVarTerm(M, TN) /\
+      QS := getRulesUnifying(M, TV, getRls(M), empty) /\
+      HTR := traverseHypernode(M, QS, TV, SET, < none, none, true >) /\
+      Orange := getOrange(HTR) /\
+      S := firstSort(M, TN) /\
+      DS := getDirectionRules(M, S, SS) /\
+      TL' := step2(M, TN, getOpsFromRules(M, Orange), TL, varsType(M, TL), DS) .
+
+  op firstSort : Module Term ~> Sort .
+  eq firstSort(M, Q[T, TL]) = getType(metaReduce(M, T)) .
+
+***(%
+\end{verbatim}
+}
+
+The function \texttt{getSubsorts} returns the subsorts of the set of sorts given as
+argument:
+
+{\codesize
+\begin{verbatim}
+%)
+
+  op getSubsorts : Module SortSet -> SortSet .
+  eq getSubsorts(M, SS) = getSubsorts(getSubsorts(M), SS) .
+
+  op getSubsorts : SubsortDeclSet SortSet -> SortSet .
+  eq getSubsorts(subsort S < S' . SSDS, S' ; SS) = S ; getSubsorts(SSDS, S' ; SS) .
+  eq getSubsorts(SSDS, SS) = none [owise] .
 
 ***(%
 \end{verbatim}
@@ -387,23 +504,6 @@ The current result of the hypernode, including the nodes in the olive and orange
   eq T in empty = false .
   eq T in (T', TL) = T == T' or-else T in TL .
 
-  op checkTerm : Term QidSet -> Bool .
-  eq checkTerm(C, QS) = false .
-  eq checkTerm(V, QS) = false .
-  eq checkTerm(Q[TL], Q ; QS) = true .
-  eq checkTerm(Q[TL], QS) = checkTerm*(TL, QS) [owise] .
-
-  op checkTerm* : Term QidSet -> Bool .
-  eq checkTerm*(empty, QS) = false .
-  eq checkTerm*((T, TL), QS) = checkTerm(T, QS) or-else checkTerm*(TL, QS) .
-
-  op checkCond : Condition QidSet -> Bool .
-  eq checkCond(nil, QS) = false .
-  eq checkCond(T = T' /\ COND, QS) = checkCond(COND, QS) .
-  eq checkCond(T := T' /\ COND, QS) = checkTerm(T', QS) or-else checkCond(COND, QS) .
-  eq checkCond(T : S /\ COND, QS) = checkCond(COND, QS) .
-  eq checkCond(T => T' /\ COND, QS) = checkTerm(T, QS) or-else checkCond(COND, QS) .
-
   op createVarTerm : Module Term ~> Term .
   ceq createVarTerm(M, Q[TL]) = Q[createVarTermList(TyL)]
    if op Q : TyL -> Ty [AtS] . ODS := getOps(M) .
@@ -415,26 +515,6 @@ The current result of the hypernode, including the nodes in the olive and orange
   eq createVarTermList(nil, N) = empty .
   ceq createVarTermList(Ty TyL, N) = V, createVarTermList(TyL, s(N))
    if V := qid("V" + string(N, 10) + ":" + string(Ty)) .
-
-  op getEq : Module Qid -> EquationSet .
-  eq getEq(M, Q) = getEq(getEqs(M), Q) .
-
-  op getEq : EquationSet Qid -> EquationSet .
-  eq getEq(eq T = T' [label(Q) AtS] . EqS, Q) =
-                                        eq T = T' [label(Q) AtS] . .
-  eq getEq(ceq T = T' if COND [label(Q) AtS] . EqS, Q) =
-                                        ceq T = T' if COND [label(Q) AtS] . .
-  eq getEq(EqS, Q) = none [owise] .
-
-  op getRl : Module Qid -> RuleSet .
-  eq getRl(M, Q) = getRl(getRls(M), Q) .
-
-  op getRl : RuleSet Qid -> RuleSet .
-  eq getRl(rl T => T' [label(Q) AtS] . RS, Q) =
-                                        rl T => T' [label(Q) AtS] . .
-  eq getRl(crl T => T' if COND [label(Q) AtS] . RS, Q) =
-                                        crl T => T' if COND [label(Q) AtS] . .
-  eq getRl(RS, Q) = none [owise] .
 
   op getCondition : Module Qid ~> Condition .
   ceq getCondition(M, Q) = getCondition(Eq)
@@ -449,34 +529,6 @@ The current result of the hypernode, including the nodes in the olive and orange
   op getCondition : Rule -> Condition .
   eq getCondition(rl T => T' [AtS] .) = nil .
   eq getCondition(crl T => T' if COND [AtS] .) = COND .
-
-  op getLHS : Module Qid ~> Term .
-  ceq getLHS(M, Q) = getLHS(Eq)
-   if Eq := getEq(M, Q) .
-  ceq getLHS(M, Q) = getLHS(R)
-   if R := getRl(M, Q) .
-
-  op getLHS : Equation -> Term .
-  eq getLHS(eq T = T' [AtS] .) = T .
-  eq getLHS(ceq T = T' if COND [AtS] .) = T .
-
-  op getLHS : Rule -> Term .
-  eq getLHS(rl T => T' [AtS] .) = T .
-  eq getLHS(crl T => T' if COND [AtS] .) = T .
-
-  op getRHS : Module Qid ~> Term .
-  ceq getRHS(M, Q) = getRHS(Eq)
-   if Eq := getEq(M, Q) .
-  ceq getRHS(M, Q) = getRHS(R)
-   if R := getRl(M, Q) .
-
-  op getRHS : Equation -> Term .
-  eq getRHS(eq T = T' [AtS] .) = T' .
-  eq getRHS(ceq T = T' if COND [AtS] .) = T' .
-
-  op getRHS : Rule -> Term .
-  eq getRHS(rl T => T' [AtS] .) = T' .
-  eq getRHS(crl T => T' if COND [AtS] .) = T' .
 
   op freshTerm : Term -> Term .
   eq freshTerm(C) = C .
@@ -557,26 +609,9 @@ which indicates whether all the nodes of the current hypernode are orange:
 \begin{verbatim}
 %)
 
+
   op allOrange? : HypernodeTraversalResult -> Bool .
   eq allOrange?(< QS, QS', B >) = B .
-
-***(%
-\end{verbatim}
-}
-
-The auxiliary function \texttt{notUnification} checks whether the term given
-as second argument unifies with any of the terms in the termlist:
-
-{\codesize
-\begin{verbatim}
-%)
-
-  op notUnification : Module Term TermList -> Bool .
-  eq notUnification(M, T, empty) = true .
-  eq notUnification(M, T, (T', TL)) = if metaUnify(M, T' =? T, 0, 0) :: UnificationPair
-                                      then false
-                                      else notUnification(M, T, TL)
-                                      fi .
 
 ***(%
 \end{verbatim}
