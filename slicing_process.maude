@@ -2,6 +2,7 @@ fmod SIDE-EFFECTS-ANALYSIS is
   pr SEMANTIC-INFERENCE .
   pr META-LEVEL .
 
+  vars HTR HTR' HTR'' : HypernodeTraversalResult .
   vars QS QS' QS1 QS2 Orange : QidSet .
   vars SET SET' : SideEffectsTuple .
   vars TL TL' TL'' TL3 : TermList .
@@ -220,9 +221,197 @@ as second argument unifies with any of the terms in the termlist:
   eq checkCond(T : S /\ COND, QS) = checkCond(COND, QS) .
   eq checkCond(T => T' /\ COND, QS) = checkTerm(T, QS) or-else checkCond(COND, QS) .
 
+***(%
+\end{verbatim}
+}
+
+We define a new sort \texttt{HypernodeTraversalResult} that will be used to return
+the result obtained when traversing a hypernode. It is composed of a pair of
+\texttt{QidSet} standing for the labels in the olive set and the orange set after
+the traversal, and
+a Boolean value indicating if all the nodes in the hypernode
+are orange, that takes the value \texttt{true} initially and is updated when
+a new label is processed:
+
+{\codesize
+\begin{verbatim}
+%)
+
+  sort HypernodeTraversalResult .
+  op <_,_,_> : QidSet QidSet Bool -> HypernodeTraversalResult [ctor] .
+
+***(%
+\end{verbatim}
+}
+
+The function \texttt{traverseHypernode} receives as arguments:
+\begin{itemize}
+\item
+The module where the slicing process takes place.
+
+\item
+The set of statements contained in the hypernode that have not been
+traversed yet.
+
+\item
+The list of terms already used to generate hypernodes. They are used to avoid
+non-termination by preventing matchings in the conditions.
+
+\item
+The side effects tuple, indicating the operators and rules that may generate side
+effects.
+
+\item
+The current result of the hypernode, including the nodes in the olive and orange set.
+\end{itemize}
+
+{\codesize
+\begin{verbatim}
+%)
+
+  op traverseHypernode : Module QidSet TermList SideEffectsTuple HypernodeTraversalResult
+                         -> HypernodeTraversalResult .
+  eq traverseHypernode(M, none, TL, SET, HTR) = HTR .
+  ceq traverseHypernode(M, Q ; QS, TL, SET, HTR) = traverseHypernode(M, QS, TL, SET, HTR')
+   if Q in SET /\
+      HTR' := add2orange(Q, HTR) .
+  ceq traverseHypernode(M, Q ; QS, TL, SET, HTR) = traverseHypernode(M, QS, TL, SET, HTR)
+   if traversed?(Q, HTR) .
+  ceq traverseHypernode(M, Q ; QS, TL, SET, HTR) =
+                                if allOrange?(HTR') and not emptyHypernode(M, COND, (T, TL))
+                                then add2orange(Q, HTR')
+                                else add2olive(Q, HTR')
+                                fi
+   if COND := getCondition(M, Q) /\
+      not Q in SET /\
+      not traversed?(Q, HTR) /\
+      T := getLHS(M, Q) /\
+      HTR' := traverseCond(M, COND, (T, TL), SET, setAllOrangeVar(true, HTR)) .
+
+  op traverseCond : Module Condition TermList SideEffectsTuple HypernodeTraversalResult
+                    -> HypernodeTraversalResult .
+  eq traverseCond(M, nil, TL, SET, HTR) = setAllOrangeVar(false, HTR) .
+  eq traverseCond(M, T = T' /\ COND, TL, SET, HTR) = traverseCond(M, COND, TL, SET, HTR) .
+  eq traverseCond(M, T := T' /\ COND, TL, SET, HTR) = traverseCond(M, COND, TL, SET, HTR) .
+  eq traverseCond(M, T : S /\ COND, TL, SET, HTR) = traverseCond(M, COND, TL, SET, HTR) .
+  ceq traverseCond(M, T => T' /\ COND, TL, SET, HTR) = combineHypernodes(HTR', HTR'')
+   if TV := freshTerm(T) /\
+      QS := getRulesUnifying(M, TV, getRls(M), TL) /\
+      HTR' := traverseHypernode(M, QS, TL, SET, HTR) /\
+      HTR'' := traverseCond(M, COND, TL, SET, setAllOrangeVar(true, HTR')) .
+
+  op emptyHypernode : Module Condition TermList -> Bool .
+  eq emptyHypernode(M, nil, TL) = true .
+  eq emptyHypernode(M, T = T' /\ COND, TL) = emptyHypernode(M, COND, TL) .
+  eq emptyHypernode(M, T := T' /\ COND, TL) = emptyHypernode(M, COND, TL) .
+  eq emptyHypernode(M, T : S /\ COND, TL) = emptyHypernode(M, COND, TL) .
+  ceq emptyHypernode(M, T => T' /\ COND, TL) = if QS == none
+                                               then emptyHypernode(M, COND, TL)
+                                               else false
+                                               fi
+   if TV := freshTerm(T) /\
+      QS := getRulesUnifying(M, TV, getRls(M), TL) .
+
+  op olive? : Qid HypernodeTraversalResult -> Bool .
+  eq olive?(Q, < Q ; QS, QS', B >) = true .
+  eq olive?(Q, HTR) = false [owise] .
+
+  op getOlive : HypernodeTraversalResult -> QidSet .
+  eq getOlive(< QS, QS', B >) = QS .
+
+  op getOrange : HypernodeTraversalResult -> QidSet .
+  eq getOrange(< QS, QS', B >) = QS' .
+
+  op orange? : Qid HypernodeTraversalResult -> Bool .
+  eq orange?(Q, < QS, Q ; QS', B >) = true .
+  eq orange?(Q, HTR) = false [owise] .
+
+  op add2olive : Qid HypernodeTraversalResult -> HypernodeTraversalResult .
+  eq add2olive(Q, < QS, QS', B >) = < Q ; QS, QS', false > .
+
+  op add2orange : Qid HypernodeTraversalResult -> HypernodeTraversalResult .
+  eq add2orange(Q, < QS, QS', B >) = < QS, Q ; QS', B > .
+
+  op setAllOrangeVar : Bool HypernodeTraversalResult -> HypernodeTraversalResult .
+  eq setAllOrangeVar(B, < QS, QS', B' >) = < QS, QS', B > .
+
+***(%
+\end{verbatim}
+}
+
+The combination of hypernodes composes the sets of labels and applies
+uses the \texttt{or} operator to update the value that indicates whether
+all the nodes in the hypernode are orange:
+
+{\codesize
+\begin{verbatim}
+%)
+
+  op combineHypernodes : HypernodeTraversalResult HypernodeTraversalResult
+                         -> HypernodeTraversalResult .
+  eq combineHypernodes(< QS, QS', B >, < QS1, QS2, B' >) =
+                                                < QS ; QS1, QS' ; QS2, B or B' > .
+
+***(%
+\end{verbatim}
+}
+
+The function \texttt{traversed?} indicates if the statement is already
+contained in the olive or orange sets:
+
+{\codesize
+\begin{verbatim}
+%)
+
+  op traversed? : Qid HypernodeTraversalResult -> Bool .
+  eq traversed?(Q, HTR) = olive?(Q, HTR) or-else orange?(Q, HTR) .
+
+***(%
+\end{verbatim}
+}
+
+The function \texttt{allOrange?} returns the third argument of a hypernode,
+which indicates whether all the nodes of the current hypernode are orange:
+
+{\codesize
+\begin{verbatim}
+%)
+
+
+  op allOrange? : HypernodeTraversalResult -> Bool .
+  eq allOrange?(< QS, QS', B >) = B .
+
+  op getCondition : Module Qid ~> Condition .
+  ceq getCondition(M, Q) = getCondition(Eq)
+   if Eq := getEq(M, Q) .
+  ceq getCondition(M, Q) = getCondition(R)
+   if R := getRl(M, Q) .
+
+  op getCondition : Equation -> Condition .
+  eq getCondition(eq T = T' [AtS] .) = nil .
+  eq getCondition(ceq T = T' if COND [AtS] .) = COND .
+
+  op getCondition : Rule -> Condition .
+  eq getCondition(rl T => T' [AtS] .) = nil .
+  eq getCondition(crl T => T' if COND [AtS] .) = COND .
+
+  op freshTerm : Term -> Term .
+  eq freshTerm(C) = C .
+  eq freshTerm(Q[TL]) = Q[freshTerm*(TL)] .
+  eq freshTerm(V) = qid(string(getName(V)) + "##:" + string(getType(V))) .
+
+  op freshTerm* : TermList -> TermList .
+  eq freshTerm*((T, TL)) = freshTerm(T), freshTerm*(TL) .
+  eq freshTerm*(empty) = empty .
+
+  op _in_ : Qid SideEffectsTuple -> Bool .
+  eq Q in < OS, Q ; ELS, RLS > = true .
+  eq Q in < OS, ELS, Q ; RLS > = true .
+  eq Q in SET = false [owise] .
+
 endfm
 
-fmod SEMANTICS-SLICING is
+fmod INTRA-PROCEDURAL-SLICING is
   pr SIDE-EFFECTS-ANALYSIS .
   pr CONVERSION .
 
@@ -332,97 +521,6 @@ argument:
   eq getSubsorts(subsort S < S' . SSDS, S' ; SS) = S ; getSubsorts(SSDS, S' ; SS) .
   eq getSubsorts(SSDS, SS) = none [owise] .
 
-***(%
-\end{verbatim}
-}
-
-We define a new sort \texttt{HypernodeTraversalResult} that will be used to return
-the result obtained when traversing a hypernode. It is composed of a pair of
-\texttt{QidSet} standing for the labels in the olive set and the orange set after
-the traversal, and
-a Boolean value indicating if all the nodes in the hypernode
-are orange, that takes the value \texttt{true} initially and is updated when
-a new label is processed:
-
-{\codesize
-\begin{verbatim}
-%)
-
-  sort HypernodeTraversalResult .
-  op <_,_,_> : QidSet QidSet Bool -> HypernodeTraversalResult [ctor] .
-
-***(%
-\end{verbatim}
-}
-
-The function \texttt{traverseHypernode} receives as arguments:
-\begin{itemize}
-\item
-The module where the slicing process takes place.
-
-\item
-The set of statements contained in the hypernode that have not been
-traversed yet.
-
-\item
-The list of terms already used to generate hypernodes. They are used to avoid
-non-termination by preventing matchings in the conditions.
-
-\item
-The side effects tuple, indicating the operators and rules that may generate side
-effects.
-
-\item
-The current result of the hypernode, including the nodes in the olive and orange set.
-\end{itemize}
-
-{\codesize
-\begin{verbatim}
-%)
-
-  op traverseHypernode : Module QidSet TermList SideEffectsTuple HypernodeTraversalResult
-                         -> HypernodeTraversalResult .
-  eq traverseHypernode(M, none, TL, SET, HTR) = HTR .
-  ceq traverseHypernode(M, Q ; QS, TL, SET, HTR) = traverseHypernode(M, QS, TL, SET, HTR')
-   if Q in SET /\
-      HTR' := add2orange(Q, HTR) .
-  ceq traverseHypernode(M, Q ; QS, TL, SET, HTR) = traverseHypernode(M, QS, TL, SET, HTR)
-   if traversed?(Q, HTR) .
-  ceq traverseHypernode(M, Q ; QS, TL, SET, HTR) =
-                                if allOrange?(HTR') and not emptyHypernode(M, COND, (T, TL))
-                                then add2orange(Q, HTR')
-                                else add2olive(Q, HTR')
-                                fi
-   if COND := getCondition(M, Q) /\
-      not Q in SET /\
-      not traversed?(Q, HTR) /\
-      T := getLHS(M, Q) /\
-      HTR' := traverseCond(M, COND, (T, TL), SET, setAllOrangeVar(true, HTR)) .
-
-  op traverseCond : Module Condition TermList SideEffectsTuple HypernodeTraversalResult
-                    -> HypernodeTraversalResult .
-  eq traverseCond(M, nil, TL, SET, HTR) = setAllOrangeVar(false, HTR) .
-  eq traverseCond(M, T = T' /\ COND, TL, SET, HTR) = traverseCond(M, COND, TL, SET, HTR) .
-  eq traverseCond(M, T := T' /\ COND, TL, SET, HTR) = traverseCond(M, COND, TL, SET, HTR) .
-  eq traverseCond(M, T : S /\ COND, TL, SET, HTR) = traverseCond(M, COND, TL, SET, HTR) .
-  ceq traverseCond(M, T => T' /\ COND, TL, SET, HTR) = combineHypernodes(HTR', HTR'')
-   if TV := freshTerm(T) /\
-      QS := getRulesUnifying(M, TV, getRls(M), TL) /\
-      HTR' := traverseHypernode(M, QS, TL, SET, HTR) /\
-      HTR'' := traverseCond(M, COND, TL, SET, setAllOrangeVar(true, HTR')) .
-
-  op emptyHypernode : Module Condition TermList -> Bool .
-  eq emptyHypernode(M, nil, TL) = true .
-  eq emptyHypernode(M, T = T' /\ COND, TL) = emptyHypernode(M, COND, TL) .
-  eq emptyHypernode(M, T := T' /\ COND, TL) = emptyHypernode(M, COND, TL) .
-  eq emptyHypernode(M, T : S /\ COND, TL) = emptyHypernode(M, COND, TL) .
-  ceq emptyHypernode(M, T => T' /\ COND, TL) = if QS == none
-                                               then emptyHypernode(M, COND, TL)
-                                               else false
-                                               fi
-   if TV := freshTerm(T) /\
-      QS := getRulesUnifying(M, TV, getRls(M), TL) .
-
   op step2 : Module Term QidSet TermList Type DirectionSet -> TermList .
   ceq step2(M, T, QS, TL, Ty, DS) = if TL == TL'
                                     then TL
@@ -516,103 +614,6 @@ The current result of the hypernode, including the nodes in the olive and orange
   ceq createVarTermList(Ty TyL, N) = V, createVarTermList(TyL, s(N))
    if V := qid("V" + string(N, 10) + ":" + string(Ty)) .
 
-  op getCondition : Module Qid ~> Condition .
-  ceq getCondition(M, Q) = getCondition(Eq)
-   if Eq := getEq(M, Q) .
-  ceq getCondition(M, Q) = getCondition(R)
-   if R := getRl(M, Q) .
-
-  op getCondition : Equation -> Condition .
-  eq getCondition(eq T = T' [AtS] .) = nil .
-  eq getCondition(ceq T = T' if COND [AtS] .) = COND .
-
-  op getCondition : Rule -> Condition .
-  eq getCondition(rl T => T' [AtS] .) = nil .
-  eq getCondition(crl T => T' if COND [AtS] .) = COND .
-
-  op freshTerm : Term -> Term .
-  eq freshTerm(C) = C .
-  eq freshTerm(Q[TL]) = Q[freshTerm*(TL)] .
-  eq freshTerm(V) = qid(string(getName(V)) + "##:" + string(getType(V))) .
-
-  op freshTerm* : TermList -> TermList .
-  eq freshTerm*((T, TL)) = freshTerm(T), freshTerm*(TL) .
-  eq freshTerm*(empty) = empty .
-
-  op _in_ : Qid SideEffectsTuple -> Bool .
-  eq Q in < OS, Q ; ELS, RLS > = true .
-  eq Q in < OS, ELS, Q ; RLS > = true .
-  eq Q in SET = false [owise] .
-
-  op olive? : Qid HypernodeTraversalResult -> Bool .
-  eq olive?(Q, < Q ; QS, QS', B >) = true .
-  eq olive?(Q, HTR) = false [owise] .
-
-  op getOlive : HypernodeTraversalResult -> QidSet .
-  eq getOlive(< QS, QS', B >) = QS .
-
-  op getOrange : HypernodeTraversalResult -> QidSet .
-  eq getOrange(< QS, QS', B >) = QS' .
-
-  op orange? : Qid HypernodeTraversalResult -> Bool .
-  eq orange?(Q, < QS, Q ; QS', B >) = true .
-  eq orange?(Q, HTR) = false [owise] .
-
-  op add2olive : Qid HypernodeTraversalResult -> HypernodeTraversalResult .
-  eq add2olive(Q, < QS, QS', B >) = < Q ; QS, QS', false > .
-
-  op add2orange : Qid HypernodeTraversalResult -> HypernodeTraversalResult .
-  eq add2orange(Q, < QS, QS', B >) = < QS, Q ; QS', B > .
-
-  op setAllOrangeVar : Bool HypernodeTraversalResult -> HypernodeTraversalResult .
-  eq setAllOrangeVar(B, < QS, QS', B' >) = < QS, QS', B > .
-
-***(%
-\end{verbatim}
-}
-
-The combination of hypernodes composes the sets of labels and applies
-uses the \texttt{or} operator to update the value that indicates whether
-all the nodes in the hypernode are orange:
-
-{\codesize
-\begin{verbatim}
-%)
-
-  op combineHypernodes : HypernodeTraversalResult HypernodeTraversalResult
-                         -> HypernodeTraversalResult .
-  eq combineHypernodes(< QS, QS', B >, < QS1, QS2, B' >) =
-                                                < QS ; QS1, QS' ; QS2, B or B' > .
-
-***(%
-\end{verbatim}
-}
-
-The function \texttt{traversed?} indicates if the statement is already
-contained in the olive or orange sets:
-
-{\codesize
-\begin{verbatim}
-%)
-
-  op traversed? : Qid HypernodeTraversalResult -> Bool .
-  eq traversed?(Q, HTR) = olive?(Q, HTR) or-else orange?(Q, HTR) .
-
-***(%
-\end{verbatim}
-}
-
-The function \texttt{allOrange?} returns the third argument of a hypernode,
-which indicates whether all the nodes of the current hypernode are orange:
-
-{\codesize
-\begin{verbatim}
-%)
-
-
-  op allOrange? : HypernodeTraversalResult -> Bool .
-  eq allOrange?(< QS, QS', B >) = B .
-
 ***(%
 \end{verbatim}
 }
@@ -682,7 +683,7 @@ fmod RELATIONS-GRAPH is
 endfm
 
 fmod INTER-PROCEDURAL-SLICING is
- pr SEMANTICS-SLICING .
+ pr INTRA-PROCEDURAL-SLICING .
  pr RELATIONS-GRAPH .
 
  var  M : Module .
