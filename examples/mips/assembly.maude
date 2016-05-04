@@ -2,7 +2,6 @@ load ../../slicing.prj
 
 (fmod REGISTERS is
   pr INT .
-  pr FLOAT .
 
   sort RegId .
 
@@ -17,7 +16,7 @@ load ../../slicing.prj
   ops hi lo acc : -> RegId [ctor] .
 
   sort Value .
-  subsort Float Int < Value .
+  subsort Int < Value .
 
   sort Register .
   op <_`,_> : RegId Value -> Register [ctor] .

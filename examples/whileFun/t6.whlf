@@ -1,0 +1,470 @@
+load wfe.maude
+
+***
+*** EXAMPLE 11
+***
+
+(mod EXAMPLE is
+ pr EVALUATION-WHILE .
+
+ op myFuns : -> FunSet .
+ eq myFuns = 'Main (nv)
+{
+  Call 'radio_control_task ('empty)
+}
+
+'radio_control_task ('empty)
+{
+	Local 'calib_mode_changed ;
+	If Equal ('link_fbw_receive_valid, 1)
+	Then
+	(
+		Local 'mode_changed ;
+		'mode_changed := 0 ;
+		Call 'copy_from_to_fbw ('empty) ;
+		Call 'bit_is_set ('from_fbw.status, 'RADIO_REALLY_LOST) ;
+		(If ((Equal ('__res_bit_is_set, 1)) And
+			((Equal ('pprz_mode, 'PPRZ_MODE_AUTO1)) Or
+			((Equal ('pprz_mode, 'PPRZ_MODE_MANUAL)) Or
+			(Equal ('too_far_from_home, 1)))))
+		Then
+		(
+			'pprz_mode := 'PPRZ_MODE_HOME ;
+			'mode_changed := 1
+		)) ;
+		Call 'bit_is_set ('from_fbw.status, 'AVERAGED_CHANNELS_SENT) ;
+		(If Equal ('__res_bit_is_set, 1)
+		Then
+		(
+			Local 'pprz_mode_changed ;
+			Call 'pprz_mode_update ('empty) ;
+			'pprz_mode_changed := '__res_pprz_mode_update ;
+			Call 'and_bitwise ('mode_changed, 'pprz_mode_changed) ;
+			'mode_changed := '__res_and_bitwise ;
+			Call 'ir_estim_mode_update ('empty) ;
+			Call 'and_bitwise ('mode_changed, '__res_ir_estim_mode_update) ;
+			'mode_changed := '__res_and_bitwise ;
+			Call 'inflight_calib_mode_update ('empty) ;
+			'calib_mode_changed := '__res_inflight_calib_mode_update ;
+			Local '__tmp_1_ ;
+			(If (Equal ('calib_mode_changed, 1) Or
+				Equal ('pprz_mode_changed, 1))
+			Then '__tmp_1_ := 1
+			Else '__tmp_1_ := 0) ;
+			Call 'inflight_calib ('__tmp_1_) ;
+			Call 'and_bitwise ('mode_changed, 'calib_mode_changed) ;
+			'mode_changed := '__res_and_bitwise
+		)) ;
+		Call 'mcu1_status_update ('empty) ;
+		Call 'and_bitwise ('mode_changed, '__res_mcu1_status_update) ;
+		'mode_changed := '__res_and_bitwise ;
+		(If Equal ('mode_changed, 1)
+		Then Call 'DOWNLINK_SEND_PPRZ_MODE ('pprz_mode, 'vertical_mode,
+				'inflight_calib_mode, 'mcu1_status, 'ir_estim_mode)) ;
+		(If Equal ('pprz_mode, 'PPRZ_MODE_AUTO1)
+		Then
+		(
+			Local '__tmp_2_ ;
+			Local '__tmp_3_ ;
+			'__tmp_2_ := 0 ;
+			'__tmp_3_ := 6 ;
+			Call 'FLOAT_OF_PPRZ ('from_fbw.channels, 'RADIO_ROLL,
+						 '__tmp_2_, '__tmp_3_) ;
+			'desired_roll := '__res_FLOAT_OF_PPRZ ;
+			'__tmp_3_ := 5 ;
+			Call 'FLOAT_OF_PPRZ ('from_fbw.channels, 'RADIO_PITCH,
+						'__tmp_2_, '__tmp_3_) ;
+			'desired_pitch := '__res_FLOAT_OF_PPRZ
+		)) ;
+		(If (Equal ('pprz_mode, 'PPRZ_MODE_MANUAL) Or
+		   	Equal ('pprz_mode, 'PPRZ_MODE_AUTO1))
+		Then
+		(
+			Call 'lookup_arr ('from_fbw.channels, 'RADIO_THROTTLE) ;
+			'desired_gaz := '__res_lookup_arr ;
+			Call 'lookup_arr ('from_fbw.channels, 'RADIO_THROTTLE) ;
+***			'roll_pgain := 'ROLL_PGAIN *. (1 - 5 / 7 * '__res_lookup_arr / 'MAX_PPRZ) ;
+			'roll_pgain := 'ROLL_PGAIN *. ('__res_lookup_arr *. 'MAX_PPRZ) ;
+			Call 'lookup_arr ('from_fbw.channels, 'RADIO_THROTTLE) ;
+***			'pitch_pgain := 'PITCH_PGAIN * (1 - 1 / 3 * '__res_lookup_arr / 'MAX_PPRZ)
+			'pitch_pgain := 'PITCH_PGAIN *. ('__res_lookup_arr *. 'MAX_PPRZ)
+		)) ;
+		'mcu1_ppm_cpt := 'from_fbw.ppm_cpt ;
+		'vsupply := 'from_fbw.vsupply ;
+		Call 'events_update ('empty) ;
+		If Not Equal ('estimator_flight_time, 1)
+		Then
+		(
+			Call 'ground_calibrate ('empty) ;
+			Call 'lookup_arr ('from_fbw.channels, 'RADIO_THROTTLE) ;
+			Call 'shiftl_bitwise ('__res_lookup_arr, 'GAZ_THRESHOLD_TAKEOFF) ;
+			If Equal ('pprz_mode, 'PPRZ_MODE_AUTO2) And
+				Equal ('__res_shiftl_bitwise, 1)
+			Then 'launch := 0
+		)
+	)
+}
+
+'copy_from_to_fbw ('empty)
+{
+	Call 'lookup_arr ('from_fbw.channels, 'RADIO_YAW) ;
+	Call 'update_arr ('to_fbw.channels, 'RADIO_YAW, '__res_lookup_arr) ;
+	Call 'lookup_arr ('from_fbw.channels, 'RADIO_PITCH) ;
+	Call 'update_arr ('to_fbw.channels, 'RADIO_PITCH, '__res_lookup_arr) ;
+	'to_fbw.status := 0
+}
+
+'update_arr ('a, 'idx, 'val)
+{
+	Call 'lookup_arr ('a, 'idx) ;
+	'__res_update_arr := 'val
+}
+
+'lookup_arr ('a, 'idx)
+{
+	'__res_lookup_arr := 'a +. 'idx
+}
+
+'bit_is_set ('sfr, 'bit)
+{
+	If (Equal ('sfr, 1)) And (Equal ('bit, 1))
+	Then '__res_bit_is_set := 1
+	Else '__res_bit_is_set := 0
+}
+
+'pprz_mode_update ('empty)
+{
+	Local '__tmp_0__ ;
+	'__tmp_0__ := 0 ;
+	Call 'CheckEvent('rc_event_1) ;
+	(If (Not Equal ('pprz_mode, 'PPRZ_MODE_HOME) Or Equal ('__res_CheckEvent, 1))
+	Then
+	(
+		Call 'PPRZ_MODE_OF_PULSE('from_fbw.channels,
+			 'RADIO_MODE, 'from_fbw.status) ;
+		Call 'ModeUpdate('pprz_mode, '__res_PPRZ_MODE_OF_PULSE)
+	)
+	Else
+	(
+		'__res_pprz_mode_update__ := 0 ;
+		'__tmp_0__ := 1
+	)) ;
+	'__tmp_0__ := 0
+}
+
+'CheckEvent ('r_event)
+{
+	If Equal ('r_event, 1)
+	Then '__res_CheckEvent := 1
+	Else '__res_CheckEvent := 0
+}
+
+'PPRZ_MODE_OF_PULSE ('from_fbw.channels, 'RADIO_MODE, 'from_fbw.status)
+{
+	Call 'lookup_arr ('from_fbw.channels, 'RADIO_MODE) ;
+	If Gt ('__res_lookup_arr, 'THRESHOLD2)
+	Then '__res_PPRZ_MODE_OF_PULSE := 'PPRZ_MODE_AUTO2
+	Else
+	(
+		If Gt ('from_fbw.status, 'THRESHOLD2)
+		Then '__res_PPRZ_MODE_OF_PULSE := 'PPRZ_MODE_AUTO1
+		Else '__res_PPRZ_MODE_OF_PULSE := 'PPRZ_MODE_MANUAL
+	)
+}
+
+'ModeUpdate ('p_mode, '_n_value)
+{
+	Local 'new_mode ;
+	'new_mode := '_n_value ;
+	If Not Equal ('p_mode, 'new_mode)
+	Then 'p_mode := 'new_mode
+}
+
+'and_bitwise ('val1, 'val2)
+{
+	If Equal ('val1, 'val2)
+	Then '__res_and_bitwise := 1
+	Else '__res_and_bitwise := 0
+}
+
+'ir_estim_mode_update ('empty)
+{
+	Call 'IR_ESTIM_MODE_OF_PULSE('from_fbw.channels, 'RADIO_LLS) ;
+	Call 'ModeUpdate ('ir_estim_mode, '__res_IR_ESTIM_MODE_OF_PULSE) ;
+	'__res_ir_estim_mode_update := 0
+}
+
+'IR_ESTIM_MODE_OF_PULSE ('from_channel, 'signal)
+{
+	Call 'lookup_arr ('from_channel, 'signal) ;
+	If Lt ('__res_lookup_arr, 'THRESHOLD2)
+	Then '__res_IR_ESTIM_MODE_OF_PULSE := 'IR_ESTIM_MODE_OFF
+	Else '__res_IR_ESTIM_MODE_OF_PULSE := 'IR_ESTIM_MODE_ON
+}
+
+'inflight_calib_mode_update ('empty)
+{
+	Call 'IF_CALIB_MODE_OF_PULSE ('from_fbw.channels, 'RADIO_CALIB) ;
+	Call 'ModeUpdate ('inflight_calib_mode,'__res_IF_CALIB_MODE_OF_PULSE) ;
+	'__res_inflight_calib_mode_update := 1
+}
+
+'IF_CALIB_MODE_OF_PULSE ('from_fbw.channels, 'RADIO_CALIB)
+{
+	Call 'lookup_arr ('from_fbw.channels, 'RADIO_CALIB) ;
+	If Lt ('__res_lookup_arr, 'THRESHOLD1)
+	Then '__res_IF_CALIB_MODE_OF_PULSE := 'IF_CALIB_MODE_UP
+	Else '__res_IF_CALIB_MODE_OF_PULSE := 'IF_CALIB_MODE_NONE
+}
+
+'inflight_calib ('__tmp_1_)
+{
+	'to_complete := 1
+}
+
+'mcu1_status_update ('empty)
+{
+	Local '__tmp_0__ ;
+	'__tmp_0__ := 0 ;
+	Local 'new_mode ;
+	'new_mode := 'from_fbw.status ;
+	(If Not Equal ('mcu1_status, 'new_mode)
+	Then
+	(
+		Local 'changed ;
+		Local '__tmp_1__ ;
+		Local '__tmp_2__ ;
+		(If (Equal ('mcu1_status, 1)) Or (Equal ('MASK_FBW_CHANGED, 1))
+		Then '__tmp_1__ := 1
+		Else '__tmp_1__ := 0) ;
+		(If (Equal ('new_mode, 1)) Or (Equal ('MASK_FBW_CHANGED, 1))
+		Then '__tmp_2__ := 1
+		Else '__tmp_2__ := 0) ;
+		(If Not Equal ('__tmp_1__, '__tmp_2__)
+		Then 'changed := 1
+		Else 'changed := 0) ;
+		'mcu1_status := 'new_mode ;
+		'__res__mcu1_status_update := 'changed ;
+		'__tmp_0__ := 1
+	)) ;
+	(If Not Equal ('__tmp_0__, 1)
+	Then '__res__mcu1_status_update := 0) ;
+	'__tmp_0__ := 0
+}
+
+'DOWNLINK_SEND_PPRZ_MODE ('pprz_mode, 'vertical_mode,
+	'inflight_calib_mode, 'mcu1_status, 'ir_estim_mode)
+{
+	If Gt ('MODEM_CHECK_FREE_SPACE, 9)
+	Then
+	(
+          Call 'ModemStartMessage ('DL_PPRZ_MODE) ;
+          Call 'MODEM_PUT_1_BYTE_BY_ADDR ('pprz_mode) ;
+          Call 'MODEM_PUT_1_BYTE_BY_ADDR ('vertical_mode) ;
+          Call 'MODEM_PUT_1_BYTE_BY_ADDR ('inflight_calib_mode) ;
+          Call 'MODEM_PUT_1_BYTE_BY_ADDR ('mcu1_status) ;
+          Call 'MODEM_PUT_1_BYTE_BY_ADDR ('ir_estim_mode) ;
+          Call 'ModemEndMessage ('empty)
+        )
+        Else 'modem_nb_ovrn := 'modem_nb_ovrn +. 1
+}
+
+'ModemStartMessage ('DL_CALIB_START)
+{
+	If Equal ('DL_CALIB_START, 1)
+	Then '__res_ModemStartMessage := 1
+	Else '__res_ModemStartMessage := 0
+}
+
+'ModemEndMessage ('empty)
+{
+	'__res_ModemEndMessage := 1
+}
+
+'MODEM_PUT_1_BYTE_BY_ADDR ('data)
+{
+	'__res_MODEM_PUT_1_BYTE_BY_ADDR := 'data
+}
+
+'FLOAT_OF_PPRZ ('from_fbw.channels, 'RADIO_ROLL, 'center, 'travel)
+{
+	Call 'lookup_arr ('from_fbw.channels, 'RADIO_ROLL) ;
+***	'__res_FLOAT_OF_PPRZ := '__res_lookup_arr /. (('MAX_PPRZ *. 'center) +. 'travel)
+	'__res_FLOAT_OF_PPRZ := '__res_lookup_arr +. (('MAX_PPRZ *. 'center) +. 'travel)
+}
+
+'events_update ('empty)
+{
+	Local 'event1_cpt ;
+	'event1_cpt := 0 ;
+	Local 'event2_cpt ;
+	'event2_cpt := 0 ;
+	Call 'EventPos ('event1_cpt, 'RADIO_GAIN1, 'rc_event_1) ;
+	Call 'EventNeg ('event2_cpt, 'RADIO_GAIN1, 'rc_event_2)
+}
+
+'EventPos ('cpt, 'channel, 'event)
+{
+	Local '__tmp_1_ ;
+	Call 'lookup_arr ('from_fbw.channels, 'channel) ;
+	'__tmp_1_ := '__res_lookup_arr ;
+	Local '__tmp_2_ ;
+	Local '__tmp_3_ ;
+	'__tmp_3_ := 75 *. 'MAX_PPRZ ;
+	(If Equal ('inflight_calib_mode, 'IF_CALIB_MODE_NONE) And
+		(Gt ('__tmp_1_, '__tmp_3_))
+	Then '__tmp_2_ := 1
+	Else '__tmp_2_ := 0) ;
+	Call 'EventUpdate('cpt, '__tmp_2_, 'event)
+}
+
+'EventNeg ('cpt, 'channel, 'event)
+{
+	Local '__tmp_1_ ;
+	Call 'lookup_arr ('from_fbw.channels, 'channel) ;
+	'__tmp_1_ := '__res_lookup_arr ;
+	Local '__tmp_2_ ;
+	Local '__tmp_3_ ;
+	'__tmp_3_ := 0 -. (75 *. 'MAX_PPRZ) ;
+	(If Equal ('inflight_calib_mode, 'IF_CALIB_MODE_NONE) And
+		(Gt ('__tmp_1_, '__tmp_3_))
+	Then '__tmp_2_ := 1
+	Else '__tmp_2_ := 0) ;
+	Call 'EventUpdate('cpt, '__tmp_2_, 'event)
+}
+
+'EventUpdate('cpt, 'cond, 'event)
+{
+	If Equal ('cond, 1)
+	Then
+	(
+		If Lt ('cpt, 'EVENT_DELAY)
+		Then
+		(
+			'cpt := 'cpt +. 1 ;
+      			If Equal ('cpt, 'EVENT_DELAY)
+        		Then 'event := 1
+    		)
+  	)
+	Else
+	(
+    		'cpt := 0 ;
+    		'event := 0
+  	)
+}
+
+'shiftl_bitwise ('val1, 'val2)
+{
+	If Equal ('val1, 'val2)
+	Then '__res_shiftl_bitwise := 'val1 *. 'val2
+	Else '__res_shiftl_bitwise := 'val1
+}
+
+'ground_calibrate ('empty)
+{
+	Local 'calib_status ;
+	If Equal ('calib_status, 'NO_CALIB)
+	Then
+	(
+		If (Lt ('cputime, 'MAX_DELAY_FOR_CALIBRATION) And
+			(Equal ('pprz_mode, 'PPRZ_MODE_AUTO1)))
+		Then
+		(
+			'calib_status := 'WAITING_CALIB_CONTRAST ;
+			Call 'DOWNLINK_SEND_CALIB_START ('empty)
+		)
+	)
+	Else
+	(
+		If Equal ('calib_status, 'WAITING_CALIB_CONTRAST)
+		Then
+		(
+			Call 'STICK_PUSHED ('from_fbw.channels, 'RADIO_ROLL) ;
+			If Equal ('__res_STICK_PUSHED, 1)
+			Then
+			(
+				Call 'ir_gain_calib ('empty) ;
+				'estimator_rad_of_ir := 'ir_rad_of_ir ;
+				Call 'DOWNLINK_SEND_RAD_OF_IR ('estimator_ir,
+					'estimator_rad, 'estimator_rad_of_ir,
+					'ir_roll_neutral, 'ir_pitch_neutral) ;
+				'calib_status := 'CALIB_DONE ;
+				Call 'DOWNLINK_SEND_CALIB_CONTRAST ('ir_contrast)
+			)
+		)
+	)
+}
+
+'DOWNLINK_SEND_CALIB_START ('empty)
+{
+	If Equal ('MODEM_CHECK_FREE_SPACE, 1)
+	Then
+	(
+		Call 'ModemStartMessage ('DL_CALIB_START) ;
+		Call 'ModemEndMessage ('empty)
+        )
+        Else 'modem_nb_ovrn := 'modem_nb_ovrn +. 1
+}
+
+'STICK_PUSHED ('from_fbw.channels, 'RADIO_ROLL)
+{
+	Call 'lookup_arr ('from_fbw.channels, 'RADIO_ROLL) ;
+	If (Gt ('__res_lookup_arr, 'THRESHOLD1)) Or
+			(Lt ('__res_lookup_arr, 'THRESHOLD2))
+	Then '__res_STICK_PUSHED := 1
+	Else '__res_STICK_PUSHED := 0
+}
+
+'ir_gain_calib ('empty)
+{
+	'ir_contrast := 'ir_pitch ;
+	Call 'RadOfIrFromConstrast ('ir_contrast)
+}
+
+'RadOfIrFromConstrast ('ir_contrast)
+{
+	'ir_rad_of_ir := 1
+}
+
+'DOWNLINK_SEND_RAD_OF_IR ('estimator_ir, 'estimator_rad, 'estimator_rad_of_ir,
+			'ir_roll_neutral, 'ir_pitch_neutral)
+{
+	If Gt ('MODEM_CHECK_FREE_SPACE, 20)
+	Then
+	(
+          Call 'ModemStartMessage ('DL_RAD_OF_IR) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('estimator_ir) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('estimator_rad) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('estimator_rad_of_ir) ;
+          Call 'MODEM_PUT_2_BYTE_BY_ADDR ('ir_roll_neutral) ;
+          Call 'MODEM_PUT_2_BYTE_BY_ADDR ('ir_pitch_neutral) ;
+          Call 'ModemEndMessage ('empty)
+        )
+        Else 'modem_nb_ovrn := 'modem_nb_ovrn +. 1
+}
+
+'MODEM_PUT_4_BYTE_BY_ADDR ('data)
+{
+	'__res_MODEM_PUT_4_BYTE_BY_ADDR := 'data
+}
+
+'MODEM_PUT_2_BYTE_BY_ADDR ('data)
+{
+	'__res_MODEM_PUT_2_BYTE_BY_ADDR := 'data
+}
+
+'DOWNLINK_SEND_CALIB_CONTRAST ('ir_contrast)
+{
+	If Gt ('MODEM_CHECK_FREE_SPACE, 6)
+	Then
+	(
+          Call 'ModemStartMessage ('DL_CALIB_CONTRAST) ;
+          Call 'MODEM_PUT_2_BYTE_BY_ADDR ('ir_contrast) ;
+          Call 'ModemEndMessage ('empty)
+        )
+        Else 'modem_nb_ovrn := 'modem_nb_ovrn +. 1
+} .
+
+endm)
+
+(red myFuns .)

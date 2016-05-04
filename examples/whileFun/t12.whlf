@@ -1,0 +1,78 @@
+load wfe.maude
+
+***
+*** EXAMPLE 15
+***
+
+(mod EXAMPLE is
+ pr EVALUATION-WHILE .
+
+ op myFuns : -> FunSet .
+ eq myFuns = 'Main (nv)
+{
+  Call 'climb_control_task ('empty)
+}
+
+'climb_control_task ('empty)
+{
+	If (Equal ('pprz_mode, 'PPRZ_MODE_AUTO2) Or
+		(Equal ('pprz_mode, 'PPRZ_MODE_HOME)))
+	Then
+	(
+		(If Gte ('vertical_mode, 'VERTICAL_MODE_AUTO_CLIMB)
+		Then Call 'climb_pid_run ('empty)) ;
+		(If Equal ('vertical_mode, 'VERTICAL_MODE_AUTO_GAZ)
+		Then 'desired_gaz := 'nav_desired_gaz) ;
+		If ((Equal ('low_battery, 1)) Or (Equal ('estimator_flight_time, 0)))
+			 And (Equal ('launch, 0))
+		Then 'desired_gaz := 0
+	)
+}
+
+'climb_pid_run ('empty)
+{
+	Local 'err ;
+	'err := 'estimator_z_dot -. 'desired_climb ;
+	Local 'fgaz ;
+	If Equal ('auto_pitch, 1)
+	Then
+	(
+		'desired_gaz := 'nav_desired_gaz ;
+		'desired_pitch := 'climb_pitch_pgain *.
+			('err +. ('climb_pitch_igain *. 'climb_pitch_sum_err)) ;
+    		(If Gt ('desired_pitch, 'max_pitch)
+      		Then 'desired_pitch := 'max_pitch) ;
+		'climb_pitch_sum_err := 'climb_pitch_sum_err +. 'err ;
+		(If Gt ('climb_pitch_sum_err, 'MAX_PITCH_CLIMB_SUM_ERR)
+		Then 'climb_pitch_sum_err := 'MAX_PITCH_CLIMB_SUM_ERR) ;
+		If Lt ('climb_pitch_sum_err, 'MAX_PITCH_CLIMB_SUM_ERR)
+      		Then 'climb_pitch_sum_err := 0 -. 'MAX_PITCH_CLIMB_SUM_ERR
+	)
+	Else
+	(
+		(If Gt ('desired_climb, 0)
+		Then 'pitch_of_vz := 'desired_climb *. 'pitch_of_vz_pgain
+		Else 'pitch_of_vz := 0) ;
+    		'fgaz := ('climb_pgain *. ('err +. ('climb_igain *. 'climb_sum_err))) +.
+			('CLIMB_LEVEL_GAZ +. ('CLIMB_GAZ_OF_CLIMB *. 'desired_climb)) ;
+    		'climb_sum_err := 'climb_sum_err +. 'err ;
+		(If Gt ('climb_sum_err, 'MAX_CLIMB_SUM_ERR)
+		Then 'climb_sum_err := 'MAX_CLIMB_SUM_ERR) ;
+		(If Lt ('climb_sum_err, 'MAX_CLIMB_SUM_ERR)
+		Then 'climb_sum_err := 0 -. 'MAX_CLIMB_SUM_ERR) ;
+		Local '__tmp_1 ;
+		'__tmp_1 := 'fgaz *. 'MAX_PPRZ ;
+		Call 'TRIM_UPPRZ ('__tmp_1) ;
+    		'desired_gaz := '__res_TRIM_UPPRZ ;
+    		'desired_pitch := 'nav_pitch +. 'pitch_of_vz
+	)
+}
+
+'TRIM_UPPRZ ('__tmp_1)
+{
+	'to_complete := 1
+} .
+
+endm)
+
+(red myFuns .)

@@ -1,0 +1,100 @@
+load wfe.maude
+
+***
+*** EXAMPLE 12
+***
+
+(mod EXAMPLE is
+ pr EVALUATION-WHILE .
+
+ op myFuns : -> FunSet .
+ eq myFuns = 'Main (nv)
+{
+  Call 'stabilisation_task ('empty)
+}
+
+'stabilisation_task ('empty)
+{
+	Call 'ir_update ('empty) ;
+	Call 'estimator_update_state_infrared ('empty) ;
+	Call 'roll_pitch_pid_run ('empty) ;
+	Call 'update_arr ('to_fbw.channels, 'RADIO_THROTTLE, 'desired_gaz) ;
+	Call 'update_arr ('to_fbw.channels, 'RADIO_ROLL, 'desired_aileron) ;
+	Call 'update_arr ('to_fbw.channels, 'RADIO_PITCH, 'desired_elevator) ;
+	Local '__tmp_1_ ;
+***	'__tmp_1_ := 'MAX_PPRZ /. 75 *. -'estimator_phi ;
+	'__tmp_1_ := 'MAX_PPRZ *. 'estimator_phi ;
+	Call 'TRIM_PPRZ ('__tmp_1_) ;
+	Call 'update_arr ('to_fbw.channels, 'RADIO_GAIN1, '__res_TRIM_PPRZ)
+}
+
+'ir_update ('empty)
+{
+	Local 'simul_ir_roll ;
+	Local 'simul_ir_pitch ;
+	'ir_roll := 'simul_ir_roll -. 'ir_roll_neutral ;
+	'ir_pitch := 'simul_ir_pitch -. 'ir_pitch_neutral
+}
+
+'estimator_update_state_infrared ('empty)
+{
+	Local 'rad_of_ir ;
+	(If Equal ('ir_estim_mode, 'IR_ESTIM_MODE_ON) And
+		Equal ('EstimatorGainIsCorrect, 1)
+	Then 'rad_of_ir := 'estimator_rad_of_ir
+	Else 'rad_of_ir := 'ir_rad_of_ir) ;
+	'estimator_phi := 'rad_of_ir *. 'ir_roll ;
+	'estimator_theta := 'rad_of_ir *. 'ir_pitch
+}
+
+'roll_pitch_pid_run ('empty)
+{
+	Local 'err ;
+	'err := 'estimator_phi -. 'desired_roll ;
+	Local '__tmp_1_ ;
+	'__tmp_1_ := 'roll_pgain *. 'err ;
+	Call 'TRIM_PPRZ ('__tmp_1_) ;
+	'desired_aileron := '__res_TRIM_PPRZ ;
+	(If Lt ('pitch_of_roll, 0)
+	Then 'pitch_of_roll := 0) ;
+	Call 'fabs ('estimator_phi) ;
+	'err := 0 -. (('estimator_theta -. 'desired_pitch) -.
+		('pitch_of_roll *. '__res_fabs)) ;
+	'__tmp_1_ := 'pitch_pgain *. 'err ;
+	Call 'TRIM_PPRZ ('__tmp_1_) ;
+	'desired_elevator := '__res_TRIM_PPRZ
+}
+
+'TRIM_PPRZ ('pprz)
+{
+	If Lt ('pprz, 'MIN_PPRZ)
+	Then '__res_TRIM_PPRZ := 'MIN_PPRZ
+	Else
+	(
+		If Gt ('pprz, 'MAX_PPRZ)
+		Then '__res_TRIM_PPRZ := 'MAX_PPRZ
+		Else '__res_TRIM_PPRZ := 'pprz
+	)
+}
+
+'fabs ('val)
+{
+	If Gt ('val, 0)
+	Then '__res_fabs := 'val
+	Else '__res_fabs := 0 -. 'val
+}
+
+'lookup_arr ('a, 'idx)
+{
+	'__res_lookup_arr := 'a +. 'idx
+}
+
+'update_arr ('a, 'idx, 'val)
+{
+	Call 'lookup_arr ('a, 'idx) ;
+	'__res_update_arr := 'val
+} .
+
+endm)
+
+(red myFuns .)

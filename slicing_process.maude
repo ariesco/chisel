@@ -2,7 +2,7 @@ fmod SIDE-EFFECTS-ANALYSIS is
   pr SEMANTIC-INFERENCE .
   pr META-LEVEL .
 
-  vars HTR HTR' HTR'' : HypernodeTraversalResult .
+  vars HTR HTR' HTR'' : HypertreeTraversalResult .
   vars QS QS' QS1 QS2 Orange : QidSet .
   vars SET SET' : SideEffectsTuple .
   vars TL TL' TL'' TL3 : TermList .
@@ -225,7 +225,7 @@ as second argument unifies with any of the terms in the termlist:
 \end{verbatim}
 }
 
-We define a new sort \texttt{HypernodeTraversalResult} that will be used to return
+We define a new sort \texttt{HypertreeTraversalResult} that will be used to return
 the result obtained when traversing a hypernode. It is composed of a pair of
 \texttt{QidSet} standing for the labels in the olive set and the orange set after
 the traversal, and
@@ -237,14 +237,14 @@ a new label is processed:
 \begin{verbatim}
 %)
 
-  sort HypernodeTraversalResult .
-  op <_,_,_> : QidSet QidSet Bool -> HypernodeTraversalResult [ctor] .
+  sort HypertreeTraversalResult .
+  op <_,_,_> : QidSet QidSet Bool -> HypertreeTraversalResult [ctor] .
 
 ***(%
 \end{verbatim}
 }
 
-The function \texttt{traverseHypernode} receives as arguments:
+The function \texttt{traverseHypertree} receives as arguments:
 \begin{itemize}
 \item
 The module where the slicing process takes place.
@@ -269,15 +269,15 @@ The current result of the hypernode, including the nodes in the olive and orange
 \begin{verbatim}
 %)
 
-  op traverseHypernode : Module QidSet TermList SideEffectsTuple HypernodeTraversalResult
-                         -> HypernodeTraversalResult .
-  eq traverseHypernode(M, none, TL, SET, HTR) = HTR .
-  ceq traverseHypernode(M, Q ; QS, TL, SET, HTR) = traverseHypernode(M, QS, TL, SET, HTR')
+  op traverseHypertree : Module QidSet TermList SideEffectsTuple HypertreeTraversalResult
+                         -> HypertreeTraversalResult .
+  eq traverseHypertree(M, none, TL, SET, HTR) = HTR .
+  ceq traverseHypertree(M, Q ; QS, TL, SET, HTR) = traverseHypertree(M, QS, TL, SET, HTR')
    if Q in SET /\
       HTR' := add2orange(Q, HTR) .
-  ceq traverseHypernode(M, Q ; QS, TL, SET, HTR) = traverseHypernode(M, QS, TL, SET, HTR)
+  ceq traverseHypertree(M, Q ; QS, TL, SET, HTR) = traverseHypertree(M, QS, TL, SET, HTR)
    if traversed?(Q, HTR) .
-  ceq traverseHypernode(M, Q ; QS, TL, SET, HTR) =
+  ceq traverseHypertree(M, Q ; QS, TL, SET, HTR) =
                                 if allOrange?(HTR') and not emptyHypernode(M, COND, (T, TL))
                                 then add2orange(Q, HTR')
                                 else add2olive(Q, HTR')
@@ -288,8 +288,8 @@ The current result of the hypernode, including the nodes in the olive and orange
       T := getLHS(M, Q) /\
       HTR' := traverseCond(M, COND, (T, TL), SET, setAllOrangeVar(true, HTR)) .
 
-  op traverseCond : Module Condition TermList SideEffectsTuple HypernodeTraversalResult
-                    -> HypernodeTraversalResult .
+  op traverseCond : Module Condition TermList SideEffectsTuple HypertreeTraversalResult
+                    -> HypertreeTraversalResult .
   eq traverseCond(M, nil, TL, SET, HTR) = setAllOrangeVar(false, HTR) .
   eq traverseCond(M, T = T' /\ COND, TL, SET, HTR) = traverseCond(M, COND, TL, SET, HTR) .
   eq traverseCond(M, T := T' /\ COND, TL, SET, HTR) = traverseCond(M, COND, TL, SET, HTR) .
@@ -297,7 +297,7 @@ The current result of the hypernode, including the nodes in the olive and orange
   ceq traverseCond(M, T => T' /\ COND, TL, SET, HTR) = combineHypernodes(HTR', HTR'')
    if TV := freshTerm(T) /\
       QS := getRulesUnifying(M, TV, getRls(M), TL) /\
-      HTR' := traverseHypernode(M, QS, TL, SET, HTR) /\
+      HTR' := traverseHypertree(M, QS, TL, SET, HTR) /\
       HTR'' := traverseCond(M, COND, TL, SET, setAllOrangeVar(true, HTR')) .
 
   op emptyHypernode : Module Condition TermList -> Bool .
@@ -312,27 +312,27 @@ The current result of the hypernode, including the nodes in the olive and orange
    if TV := freshTerm(T) /\
       QS := getRulesUnifying(M, TV, getRls(M), TL) .
 
-  op olive? : Qid HypernodeTraversalResult -> Bool .
+  op olive? : Qid HypertreeTraversalResult -> Bool .
   eq olive?(Q, < Q ; QS, QS', B >) = true .
   eq olive?(Q, HTR) = false [owise] .
 
-  op getOlive : HypernodeTraversalResult -> QidSet .
+  op getOlive : HypertreeTraversalResult -> QidSet .
   eq getOlive(< QS, QS', B >) = QS .
 
-  op getOrange : HypernodeTraversalResult -> QidSet .
+  op getOrange : HypertreeTraversalResult -> QidSet .
   eq getOrange(< QS, QS', B >) = QS' .
 
-  op orange? : Qid HypernodeTraversalResult -> Bool .
+  op orange? : Qid HypertreeTraversalResult -> Bool .
   eq orange?(Q, < QS, Q ; QS', B >) = true .
   eq orange?(Q, HTR) = false [owise] .
 
-  op add2olive : Qid HypernodeTraversalResult -> HypernodeTraversalResult .
+  op add2olive : Qid HypertreeTraversalResult -> HypertreeTraversalResult .
   eq add2olive(Q, < QS, QS', B >) = < Q ; QS, QS', false > .
 
-  op add2orange : Qid HypernodeTraversalResult -> HypernodeTraversalResult .
+  op add2orange : Qid HypertreeTraversalResult -> HypertreeTraversalResult .
   eq add2orange(Q, < QS, QS', B >) = < QS, Q ; QS', B > .
 
-  op setAllOrangeVar : Bool HypernodeTraversalResult -> HypernodeTraversalResult .
+  op setAllOrangeVar : Bool HypertreeTraversalResult -> HypertreeTraversalResult .
   eq setAllOrangeVar(B, < QS, QS', B' >) = < QS, QS', B > .
 
 ***(%
@@ -347,8 +347,8 @@ all the nodes in the hypernode are orange:
 \begin{verbatim}
 %)
 
-  op combineHypernodes : HypernodeTraversalResult HypernodeTraversalResult
-                         -> HypernodeTraversalResult .
+  op combineHypernodes : HypertreeTraversalResult HypertreeTraversalResult
+                         -> HypertreeTraversalResult .
   eq combineHypernodes(< QS, QS', B >, < QS1, QS2, B' >) =
                                                 < QS ; QS1, QS' ; QS2, B or B' > .
 
@@ -363,7 +363,7 @@ contained in the olive or orange sets:
 \begin{verbatim}
 %)
 
-  op traversed? : Qid HypernodeTraversalResult -> Bool .
+  op traversed? : Qid HypertreeTraversalResult -> Bool .
   eq traversed?(Q, HTR) = olive?(Q, HTR) or-else orange?(Q, HTR) .
 
 ***(%
@@ -378,7 +378,7 @@ which indicates whether all the nodes of the current hypernode are orange:
 %)
 
 
-  op allOrange? : HypernodeTraversalResult -> Bool .
+  op allOrange? : HypertreeTraversalResult -> Bool .
   eq allOrange?(< QS, QS', B >) = B .
 
   op getCondition : Module Qid ~> Condition .
@@ -415,7 +415,7 @@ fmod INTRA-PROCEDURAL-SLICING is
   pr SIDE-EFFECTS-ANALYSIS .
   pr CONVERSION .
 
-  vars HTR HTR' HTR'' : HypernodeTraversalResult .
+  vars HTR HTR' HTR'' : HypertreeTraversalResult .
   vars QS QS' QS1 QS2 Orange : QidSet .
   vars SET SET' : SideEffectsTuple .
   vars TL TL' TL'' TL3 : TermList .
@@ -449,7 +449,7 @@ fmod INTRA-PROCEDURAL-SLICING is
   op sr : SideEffectsTuple -> SlicingResult . *** For testing purposes
   op hypernode : QidSet -> SlicingResult . *** For testing purposes
   op term : Term -> SlicingResult . *** For testing purposes
-  op htr : HypernodeTraversalResult TermList -> SlicingResult . *** For testing purposes
+  op htr : HypertreeTraversalResult TermList -> SlicingResult . *** For testing purposes
   op ds : DirectionSet -> SlicingResult . *** For testing purposes
   op sliRes : QidSet TermList DirectionSet -> SlicingResult [ctor] .
 
@@ -494,7 +494,7 @@ and the set of sorts involving side effects. It returns
       TN := getTerm(metaReduce(M, T)) /\
       TV := createVarTerm(M, TN) /\
       QS := getRulesUnifying(M, TV, getRls(M), empty) /\
-      HTR := traverseHypernode(M, QS, TV, SET, < none, none, true >) /\
+      HTR := traverseHypertree(M, QS, TV, SET, < none, none, true >) /\
       Orange := getOrange(HTR) /\
       S := firstSort(M, TN) /\
       DS := getDirectionRules(M, S, SS) /\
@@ -699,7 +699,7 @@ fmod INTER-PROCEDURAL-SLICING is
  *** CO: Call operator
  vars CO Q Q' : Qid .
  vars QS Orange CUR : QidSet .
- vars HTR : HypernodeTraversalResult .
+ vars HTR : HypertreeTraversalResult .
  vars Ty Ty' : Type .
  var  TyL : TypeList .
  var  N : Nat .
@@ -737,7 +737,7 @@ fmod INTER-PROCEDURAL-SLICING is
       TV := createVarSort(M, OS) /\
       CO := getCallOp(M, CUR) /\
       QS := getRulesUnifying(M, TV, getRls(M), empty) /\
-      HTR := traverseHypernode(M, QS, TV, SET, < none, none, true >) /\
+      HTR := traverseHypertree(M, QS, TV, SET, < none, none, true >) /\
       Orange := getOrange(HTR) /\
       ST := createTable(DEFS, SV) /\
       DS := getDirectionRules(M, typeFromDefs(M, DEFS), SS) /\

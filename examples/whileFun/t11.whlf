@@ -1,0 +1,40 @@
+load wfe.maude
+
+***
+*** EXAMPLE 14
+***
+
+(mod EXAMPLE is
+ pr EVALUATION-WHILE .
+
+ op myFuns : -> FunSet .
+ eq myFuns = 'Main (nv)
+{
+  Call 'altitude_control_task ('empty)
+}
+
+'altitude_control_task ('empty)
+{
+	If (Equal ('pprz_mode, 'PPRZ_MODE_AUTO2) Or
+		(Equal ('pprz_mode, 'PPRZ_MODE_HOME)))
+	Then
+	(
+		If Equal ('vertical_mode, 'VERTICAL_MODE_AUTO_ALT)
+		Then Call 'altitude_pid_run ('empty)
+	)
+}
+
+'altitude_pid_run ('empty)
+{
+	Local 'err ;
+	'err := 'estimator_z -. 'desired_altitude ;
+	'desired_climb := 'pre_climb +. ('altitude_pgain *. 'err) ;
+	(If Lt ('desired_climb, 'CLIMB_MAX_m)
+	Then 'desired_climb := 'CLIMB_MAX_m) ;
+	If Gt ('desired_climb, 'CLIMB_MAX)
+	Then 'desired_climb := 'CLIMB_MAX
+} .
+
+endm)
+
+(red myFuns .)

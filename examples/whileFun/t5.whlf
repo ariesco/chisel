@@ -1,0 +1,106 @@
+load wfe.maude
+
+***
+*** EXAMPLE 10
+***
+
+(mod EXAMPLE is
+ pr EVALUATION-WHILE .
+
+ op myFuns : -> FunSet .
+ eq myFuns = 'Main (nv)
+{
+	Call 'check_failsafe_task ('empty)
+}
+
+'check_failsafe_task ('empty)
+{
+	If (Equal ('mode, 'MODE_MANUAL) And Not Equal ('radio_ok, 1)) Or
+		(Equal ('mode, 'MODE_AUTO) And Not Equal ('mega128_ok, 1))
+	Then Call 'servo_set ('failsafe)
+}
+
+'servo_set ('values)
+{
+	Call 'ServoSet ('values)
+}
+
+'ServoSet ('values)
+{
+	Local 'servo_value ;
+	Local '_var_roll ;
+	Call 'SERVO_NEUTRAL ('SERVO_MOTOR_LEFT) ;
+	Call 'lookup_arr ('values, 'RADIO_GAIN1) ;
+	'servo_value := '__res_SERVO_NEUTRAL +. ((2 *. '__res_lookup_arr) *. 'SERVO_MOTOR_LEFT_TRAVEL) ;
+	Call 'ChopServo ('servo_value) ;
+	Call 'update_arr ('servo_widths, 'SERVO_MOTOR_LEFT, '__res_ChopServo) ;
+	Call 'SERVO_NEUTRAL ('SERVO_MOTOR_RIGHT) ;
+	Call 'lookup_arr ('values, 'RADIO_THROTTLE) ;
+	'servo_value := '__res_SERVO_NEUTRAL +. ((2 *. '__res_lookup_arr) *. 'SERVO_MOTOR_RIGHT_TRAVEL) ;
+	Call 'ChopServo ('servo_value) ;
+	Call 'update_arr ('servo_widths, 'SERVO_MOTOR_RIGHT, '__res_ChopServo) ;
+	Call 'SERVO_NEUTRAL ('SERVO_ELEVATOR) ;
+	Call 'lookup_arr ('values, 'RADIO_PITCH) ;
+	'servo_value := '__res_SERVO_NEUTRAL +. ('__res_lookup_arr *. 'SERVO_ELEVATOR_TRAVEL) ;
+	Call 'ChopServo ('servo_value) ;
+	Call 'update_arr ('servo_widths, 'SERVO_ELEVATOR, '__res_ChopServo) ;
+	Call 'lookup_arr ('values, 'RADIO_ROLL) ;
+	'_var_roll := '__res_lookup_arr ;
+	Local '__tmp_1 ;
+	(If Gt ('_var_roll, 0)
+	Then '__tmp_1 := 1
+	Else '__tmp_1 := 'AILERON_DIFF) ;
+	Call 'SERVO_NEUTRAL ('SERVO_AILERON_LEFT) ;
+	'servo_value := '__res_SERVO_NEUTRAL +.
+			(('__tmp_1 *. '_var_roll) *. 'SERVO_AILERON_LEFT_TRAVEL) ;
+	Call 'ChopServo ('servo_value) ;
+	Call 'update_arr ('servo_widths, 'SERVO_AILERON_LEFT, '__res_ChopServo) ;
+	(If Gt ('_var_roll, 0)
+	Then '__tmp_1 := 'AILERON_DIFF
+	Else '__tmp_1 := 1) ;
+	Call 'SERVO_NEUTRAL ('SERVO_AILERON_RIGHT) ;
+	'servo_value := '__res_SERVO_NEUTRAL +. (('__tmp_1 *. '_var_roll) *. 'SERVO_AILERON_RIGHT_TRAVEL) ;
+	Call 'ChopServo ('servo_value) ;
+	Call 'update_arr ('servo_widths, 'SERVO_AILERON_RIGHT, '__res_ChopServo) ;
+	Call 'SERVO_NEUTRAL ('SERVO_RUDDER) ;
+	Local '__tmp_2 ;
+	Call 'lookup_arr ('values, 'RADIO_ROLL) ;
+	'__tmp_2 := '__res_lookup_arr ;
+	Call 'lookup_arr ('values, 'RADIO_YAW) ;
+	'servo_value := '__res_SERVO_NEUTRAL +.
+			('__res_lookup_arr +. (('__tmp_2 *. 'COMBI_SWITCH) *. 'SERVO_RUDDER_TRAVEL)) ;
+	Call 'ChopServo ('servo_value) ;
+	Call 'update_arr ('servo_widths, 'SERVO_RUDDER, '__res_ChopServo)
+}
+
+'update_arr ('a, 'idx, 'val)
+{
+	Call 'lookup_arr ('a, 'idx) ;
+	'__res_update_arr := 'val
+}
+
+'lookup_arr ('a, 'idx)
+{
+	'__res_lookup_arr := 'a +. 'idx
+}
+
+'SERVO_NEUTRAL ('value)
+{
+	'__res_SERVO_NEUTRAL := 'value *. 'CLOCK
+}
+
+'ChopServo ('value)
+{
+	If Lt ('value, 'SERVO_MIN)
+	Then '__res_ChopServo := 'SERVO_MIN
+	Else
+	(
+		If Gt ('value, 'SERVO_MAX)
+		Then '__res_ChopServo := 'SERVO_MAX
+		Else '__res_ChopServo := 'value
+	)
+} .
+
+endm)
+
+(red myFuns .)

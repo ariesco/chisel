@@ -1,0 +1,104 @@
+load wfe.maude
+
+***
+*** EXAMPLE 7
+***
+
+(mod EXAMPLE is
+ pr EVALUATION-WHILE .
+
+ op myFuns : -> FunSet .
+ eq myFuns = 'Main (nv)
+{
+	Call 'send_data_to_autopilot_task ('empty)
+}
+
+'send_data_to_autopilot_task ('empty)
+{
+	Call 'SpiIsSelected ('empty) ;
+	If (Not Equal ('__res_SpiIsSelected, 1)) And Equal ('spi_was_interrupted, 1)
+	Then
+	(
+		'spi_was_interrupted := 0 ;
+		Call 'to_autopilot_from_last_radio ('empty) ;
+		Call 'spi_reset ('empty)
+	)
+}
+
+'SpiIsSelected ('empty)
+{
+	Call 'bit_is_set ('SPI_PIN, 'SPI_SS_PIN) ;
+	'__res_SpiIsSelected := '__res_bit_is_set
+}
+
+'bit_is_set ('sfr, 'bit)
+{
+	If (Equal ('sfr, 1)) And (Equal ('bit, 1))
+	Then '__res_bit_is_set := 1
+	Else '__res_bit_is_set := 0
+}
+
+'to_autopilot_from_last_radio ('empty)
+{
+	Local 'i ;
+	'to_mega128.channels_0 := 'last_radio_0 ;
+	'to_mega128.channels_1 := 'last_radio_1 ;
+	'to_mega128.channels_2 := 'last_radio_2 ;
+	'to_mega128.channels_3 := 'last_radio_3 ;
+	'to_mega128.channels_4 := 'last_radio_4 ;
+	'to_mega128.channels_5 := 'last_radio_5 ;
+	'to_mega128.channels_6 := 'last_radio_6 ;
+	'to_mega128.channels_7 := 'last_radio_7 ;
+	'to_mega128.channels_8 := 'last_radio_8 ;
+	(If Equal ('radio_ok, 1)
+	Then
+	(
+		Call 'BV ('STATUS_RADIO_OK) ;
+		'to_mega128.status := '__res_BV
+	)
+	Else 'to_mega128.status := 0) ;
+	(If Equal ('last_radio_contains_avg_channels, 1)
+	Then
+	(
+		Call 'BV ('AVERAGED_CHANNELS_SENT) ;
+***		'to_mega128.status := 'to_mega128.status |. '__res_BV ;
+		'to_mega128.status := 'to_mega128.status +. '__res_BV ;
+		'last_radio_contains_avg_channels := 0
+	)) ;
+	'to_mega128.ppm_cpt := 'last_ppm_cpt ;
+	Local '__tmp_1 ;
+	'__tmp_1 := 'vsupply_adc_buf.sum +. 'AV_NB_SAMPLE ;
+	Call 'VoltageOfAdc ('__tmp_1) ;
+	'to_mega128.vsupply := '__res_VoltageOfAdc *. 10 ;
+	'to_mega128.vsupply := 0
+}
+
+'spi_reset ('empty)
+{
+	'idx_buf := 0 ;
+	'xor_in := 0 ;
+	Call 'lookup_arr ('to_mega128, 'idx_buf) ;
+	'xor_out := '__res_lookup_arr ;
+	'SPDR := 'xor_out ;
+	'mega128_receive_valid := 0
+}
+
+'lookup_arr ('a, 'idx)
+{
+	'__res_lookup_arr := 'a +. 'idx
+}
+
+'BV ('a)
+{
+	'__res_BV := 'a
+}
+
+'VoltageOfAdc ('adc)
+{
+	'__res_VoltageOfAdc := ('VOLTAGE_ADC_A *. 'adc) +. 'VOLTAGE_ADC_B
+}
+
+.
+endm)
+
+(red myFuns .)

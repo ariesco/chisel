@@ -1,0 +1,9 @@
+load fly_by_wire.maude
+
+(mod T1 is
+  pr TEST .
+
+  op t1 : -> InsList .
+  eq t1 = test-ppm-task last-radio-from-ppm LastRadioFromPpm lookup-arr MODE-OF-PPRZ
+          servo-set ServoSet SERVO-NEUTRAL ChopServo update-arr .
+endm)
