@@ -1,0 +1,78 @@
+*************** This is the slice w.r.t. the variable 'servo_value,'values,'var_roll ***************
+
+
+
+The variables to slice 'ChopServo are {'value}
+The variables to slice 'Main are {}
+The variables to slice 'ServoSet are {'SERVO_MOTOR_LEFT, '__res_lookup_arr, 'SERVO_MOTOR_LEFT_TRAVEL, 'SERVO_MOTOR_RIGHT, 'SERVO_MOTOR_RIGHT_TRAVEL, 'SERVO_ELEVATOR,
+    'SERVO_ELEVATOR_TRAVEL, 'SERVO_AILERON_LEFT, '__tmp_1, '_var_roll, 'SERVO_AILERON_LEFT_TRAVEL, 'AILERON_DIFF, 'SERVO_AILERON_RIGHT, 'SERVO_AILERON_RIGHT_TRAVEL,
+    'SERVO_RUDDER, '__tmp_2, 'COMBI_SWITCH, 'SERVO_RUDDER_TRAVEL, 'servo_value, 'values}
+The variables to slice 'check_failsafe_task are {'failsafe}
+The variables to slice 'lookup_arr are {'idx, 'a}
+The variables to slice 'servo_set are {'values}
+The variables to slice 'update_arr are {'idx}
+
+'ChopServo('value){If Lt('value,_)Then
+_
+Else
+  If Gt('value,_)Then
+_
+Else
+    _ := 'value}
+
+'Main(_){_}
+
+'ServoSet('values){Local 'servo_value ;
+Local '_var_roll ;
+Local 'SERVO_MOTOR_LEFT ;
+Local 'SERVO_MOTOR_RIGHT ;
+Local 'SERVO_ELEVATOR ;
+Local 'SERVO_AILERON_LEFT ;
+Local 'SERVO_AILERON_RIGHT ;
+Local 'SERVO_RUDDER ;
+Call 'lookup_arr('values,_);
+'servo_value := 'SERVO_MOTOR_LEFT +.((_ *. '__res_lookup_arr)*. 'SERVO_MOTOR_LEFT_TRAVEL);
+Call 'ChopServo('servo_value);
+Call 'update_arr(_,'SERVO_MOTOR_LEFT,_);
+Call 'lookup_arr('values,_);
+'servo_value := 'SERVO_MOTOR_RIGHT +.((_ *. '__res_lookup_arr)*. 'SERVO_MOTOR_RIGHT_TRAVEL);
+Call 'ChopServo('servo_value);
+Call 'update_arr(_,'SERVO_MOTOR_RIGHT,_);
+Call 'lookup_arr('values,_);
+'servo_value := 'SERVO_ELEVATOR +.('__res_lookup_arr *. 'SERVO_ELEVATOR_TRAVEL);
+Call 'ChopServo('servo_value);
+Call 'update_arr(_,'SERVO_ELEVATOR,_);
+Call 'lookup_arr('values,_);
+'_var_roll := '__res_lookup_arr ;
+Local '__tmp_1 ;
+If Gt('_var_roll,0)Then
+  '__tmp_1 := _
+Else
+  '__tmp_1 := 'AILERON_DIFF ;
+'servo_value := 'SERVO_AILERON_LEFT +.(('__tmp_1 *. '_var_roll)*. 'SERVO_AILERON_LEFT_TRAVEL);
+Call 'ChopServo('servo_value);
+Call 'update_arr(_,'SERVO_AILERON_LEFT,_);
+If Gt('_var_roll,0)Then
+  '__tmp_1 := 'AILERON_DIFF
+Else
+  '__tmp_1 := _ ;
+'servo_value := 'SERVO_AILERON_RIGHT +.(('__tmp_1 *. '_var_roll)*. 'SERVO_AILERON_RIGHT_TRAVEL);
+Call 'ChopServo('servo_value);
+Call 'update_arr(_,'SERVO_AILERON_RIGHT,_);
+Local '__tmp_2 ;
+Call 'lookup_arr('values,_);
+'__tmp_2 := '__res_lookup_arr ;
+Call 'lookup_arr('values,_);
+'servo_value := 'SERVO_RUDDER +.('__res_lookup_arr +.(('__tmp_2 *. 'COMBI_SWITCH)*. 'SERVO_RUDDER_TRAVEL));
+Call 'ChopServo('servo_value);
+Call 'update_arr(_,'SERVO_RUDDER,_)}
+
+'check_failsafe_task(_){If _ Then
+Call 'servo_set('failsafe)}
+
+'lookup_arr('a,'idx){_ := 'a +. 'idx}
+
+'servo_set('values){Call 'ServoSet('values)}
+
+'update_arr(_,'idx,_){Call 'lookup_arr(_,'idx);
+_}

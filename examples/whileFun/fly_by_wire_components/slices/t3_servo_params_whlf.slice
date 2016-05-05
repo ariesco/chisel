@@ -1,0 +1,70 @@
+*************** This is the slice w.r.t. the variable 'SERVO_MOTOR_LEFT,'SERVO_MOTOR_RIGHT,'SERVO_ELEVATOR,'SERVO_AILERON_LEFT,'SERVO_AILERON_RIGHT,'SERVO_RUDDER
+    ***************
+
+
+
+The variables to slice 'ChopServo are {}
+The variables to slice 'Main are {}
+The variables to slice 'ServoSet are {'SERVO_MOTOR_LEFT, 'SERVO_MOTOR_RIGHT, 'SERVO_ELEVATOR, 'SERVO_AILERON_LEFT, 'SERVO_AILERON_RIGHT, 'SERVO_RUDDER}
+The variables to slice 'SpiIsSelected are {}
+The variables to slice 'bit_is_set are {}
+The variables to slice 'check_mega128_values_task are {}
+The variables to slice 'lookup_arr are {'idx}
+The variables to slice 'servo_set are {}
+The variables to slice 'update_arr are {'idx}
+
+'ChopServo(_){_}
+
+'Main(_){_}
+
+'ServoSet(_){_ ;
+_ ;
+Local 'SERVO_MOTOR_LEFT ;
+Local 'SERVO_MOTOR_RIGHT ;
+Local 'SERVO_ELEVATOR ;
+Local 'SERVO_AILERON_LEFT ;
+Local 'SERVO_AILERON_RIGHT ;
+Local 'SERVO_RUDDER ;
+_ ;
+_ := 'SERVO_MOTOR_LEFT +. _ ;
+_ ;
+Call 'update_arr(_,'SERVO_MOTOR_LEFT,_);
+_ ;
+_ := 'SERVO_MOTOR_RIGHT +. _ ;
+_ ;
+Call 'update_arr(_,'SERVO_MOTOR_RIGHT,_);
+_ ;
+_ := 'SERVO_ELEVATOR +. _ ;
+_ ;
+Call 'update_arr(_,'SERVO_ELEVATOR,_);
+_ ;
+_ ;
+_ ;
+_ ;
+_ := 'SERVO_AILERON_LEFT +. _ ;
+_ ;
+Call 'update_arr(_,'SERVO_AILERON_LEFT,_);
+_ ;
+_ := 'SERVO_AILERON_RIGHT +. _ ;
+_ ;
+Call 'update_arr(_,'SERVO_AILERON_RIGHT,_);
+_ ;
+_ ;
+_ ;
+_ ;
+_ := 'SERVO_RUDDER +. _ ;
+_ ;
+Call 'update_arr(_,'SERVO_RUDDER,_)}
+
+'SpiIsSelected(_){_}
+
+'bit_is_set(_){_}
+
+'check_mega128_values_task(_){_}
+
+'lookup_arr(_,'idx){_ := _ +. 'idx}
+
+'servo_set(_){_}
+
+'update_arr(_,'idx,_){Call 'lookup_arr(_,'idx);
+_}

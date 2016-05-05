@@ -98,4 +98,30 @@ load ../wfe.maude
 
 endm)
 
+(set side-effect sorts ESt RWBUF .)
+
+(set context-update rules CallF .)
+
+(islice Statement with defs myFuns wrt '__res_lookup_arr '__res_update_arr .)
+
+eof
+
+(islice Statement with defs myFuns wrt 'radio_ok 'mega128_ok .)
+
+(islice Statement with defs myFuns wrt 'mode 'MODE_AUTO 'MODE_MANUAL .)
+
+(islice Statement with defs myFuns wrt 'servo_value 'values 'var_roll .)
+
+(islice Statement with defs myFuns wrt 'SERVO_MOTOR_LEFT 'SERVO_MOTOR_RIGHT
+                                       'SERVO_ELEVATOR 'SERVO_AILERON_LEFT
+                                       'SERVO_AILERON_RIGHT 'SERVO_RUDDER .)
+
+(islice Statement with defs myFuns wrt 'RADIO_GAIN1 'RADIO_THROTTLE 'RADIO_PITCH
+                                       'RADIO_ROLL 'RADIO_YAW .)
+
+(islice Statement with defs myFuns wrt '__res_SERVO_NATURAL '__res_ChopServo
+                                       '__res_lookup_arr '__res_update_arr .)
+
+(islice Statement with defs myFuns wrt '__res_lookup_arr '__res_update_arr .)
+
 (red myFuns .)

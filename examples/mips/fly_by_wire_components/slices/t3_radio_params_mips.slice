@@ -1,0 +1,504 @@
+The variables obtained by the slicing process are: $f0 $f1 $f2 $f3
+
+_
+_
+_
+_
+jal 'SpiIsSelected
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+jal 'servo_set
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+jal 'bit_is_set
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+j 'bit_is_set_0x4c
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+jal 'ServoSet
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+jal 'SERVO_NEUTRAL
+_
+_
+_
+_
+_
+jal 'lookup_arr
+_
+_
+_
+_
+_
+_
+cvt.d.w $f0,$f1
+_
+_
+_
+_
+_
+_
+_
+_
+_
+mul $f2,$f2,$f0
+_
+_
+_
+_
+trunc.w.d $f3,$f2
+_
+_
+_
+_
+_
+_
+_
+_
+_
+jal 'ChopServo
+_
+_
+_
+_
+_
+_
+_
+_
+_
+jal 'update_arr
+_
+_
+jal 'SERVO_NEUTRAL
+_
+_
+_
+_
+_
+jal 'lookup_arr
+_
+_
+_
+_
+_
+_
+cvt.d.w $f0,$f1
+_
+_
+_
+_
+_
+_
+_
+_
+_
+mul $f2,$f2,$f0
+_
+_
+_
+_
+trunc.w.d $f3,$f2
+_
+_
+_
+_
+_
+_
+_
+_
+_
+jal 'ChopServo
+_
+_
+_
+_
+_
+_
+_
+_
+_
+jal 'update_arr
+_
+_
+jal 'SERVO_NEUTRAL
+_
+_
+_
+_
+_
+jal 'lookup_arr
+_
+_
+_
+_
+_
+cvt.d.w $f0,$f1
+_
+_
+_
+_
+_
+_
+_
+_
+_
+mul $f2,$f2,$f0
+_
+_
+_
+_
+trunc.w.d $f3,$f2
+_
+_
+_
+_
+_
+_
+_
+_
+_
+jal 'ChopServo
+_
+_
+_
+_
+_
+_
+_
+_
+_
+jal 'update_arr
+_
+_
+_
+_
+jal 'lookup_arr
+_
+_
+_
+_
+jal 'SERVO_NEUTRAL
+_
+_
+_
+_
+_
+_
+j 'ServoSet_0x2bc
+_
+_
+_
+_
+_
+cvt.d.w $f0,$f1
+_
+_
+_
+_
+_
+_
+_
+_
+_
+mul $f2,$f2,$f0
+_
+_
+_
+_
+trunc.w.d $f3,$f2
+_
+_
+_
+_
+_
+_
+_
+_
+_
+jal 'ChopServo
+_
+_
+_
+_
+_
+_
+_
+_
+_
+jal 'update_arr
+_
+_
+jal 'SERVO_NEUTRAL
+_
+_
+_
+_
+_
+_
+j 'ServoSet_0x388
+_
+_
+_
+_
+_
+cvt.d.w $f0,$f1
+_
+_
+_
+_
+_
+_
+_
+_
+_
+mul $f2,$f2,$f0
+_
+_
+_
+_
+trunc.w.d $f3,$f2
+_
+_
+_
+_
+_
+_
+_
+_
+_
+jal 'ChopServo
+_
+_
+_
+_
+_
+_
+_
+_
+_
+jal 'update_arr
+_
+_
+jal 'SERVO_NEUTRAL
+_
+_
+_
+_
+_
+jal 'lookup_arr
+_
+_
+_
+_
+_
+_
+jal 'lookup_arr
+_
+_
+_
+_
+_
+_
+_
+_
+_
+cvt.d.w $f0,$f1
+_
+_
+_
+_
+_
+_
+_
+_
+_
+mul $f2,$f2,$f0
+_
+_
+_
+_
+trunc.w.d $f3,$f2
+_
+_
+_
+_
+_
+_
+_
+_
+_
+jal 'ChopServo
+_
+_
+_
+_
+_
+_
+_
+_
+_
+jal 'update_arr
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+j 'ChopServo_0x64
+_
+_
+_
+_
+_
+_
+_
+_
+j 'ChopServo_0x64
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+jal 'lookup_arr
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_

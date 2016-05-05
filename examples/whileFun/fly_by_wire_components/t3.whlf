@@ -123,4 +123,29 @@ load ../wfe.maude
 
 endm)
 
+(set side-effect sorts ESt RWBUF .)
+
+(set context-update rules CallF .)
+
+eof
+
+(islice Statement with defs myFuns wrt 'spi_was_interrupted .)
+
+(islice Statement with defs myFuns wrt 'mega128_receive_valid 'mega128_ok .)
+
+(islice Statement with defs myFuns wrt 'time_since_last_mega128 'mode .)
+
+(islice Statement with defs myFuns wrt 'SERVO_MOTOR_LEFT 'SERVO_MOTOR_RIGHT
+                                       'SERVO_ELEVATOR 'SERVO_AILERON_LEFT
+                                       'SERVO_AILERON_RIGHT 'SERVO_RUDDER .)
+
+(islice Statement with defs myFuns wrt 'RADIO_GAIN1 'RADIO_THROTTLE 'RADIO_PITCH
+                                       'RADIO_ROLL 'RADIO_YAW .)
+
+(islice Statement with defs myFuns wrt '__res_SpiIsSelected '__res_ChopServo
+                                       '__res_SERVO_NEUTRAL '__res_lookup_arr
+                                       '__res_update_arr .)
+
+(islice Statement with defs myFuns wrt '__res_lookup_arr '__res_update_arr .)
+
 (red myFuns .)

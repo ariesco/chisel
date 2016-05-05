@@ -9,6 +9,28 @@ endm)
 
 eof
 
+1. (slice tt5 wrt v0 a0 .)
+
+2. (slice tt5 wrt a0 a1 v0 .)
+
+3. (slice tt5 wrt zero v0 v1 a0 a1 s8 .)
+
+4. (slice tt5 wrt $f0 $f1 $f2 $f3 .)
+
+5. (slice tt5 wrt $f0 $f1 $f2 $f3 .)
+
+6. (slice tt5 wrt a0 a2 a3 .)
+
+7. (slice tt5 wrt a2 a3 .)
+
+	1. { v0, a0 } -> file t5_ok_mips.slice
+	2. { a0, a1, v0 } -> file t5_mode_mips.slice
+	3. { zero, v0, v1, a0, a1, s8 } -> file t5_servo_values_mips.slice
+	4. { $f0, $f1, $f2, $f3 } -> file t5_servo_params_mips.slice
+	5. { $f0, $f1, $f2, $f3 } -> file t5_radio_params_mips.slice
+	6. { a0, a2, a3 } -> file t5_res_mips.slice
+	7. { a2, a3 } -> file t5_arr_mips.slice
+
 'check_failsafe_task addiu sp,sp,-24
 sw ra,20(sp)
 sw s8,16(sp)

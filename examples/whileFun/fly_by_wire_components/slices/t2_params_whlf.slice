@@ -1,0 +1,52 @@
+*************** This is the slice w.r.t. the variable 'STATUS_RADIO_OK,'AVERAGED_CHANNELS_SENT,'AV_NB_SAMPLE,'VOLTAGE_ADC_A,'VOLTAGE_ADC_B ***************
+
+
+
+The variables to slice 'BV are {'a}
+The variables to slice 'Main are {}
+The variables to slice 'SpiIsSelected are {}
+The variables to slice 'VoltageOfAdc are {'VOLTAGE_ADC_A, 'VOLTAGE_ADC_B}
+The variables to slice 'bit_is_set are {}
+The variables to slice 'lookup_arr are {}
+The variables to slice 'send_data_to_autopilot_task are {}
+The variables to slice 'spi_reset are {}
+The variables to slice 'to_autopilot_from_last_radio are {'STATUS_RADIO_OK, 'AVERAGED_CHANNELS_SENT, 'AV_NB_SAMPLE}
+
+'BV('a){_ := 'a}
+
+'Main(_){_}
+
+'SpiIsSelected(_){_}
+
+'VoltageOfAdc(_){_ :=('VOLTAGE_ADC_A *. _)+. 'VOLTAGE_ADC_B}
+
+'bit_is_set(_){_}
+
+'lookup_arr(_){_}
+
+'send_data_to_autopilot_task(_){_}
+
+'spi_reset(_){_}
+
+'to_autopilot_from_last_radio(_){_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+If _ Then
+  Call 'BV('STATUS_RADIO_OK);
+  _
+Else
+_ ;
+If _ Then
+(  Call 'BV('AVERAGED_CHANNELS_SENT);
+  _);
+_ ;
+_ ;
+_ := _ +. 'AV_NB_SAMPLE ;
+_}

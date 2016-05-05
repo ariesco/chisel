@@ -1,0 +1,49 @@
+*************** This is the slice w.r.t. the variable 'to_mega128.status ***************
+
+
+The variables to slice 'BV are {}
+The variables to slice 'Main are {}
+The variables to slice 'SpiIsSelected are {}
+The variables to slice 'VoltageOfAdc are {}
+The variables to slice 'bit_is_set are {}
+The variables to slice 'lookup_arr are {}
+The variables to slice 'send_data_to_autopilot_task are {}
+The variables to slice 'spi_reset are {}
+The variables to slice 'to_autopilot_from_last_radio are {'__res_BV, 'to_mega128.status}
+
+'BV(_){_}
+
+'Main(_){_}
+
+'SpiIsSelected(_){_}
+
+'VoltageOfAdc(_){_}
+
+'bit_is_set(_){_}
+
+'lookup_arr(_){_}
+
+'send_data_to_autopilot_task(_){_}
+
+'spi_reset(_){_}
+
+'to_autopilot_from_last_radio(_){_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+If _ Then
+  _ ;
+    'to_mega128.status := '__res_BV
+Else
+  'to_mega128.status := 0 ;
+If _ Then
+(  _ ;
+      'to_mega128.status := 'to_mega128.status +. '__res_BV ;
+  _);
+_}

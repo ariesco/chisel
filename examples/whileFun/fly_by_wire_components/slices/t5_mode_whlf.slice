@@ -1,0 +1,26 @@
+*************** This is the slice w.r.t. the variable 'mode,'MODE_AUTO,'MODE_MANUAL ***************
+
+
+
+The variables to slice 'ChopServo are {}
+The variables to slice 'Main are {}
+The variables to slice 'ServoSet are {}
+The variables to slice 'check_failsafe_task are {'mode, 'MODE_AUTO, 'MODE_MANUAL}
+The variables to slice 'lookup_arr are {}
+The variables to slice 'servo_set are {}
+The variables to slice 'update_arr are {}
+
+'ChopServo(_){_}
+
+'Main(_){_}
+
+'ServoSet(_){_}
+
+'check_failsafe_task(_){If(Equal('mode,'MODE_MANUAL)And _)Or(Equal('mode,'MODE_AUTO)And _)Then
+_}
+
+'lookup_arr(_){_}
+
+'servo_set(_){_}
+
+'update_arr(_){_}

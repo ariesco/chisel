@@ -1,0 +1,65 @@
+*************** This is the slice w.r.t. the variable '__res_VoltageOfAdc,'__res_BV,'__res_lookup_arr,'__res_bit_is_set,'__res_SpiIsSelected ***************
+
+
+
+The variables to slice 'BV are {'a, '__res_BV}
+The variables to slice 'Main are {}
+The variables to slice 'SpiIsSelected are {'__res_bit_is_set, '__res_SpiIsSelected}
+The variables to slice 'VoltageOfAdc are {'VOLTAGE_ADC_A, 'adc, 'VOLTAGE_ADC_B, '__res_VoltageOfAdc}
+The variables to slice 'bit_is_set are {'__res_bit_is_set}
+The variables to slice 'lookup_arr are {'a, 'idx, '__res_lookup_arr}
+The variables to slice 'send_data_to_autopilot_task are {'__res_SpiIsSelected}
+The variables to slice 'spi_reset are {'__res_lookup_arr}
+The variables to slice 'to_autopilot_from_last_radio are {'__res_VoltageOfAdc, '__res_BV}
+
+'BV('a){'__res_BV := 'a}
+
+'Main(_){_}
+
+'SpiIsSelected(_){_ ;
+'__res_SpiIsSelected := '__res_bit_is_set}
+
+'VoltageOfAdc('adc){'__res_VoltageOfAdc :=('VOLTAGE_ADC_A *. 'adc)+. 'VOLTAGE_ADC_B}
+
+'bit_is_set(_){If _ Then
+  '__res_bit_is_set := _
+Else
+  '__res_bit_is_set := 0}
+
+'lookup_arr('a,'idx){'__res_lookup_arr := 'a +. 'idx}
+
+'send_data_to_autopilot_task(_){_ ;
+If Not Equal('__res_SpiIsSelected,_)And _ Then
+_}
+
+'spi_reset(_){_ ;
+_ ;
+_ ;
+_ := '__res_lookup_arr ;
+_}
+
+'to_autopilot_from_last_radio(_){_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+If _ Then
+  _ ;
+    _ := '__res_BV
+Else
+_ ;
+If _ Then
+(  _ ;
+      _ := _ +. '__res_BV ;
+  _);
+_ ;
+_ ;
+_ ;
+_ ;
+_ := '__res_VoltageOfAdc *. _ ;
+_}

@@ -101,4 +101,30 @@ load ../wfe.maude
 .
 endm)
 
+(set side-effect sorts ESt RWBUF .)
+
+(set context-update rules CallF .)
+
+eof
+
+(islice Statement with defs myFuns wrt 'spi_was_interrupted .)
+
+(islice Statement with defs myFuns wrt 'last_radio_0 'last_radio_1
+                         'last_radio_2 'last_radio_3 'last_radio_4
+                         'last_radio_5 'last_radio_6 'last_radio_7
+                         'last_radio_8 'last_radio_contains_avg_channels .)
+
+(islice Statement with defs myFuns wrt 'to_mega128.status 'to_mega128.vsupply
+                                       'to_mega128.ppm_cpt .)
+
+(islice Statement with defs myFuns wrt 'to_mega128.status .)
+
+(islice Statement with defs myFuns wrt 'STATUS_RADIO_OK 'AVERAGED_CHANNELS_SENT
+                                       'AV_NB_SAMPLE 'VOLTAGE_ADC_A 'VOLTAGE_ADC_B .)
+
+(islice Statement with defs myFuns wrt '__res_VoltageOfAdc '__res_BV '__res_lookup_arr
+                    		                 '__res_bit_is_set '__res_SpiIsSelected .)
+
+(islice Statement with defs myFuns wrt '__res_lookup_arr .)
+
 (red myFuns .)

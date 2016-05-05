@@ -1,0 +1,38 @@
+*************** This is the slice w.r.t. the variable '4017_NB_CHANNELS ***************
+
+
+The variables to slice 'BV are {}
+The variables to slice 'Main are {}
+The variables to slice 'SFR_BYTE are {}
+The variables to slice 'lookup_arr are {}
+The variables to slice 'sbi are {}
+The variables to slice 'servo_transmit are {'4017_NB_CHANNELS}
+The variables to slice 'shiftr_bitwise are {}
+The variables to slice 'uart_transmit are {}
+The variables to slice 'update_arr are {}
+
+'BV(_){_}
+
+'Main(_){_}
+
+'SFR_BYTE(_){_}
+
+'lookup_arr(_){_}
+
+'sbi(_){_}
+
+'servo_transmit(_){_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+While Lt(_,'4017_NB_CHANNELS)Do
+_
+;
+_}
+
+'shiftr_bitwise(_){_}
+
+'uart_transmit(_){_}
+
+'update_arr(_){_}

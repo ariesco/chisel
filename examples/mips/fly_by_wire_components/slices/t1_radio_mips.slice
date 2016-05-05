@@ -1,0 +1,535 @@
+The variables obtained by the slicing process are: v0 zero s8 sp gp ra a0 a2 v1 $f1 $f0 $f2 $f3 a1 a3
+
+_ addiu sp,sp,_
+sw ra,_(sp)
+sw s8,_(sp)
+move s8,sp
+_
+andi v0,v0,_
+beqz v0,_
+_
+sb zero,_(gp)
+_
+addiu v0,v0,_
+andi v0,v0,_
+sb v0,_(gp)
+_
+sb v0,_(gp)
+sb zero,_(gp)
+sh zero,_(gp)
+jal 'last_radio_from_ppm
+_
+_
+beqz v0,_
+_
+_
+addiu a0,v0,_
+_
+_
+jal 'lookup_arr
+_
+_
+sh v0,_(s8)
+_
+move a0,v0
+jal 'MODE_OF_PPRZ
+_
+sb v0,_(gp)
+_ _
+bnez v0,_
+_
+_
+addiu a0,v0,_
+jal 'servo_set
+_
+j 'test_ppm_task_0xd0
+_
+_ _
+bnez v0,_
+_
+_
+beqz v0,_
+_
+_
+sb v0,_(gp)
+_ _
+sltiu v0,v0,_
+bnez v0,_
+_
+sb zero,_(gp)
+_ _
+sltiu v0,v0,_
+bnez v0,_
+_
+_
+sb v0,_(gp)
+_ move sp,s8
+_
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw ra,_(sp)
+sw s8,_(sp)
+move s8,sp
+jal 'LastRadioFromPpm
+_
+move sp,s8
+_
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw s8,_(sp)
+move s8,sp
+move sp,s8
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw s8,_(sp)
+move s8,sp
+sw a0,_(s8)
+move v1,a1
+move v0,a2
+sb v1,_(s8)
+sb v0,_(s8)
+_
+_
+mul v0,v1,v0
+_
+addu v0,v1,v0
+sw v0,_(s8)
+_
+move sp,s8
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw s8,_(sp)
+move s8,sp
+sw a0,_(s8)
+_
+slti v0,v0,_
+beqz v0,_
+_
+sb zero,_(s8)
+j 'MODE_OF_PPRZ_0x34
+_
+_ _
+sb v0,_(s8)
+_ _
+move sp,s8
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw ra,_(sp)
+sw s8,_(sp)
+move s8,sp
+sw a0,_(s8)
+_
+jal 'ServoSet
+_
+move sp,s8
+_
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw ra,_(sp)
+sw s8,_(sp)
+move s8,sp
+sw a0,_(s8)
+_
+jal 'SERVO_NEUTRAL
+_
+sh v0,_(s8)
+addiu a0,s8,_
+_
+_
+jal 'lookup_arr
+_
+_
+sh v0,_(s8)
+_
+sll v0,v0,_
+mtc1 v0,$f1
+cvt.d.w $f0,$f1
+mfc1 a0,$f0
+mfc1 a1,$f1
+_
+_
+_
+mtc1 a0,$f2
+mtc1 a1,$f3
+mtc1 v0,$f0
+mtc1 v1,$f1
+mul $f2,$f2,$f0
+mfc1 v0,$f2
+mfc1 v1,$f3
+mtc1 v0,$f2
+mtc1 v1,$f3
+trunc.w.d $f3,$f2
+mfc1 v0,$f3
+sll v0,v0,_
+sra v0,v0,_
+andi v1,v0,_
+_
+addu v0,v1,v0
+sh v0,_(s8)
+_
+move a0,v0
+jal 'ChopServo
+_
+sh v0,_(s8)
+_
+andi v0,v0,_
+addiu v1,s8,_
+move a0,v1
+_
+_
+move a3,v0
+jal 'update_arr
+_
+_
+jal 'SERVO_NEUTRAL
+_
+sh v0,_(s8)
+addiu a0,s8,_
+move a1,zero
+_
+jal 'lookup_arr
+_
+_
+sh v0,_(s8)
+_
+sll v0,v0,_
+mtc1 v0,$f1
+cvt.d.w $f0,$f1
+mfc1 a0,$f0
+mfc1 a1,$f1
+_
+_
+_
+mtc1 a0,$f2
+mtc1 a1,$f3
+mtc1 v0,$f0
+mtc1 v1,$f1
+mul $f2,$f2,$f0
+mfc1 v0,$f2
+mfc1 v1,$f3
+mtc1 v0,$f2
+mtc1 v1,$f3
+trunc.w.d $f3,$f2
+mfc1 v0,$f3
+sll v0,v0,_
+sra v0,v0,_
+andi v1,v0,_
+_
+addu v0,v1,v0
+sh v0,_(s8)
+_
+move a0,v0
+jal 'ChopServo
+_
+sh v0,_(s8)
+_
+andi v0,v0,_
+addiu v1,s8,_
+move a0,v1
+_
+_
+move a3,v0
+jal 'update_arr
+_
+_
+jal 'SERVO_NEUTRAL
+_
+sh v0,_(s8)
+addiu a0,s8,_
+_
+_
+jal 'lookup_arr
+_
+_
+sh v0,_(s8)
+_
+mtc1 v0,$f1
+cvt.d.w $f0,$f1
+mfc1 a0,$f0
+mfc1 a1,$f1
+_
+_
+_
+mtc1 a0,$f2
+mtc1 a1,$f3
+mtc1 v0,$f0
+mtc1 v1,$f1
+mul $f2,$f2,$f0
+mfc1 v0,$f2
+mfc1 v1,$f3
+mtc1 v0,$f2
+mtc1 v1,$f3
+trunc.w.d $f3,$f2
+mfc1 v0,$f3
+sll v0,v0,_
+sra v0,v0,_
+andi v1,v0,_
+_
+addu v0,v1,v0
+sh v0,_(s8)
+_
+move a0,v0
+jal 'ChopServo
+_
+sh v0,_(s8)
+_
+andi v0,v0,_
+addiu v1,s8,_
+move a0,v1
+_
+_
+move a3,v0
+jal 'update_arr
+_
+addiu a0,s8,_
+_
+_
+jal 'lookup_arr
+_
+_
+sh v0,_(s8)
+move a0,zero
+jal 'SERVO_NEUTRAL
+_
+sh v0,_(s8)
+_
+bgtz v0,_
+_
+_
+j 'ServoSet_0x2bc
+_
+_ _
+_ _
+mul v0,v0,v1
+mtc1 v0,$f1
+cvt.d.w $f0,$f1
+mfc1 a0,$f0
+mfc1 a1,$f1
+_
+_
+_
+mtc1 a0,$f2
+mtc1 a1,$f3
+mtc1 v0,$f0
+mtc1 v1,$f1
+mul $f2,$f2,$f0
+mfc1 v0,$f2
+mfc1 v1,$f3
+mtc1 v0,$f2
+mtc1 v1,$f3
+trunc.w.d $f3,$f2
+mfc1 v0,$f3
+sll v0,v0,_
+sra v0,v0,_
+andi v1,v0,_
+_
+addu v0,v1,v0
+sh v0,_(s8)
+_
+move a0,v0
+jal 'ChopServo
+_
+sh v0,_(s8)
+_
+andi v0,v0,_
+addiu v1,s8,_
+move a0,v1
+move a1,zero
+_
+move a3,v0
+jal 'update_arr
+_
+_
+jal 'SERVO_NEUTRAL
+_
+sh v0,_(s8)
+_
+blez v0,_
+_
+_
+j 'ServoSet_0x388
+_
+_ _
+_ _
+mul v0,v0,v1
+mtc1 v0,$f1
+cvt.d.w $f0,$f1
+mfc1 a0,$f0
+mfc1 a1,$f1
+_
+_
+_
+mtc1 a0,$f2
+mtc1 a1,$f3
+mtc1 v0,$f0
+mtc1 v1,$f1
+mul $f2,$f2,$f0
+mfc1 v0,$f2
+mfc1 v1,$f3
+mtc1 v0,$f2
+mtc1 v1,$f3
+trunc.w.d $f3,$f2
+mfc1 v0,$f3
+sll v0,v0,_
+sra v0,v0,_
+andi v1,v0,_
+_
+addu v0,v1,v0
+sh v0,_(s8)
+_
+move a0,v0
+jal 'ChopServo
+_
+sh v0,_(s8)
+_
+andi v0,v0,_
+addiu v1,s8,_
+move a0,v1
+_
+_
+move a3,v0
+jal 'update_arr
+_
+_
+jal 'SERVO_NEUTRAL
+_
+sh v0,_(s8)
+addiu a0,s8,_
+_
+_
+jal 'lookup_arr
+_
+_
+sh v0,_(s8)
+addiu a0,s8,_
+_
+_
+jal 'lookup_arr
+_
+_
+sh v0,_(s8)
+_
+_
+_
+mul v0,a0,v0
+addu v0,v1,v0
+mtc1 v0,$f1
+cvt.d.w $f0,$f1
+mfc1 a0,$f0
+mfc1 a1,$f1
+_
+_
+_
+mtc1 a0,$f2
+mtc1 a1,$f3
+mtc1 v0,$f0
+mtc1 v1,$f1
+mul $f2,$f2,$f0
+mfc1 v0,$f2
+mfc1 v1,$f3
+mtc1 v0,$f2
+mtc1 v1,$f3
+trunc.w.d $f3,$f2
+mfc1 v0,$f3
+sll v0,v0,_
+sra v0,v0,_
+andi v1,v0,_
+_
+addu v0,v1,v0
+sh v0,_(s8)
+_
+move a0,v0
+jal 'ChopServo
+_
+sh v0,_(s8)
+_
+andi v0,v0,_
+addiu v1,s8,_
+move a0,v1
+_
+_
+move a3,v0
+jal 'update_arr
+_
+move sp,s8
+_
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw s8,_(sp)
+move s8,sp
+move v0,a0
+sh v0,_(s8)
+_
+_
+sltu v0,v1,v0
+beqz v0,_
+_
+_
+sb v0,_(s8)
+j 'ChopServo_0x64
+_
+_ _
+_
+sltu v0,v0,v1
+beqz v0,_
+_
+_
+sb v0,_(s8)
+j 'ChopServo_0x64
+_
+_ _
+sb v0,_(s8)
+_ _
+move sp,s8
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw ra,_(sp)
+sw s8,_(sp)
+move s8,sp
+sw a0,_(s8)
+move a0,a1
+move v1,a2
+move v0,a3
+sb a0,_(s8)
+sb v1,_(s8)
+sb v0,_(s8)
+_
+_
+_
+move a1,v1
+move a2,v0
+jal 'lookup_arr
+_
+sw v0,_(s8)
+_
+andi v0,v0,_
+move sp,s8
+_
+_
+addiu sp,sp,_
+jr ra
+_

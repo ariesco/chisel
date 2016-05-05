@@ -10,6 +10,28 @@ endm)
 
 eof
 
+1. (slice tt2 wrt v0 zero s8 .)
+
+2. (slice tt2 wrt v0 v1 s8 .)
+
+3. (slice tt2 wrt v0 v1 a0 a1 .)
+
+4. (slice tt2 wrt v0 v1 .)
+
+5. (slice tt2 wrt $f0 $f1 $f2 $f3 .)
+
+6. (slice tt2 wrt a0 a1 a2 .)
+
+7. (slice tt2 wrt a1 a2 .)
+
+	1. { v0, zero, s8 } -> file t2_spi_interr_mips.slice
+	2. { v0, v1, s8 } -> file t2_last_radio_mips.slice
+	3. { v0, v1, a0, a1 } -> file t2_to_mega128_mips.slice
+	4. { v0, v1 } -> file t2_to_mega128_status_mips.slice
+	5. { $f0, $f1, $f2, $f3 } -> file t2_params_mips.slice
+	6. { a0, a1, a2 } -> file t2_res_mips.slice
+	7. { a1, a2 } -> file t2_arr_mips.slice
+
 
 'send_data_to_autopilot_task addiu sp,sp,-24
 sw ra,20(sp)

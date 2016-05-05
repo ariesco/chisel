@@ -1,0 +1,59 @@
+*************** This is the slice w.r.t. the variable 'servo,'data ***************
+
+
+
+The variables to slice 'BV are {}
+The variables to slice 'Main are {}
+The variables to slice 'SFR_BYTE are {}
+The variables to slice 'lookup_arr are {'idx}
+The variables to slice 'sbi are {}
+The variables to slice 'servo_transmit are {'__res_shiftr_bitwise, '"\n", '__tmp_4, '__tmp_2, '__tmp_1, 'servo}
+The variables to slice 'shiftr_bitwise are {}
+The variables to slice 'uart_transmit are {'data}
+The variables to slice 'update_arr are {'val}
+
+'BV(_){_}
+
+'Main(_){_}
+
+'SFR_BYTE(_){_}
+
+'lookup_arr(_,'idx){_ := _ +. 'idx}
+
+'sbi(_){_}
+
+'servo_transmit(_){Local 'servo ;
+Local '__tmp_1 ;
+'__tmp_1 := 0 ;
+Call 'uart_transmit('__tmp_1);
+Call 'uart_transmit('__tmp_1);
+While Lt('servo,_)Do
+(  Call 'lookup_arr(_,'servo);
+    Local '__tmp_2 ;
+    _ ;
+    _ ;
+    _ ;
+      '__tmp_2 := '__res_shiftr_bitwise ;
+    Call 'uart_transmit('__tmp_2);
+      '__tmp_2 := '__tmp_2 +. _ ;
+  Call 'uart_transmit('__tmp_2))
+;
+Local '__tmp_4 ;
+'__tmp_4 := '"\n" ;
+Call 'uart_transmit('__tmp_4)}
+
+'shiftr_bitwise(_){_}
+
+'uart_transmit('data){_ ;
+If _ Then
+  _ ;
+    _ ;
+    _ ;
+    Call 'update_arr(_,_,'data);
+  _
+Else
+(    _ := 'data ;
+  _)}
+
+'update_arr(_,_,'val){_ ;
+_ := 'val}

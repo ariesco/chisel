@@ -1,0 +1,66 @@
+*************** This is the slice w.r.t. the variable 'RADIO_GAIN1,'RADIO_THROTTLE,'RADIO_PITCH,'RADIO_ROLL,'RADIO_YAW ***************
+
+
+
+The variables to slice 'ChopServo are {}
+The variables to slice 'Main are {}
+The variables to slice 'ServoSet are {'RADIO_GAIN1, 'RADIO_THROTTLE, 'RADIO_PITCH, 'RADIO_ROLL, 'RADIO_YAW}
+The variables to slice 'SpiIsSelected are {}
+The variables to slice 'bit_is_set are {}
+The variables to slice 'check_mega128_values_task are {}
+The variables to slice 'lookup_arr are {'idx}
+The variables to slice 'servo_set are {}
+The variables to slice 'update_arr are {}
+
+'ChopServo(_){_}
+
+'Main(_){_}
+
+'ServoSet(_){_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+Call 'lookup_arr(_,'RADIO_GAIN1);
+_ ;
+_ ;
+_ ;
+Call 'lookup_arr(_,'RADIO_THROTTLE);
+_ ;
+_ ;
+_ ;
+Call 'lookup_arr(_,'RADIO_PITCH);
+_ ;
+_ ;
+_ ;
+Call 'lookup_arr(_,'RADIO_ROLL);
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+Call 'lookup_arr(_,'RADIO_ROLL);
+_ ;
+Call 'lookup_arr(_,'RADIO_YAW);
+_}
+
+'SpiIsSelected(_){_}
+
+'bit_is_set(_){_}
+
+'check_mega128_values_task(_){_}
+
+'lookup_arr(_,'idx){_ := _ +. 'idx}
+
+'servo_set(_){_}
+
+'update_arr(_){_}

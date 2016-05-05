@@ -1,0 +1,43 @@
+The variables to slice 'BV are {}
+The variables to slice 'Main are {}
+The variables to slice 'SpiIsSelected are {}
+The variables to slice 'VoltageOfAdc are {}
+The variables to slice 'bit_is_set are {}
+The variables to slice 'lookup_arr are {}
+The variables to slice 'send_data_to_autopilot_task are {}
+The variables to slice 'spi_reset are {}
+The variables to slice 'to_autopilot_from_last_radio are {'last_radio_0, 'last_radio_1, 'last_radio_2, 'last_radio_3, 'last_radio_4, 'last_radio_5, 'last_radio_6,
+    'last_radio_7, 'last_radio_8, 'last_radio_contains_avg_channels}
+
+'BV(_){_}
+
+'Main(_){_}
+
+'SpiIsSelected(_){_}
+
+'VoltageOfAdc(_){_}
+
+'bit_is_set(_){_}
+
+'lookup_arr(_){_}
+
+'send_data_to_autopilot_task(_){_}
+
+'spi_reset(_){_}
+
+'to_autopilot_from_last_radio(_){_ ;
+_ := 'last_radio_0 ;
+_ := 'last_radio_1 ;
+_ := 'last_radio_2 ;
+_ := 'last_radio_3 ;
+_ := 'last_radio_4 ;
+_ := 'last_radio_5 ;
+_ := 'last_radio_6 ;
+_ := 'last_radio_7 ;
+_ := 'last_radio_8 ;
+_ ;
+If Equal('last_radio_contains_avg_channels,_)Then
+(  _ ;
+    _ ;
+    'last_radio_contains_avg_channels := 0);
+_}

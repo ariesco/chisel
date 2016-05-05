@@ -1,0 +1,238 @@
+The variables obtained by the slicing process are: a0 v0 zero s8 v1 sp ra s0 gp a1 a2 a3
+
+_ addiu sp,sp,_
+sw ra,_(sp)
+sw s8,_(sp)
+move s8,sp
+move a0,zero
+jal 'uart_transmit
+_
+move a0,zero
+jal 'uart_transmit
+_
+sb zero,_(s8)
+j 'servo_transmit_0xc4
+_
+_ _
+_
+addiu a0,v1,_
+move a1,v0
+_
+jal 'lookup_arr
+_
+_
+sb v0,_(s8)
+_
+move a0,v0
+_
+jal 'shiftr_bitwise
+_
+sb v0,_(s8)
+_
+move a0,v0
+jal 'uart_transmit
+_
+_
+move a0,v0
+jal 'uart_transmit
+_
+_
+_
+sll v1,v1,_
+addiu v0,v0,_
+addu v0,v1,v0
+_
+andi v0,v0,_
+move a0,v0
+jal 'uart_transmit
+_
+_
+addiu v0,v0,_
+sb v0,_(s8)
+_ _
+sltiu v0,v0,_
+bnez v0,_
+_
+_
+jal 'uart_transmit
+_
+move sp,s8
+_
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw ra,_(sp)
+sw s8,_(sp)
+sw s0,_(sp)
+move s8,sp
+move v0,a0
+sb v0,_(s8)
+_
+move s0,v0
+_
+move a0,v0
+jal '_BV
+_
+and v0,s0,v0
+beqz v0,_
+_
+_
+andi v0,v0,_
+move v1,v0
+_
+addiu v0,v0,_
+beq v1,v0,_
+_
+_
+move v1,v0
+_
+_
+addiu a0,a0,_
+move a1,v1
+move a2,zero
+move a3,v0
+jal 'update_arr
+_
+sb v0,_(s8)
+_
+addiu v0,v0,_
+andi v0,v0,_
+sb v0,_(gp)
+j 'uart_transmit_0xd0
+_
+_ _
+sb v0,_(gp)
+_
+move v1,v0
+_
+move a0,v1
+move a1,v0
+jal 'sbi
+_
+j 'uart_transmit_0xd0
+_
+_
+_ move sp,s8
+_
+_
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw s8,_(sp)
+move s8,sp
+move v0,a0
+sh v0,_(s8)
+_
+_
+sllv v0,v1,v0
+andi v0,v0,_
+move sp,s8
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw ra,_(sp)
+sw s8,_(sp)
+move s8,sp
+sw a0,_(s8)
+move a0,a1
+move v1,a2
+move v0,a3
+sb a0,_(s8)
+sb v1,_(s8)
+sb v0,_(s8)
+_
+_
+_
+move a1,v1
+move a2,v0
+jal 'lookup_arr
+_
+sw v0,_(s8)
+_
+andi v0,v0,_
+move sp,s8
+_
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw s8,_(sp)
+move s8,sp
+sw a0,_(s8)
+move v1,a1
+move v0,a2
+sb v1,_(s8)
+sb v0,_(s8)
+_
+_
+mul v0,v1,v0
+_
+addu v0,v1,v0
+sw v0,_(s8)
+_
+move sp,s8
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw ra,_(sp)
+sw s8,_(sp)
+move s8,sp
+move v1,a0
+move v0,a1
+sb v1,_(s8)
+sb v0,_(s8)
+_
+move a0,v0
+jal 'SFR_BYTE
+_
+sb v0,_(s8)
+_
+move a0,v0
+jal '_BV
+_
+andi v1,v0,_
+_
+or v0,v1,v0
+sb v0,_(s8)
+_
+move sp,s8
+_
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw s8,_(sp)
+move s8,sp
+move v0,a0
+sb v0,_(s8)
+addiu v0,s8,_
+andi v0,v0,_
+_
+andi v0,v0,_
+move sp,s8
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw s8,_(sp)
+move s8,sp
+move v1,a0
+move v0,a1
+sb v1,_(s8)
+sb v0,_(s8)
+move sp,s8
+_
+addiu sp,sp,_
+jr ra
+_

@@ -1,0 +1,331 @@
+The variables obtained by the slicing process are: v0 zero s8 sp gp ra a1 v1 s0 a0 a2 $f1 $f0 $f2 $f3 $fcc0
+
+_ addiu sp,sp,_
+sw ra,_(sp)
+sw s8,_(sp)
+move s8,sp
+jal 'SpiIsSelected
+_
+bnez v0,_
+_
+_
+andi v0,v0,_
+beqz v0,_
+_
+sb zero,_(gp)
+jal 'to_autopilot_from_last_radio
+_
+jal 'spi_reset
+_
+_ move sp,s8
+_
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw ra,_(sp)
+sw s8,_(sp)
+move s8,sp
+_
+move a0,v0
+_
+jal 'bit_is_set
+_
+move sp,s8
+_
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw s8,_(sp)
+move s8,sp
+move v1,a0
+move v0,a1
+sb v1,_(s8)
+sb v0,_(s8)
+_
+_
+bne v1,v0,_
+_
+_
+_
+bne v1,v0,_
+_
+_
+j 'bit_is_set_0x4c
+_
+_ move v0,zero
+_ move sp,s8
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw ra,_(sp)
+sw s8,_(sp)
+sw s0,_(sp)
+move s8,sp
+_
+_
+_
+sh v1,_(v0)
+_
+addiu v0,v0,_
+_
+_
+addiu v0,v0,_
+sh v1,_(v0)
+_
+addiu v0,v0,_
+_
+_
+addiu v0,v0,_
+sh v1,_(v0)
+_
+addiu v0,v0,_
+_
+_
+addiu v0,v0,_
+sh v1,_(v0)
+_
+addiu v0,v0,_
+_
+_
+addiu v0,v0,_
+sh v1,_(v0)
+_
+addiu v0,v0,_
+_
+_
+addiu v0,v0,_
+sh v1,_(v0)
+_
+addiu v0,v0,_
+_
+_
+addiu v0,v0,_
+sh v1,_(v0)
+_
+addiu v0,v0,_
+_
+_
+addiu v0,v0,_
+sh v1,_(v0)
+_
+addiu v0,v0,_
+_
+_
+addiu v0,v0,_
+sh v1,_(v0)
+_
+beqz v0,_
+_
+move a0,zero
+jal '_BV
+_
+andi v0,v0,_
+j 'to_autopilot_from_last_radio_0x10c
+_
+_ move v0,zero
+_ _
+addiu v1,v1,_
+sb v0,_(v1)
+_
+addiu v0,v0,_
+_
+sll s0,v0,_
+sra s0,s0,_
+_
+beqz v0,_
+_
+_
+jal '_BV
+_
+sll v0,v0,_
+sra v0,v0,_
+j 'to_autopilot_from_last_radio_0x158
+_
+_ move v0,zero
+_ or v0,s0,v0
+sll v0,v0,_
+sra v0,v0,_
+andi v1,v0,_
+_
+addiu v0,v0,_
+sb v1,_(v0)
+_
+beqz v0,_
+_
+_
+addiu v0,v0,_
+_
+_
+jal '_BV
+_
+andi v0,v0,_
+or v0,s0,v0
+andi v1,v0,_
+_
+addiu v0,v0,_
+sb v1,_(v0)
+sb zero,_(gp)
+_ _
+_
+addiu v0,v0,_
+sb v1,_(v0)
+_
+_
+srl v0,v0,_
+andi v0,v0,_
+move a0,v0
+jal 'VoltageOfAdc
+_
+andi v0,v0,_
+sll v0,v0,_
+sll v1,v0,_
+addu v0,v0,v1
+andi v1,v0,_
+_
+addiu v0,v0,_
+sb v1,_(v0)
+move sp,s8
+_
+_
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw ra,_(sp)
+sw s8,_(sp)
+move s8,sp
+sb zero,_(gp)
+sb zero,_(gp)
+_
+andi v0,v0,_
+_
+addiu a0,v1,_
+_
+move a2,v0
+jal 'lookup_arr
+_
+_
+sb v0,_(s8)
+_
+sb v0,_(gp)
+_
+andi v0,v0,_
+sh v0,_(gp)
+sb zero,_(gp)
+move sp,s8
+_
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw s8,_(sp)
+move s8,sp
+sw a0,_(s8)
+move v1,a1
+move v0,a2
+sb v1,_(s8)
+sb v0,_(s8)
+_
+_
+mul v0,v1,v0
+_
+addu v0,v1,v0
+sw v0,_(s8)
+_
+move sp,s8
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw s8,_(sp)
+move s8,sp
+move v0,a0
+sh v0,_(s8)
+_
+_
+sllv v0,v1,v0
+andi v0,v0,_
+move sp,s8
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw s8,_(sp)
+move s8,sp
+move v0,a0
+sh v0,_(s8)
+_
+mtc1 v0,$f1
+cvt.d.w $f0,$f1
+mfc1 a0,$f0
+mfc1 a1,$f1
+_
+_
+_
+mtc1 a0,$f2
+mtc1 a1,$f3
+mtc1 v0,$f0
+mtc1 v1,$f1
+mul $f2,$f2,$f0
+mfc1 a0,$f2
+mfc1 a1,$f3
+_
+_
+_
+mtc1 a0,$f2
+mtc1 a1,$f3
+mtc1 v0,$f0
+mtc1 v1,$f1
+add $f2,$f2,$f0
+mfc1 v0,$f2
+mfc1 v1,$f3
+_
+_
+_
+mtc1 v0,$f2
+mtc1 v1,$f3
+mtc1 a0,$f0
+mtc1 a1,$f1
+c.le.d $f0,$f2
+_
+movf a2,zero,$fcc0
+mtc1 a2,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+_
+_
+mtc1 v0,$f0
+mtc1 v1,$f1
+trunc.w.d $f1,$f0
+mfc1 v0,$f1
+j 'VoltageOfAdc_0x100
+_
+_ mtc1 v0,$f2
+mtc1 v1,$f3
+mtc1 a0,$f0
+mtc1 a1,$f1
+sub $f2,$f2,$f0
+mfc1 v0,$f2
+mfc1 v1,$f3
+_
+mtc1 v0,$f2
+mtc1 v1,$f3
+trunc.w.d $f3,$f2
+mfc1 v0,$f3
+or v0,v0,a0
+_ andi v0,v0,_
+move sp,s8
+_
+addiu sp,sp,_
+jr ra
+_

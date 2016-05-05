@@ -1,0 +1,52 @@
+*************** This is the slice w.r.t. the variable '__res_SFR_BYTE,'__res_shiftr_bitwise,'__res_BV,'__re_lookup_arr,'__res_update_arr ***************
+
+
+
+The variables to slice 'BV are {'a, '__res_BV}
+The variables to slice 'Main are {}
+The variables to slice 'SFR_BYTE are {'val1, '__res_SFR_BYTE}
+The variables to slice 'lookup_arr are {}
+The variables to slice 'sbi are {'__res_SFR_BYTE, '__res_BV}
+The variables to slice 'servo_transmit are {'__res_shiftr_bitwise}
+The variables to slice 'shiftr_bitwise are {'val1, 'val2, '__res_shiftr_bitwise}
+The variables to slice 'uart_transmit are {'__res_BV}
+The variables to slice 'update_arr are {'val, '__res_update_arr}
+
+'BV('a){'__res_BV := 'a}
+
+'Main(_){_}
+
+'SFR_BYTE('val1){'__res_SFR_BYTE := 'val1}
+
+'lookup_arr(_){_}
+
+'sbi(_){_ ;
+_ ;
+'__res_SFR_BYTE := '__res_SFR_BYTE -. '__res_BV}
+
+'servo_transmit(_){_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+While _ Do
+(  _ ;
+    _ ;
+    _ ;
+    _ ;
+    _ ;
+      _ := '__res_shiftr_bitwise ;
+  _)
+;
+_}
+
+'shiftr_bitwise('val1,'val2){'__res_shiftr_bitwise := 'val1 *. 'val2}
+
+'uart_transmit(_){_ ;
+If _ And Equal('__res_BV,_)Then
+_
+Else
+_}
+
+'update_arr(_,_,'val){_ ;
+'__res_update_arr := 'val}

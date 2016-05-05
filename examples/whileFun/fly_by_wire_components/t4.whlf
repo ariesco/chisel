@@ -92,4 +92,25 @@ load ../wfe.maude
 
 endm)
 
+(set side-effect sorts ESt RWBUF .)
+
+(set context-update rules CallF .)
+
+eof
+
+(islice Statement with defs myFuns wrt 'servo 'servo_widths .)
+
+(islice Statement with defs myFuns wrt 'data 'servo.)
+
+(islice Statement with defs myFuns wrt '4017_NB_CHANNELS .)
+
+(islice Statement with defs myFuns wrt '__tmp_1 '__tmp_2 '__tmp_3 '__tmp_4 .)
+
+(islice Statement with defs myFuns wrt 'TXCIE 'UCSRB 'UDR .)
+
+(islice Statement with defs myFuns wrt '__res_SFR_BYTE '__res_shiftr_bitwise '__res_BV
+                                       '__re_lookup_arr '__res_update_arr .)
+
+(islice Statement with defs myFuns wrt '__re_lookup_arr '__res_update_arr .)
+
 (red myFuns .)

@@ -1,0 +1,39 @@
+*************** This is the slice w.r.t. the variable 'time_since_last_mega128,'mode ***************
+
+
+
+The variables to slice 'ChopServo are {}
+The variables to slice 'Main are {}
+The variables to slice 'ServoSet are {}
+The variables to slice 'SpiIsSelected are {}
+The variables to slice 'bit_is_set are {}
+The variables to slice 'check_mega128_values_task are {'time_since_last_mega128, 'mode}
+The variables to slice 'lookup_arr are {}
+The variables to slice 'servo_set are {}
+The variables to slice 'update_arr are {}
+
+'ChopServo(_){_}
+
+'Main(_){_}
+
+'ServoSet(_){_}
+
+'SpiIsSelected(_){_}
+
+'bit_is_set(_){_}
+
+'check_mega128_values_task(_){_ ;
+If _ Then
+  If _ Then
+(        'time_since_last_mega128 := 0 ;
+        _ ;
+        If Equal('mode,_)Then
+_);
+If Equal('time_since_last_mega128,_)Then
+_}
+
+'lookup_arr(_){_}
+
+'servo_set(_){_}
+
+'update_arr(_){_}
