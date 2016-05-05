@@ -1564,5 +1564,7 @@ endm)
 
 (set context-update rules CallF .)
 
+eof
+
 (islice Statement with defs myFuns wrt 'count .)
 

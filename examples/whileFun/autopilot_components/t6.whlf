@@ -467,4 +467,47 @@ load ../wfe.maude
 
 endm)
 
+eof
+
+1. (islice Statement with defs myFuns wrt 'pprz_mode .)
+
+2. (islice Statement with defs myFuns wrt 'mode_changed 'calib_mode_changed
+                                          'pprz_mode_changed .)
+
+3. (islice Statement with defs myFuns wrt 'link_fbw_receive_valid 'from_fbw.status
+		                                        'from_fbw 'channels .)
+
+4. (islice Statement with defs myFuns wrt 'desired_roll 'desired_pitch 'desired_gaz .)
+
+5. (islice Statement with defs myFuns wrt 'RADIO_ROLL 'RADIO_THROTTLE 'RADIO_PITCH
+          		                              'RADIO_YAW 'RADIO_CALIB .)
+
+6. (islice Statement with defs myFuns wrt '__res_and_bitwise '__res_FLOAT_OF_PPRZ
+          		                              '__res_mcu1_status_update '__res_bit_is_set
+          		                              '__res_CheckEvent '__res_PPRZ_MODE_OF_PULSE
+          		                              '__res_IR_ESTIM_MODE_OF_PULSE
+          		                              '__res_IF_CALIB_MODE_OF_PULSE '__res_STICK_PUSHED
+          		                              '__res_shiftl_bitwise '__res_lookup_arr
+          		                              '__res_update_arr .)
+
+7. (islice Statement with defs myFuns wrt '__res_lookup_arr '__res_update_arr .)
+
+	1. { pprz_mode } -> file t6_pprz_mode_whlf.slice
+	2. { mode_changed, calib_mode_changed, pprz_mode_changed }
+		-> file t6_mode_changed_whlf.slice
+	3. { link_fbw_receive_valid, from_fbw.status,
+		from_fbw, channels } -> file t6_fbw_flags_whlf.slice
+	4. { desired_roll, desired_pitch, desired_gaz }
+		-> file t6_desired_params_whlf.slice
+	5. { RADIO_ROLL, RADIO_THROTTLE, RADIO_PITCH,
+		RADIO_YAW, RADIO_CALIB } -> file t6_radio_params_whlf.slice
+	6. { __res_and_bitwise, __res_FLOAT_OF_PPRZ,
+		__res_mcu1_status_update, __res_bit_is_set,
+		__res_CheckEvent, __res_PPRZ_MODE_OF_PULSE,
+		__res_IR_ESTIM_MODE_OF_PULSE,
+		__res_IF_CALIB_MODE_OF_PULSE, __res_STICK_PUSHED,
+		__res_shiftl_bitwise, __res_lookup_arr, __res_update_arr }
+		-> file t6_res_whlf.slice
+	7. { __res_lookup_arr, __res_update_arr } -> file t6_arr_whlf.slice
+
 (red myFuns .)

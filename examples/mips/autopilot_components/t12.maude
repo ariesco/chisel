@@ -9,6 +9,28 @@ endm)
 
 eof
 
+1. (slice tt12 wrt v0 .)
+
+2. (slice tt12 wrt v0 v1 .)
+
+3. (slice tt12 wrt $f0 $f1 v0 .)
+
+4. (slice tt12 wrt v0 v1 $f0 .)
+
+5. (slice tt12 wrt $f0 $f1 $f2 .)
+
+6. (slice tt12 wrt a0 a1 a2 a3 .)
+
+7. (slice tt12 wrt a0 .)
+
+	1. { v0 } -> file t12_modes_mips.slice
+	2. { v0, v1 } -> file t12_desired_mips.slice
+	3. { $f0, $f1, v0 } -> file t12_pitch_param_mips.slice
+	4. { v0, v1, $f0 } -> file t12_err_mips.slice
+	5. { $f0, $f1, $f2 } -> file t12_arith_params_mips.slice
+	6. { a0, a1, a2, a3 } -> file t12_autos_mips.slice
+	7. { a0 } -> file t12_res_mips.slice
+
 'climb_control_task addiu sp,sp,-24
 sw ra,20(sp)
 sw s8,16(sp)

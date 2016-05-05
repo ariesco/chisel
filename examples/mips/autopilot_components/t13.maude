@@ -19,6 +19,28 @@ endm)
 
 eof
 
+1. (slice tt13 wrt v0 .)
+
+2. (slice tt13 wrt v0 v1 a0 zero .)
+
+3. (slice tt13 wrt v0 a0 v1 a1 .)
+
+4. (slice tt13 wrt $f0 $f1 $f2 $f3 .)
+
+5. (slice tt13 wrt a0 v1 .)
+
+6. (slice tt13 wrt a0 a1 a2 .)
+
+7. (slice tt13 wrt a0 .)
+
+	1. { v0 } -> file t13_boot_mips.slice
+	2. { v0, v1, a0, zero } -> file t13_time_params_mips.slice
+	3. { v0, a0, v1, a1 } -> file t13_modes_mips.slice
+	4. { $f0, $f1, $f2, $f3 } -> file t13_estimator_mips.slice
+	5. { a0, v1 } -> file t13_downlink_mips.slice
+	6. { a0, a1, a2 } -> file t13_res_mips.slice
+	7. { a0 } -> file t13_modem_comm_mips.slice
+
 'reporting_task addiu sp,sp,-24
 sw ra,20(sp)
 sw s8,16(sp)

@@ -9,6 +9,19 @@ endm)
 
 eof
 
+1. (slice tt11 wrt v0 .)
+
+2. (slice tt11 wrt v0 v1 zero .)
+
+3. (slice tt11 wrt $f0 $f1 .)
+
+4. (slice tt11 wrt $f0 $f1 $f2 .)
+
+	1. { v0 } -> file t11_pprz_mode_mips.slice
+	2. { v0, v1, zero } -> file t11_vertical_mode_mips.slice
+	3. { $f0, $f1 } -> file t11_desired_mips.slice
+	4. { $f0, $f1, $f2 } -> file t11_params_mips.slice
+
 'altitude_control_task addiu sp,sp,-24
 sw ra,20(sp)
 sw s8,16(sp)

@@ -10,6 +10,28 @@ endm)
 
 eof
 
+1. (slice tt7 wrt v0 v1 a0 .)
+
+2. (slice tt7 wrt v0 va a0 a1 .)
+
+3. (slice tt7 wrt v1 .)
+
+4. (slice tt7 wrt a0 a1 a2 v0 .)
+
+5. (slice tt7 wrt $f0 $f1 $f2 $f3 .)
+
+6. (slice tt7 wrt a0 a1 a2 a3 .)
+
+7. (slice tt7 wrt a2 a3 .)
+
+	1. { v0, v1, a0 } -> file t7_desired_mips.slice
+	2. { v0, v1, a0, a1 } -> file t7_estimator_mips.slice
+	3. { v1 } -> file t7_fbw_channels_mips.slice
+	4. { a0, a1, a2, v0 } -> file t7_simul_ir_mips.slice
+	5. { $f0, $f1, $f2, $f3 } -> file t7_radio_params_mips.slice
+	6. { a0, a1, a2, a3 } -> file t7_res_mips.slice
+	7. { a2, a3 } -> file t7_arr_mips.slice
+
 'stabilisation_task addiu sp,sp,-32
 sw ra,28(sp)
 sw s8,24(sp)

@@ -13,6 +13,28 @@ endm)
 
 eof
 
+1. (slice tt10 wrt v0 zero s8 .)
+
+2. (slice tt10 wrt a0 v0 v1 zero .)
+
+3. (slice tt10 wrt v0 $f0 $f1 $f2 .)
+
+4. (slice tt10 wrt v0 v1 .)
+
+5. (slice tt10 wrt $f0 $f1 $f2 $f3 .)
+
+6. (slice tt10 wrt a0 a1 a2 .)
+
+7. (slice tt10 wrt a1 a2 .)
+
+	1. { v0, zero, s8 } -> file t10_nav_mips.slice
+	2. { a0, v0, v1, zero } -> file t10_dist2_mips.slice
+	3. { v0, $f0, $f1, $f2 } -> file t10_estimator_mips.slice
+	4. { v0, v1 } -> file t10_roll_info_mips.slice
+	5. { $f0, $f1, $f2, $f3 } -> file t10_params_mips.slice
+	6. { a0, a1, a2 } -> file t10_res_mips.slice
+	7. { a1, a2 } -> file t10_arr_mips.slice
+
 'navigation_task: addiu sp,sp,-24
 sw ra,20(sp)
 sw s8,16(sp)
