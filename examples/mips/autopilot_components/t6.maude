@@ -17,6 +17,28 @@ endm)
 
 eof
 
+1. (slice tt6 wrt v0 a0 a1 s8 .)
+
+2. (slice tt6 wrt v0 zero s8 .)
+
+3. (slice tt6 wrt v0 .)
+
+4. (slice tt6 wrt v0 a0 a1 a2 s8 .)
+
+5. (slice tt6 wrt $f0 $f1 $f2 $f3 a0 a1 .)
+
+6. (slice tt6 wrt a0 a1 a2 a3 .)
+
+7. (slice tt6 wrt a1 a2 .)
+
+	1. { v0, a0, a1, s8 } -> file t1_ppm_mips.slice
+	2. { v0, zero, s8 } -> file t1_radio_mips.slice
+	3. { v0 } -> file t1_mode_mips.slice
+	4. { v0, a0, a1, a2, s8 } -> file t1_servo_mips.slice
+	5. { $f0, $f1, $f2, $f3, a0, a1 } -> file t1_params_mips.slice
+	6. { a0, a1, a2, a3 } -> file t1_res_mips.slice
+	7. { a1, a2 } -> file t1_arr_mips.slice
+
 'radio_control_task addiu sp,sp,-48
 sw ra,44(sp)
 sw s8,40(sp)
