@@ -3,14 +3,1353 @@ load ../autopilot.maude
 (mod T6 is
   pr TEST .
 
-  op t6 : -> InsList .
-  eq t6 = radio-control-task copy-from-to-fbw update-arr lookup-arr bit-is-set
-          pprz-mode-update CheckEvent PPRZ-MODE-OF-PULSE ModeUpdate and-bitwise
-          ir-estim-mode-update IR-ESTIM-MODE-OF-PULSE inflight-calib-mode-update
-          IF-CALIB-MODE-OF-PULSE inflight-calib mcu1-status-update DOWNLINK-SEND-PPRZ-MODE
-          ModemStartMessage ModemEndMessage MODEM-PUT-1-BYTE-BY-ADDR FLOAT-OF-PPRZ
-          events-update EventPos EventNeg EventUpdate shiftl-bitwise ground-calibrate
-          DOWNLINK-SEND-CALIB-START STICK-PUSHED ir-gain-calib RadOfIrFromConstrast
-          DOWNLINK-SEND-RAD-OF-IR MODEM-PUT-4-BYTE-BY-ADDR MODEM-PUT-2-BYTE-BY-ADDR
-          DOWNLINK-SEND-CALIB-CONTRAST .
+  op tt6 : -> InsList .
+  eq tt6 = radio-control-task copy-from-to-fbw update-arr lookup-arr bit-is-set
+           pprz-mode-update CheckEvent PPRZ-MODE-OF-PULSE ModeUpdate and-bitwise
+           ir-estim-mode-update IR-ESTIM-MODE-OF-PULSE inflight-calib-mode-update
+           IF-CALIB-MODE-OF-PULSE inflight-calib mcu1-status-update DOWNLINK-SEND-PPRZ-MODE
+           ModemStartMessage ModemEndMessage MODEM-PUT-1-BYTE-BY-ADDR FLOAT-OF-PPRZ
+           events-update EventPos EventNeg EventUpdate shiftl-bitwise ground-calibrate
+           DOWNLINK-SEND-CALIB-START STICK-PUSHED ir-gain-calib RadOfIrFromConstrast
+           DOWNLINK-SEND-RAD-OF-IR MODEM-PUT-4-BYTE-BY-ADDR MODEM-PUT-2-BYTE-BY-ADDR
+           DOWNLINK-SEND-CALIB-CONTRAST .
 endm)
+
+eof
+
+'radio_control_task addiu sp,sp,-48
+sw ra,44(sp)
+sw s8,40(sp)
+sw s0,36(sp)
+move s8,sp
+lbu v0,0(gp)
+andi v0,v0,255
+beqz v0,'radio_control_task_0x4b0
+nop
+sb zero,24(s8)
+jal 'copy_from_to_fbw
+nop
+lui v0,65284
+addiu v0,v0,16
+lbu v0,19(v0)
+move a0,v0
+li a1,1
+jal '_bit_is_set
+nop
+beqz v0,'radio_control_task_0x70
+nop
+lbu v1,3(gp)
+li v0,1
+beq v1,v0,'radio_control_task_0x7c
+nop
+lbu v0,3(gp)
+beqz v0,'radio_control_task_0x7c
+nop
+'radio_control_task_0x70 lbu v0,90(gp)
+beqz v0,'radio_control_task_0x8c
+nop
+'radio_control_task_0x7c li v0,3
+sb v0,3(gp)
+li v0,1
+sb v0,24(s8)
+'radio_control_task_0x8c lui v0,65284
+addiu v0,v0,16
+lbu v0,19(v0)
+move a0,v0
+li a1,2
+jal '_bit_is_set
+nop
+beqz v0,'radio_control_task_0x158
+nop
+jal 'pprz_mode_update
+nop
+sb v0,25(s8)
+lbu v1,24(s8)
+lbu v0,25(s8)
+move a0,v1
+move a1,v0
+jal 'and_bitwise
+nop
+sb v0,24(s8)
+lbu s0,24(s8)
+jal 'ir_estim_mode_update
+nop
+move a0,s0
+move a1,v0
+jal 'and_bitwise
+nop
+sb v0,24(s8)
+jal 'inflight_calib_mode_update
+nop
+sb v0,26(s8)
+lbu v0,26(s8)
+bnez v0,'radio_control_task_0x11c
+nop
+lbu v0,25(s8)
+beqz v0,'radio_control_task_0x128
+nop
+'radio_control_task_0x11c li v0,1
+j 'radio_control_task_0x12c
+nop
+'radio_control_task_0x128 move v0,zero
+'radio_control_task_0x12c andi v0,v0,255
+move a0,v0
+jal 'inflight_calib
+nop
+lbu v1,24(s8)
+lbu v0,26(s8)
+move a0,v1
+move a1,v0
+jal 'and_bitwise
+nop
+sb v0,24(s8)
+'radio_control_task_0x158 lbu s0,24(s8)
+jal 'mcu1_status_update
+nop
+move a0,s0
+move a1,v0
+jal 'and_bitwise
+nop
+sb v0,24(s8)
+lbu v0,24(s8)
+beqz v0,'radio_control_task_0x1b8
+nop
+lbu v0,3(gp)
+move a0,v0
+lbu v0,4(gp)
+move a1,v0
+lbu v0,1(gp)
+move v1,v0
+lbu v0,22(gp)
+lbu a2,-2(gp)
+sw a2,16(sp)
+move a2,v1
+move a3,v0
+jal '_DOWNLINK_SEND_PPRZ_MODE
+nop
+'radio_control_task_0x1b8 lbu v1,3(gp)
+li v0,1
+bne v1,v0,'radio_control_task_0x228
+nop
+lui v0,65284
+addiu v0,v0,16
+lh v0,2(v0)
+andi v0,v0,255
+move a0,v0
+move a1,zero
+move a2,zero
+jal '_FLOAT_OF_PPRZ
+nop
+mfc1 v1,$f0
+lui v0,65284
+sw v1,952(v0)
+lui v0,65284
+addiu v0,v0,16
+lh v0,4(v0)
+andi v0,v0,255
+move a0,v0
+move a1,zero
+move a2,zero
+jal '_FLOAT_OF_PPRZ
+nop
+mfc1 v1,$f0
+lui v0,65284
+sw v1,956(v0)
+'radio_control_task_0x228 lbu v0,3(gp)
+beqz v0,'radio_control_task_0x244
+nop
+lbu v1,3(gp)
+li v0,1
+bne v1,v0,'radio_control_task_0x434
+nop
+'radio_control_task_0x244 lui v0,65284
+addiu a0,v0,16
+move a1,zero
+li a2,18
+jal 'lookup_arr
+nop
+lbu v0,0(v0)
+sll v0,v0,16
+sra v0,v0,16
+sh v0,76(gp)
+lui v0,65284
+addiu a0,v0,16
+move a1,zero
+li a2,18
+jal 'lookup_arr
+nop
+lbu v0,0(v0)
+mtc1 v0,$f1
+cvt.d.w $f0,$f1
+mfc1 a0,$f0
+mfc1 a1,$f1
+lui v0,65284
+lw v1,492(v0)
+lw v0,488(v0)
+mtc1 a0,$f2
+mtc1 a1,$f3
+mtc1 v0,$f0
+mtc1 v1,$f1
+mul $f2,$f2,$f0
+mfc1 a0,$f2
+mfc1 a1,$f3
+lui v0,65284
+lw v1,500(v0)
+lw v0,496(v0)
+mtc1 a0,$f2
+mtc1 a1,$f3
+mtc1 v0,$f0
+mtc1 v1,$f1
+div $f2,$f2,$f0
+mfc1 v0,$f2
+mfc1 v1,$f3
+lui a0,65284
+lw a1,508(a0)
+lw a0,504(a0)
+mtc1 a0,$f2
+mtc1 a1,$f3
+mtc1 v0,$f0
+mtc1 v1,$f1
+sub $f2,$f2,$f0
+mfc1 a0,$f2
+mfc1 a1,$f3
+lui v0,65284
+lw v1,516(v0)
+lw v0,512(v0)
+mtc1 a0,$f2
+mtc1 a1,$f3
+mtc1 v0,$f0
+mtc1 v1,$f1
+mul $f2,$f2,$f0
+mfc1 v0,$f2
+mfc1 v1,$f3
+mtc1 v0,$f2
+mtc1 v1,$f3
+cvt.s.d $f3,$f2
+mfc1 v1,$f3
+lui v0,65284
+sw v1,592(v0)
+lui v0,65284
+addiu a0,v0,16
+move a1,zero
+li a2,18
+jal 'lookup_arr
+nop
+lbu v0,0(v0)
+mtc1 v0,$f1
+cvt.d.w $f0,$f1
+mfc1 a0,$f0
+mfc1 a1,$f1
+lui v0,65284
+lw v1,524(v0)
+lw v0,520(v0)
+mtc1 a0,$f2
+mtc1 a1,$f3
+mtc1 v0,$f0
+mtc1 v1,$f1
+mul $f2,$f2,$f0
+mfc1 a0,$f2
+mfc1 a1,$f3
+lui v0,65284
+lw v1,500(v0)
+lw v0,496(v0)
+mtc1 a0,$f2
+mtc1 a1,$f3
+mtc1 v0,$f0
+mtc1 v1,$f1
+div $f2,$f2,$f0
+mfc1 v0,$f2
+mfc1 v1,$f3
+lui a0,65284
+lw a1,508(a0)
+lw a0,504(a0)
+mtc1 a0,$f2
+mtc1 a1,$f3
+mtc1 v0,$f0
+mtc1 v1,$f1
+sub $f2,$f2,$f0
+mfc1 a0,$f2
+mfc1 a1,$f3
+lui v0,65284
+lw v1,532(v0)
+lw v0,528(v0)
+mtc1 a0,$f2
+mtc1 a1,$f3
+mtc1 v0,$f0
+mtc1 v1,$f1
+mul $f2,$f2,$f0
+mfc1 v0,$f2
+mfc1 v1,$f3
+mtc1 v0,$f2
+mtc1 v1,$f3
+cvt.s.d $f3,$f2
+mfc1 v1,$f3
+lui v0,65284
+sw v1,596(v0)
+'radio_control_task_0x434 lui v0,65284
+addiu v0,v0,16
+lbu v0,18(v0)
+sb v0,23(gp)
+lui v0,65284
+addiu v0,v0,16
+lbu v0,21(v0)
+sb v0,186(gp)
+jal 'events_update
+nop
+lhu v0,40(gp)
+bnez v0,'radio_control_task_0x4b0
+nop
+jal 'ground_calibrate
+nop
+lbu v1,3(gp)
+li v0,2
+bne v1,v0,'radio_control_task_0x4b0
+nop
+lui v0,65284
+addiu a0,v0,16
+move a1,zero
+li a2,18
+jal 'lookup_arr
+nop
+lbu v0,0(v0)
+slti v0,v0,16
+bnez v0,'radio_control_task_0x4b0
+nop
+li v0,1
+sb v0,7(gp)
+'radio_control_task_0x4b0 move sp,s8
+lw ra,44(sp)
+lw s8,40(sp)
+lw s0,36(sp)
+addiu sp,sp,48
+jr ra
+nop
+
+'copy_from_to_fbw addiu sp,sp,-32
+sw ra,28(sp)
+sw s8,24(sp)
+move s8,sp
+lui v0,65284
+addiu a0,v0,16
+li a1,3
+li a2,18
+jal 'lookup_arr
+nop
+lbu v0,0(v0)
+sb v0,16(s8)
+lbu v0,16(s8)
+lui v1,65284
+addiu a0,v1,16
+li a1,3
+li a2,18
+move a3,v0
+jal 'update_arr
+nop
+lui v0,65284
+addiu a0,v0,16
+li a1,2
+li a2,18
+jal 'lookup_arr
+nop
+lbu v0,0(v0)
+sb v0,17(s8)
+lbu v0,17(s8)
+lui v1,65284
+addiu a0,v1,16
+li a1,2
+li a2,18
+move a3,v0
+jal 'update_arr
+nop
+lui v0,65284
+addiu v0,v0,16
+sb zero,19(v0)
+move sp,s8
+lw ra,28(sp)
+lw s8,24(sp)
+addiu sp,sp,32
+jr ra
+nop
+
+'update_arr addiu sp,sp,-32
+sw ra,28(sp)
+sw s8,24(sp)
+move s8,sp
+sw a0,32(s8)
+move a0,a1
+move v1,a2
+move v0,a3
+sb a0,36(s8)
+sb v1,40(s8)
+sb v0,44(s8)
+lbu v1,36(s8)
+lbu v0,40(s8)
+lw a0,32(s8)
+move a1,v1
+move a2,v0
+jal 'lookup_arr
+nop
+sw v0,16(s8)
+lw v0,16(s8)
+andi v1,v0,255
+lbu v0,44(s8)
+addu v0,v1,v0
+andi v0,v0,255
+move sp,s8
+lw ra,28(sp)
+lw s8,24(sp)
+addiu sp,sp,32
+jr ra
+nop
+
+'lookup_arr addiu sp,sp,-16
+sw s8,12(sp)
+move s8,sp
+sw a0,16(s8)
+move v1,a1
+move v0,a2
+sb v1,20(s8)
+sb v0,24(s8)
+lbu v1,24(s8)
+lbu v0,20(s8)
+mul v0,v1,v0
+lw v1,16(s8)
+addu v0,v1,v0
+sw v0,0(s8)
+lw v0,0(s8)
+move sp,s8
+lw s8,12(sp)
+addiu sp,sp,16
+jr ra
+nop
+
+'_bit_is_set addiu sp,sp,-8
+sw s8,4(sp)
+move s8,sp
+move v1,a0
+move v0,a1
+sb v1,8(s8)
+sb v0,12(s8)
+lbu v1,8(s8)
+li v0,1
+bne v1,v0,'_bit_is_set_0x48
+nop
+lbu v1,12(s8)
+li v0,1
+bne v1,v0,'_bit_is_set_0x48
+nop
+li v0,1
+j '_bit_is_set_0x4c
+nop
+'_bit_is_set_0x48 move v0,zero
+move sp,s8
+lw s8,4(sp)
+addiu sp,sp,8
+jr ra
+nop
+
+'pprz_mode_update addiu sp,sp,-32
+sw ra,28(sp)
+sw s8,24(sp)
+sw s0,20(sp)
+move s8,sp
+lbu v1,3(gp)
+li v0,3
+bne v1,v0,'pprz_mode_update_0x3c
+nop
+lbu v0,52(gp)
+move a0,v0
+jal '_CheckEvent
+nop
+beqz v0,'pprz_mode_update_0x9c
+nop
+'pprz_mode_update_0x3c lbu v0,3(gp)
+move s0,v0
+lui v0,65284
+addiu a0,v0,4
+li a1,4
+li a2,18
+jal 'lookup_arr
+nop
+lb v0,0(v0)
+andi v0,v0,255
+move v1,v0
+lui v0,65284
+addiu v0,v0,255
+lbu v0,19(v0)
+move a0,v1
+move a1,v0
+jal '_PPRZ_MODE_OF_PULSE
+nop
+move a0,s0
+move a1,v0
+jal '_ModeUpdate
+nop
+j 'pprz_mode_update_0xa0
+nop
+'pprz_mode_update_0x9c move v0,zero
+'pprz_mode_update_0xa0 move sp,s8
+lw ra,28(sp)
+lw s8,24(sp)
+lw s0,20(sp)
+addiu sp,sp,32
+jr ra
+nop
+
+'_CheckEvent addiu sp,sp,-8
+sw s8,4(sp)
+move s8,sp
+move v0,a0
+sb v0,8(s8)
+lbu v0,8(s8)
+beqz v0,'_CheckEvent_0x2c
+nop
+move v0,zero
+j '_CheckEvent_0x30
+nop
+'_CheckEvent_0x2c li v0,1
+'_CheckEvent_0x30 move sp,s8
+lw s8,4(sp)
+addiu sp,sp,8
+jr ra
+nop
+
+'_PPRZ_MODE_OF_PULSE addiu sp,sp,-8
+sw s8,4(sp)
+move s8,sp
+move v1,a0
+move v0,a1
+sb v1,8(s8)
+sb v0,12(s8)
+li v0,1
+move sp,s8
+lw s8,4(sp)
+addiu sp,sp,8
+jr ra
+nop
+
+'_ModeUpdate addiu sp,sp,-16
+sw s8,12(sp)
+move s8,sp
+move v1,a0
+move v0,a1
+sb v1,16(s8)
+sb v0,20(s8)
+lbu v0,20(s8)
+sb v0,0(s8)
+lbu v1,16(s8)
+lbu v0,0(s8)
+beq v1,v0,'_ModeUpdate_0x48
+nop
+lbu v0,0(s8)
+sb v0,16(s8)
+li v0,1
+j '_ModeUpdate_0x4c
+nop
+'_ModeUpdate_0x48 move v0,zero
+'_ModeUpdate_0x4c move sp,s8
+lw s8,12(sp)
+addiu sp,sp,16
+jr ra
+nop
+
+'and_bitwise addiu sp,sp,-8
+sw s8,4(sp)
+move s8,sp
+move v1,a0
+move v0,a1
+sb v1,8(s8)
+sb v0,12(s8)
+lbu v1,8(s8)
+lbu v0,12(s8)
+and v0,v1,v0
+andi v0,v0,255
+move sp,s8
+lw s8,4(sp)
+addiu sp,sp,8
+jr ra
+nop
+
+'ir_estim_mode_update addiu sp,sp,-32
+sw ra,28(sp)
+sw s8,24(sp)
+sw s0,20(sp)
+move s8,sp
+lbu v0,-2(gp)
+move s0,v0
+lui v0,65284
+addiu a0,v0,16
+li a1,7
+li a2,18
+jal 'lookup_arr
+nop
+lb v0,0(v0)
+andi v0,v0,255
+move a0,v0
+jal '_IR_ESTIM_MODE_OF_PULSE
+nop
+move a0,s0
+move a1,v0
+jal '_ModeUpdate
+nop
+move sp,s8
+lw ra,28(sp)
+lw s8,24(sp)
+lw s0,20(sp)
+addiu sp,sp,32
+jr ra
+nop
+
+'_IR_ESTIM_MODE_OF_PULSE addiu sp,sp,-8
+sw s8,4(sp)
+move s8,sp
+move v0,a0
+sb v0,8(s8)
+move v0,zero
+move sp,s8
+lw s8,4(sp)
+addiu sp,sp,8
+jr ra
+nop
+
+'inflight_calib_mode_update addiu sp,sp,-32
+sw ra,28(sp)
+sw s8,24(sp)
+sw s0,20(sp)
+move s8,sp
+lbu v0,1(gp)
+move s0,v0
+lui v0,65284
+addiu a0,v0,16
+li a1,8
+li a2,18
+jal 'lookup_arr
+nop
+lbu v0,0(v0)
+move a0,v0
+jal '_IF_CALIB_MODE_OF_PULSE
+nop
+move a0,s0
+move a1,v0
+jal '_ModeUpdate
+nop
+move sp,s8
+lw ra,28(sp)
+lw s8,24(sp)
+lw s0,20(sp)
+addiu sp,sp,32
+jr ra
+nop
+
+'_IF_CALIB_MODE_OF_PULSE addiu sp,sp,-8
+sw s8,4(sp)
+move s8,sp
+move v0,a0
+sb v0,8(s8)
+move v0,zero
+move sp,s8
+lw s8,4(sp)
+addiu sp,sp,8
+jr ra
+nop
+
+'inflight_calib addiu sp,sp,-8
+sw s8,4(sp)
+move s8,sp
+move v0,a0
+sb v0,8(s8)
+move sp,s8
+lw s8,4(sp)
+addiu sp,sp,8
+jr ra
+nop
+
+'mcu1_status_update addiu sp,sp,-16
+sw s8,12(sp)
+move s8,sp
+lui v0,65284
+addiu v0,v0,8
+lbu v0,19(v0)
+sb v0,1(s8)
+lbu v0,22(gp)
+lbu v1,1(s8)
+beq v1,v0,'mcu1_status_update_0x70
+nop
+lbu v0,22(gp)
+move v1,v0
+lbu v0,1(s8)
+xor v0,v1,v0
+andi v0,v0,3
+beqz v0,'mcu1_status_update_0x58
+nop
+li v0,1
+sb v0,0(s8)
+j 'mcu1_status_update_0x5c
+nop
+'mcu1_status_update_0x58 sb zero,0(s8)
+'mcu1_status_update_0x5c lbu v0,1(s8)
+sb v0,22(gp)
+lbu v0,0(s8)
+j 'mcu1_status_update_0x74
+nop
+'mcu1_status_update_0x70 move v0,zero
+'mcu1_status_update_0x74 move sp,s8
+lw s8,12(sp)
+addiu sp,sp,16
+jr ra
+nop
+
+'_DOWNLINK_SEND_PPRZ_MODE addiu sp,sp,-40
+sw ra,36(sp)
+sw s8,32(sp)
+move s8,sp
+move t0,a0
+move a0,a2
+move v1,a3
+lw v0,56(s8)
+sb t0,40(s8)
+sb a1,44(s8)
+sb a0,48(s8)
+sb v1,52(s8)
+sb v0,24(s8)
+lbu v0,16(s8)
+sltiu v0,v0,10
+bnez v0,'_DOWNLINK_SEND_PPRZ_MODE_0xb0
+nop
+li a0,11
+jal '_ModemStartMessage
+nop
+lbu v0,40(s8)
+move a0,v0
+jal '_MODEM_PUT_1_BYTE_BY_ADDR
+nop
+lbu v0,44(s8)
+move a0,v0
+jal '_MODEM_PUT_1_BYTE_BY_ADDR
+nop
+lbu v0,48(s8)
+move a0,v0
+jal '_MODEM_PUT_1_BYTE_BY_ADDR
+nop
+lbu v0,52(s8)
+move a0,v0
+jal '_MODEM_PUT_1_BYTE_BY_ADDR
+nop
+lbu v0,24(s8)
+move a0,v0
+jal '_MODEM_PUT_1_BYTE_BY_ADDR
+nop
+jal '_ModemEndMessage
+nop
+j '_DOWNLINK_SEND_PPRZ_MODE_0xc0
+nop
+'_DOWNLINK_SEND_PPRZ_MODE_0xb0 lbu v0,73(gp)
+addiu v0,v0,1
+andi v0,v0,255
+sb v0,73(gp)
+'_DOWNLINK_SEND_PPRZ_MODE_0xc0 move sp,s8
+lw ra,36(sp)
+lw s8,32(sp)
+addiu sp,sp,40
+jr ra
+nop
+
+'_ModemStartMessage addiu sp,sp,-8
+sw s8,4(sp)
+move s8,sp
+move v0,a0
+sb v0,8(s8)
+lbu v1,8(s8)
+li v0,1
+bne v1,v0,'_ModemStartMessage_0x30
+nop
+li v0,1
+j '_ModemStartMessage_0x30
+nop
+'_ModemStartMessage_0x30 move sp,s8
+lw s8,4(sp)
+addiu sp,sp,8
+jr ra
+nop
+
+'_ModemEndMessage addiu sp,sp,-8
+sw s8,4(sp)
+move s8,sp
+li v0,1
+move sp,s8
+lw s8,4(sp)
+addiu sp,sp,8
+jr ra
+nop
+
+'_MODEM_PUT_1_BYTE_BY_ADDR addiu sp,sp,-8
+sw s8,4(sp)
+move s8,sp
+move v0,a0
+sb v0,8(s8)
+lbu v0,8(s8)
+move sp,s8
+lw s8,4(sp)
+addiu sp,sp,8
+jr ra
+nop
+
+'_FLOAT_OF_PPRZ addiu sp,sp,-8
+sw s8,4(sp)
+move s8,sp
+move v1,a1
+move v0,a2
+sb a0,8(s8)
+sb v1,12(s8)
+sb v0,16(s8)
+lbu v0,8(s8)
+mtc1 v0,$f0
+cvt.s.w $f0,$f0
+mfc1 v1,$f0
+lui v0,65284
+lw v0,112(v0)
+mtc1 v1,$f1
+mtc1 v0,$f0
+div $f1,$f1,$f0
+mfc1 v1,$f1
+lbu v0,16(s8)
+mtc1 v0,$f1
+cvt.s.w $f1,$f1
+mfc1 v0,$f1
+mtc1 v1,$f0
+mtc1 v0,$f1
+mul $f0,$f0,$f1
+mfc1 v1,$f0
+lbu v0,12(s8)
+mtc1 v0,$f0
+cvt.s.w $f0,$f0
+mfc1 v0,$f0
+mtc1 v1,$f1
+mtc1 v0,$f0
+add $f1,$f1,$f0
+mfc1 v0,$f1
+mtc1 v0,$f0
+move sp,s8
+lw s8,4(sp)
+addiu sp,sp,8
+jr ra
+nop
+
+'events_update addiu sp,sp,-24
+sw ra,20(sp)
+sw s8,16(sp)
+move s8,sp
+lhu v0,32(gp)
+andi v0,v0,255
+move v1,v0
+lbu v0,52(gp)
+move a0,v1
+li a1,5
+move a2,v0
+jal '_EventPos
+nop
+lhu v0,34(gp)
+andi v0,v0,255
+move v1,v0
+lbu v0,140(gp)
+move a0,v1
+li a1,5
+move a2,v0
+jal '_EventNeg
+nop
+move sp,s8
+lw ra,20(sp)
+lw s8,16(sp)
+addiu sp,sp,24
+jr ra
+nop
+
+'_EventPos addiu sp,sp,-32
+sw ra,28(sp)
+sw s8,24(sp)
+sw s0,20(sp)
+move s8,sp
+move v1,a1
+move v0,a2
+sb a0,32(s8)
+sb v1,36(s8)
+sb v0,40(s8)
+lbu s0,32(s8)
+lbu v0,1(gp)
+bnez v0,'_EventPos_0x70
+nop
+lbu v0,36(s8)
+lui v1,65284
+addiu a0,v1,16
+move a1,v0
+li a2,18
+jal 'lookup_arr
+nop
+lbu v0,0(v0)
+slti v0,v0,16
+bnez v0,'_EventPos_0x70
+nop
+li v0,1
+j '_EventPos_0x74
+nop
+'_EventPos_0x70 move v0,zero
+'_EventPos_0x74 andi v0,v0,255
+move v1,v0
+lbu v0,40(s8)
+move a0,s0
+move a1,v1
+move a2,v0
+jal '_EventUpdate
+nop
+move sp,s8
+lw ra,28(sp)
+lw s8,24(sp)
+lw s0,20(sp)
+addiu sp,sp,32
+jr ra
+nop
+
+'_EventNeg addiu sp,sp,-32
+sw ra,28(sp)
+sw s8,24(sp)
+sw s0,20(sp)
+move s8,sp
+move v1,a1
+move v0,a2
+sb a0,32(s8)
+sb v1,36(s8)
+sb v0,40(s8)
+lbu s0,32(s8)
+lbu v0,1(gp)
+bnez v0,'_EventNeg_0x70
+nop
+lbu v0,36(s8)
+lui v1,65284
+addiu a0,v1,16
+move a1,v0
+li a2,18
+jal 'lookup_arr
+nop
+lbu v0,0(v0)
+slti v0,v0,-16
+bnez v0,'_EventNeg_0x70
+nop
+li v0,1
+j '_EventNeg_0x74
+nop
+'_EventNeg_0x70 move v0,zero
+'_EventNeg_0x74 andi v0,v0,255
+move v1,v0
+lbu v0,40(s8)
+move a0,s0
+move a1,v1
+move a2,v0
+jal '_EventUpdate
+nop
+move sp,s8
+lw ra,28(sp)
+lw s8,24(sp)
+lw s0,20(sp)
+addiu sp,sp,32
+jr ra
+nop
+
+'_EventUpdate addiu sp,sp,-16
+sw s8,12(sp)
+move s8,sp
+move v1,a1
+move v0,a2
+sb a0,16(s8)
+sb v1,20(s8)
+sb v0,24(s8)
+lbu v0,20(s8)
+beqz v0,'_EventUpdate_0x68
+nop
+lbu v0,16(s8)
+sltiu v0,v0,20
+beqz v0,'_EventUpdate_0x70
+nop
+lbu v0,16(s8)
+addiu v0,v0,1
+sb v0,16(s8)
+lbu v1,16(s8)
+li v0,20
+bne v1,v0,'_EventUpdate_0x70
+nop
+li v0,1
+sb v0,0(s8)
+j '_EventUpdate_0x70
+nop
+'_EventUpdate_0x68 sb zero,16(s8)
+sb zero,0(s8)
+'_EventUpdate_0x70 move sp,s8
+lw s8,12(sp)
+addiu sp,sp,16
+jr ra
+nop
+
+'shiftl_bitwise addiu sp,sp,-8
+sw s8,4(sp)
+move s8,sp
+move v1,a0
+move v0,a1
+sb v1,8(s8)
+sb v0,12(s8)
+move sp,s8
+lw s8,4(sp)
+addiu sp,sp,8
+jr ra
+nop
+
+'ground_calibrate addiu sp,sp,-32
+sw ra,28(sp)
+sw s8,24(sp)
+move s8,sp
+lbu v0,36(gp)
+bnez v0,'ground_calibrate_0x54
+nop
+lhu v0,20(gp)
+sltiu v0,v0,10
+beqz v0,'ground_calibrate_0x1c0
+nop
+lbu v1,3(gp)
+li v0,1
+bne v1,v0,'ground_calibrate_0x1c0
+nop
+li v0,1
+sb v0,36(gp)
+jal '_DOWNLINK_SEND_CALIB_START
+nop
+j 'ground_calibrate_0x1c0
+nop
+'ground_calibrate_0x54 lbu v1,36(gp)
+li v0,1
+bne v1,v0,'ground_calibrate_0x1c0
+nop
+lui v0,65284
+addiu a0,v0,255
+li a1,1
+li a2,18
+jal 'lookup_arr
+nop
+lw v1,0(v0)
+lui v0,65284
+lw v0,512(v0)
+mtc1 v1,$f0
+mtc1 v0,$f1
+c.lt.s $f0,$f1
+lui v0,65284
+movf v0,zero,$f0
+mtc1 v0,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+bc1t 'ground_calibrate_0xfc
+nop
+lui v0,65284
+addiu a0,v0,255
+li a1,1
+li a2,18
+jal 'lookup_arr
+nop
+lw v1,0(v0)
+lui v0,65284
+lw v0,516(v0)
+mtc1 v1,$f0
+mtc1 v0,$f1
+c.lt.s $f1,$f0
+lui v0,65284
+movf v0,zero,$f0
+mtc1 v0,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+bc1f 'ground_calibrate_0x1c0
+nop
+'ground_calibrate_0xfc jal 'ir_gain_calib
+nop
+lui v0,65284
+lw v1,724(v0)
+lui v0,65284
+sw v1,0(v0)
+lui v0,65284
+lw v0,0(v0)
+mtc1 v0,$f0
+trunc.w.s $f0,$f0
+mfc1 v0,$f0
+sll v0,v0,24
+sra v0,v0,24
+andi v0,v0,255
+move a0,v0
+lui v0,65284
+lw v0,0(v0)
+mtc1 v0,$f1
+trunc.w.s $f1,$f1
+mfc1 v0,$f1
+sll v0,v0,24
+sra v0,v0,24
+andi v0,v0,255
+move a1,v0
+lui v0,65284
+lw v0,0(v0)
+mtc1 v0,$f2
+trunc.w.s $f2,$f2
+mfc1 v0,$f2
+sll v0,v0,24
+sra v0,v0,24
+andi v0,v0,255
+move v1,v0
+lh v0,-8(gp)
+andi v0,v0,255
+lh a2,-6(gp)
+andi a2,a2,255
+sw a2,16(sp)
+move a2,v1
+move a3,v0
+jal '_DOWNLINK_SEND_RAD_OF_IR
+nop
+li v0,2
+sb v0,36(gp)
+lh v0,-10(gp)
+andi v0,v0,255
+move a0,v0
+jal '_DOWNLINK_SEND_CALIB_CONTRAST
+nop
+'ground_calibrate_0x1c0 move sp,s8
+lw ra,28(sp)
+lw s8,24(sp)
+addiu sp,sp,32
+jr ra
+nop
+
+'_DOWNLINK_SEND_CALIB_START addiu sp,sp,-24
+sw ra,20(sp)
+sw s8,16(sp)
+move s8,sp
+lbu v1,86(gp)
+lbu v0,112(gp)
+andi v0,v0,255
+sltu v0,v1,v0
+bnez v0,'_DOWNLINK_SEND_CALIB_START_0x54
+nop
+lbu v0,112(gp)
+andi v0,v0,255
+move v1,v0
+lbu v0,86(gp)
+subu v0,v1,v0
+addiu v0,v0,255
+slti v0,v0,5
+xori v0,v0,1
+andi v0,v0,255
+j '_DOWNLINK_SEND_CALIB_START_0x74
+nop
+'_DOWNLINK_SEND_CALIB_START_0x54 lbu v0,112(gp)
+andi v0,v0,255
+move v1,v0
+lbu v0,86(gp)
+subu v0,v1,v0
+slti v0,v0,5
+xori v0,v0,1
+andi v0,v0,255
+'_DOWNLINK_SEND_CALIB_START_0x74 beqz v0,'_DOWNLINK_SEND_CALIB_START_0x98
+nop
+li a0,2
+jal '_ModemStartMessage
+nop
+jal '_ModemEndMessage
+nop
+j '_DOWNLINK_SEND_CALIB_START_0xa8
+nop
+'_DOWNLINK_SEND_CALIB_START_0x98 lbu v0,73(gp)
+addiu v0,v0,1
+andi v0,v0,255
+sb v0,73(gp)
+'_DOWNLINK_SEND_CALIB_START_0xa8 move sp,s8
+lw ra,20(sp)
+lw s8,16(sp)
+addiu sp,sp,24
+jr ra
+nop
+
+'STICK_PUSHED addiu sp,sp,-8
+sw s8,4(sp)
+move s8,sp
+move v0,a0
+sh v0,8(s8)
+lhu v0,8(s8)
+sltiu v0,v0,0
+bnez v0,'STICK_PUSHED_0x30
+nop
+li v0,1
+j 'STICK_PUSHED_0x34
+nop
+'STICK_PUSHED_0x30 move v0,zero
+'STICK_PUSHED_0x34 move sp,s8
+lw s8,4(sp)
+addiu sp,sp,8
+jr ra
+nop
+
+'ir_gain_calib addiu sp,sp,-24
+sw ra,20(sp)
+sw s8,16(sp)
+move s8,sp
+lh v0,64(gp)
+andi v0,v0,0
+negu v0,v0
+andi v0,v0,0
+sll v0,v0,16
+sra v0,v0,16
+sh v0,-10(gp)
+lh v0,-10(gp)
+andi v0,v0,0
+move a0,v0
+jal '_RadOfIrFromConstrast
+nop
+move sp,s8
+lw ra,20(sp)
+lw s8,16(sp)
+addiu sp,sp,24
+jr ra
+nop
+
+'_RadOfIrFromConstrast addiu sp,sp,-8
+sw s8,4(sp)
+move s8,sp
+move v0,a0
+sh v0,8(s8)
+lhu v0,8(s8)
+mtc1 v0,$f1
+cvt.d.w $f0,$f1
+mfc1 v0,$f0
+mfc1 v1,$f1
+lui a0,0
+lw a1,468(a0)
+lw a0,464(a0)
+mtc1 a0,$f2
+mtc1 a1,$f3
+mtc1 v0,$f0
+mtc1 v1,$f1
+div $f2,$f2,$f0
+mfc1 v0,$f2
+mfc1 v1,$f3
+mtc1 v0,$f2
+mtc1 v1,$f3
+cvt.s.d $f3,$f2
+mfc1 v1,$f3
+lui v0,65284
+sw v1,716(v0)
+move sp,s8
+lw s8,4(sp)
+addiu sp,sp,8
+jr ra
+nop
+
+'_DOWNLINK_SEND_RAD_OF_IR addiu sp,sp,-40
+sw ra,36(sp)
+sw s8,32(sp)
+move s8,sp
+move t0,a0
+move a0,a2
+move v1,a3
+lw v0,56(s8)
+sb t0,40(s8)
+sb a1,44(s8)
+sb a0,48(s8)
+sb v1,52(s8)
+sb v0,24(s8)
+lhu v0,16(s8)
+sltiu v0,v0,21
+bnez v0,'_DOWNLINK_SEND_RAD_OF_IR_0xb0
+nop
+li a0,5
+jal '_ModemStartMessage
+nop
+lbu v0,40(s8)
+move a0,v0
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+nop
+lbu v0,44(s8)
+move a0,v0
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+nop
+lbu v0,48(s8)
+move a0,v0
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+nop
+lbu v0,52(s8)
+move a0,v0
+jal '_MODEM_PUT_2_BYTE_BY_ADDR
+nop
+lbu v0,24(s8)
+move a0,v0
+jal '_MODEM_PUT_2_BYTE_BY_ADDR
+nop
+jal '_ModemEndMessage
+nop
+j '_DOWNLINK_SEND_RAD_OF_IR_0xc0
+nop
+'_DOWNLINK_SEND_RAD_OF_IR_0xb0 lbu v0,73(gp)
+addiu v0,v0,1
+andi v0,v0,255
+sb v0,73(gp)
+'_DOWNLINK_SEND_RAD_OF_IR_0xc0 move sp,s8
+lw ra,36(sp)
+lw s8,32(sp)
+addiu sp,sp,40
+jr ra
+nop
+
+'_MODEM_PUT_4_BYTE_BY_ADDR addiu sp,sp,-8
+sw s8,4(sp)
+move s8,sp
+move v0,a0
+sb v0,8(s8)
+lbu v0,8(s8)
+move sp,s8
+lw s8,4(sp)
+addiu sp,sp,8
+jr ra
+nop
+
+'_MODEM_PUT_2_BYTE_BY_ADDR addiu sp,sp,-8
+sw s8,4(sp)
+move s8,sp
+move v0,a0
+sb v0,8(s8)
+lbu v0,8(s8)
+move sp,s8
+lw s8,4(sp)
+addiu sp,sp,8
+jr ra
+nop
+
+'_DOWNLINK_SEND_CALIB_CONTRAST addiu sp,sp,-32
+sw ra,28(sp)
+sw s8,24(sp)
+move s8,sp
+move v0,a0
+sb v0,32(s8)
+lbu v0,16(s8)
+sltiu v0,v0,7
+bnez v0,'_DOWNLINK_SEND_CALIB_CONTRAST_0x54
+nop
+li a0,3
+jal '_ModemStartMessage
+nop
+lbu v0,32(s8)
+move a0,v0
+jal '_MODEM_PUT_2_BYTE_BY_ADDR
+nop
+jal '_ModemEndMessage
+nop
+j '_DOWNLINK_SEND_CALIB_CONTRAST_0x64
+nop
+'_DOWNLINK_SEND_CALIB_CONTRAST_0x54 lbu v0,73(gp)
+addiu v0,v0,1
+andi v0,v0,255
+sb v0,73(gp)
+'_DOWNLINK_SEND_CALIB_CONTRAST_0x64 move sp,s8
+lw ra,28(sp)
+lw s8,24(sp)
+addiu sp,sp,32
+jr ra
+nop

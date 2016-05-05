@@ -3,6 +3,232 @@ load ../autopilot.maude
 (mod T8 is
   pr TEST .
 
-  op t8 : -> InsList .
-  eq t8 = link-fbw-send and-bitwise SPI-START SPI-SELECT-SLAVE0 lookup-arr BV .
+  op tt8 : -> InsList .
+  eq tt8 = link-fbw-send and-bitwise SPI-START SPI-SELECT-SLAVE0 lookup-arr BV .
 endm)
+
+eof
+
+'link_fbw_send addiu sp,sp,-16
+sw s8,12(sp)
+move s8,sp
+lbu v0,138(gp)
+andi v0,v0,255
+beqz v0,'link_fbw_send_0x34
+nop
+lbu v0,126(gp)
+addiu v0,v0,1
+andi v0,v0,255
+sb v0,126(gp)
+j 'link_fbw_send_0x154
+nop
+'link_fbw_send_0x34 lbu v0,178(gp)
+li v1,1
+sllv v0,v1,v0
+sll v1,v0,24
+sra v1,v1,24
+lbu v0,84(gp)
+li a0,1
+sllv v0,a0,v0
+sll v0,v0,24
+sra v0,v0,24
+or v0,v1,v0
+sll v1,v0,24
+sra v1,v1,24
+lbu v0,143(gp)
+li a0,1
+sllv v0,a0,v0
+sll v0,v0,24
+sra v0,v0,24
+or v0,v1,v0
+sll v0,v0,24
+sra v0,v0,24
+andi v0,v0,255
+sb v0,133(gp)
+addiu v0,gp,100
+andi v0,v0,16
+lbu v0,0(v0)
+andi v0,v0,255
+move v1,v0
+lbu v0,56(gp)
+srav v0,v1,v0
+andi v0,v0,1
+beqz v0,'link_fbw_send_0xc0
+nop
+lbu v0,73(gp)
+sb v0,0(s8)
+'link_fbw_send_0xc0 lbu v0,118(gp)
+li v1,1
+sllv v0,v1,v0
+sll v1,v0,24
+sra v1,v1,24
+lbu v0,133(gp)
+sll v0,v0,24
+sra v0,v0,24
+or v0,v1,v0
+sll v0,v0,24
+sra v0,v0,24
+andi v0,v0,255
+sb v0,133(gp)
+li v0,1
+sb v0,138(gp)
+addiu v0,gp,112
+andi v0,v0,16
+addiu v1,gp,112
+andi v1,v1,16
+lbu v1,0(v1)
+andi a0,v1,255
+li v1,-2
+and v1,a0,v1
+andi v1,v1,255
+sb v1,0(v0)
+sb zero,13(gp)
+sb zero,14(gp)
+lbu v0,13(gp)
+move v1,v0
+lui v0,65284
+addiu v0,v0,16
+addu v0,v1,v0
+lbu v0,0(v0)
+sb v0,15(gp)
+lbu v0,15(gp)
+sb v0,73(gp)
+sb zero,0(gp)
+'link_fbw_send_0x154 move sp,s8
+lw s8,12(sp)
+addiu sp,sp,16
+jr ra
+nop
+
+'and_bitwise addiu sp,sp,-8
+sw s8,4(sp)
+move s8,sp
+move v1,a0
+move v0,a1
+sb v1,8(s8)
+sb v0,12(s8)
+lbu v1,8(s8)
+lbu v0,12(s8)
+and v0,v1,v0
+andi v0,v0,255
+move sp,s8
+lw s8,4(sp)
+addiu sp,sp,8
+jr ra
+nop
+
+'SPI_START addiu sp,sp,-32
+sw ra,28(sp)
+sw s8,24(sp)
+move s8,sp
+move v0,a0
+sb v0,32(s8)
+lbu v0,32(s8)
+andi v0,v0,65535
+sh v0,0(gp)
+addiu v0,gp,0
+andi v0,v0,65535
+lbu v0,0(v0)
+andi v0,v0,255
+sll v1,v0,24
+sra v1,v1,24
+lbu v0,0(gp)
+li a0,1
+sllv v0,a0,v0
+sll v0,v0,24
+sra v0,v0,24
+and v0,v1,v0
+sll v0,v0,24
+sra v0,v0,24
+sb v0,16(s8)
+lbu v0,16(s8)
+beqz v0,'SPI_START_0x74
+nop
+lhu v0,0(gp)
+sb v0,17(s8)
+'SPI_START_0x74 lhu v0,0(gp)
+andi v0,v0,255
+move a0,v0
+jal 'BV
+nop
+sb v0,18(s8)
+lhu v0,0(gp)
+andi v0,v0,255
+move v1,v0
+lbu v0,18(s8)
+move a0,v1
+move a1,v0
+jal 'and_bitwise
+nop
+sh v0,0(gp)
+move sp,s8
+lw ra,28(sp)
+lw s8,24(sp)
+addiu sp,sp,32
+jr ra
+nop
+
+'SPI_SELECT_SLAVE0 addiu sp,sp,-8
+sw s8,4(sp)
+move s8,sp
+li v0,1
+sb v0,0(gp)
+addiu v0,gp,0
+andi v0,v0,65535
+addiu v1,gp,0
+andi v1,v1,65535
+lbu v1,0(v1)
+andi v1,v1,255
+sll a0,v1,24
+sra a0,a0,24
+lbu v1,0(gp)
+li a1,1
+sllv v1,a1,v1
+sll v1,v1,24
+sra v1,v1,24
+nor v1,zero,v1
+sll v1,v1,24
+sra v1,v1,24
+and v1,a0,v1
+sll v1,v1,24
+sra v1,v1,24
+andi v1,v1,255
+sb v1,0(v0)
+move sp,s8
+lw s8,4(sp)
+addiu sp,sp,8
+jr ra
+nop
+
+'lookup_arr addiu sp,sp,-16
+sw s8,12(sp)
+move s8,sp
+sw a0,16(s8)
+move v1,a1
+move v0,a2
+sb v1,20(s8)
+sb v0,24(s8)
+lbu v1,24(s8)
+lbu v0,20(s8)
+mul v0,v1,v0
+lw v1,16(s8)
+addu v0,v1,v0
+sw v0,0(s8)
+lw v0,0(s8)
+move sp,s8
+lw s8,12(sp)
+addiu sp,sp,16
+jr ra
+nop
+
+'BV addiu sp,sp,-8
+sw s8,4(sp)
+move s8,sp
+move v0,a0
+sb v0,8(s8)
+lbu v0,8(s8)
+move sp,s8
+lw s8,4(sp)
+addiu sp,sp,8
+jr ra
+nop

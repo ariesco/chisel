@@ -3,7 +3,347 @@ load ../fly_by_wire.maude
 (mod T2 is
   pr TEST .
 
-  op t2 : -> InsList .
-  eq t2 = send-data-to-autopilot-task SpiIsSelected bit-is-set to-autopilot-from-last-radio
-          spi-reset lookup-arr BV VoltageOfAdc .
+  op tt2 : -> InsList .
+  eq tt2 = send-data-to-autopilot-task SpiIsSelected bit-is-set to-autopilot-from-last-radio
+           spi-reset lookup-arr BV VoltageOfAdc .
 endm)
+
+eof
+
+
+'send_data_to_autopilot_task addiu sp,sp,-24
+sw ra,20(sp)
+sw s8,16(sp)
+move s8,sp
+jal 'SpiIsSelected
+nop
+bnez v0,'send_data_to_autopilot_task_0x44
+nop
+lbu v0,2(gp)
+andi v0,v0,255
+beqz v0,'send_data_to_autopilot_task_0x44
+nop
+sb zero,2(gp)
+jal 'to_autopilot_from_last_radio
+nop
+jal 'spi_reset
+nop
+'send_data_to_autopilot_task_0x44 move sp,s8
+lw ra,20(sp)
+lw s8,16(sp)
+addiu sp,sp,24
+jr ra
+nop
+
+'SpiIsSelected addiu sp,sp,-24
+sw ra,20(sp)
+sw s8,16(sp)
+move s8,sp
+lbu v0,109(gp)
+move a0,v0
+li a1,2
+jal 'bit_is_set
+nop
+move sp,s8
+lw ra,20(sp)
+lw s8,16(sp)
+addiu sp,sp,24
+jr ra
+nop
+
+'bit_is_set addiu sp,sp,-8
+sw s8,4(sp)
+move s8,sp
+move v1,a0
+move v0,a1
+sb v1,8(s8)
+sb v0,12(s8)
+lbu v1,8(s8)
+li v0,1
+bne v1,v0,'bit_is_set_0x48
+nop
+lbu v1,12(s8)
+li v0,1
+bne v1,v0,'bit_is_set_0x48
+nop
+li v0,1
+j 'bit_is_set_0x4c
+nop
+'bit_is_set_0x48 move v0,zero
+'bit_is_set_0x4c move sp,s8
+lw s8,4(sp)
+addiu sp,sp,8
+jr ra
+nop
+
+'to_autopilot_from_last_radio addiu sp,sp,-32
+sw ra,28(sp)
+sw s8,24(sp)
+sw s0,20(sp)
+move s8,sp
+lui v0,65284
+lh v1,864(v0)
+lui v0,65284
+sh v1,884(v0)
+lui v0,65284
+addiu v0,v0,864
+lh v1,2(v0)
+lui v0,65284
+addiu v0,v0,884
+sh v1,2(v0)
+lui v0,65284
+addiu v0,v0,864
+lh v1,4(v0)
+lui v0,65284
+addiu v0,v0,884
+sh v1,4(v0)
+lui v0,65284
+addiu v0,v0,864
+lh v1,6(v0)
+lui v0,65284
+addiu v0,v0,884
+sh v1,6(v0)
+lui v0,65284
+addiu v0,v0,864
+lh v1,8(v0)
+lui v0,65284
+addiu v0,v0,884
+sh v1,8(v0)
+lui v0,65284
+addiu v0,v0,864
+lh v1,10(v0)
+lui v0,65284
+addiu v0,v0,884
+sh v1,10(v0)
+lui v0,65284
+addiu v0,v0,864
+lh v1,12(v0)
+lui v0,65284
+addiu v0,v0,884
+sh v1,12(v0)
+lui v0,65284
+addiu v0,v0,864
+lh v1,14(v0)
+lui v0,65284
+addiu v0,v0,884
+sh v1,14(v0)
+lui v0,65284
+addiu v0,v0,864
+lh v1,16(v0)
+lui v0,65284
+addiu v0,v0,884
+sh v1,16(v0)
+lbu v0,110(gp)
+beqz v0,'to_autopilot_from_last_radio_0x108
+nop
+move a0,zero
+jal '_BV
+nop
+andi v0,v0,255
+j 'to_autopilot_from_last_radio_0x10c
+nop
+'to_autopilot_from_last_radio_0x108 move v0,zero
+'to_autopilot_from_last_radio_0x10c lui v1,65284
+addiu v1,v1,884
+sb v0,19(v1)
+lui v0,65284
+addiu v0,v0,884
+lbu v0,19(v0)
+sll s0,v0,24
+sra s0,s0,24
+lbu v0,71(gp)
+beqz v0,'to_autopilot_from_last_radio_0x154
+nop
+li a0,1
+jal '_BV
+nop
+sll v0,v0,24
+sra v0,v0,24
+j 'to_autopilot_from_last_radio_0x158
+nop
+'to_autopilot_from_last_radio_0x154 move v0,zero
+'to_autopilot_from_last_radio_0x158 or v0,s0,v0
+sll v0,v0,24
+sra v0,v0,24
+andi v1,v0,255
+lui v0,65284
+addiu v0,v0,884
+sb v1,19(v0)
+lbu v0,0(gp)
+beqz v0,'to_autopilot_from_last_radio_0x1b4
+nop
+lui v0,65284
+addiu v0,v0,884
+lbu s0,19(v0)
+li a0,2
+jal '_BV
+nop
+andi v0,v0,255
+or v0,s0,v0
+andi v1,v0,255
+lui v0,65284
+addiu v0,v0,884
+sb v1,19(v0)
+sb zero,0(gp)
+'to_autopilot_from_last_radio_0x1b4 lbu v1,13(gp)
+lui v0,65284
+addiu v0,v0,884
+sb v1,18(v0)
+lui v0,65284
+lhu v0,668(v0)
+srl v0,v0,5
+andi v0,v0,65535
+move a0,v0
+jal 'VoltageOfAdc
+nop
+andi v0,v0,255
+sll v0,v0,1
+sll v1,v0,2
+addu v0,v0,v1
+andi v1,v0,255
+lui v0,65284
+addiu v0,v0,884
+sb v1,21(v0)
+move sp,s8
+lw ra,28(sp)
+lw s8,24(sp)
+lw s0,20(sp)
+addiu sp,sp,32
+jr ra
+nop
+
+'spi_reset addiu sp,sp,-32
+sw ra,28(sp)
+sw s8,24(sp)
+move s8,sp
+sb zero,3(gp)
+sb zero,4(gp)
+lbu v0,3(gp)
+andi v0,v0,255
+lui v1,65284
+addiu a0,v1,900
+li a1,22
+move a2,v0
+jal 'lookup_arr
+nop
+lbu v0,0(v0)
+sb v0,16(s8)
+lbu v0,16(s8)
+sb v0,5(gp)
+lbu v0,5(gp)
+andi v0,v0,255
+sh v0,44(gp)
+sb zero,1(gp)
+move sp,s8
+lw ra,28(sp)
+lw s8,24(sp)
+addiu sp,sp,32
+jr ra
+nop
+
+'lookup_arr addiu sp,sp,-16
+sw s8,12(sp)
+move s8,sp
+sw a0,16(s8)
+move v1,a1
+move v0,a2
+sb v1,20(s8)
+sb v0,24(s8)
+lbu v1,24(s8)
+lbu v0,20(s8)
+mul v0,v1,v0
+lw v1,16(s8)
+addu v0,v1,v0
+sw v0,0(s8)
+lw v0,0(s8)
+move sp,s8
+lw s8,12(sp)
+addiu sp,sp,16
+jr ra
+nop
+
+'_BV addiu sp,sp,-8
+sw s8,4(sp)
+move s8,sp
+move v0,a0
+sh v0,8(s8)
+lhu v0,8(s8)
+li v1,1
+sllv v0,v1,v0
+andi v0,v0,65535
+move sp,s8
+lw s8,4(sp)
+addiu sp,sp,8
+jr ra
+nop
+
+'VoltageOfAdc addiu sp,sp,-8
+sw s8,4(sp)
+move s8,sp
+move v0,a0
+sh v0,8(s8)
+lhu v0,8(s8)
+mtc1 v0,$f1
+cvt.d.w $f0,$f1
+mfc1 a0,$f0
+mfc1 a1,$f1
+lui v0,65284
+lw v1,108(v0)
+lw v0,104(v0)
+mtc1 a0,$f2
+mtc1 a1,$f3
+mtc1 v0,$f0
+mtc1 v1,$f1
+mul $f2,$f2,$f0
+mfc1 a0,$f2
+mfc1 a1,$f3
+lui v0,65284
+lw v1,116(v0)
+lw v0,112(v0)
+mtc1 a0,$f2
+mtc1 a1,$f3
+mtc1 v0,$f0
+mtc1 v1,$f1
+add $f2,$f2,$f0
+mfc1 v0,$f2
+mfc1 v1,$f3
+lui a0,65284
+lw a1,124(a0)
+lw a0,120(a0)
+mtc1 v0,$f2
+mtc1 v1,$f3
+mtc1 a0,$f0
+mtc1 a1,$f1
+c.le.d $f0,$f2
+lui a2,16256
+movf a2,zero,$fcc0
+mtc1 a2,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+bc1t 'VoltageOfAdc_0xcc
+nop
+mtc1 v0,$f0
+mtc1 v1,$f1
+trunc.w.d $f1,$f0
+mfc1 v0,$f1
+j 'VoltageOfAdc_0x100
+nop
+'VoltageOfAdc_0xcc mtc1 v0,$f2
+mtc1 v1,$f3
+mtc1 a0,$f0
+mtc1 a1,$f1
+sub $f2,$f2,$f0
+mfc1 v0,$f2
+mfc1 v1,$f3
+lui a0,32768
+mtc1 v0,$f2
+mtc1 v1,$f3
+trunc.w.d $f3,$f2
+mfc1 v0,$f3
+or v0,v0,a0
+'VoltageOfAdc_0x100 andi v0,v0,65535
+move sp,s8
+lw s8,4(sp)
+addiu sp,sp,8
+jr ra
+nop

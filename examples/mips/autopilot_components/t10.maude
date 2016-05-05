@@ -3,10 +3,1031 @@ load ../autopilot.maude
 (mod T10 is
   pr TEST .
 
-  op t10 : -> InsList .
-  eq t10 = navigation-task navigation-update nav-home Circle lookup-arr
-           compute-dist2-to-home nav-update auto-nav send-nav-values
-           DOWNLINK-SEND-NAVIGATION ModemStartMessage ModemEndMessage
-           MODEM-PUT-4-BYTE-BY-ADDR MODEM-PUT-1-BYTE-BY-ADDR course-run
-           course-pid-run NORM-RAD-ANGLE .
+  op tt10 : -> InsList .
+  eq tt10 = navigation-task navigation-update nav-home Circle lookup-arr
+            compute-dist2-to-home nav-update auto-nav send-nav-values
+            DOWNLINK-SEND-NAVIGATION ModemStartMessage ModemEndMessage
+            MODEM-PUT-4-BYTE-BY-ADDR MODEM-PUT-1-BYTE-BY-ADDR course-run
+            course-pid-run NORM-RAD-ANGLE .
 endm)
+
+eof
+
+'navigation_task: addiu sp,sp,-24
+sw ra,20(sp)
+sw s8,16(sp)
+move s8,sp
+jal 'navigation_update
+nop
+jal 'send_nav_values
+nop
+jal 'course_run
+nop
+move sp,s8
+lw ra,20(sp)
+lw s8,16(sp)
+addiu sp,sp,24
+jr ra
+nop
+
+'navigation_update addiu sp,sp,-24
+sw ra,20(sp)
+sw s8,16(sp)
+move s8,sp
+li v0,3
+sb v0,5(gp)
+lbu v1,3(gp)
+li v0,3
+bne v1,v0,'navigation_update_0x38
+nop
+jal 'nav_home
+nop
+j 'navigation_update_0x40
+nop
+'navigation_update_0x38 jal 'nav_update
+nop
+'navigation_update_0x40 move sp,s8
+lw ra,20(sp)
+lw s8,16(sp)
+addiu sp,sp,24
+jr ra
+nop
+
+'nav_home addiu sp,sp,-24
+sw ra,20(sp)
+sw s8,16(sp)
+move s8,sp
+lui v0,65284
+lw v0,252(v0)
+move a0,zero
+move a1,v0
+jal '_Circle
+nop
+lui v0,65284
+sw zero,980(v0)
+li v0,3
+sb v0,4(gp)
+lui v0,65284
+lui v1,65284
+lw v1,240(v1)
+sw v1,624(v0)
+jal 'compute_dist2_to_home
+nop
+lui v0,65284
+lw v1,0(v0)
+lui v0,65284
+sw v1,0(v0)
+move sp,s8
+lw ra,20(sp)
+lw s8,16(sp)
+addiu sp,sp,24
+jr ra
+nop
+
+'_Circle addiu sp,sp,-48
+sw ra,44(sp)
+sw s8,40(sp)
+sw s0,36(sp)
+move s8,sp
+move v0,a0
+sw a1,52(s8)
+sb v0,48(s8)
+lui v0,65284
+lw s0,0(v0)
+lbu v1,48(s8)
+lbu v0,16(s8)
+lui a0,65284
+addiu a0,a0,620
+move a1,v1
+move a2,v0
+jal 'lookup_arr
+nop
+lbu v0,0(v0)
+mtc1 v0,$f0
+cvt.s.w $f0,$f0
+mfc1 v0,$f0
+mtc1 s0,$f1
+mtc1 v0,$f2
+sub $f1,$f1,$f2
+mfc1 v1,$f1
+lui v0,65284
+lw v0,0(v0)
+mtc1 v1,$f3
+mtc1 v0,$f0
+add $f3,$f3,$f0
+mfc1 s0,$f3
+lbu v1,48(s8)
+lbu v0,17(s8)
+lui a0,65284
+addiu a0,a0,620
+move a1,v1
+move a2,v0
+jal 'lookup_arr
+nop
+lbu v0,0(v0)
+mtc1 v0,$f1
+cvt.s.w $f1,$f1
+mfc1 v0,$f1
+mtc1 s0,$f2
+mtc1 v0,$f3
+sub $f2,$f2,$f3
+mfc1 v0,$f2
+sw v0,20(s8)
+lw v0,20(s8)
+mtc1 v0,$f1
+cvt.d.s $f0,$f1
+mfc1 a0,$f0
+mfc1 a1,$f1
+lw v1,52(s8)
+lui v0,65284
+xor v1,v1,v0
+lui v0,65284
+lw v0,0(v0)
+mtc1 v1,$f2
+mtc1 v0,$f3
+mul $f2,$f2,$f3
+mfc1 v0,$f2
+mtc1 v0,$f1
+cvt.d.s $f0,$f1
+mfc1 v0,$f0
+mfc1 v1,$f1
+lui a2,65284
+lw a3,180(a2)
+lw a2,176(a2)
+mtc1 a2,$f2
+mtc1 a3,$f3
+mtc1 v0,$f0
+mtc1 v1,$f1
+div $f2,$f2,$f0
+mfc1 v0,$f2
+mfc1 v1,$f3
+mtc1 a0,$f2
+mtc1 a1,$f3
+mtc1 v0,$f0
+mtc1 v1,$f1
+add $f2,$f2,$f0
+mfc1 v0,$f2
+mfc1 v1,$f3
+mtc1 v0,$f2
+mtc1 v1,$f3
+cvt.s.d $f3,$f2
+mfc1 v0,$f3
+sw v0,24(s8)
+lbu v1,48(s8)
+lbu v0,17(s8)
+lui a0,65284
+addiu a0,a0,620
+move a1,v1
+move a2,v0
+jal 'lookup_arr
+nop
+lbu v1,48(s8)
+lbu v0,16(s8)
+lui a0,65284
+addiu a0,a0,620
+move a1,v1
+move a2,v0
+jal 'lookup_arr
+nop
+lw v0,24(s8)
+mtc1 v0,$f1
+cvt.d.s $f0,$f1
+mfc1 v0,$f0
+mfc1 v1,$f1
+lui a0,65284
+lw a1,188(a0)
+lw a0,184(a0)
+mtc1 a0,$f2
+mtc1 a1,$f3
+mtc1 v0,$f0
+mtc1 v1,$f1
+sub $f2,$f2,$f0
+mfc1 a0,$f2
+mfc1 a1,$f3
+lui v0,65284
+lw v1,132(v0)
+lw v0,128(v0)
+mtc1 a0,$f2
+mtc1 a1,$f3
+mtc1 v0,$f0
+mtc1 v1,$f1
+div $f2,$f2,$f0
+mfc1 a0,$f2
+mfc1 a1,$f3
+lui v0,65284
+lw v1,196(v0)
+lw v0,192(v0)
+mtc1 a0,$f2
+mtc1 a1,$f3
+mtc1 v0,$f0
+mtc1 v1,$f1
+mul $f2,$f2,$f0
+mfc1 v0,$f2
+mfc1 v1,$f3
+mtc1 v0,$f2
+mtc1 v1,$f3
+cvt.s.d $f3,$f2
+mfc1 v1,$f3
+lui v0,65284
+sw v1,0(v0)
+j '_Circle_0x278
+nop
+'_Circle_0x250 lui v0,65284
+lw v1,0(v0)
+lui v0,65284
+lw v0,200(v0)
+mtc1 v1,$f0
+mtc1 v0,$f1
+add $f0,$f0,$f1
+mfc1 v1,$f0
+lui v0,65284
+sw v1,0(v0)
+'_Circle_0x278 lui v0,65284
+lw v1,0(v0)
+move v0,zero
+mtc1 v1,$f2
+mtc1 v0,$f3
+c.lt.s $f2,$f3
+lui v0,65284
+movf v0,zero,$f0
+mtc1 v0,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+bc1t '_Circle_0x250
+nop
+j '_Circle_0x2dc
+nop
+'_Circle_0x2b4 lui v0,65284
+lw v1,0(v0)
+lui v0,65284
+lw v0,200(v0)
+mtc1 v1,$f0
+mtc1 v0,$f1
+sub $f0,$f0,$f1
+mfc1 v1,$f0
+lui v0,65284
+sw v1,0(v0)
+'_Circle_0x2dc lui v0,65284
+lw v1,0(v0)
+lui v0,65284
+lw v0,200(v0)
+mtc1 v1,$f2
+mtc1 v0,$f3
+c.le.s $f3,$f2
+lui v0,65284
+movf v0,zero,$f0
+mtc1 v0,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+bc1t '_Circle_0x2b4
+nop
+mtc1 v0,$f0
+move sp,s8
+lw ra,44(sp)
+lw s8,40(sp)
+lw s0,36(sp)
+addiu sp,sp,48
+jr ra
+nop
+
+'lookup_arr addiu sp,sp,-16
+sw s8,12(sp)
+move s8,sp
+sw a0,16(s8)
+move v1,a1
+move v0,a2
+sb v1,20(s8)
+sb v0,24(s8)
+lbu v1,24(s8)
+lbu v0,20(s8)
+mul v0,v1,v0
+lw v1,16(s8)
+addu v0,v1,v0
+sw v0,0(s8)
+lw v0,0(s8)
+move sp,s8
+lw s8,12(sp)
+addiu sp,sp,16
+jr ra
+nop
+
+'compute_dist2_to_home addiu sp,sp,-40
+sw ra,36(sp)
+sw s8,32(sp)
+move s8,sp
+lbu v0,16(s8)
+lui v1,65284
+addiu a0,v1,620
+move a1,zero
+move a2,v0
+jal 'lookup_arr
+nop
+lbu v0,0(v0)
+mtc1 v0,$f0
+cvt.s.w $f0,$f0
+mfc1 v1,$f0
+lui v0,65284
+lw v0,0(v0)
+mtc1 v1,$f1
+mtc1 v0,$f2
+sub $f1,$f1,$f2
+mfc1 v0,$f1
+sw v0,20(s8)
+lbu v0,24(s8)
+lui v1,65284
+addiu a0,v1,620
+move a1,zero
+move a2,v0
+jal 'lookup_arr
+nop
+lbu v0,0(v0)
+mtc1 v0,$f3
+cvt.s.w $f3,$f3
+mfc1 v1,$f3
+lui v0,65284
+lw v0,0(v0)
+mtc1 v1,$f0
+mtc1 v0,$f1
+sub $f0,$f0,$f1
+mfc1 v0,$f0
+sw v0,28(s8)
+lw v1,20(s8)
+lw v0,20(s8)
+mtc1 v1,$f2
+mtc1 v0,$f3
+mul $f2,$f2,$f3
+mfc1 v1,$f2
+lw a0,28(s8)
+lw v0,28(s8)
+mtc1 a0,$f0
+mtc1 v0,$f1
+mul $f0,$f0,$f1
+mfc1 v0,$f0
+mtc1 v1,$f2
+mtc1 v0,$f3
+add $f2,$f2,$f3
+mfc1 v1,$f2
+lui v0,65284
+sw v1,0(v0)
+lui v0,65284
+lw v1,0(v0)
+lui v0,65284
+lw v0,276(v0)
+mtc1 v1,$f0
+mtc1 v0,$f1
+c.lt.s $f1,$f0
+lui v0,65284
+movf v0,zero,$f0
+mtc1 v0,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+bc1f 'compute_dist2_to_home_0x130
+nop
+li v0,1
+sb v0,90(gp)
+j 'compute_dist2_to_home_0x134
+nop
+'compute_dist2_to_home_0x130 sb zero,90(gp)
+'compute_dist2_to_home_0x134 move sp,s8
+lw ra,36(sp)
+lw s8,32(sp)
+addiu sp,sp,40
+jr ra
+nop
+
+'nav_update addiu sp,sp,-24
+sw ra,20(sp)
+sw s8,16(sp)
+move s8,sp
+jal 'compute_dist2_to_home
+nop
+jal '_auto_nav
+nop
+move sp,s8
+lw ra,20(sp)
+lw s8,16(sp)
+addiu sp,sp,24
+jr ra
+nop
+
+'_auto_nav addiu sp,sp,-8
+sw s8,4(sp)
+move s8,sp
+move sp,s8
+lw s8,4(sp)
+addiu sp,sp,8
+jr ra
+nop
+
+'send_nav_values addiu sp,sp,-40
+sw ra,36(sp)
+sw s8,32(sp)
+move s8,sp
+lbu v0,87(gp)
+move t0,v0
+lbu v0,142(gp)
+move a1,v0
+lui v0,65284
+lw v0,0(v0)
+lui v1,65284
+lw a0,412(v1)
+mtc1 v0,$f0
+mtc1 a0,$f1
+c.le.s $f1,$f0
+lui v1,65284
+movf v1,zero,$f0
+mtc1 v1,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+bc1t 'send_nav_values_0x6c
+nop
+mtc1 v0,$f0
+trunc.w.s $f0,$f0
+mfc1 v0,$f0
+j 'send_nav_values_0x90
+nop
+'send_nav_values_0x6c mtc1 v0,$f1
+mtc1 a0,$f2
+sub $f1,$f1,$f2
+mfc1 v0,$f1
+lui v1,65284
+mtc1 v0,$f3
+trunc.w.s $f3,$f3
+mfc1 v0,$f3
+or v0,v0,v1
+'send_nav_values_0x90 andi v0,v0,255
+move a2,v0
+lui v0,65284
+lw v0,0(v0)
+lui v1,65284
+lw a0,412(v1)
+mtc1 v0,$f0
+mtc1 a0,$f1
+c.le.s $f1,$f0
+lui v1,65284
+movf v1,zero,$f0
+mtc1 v1,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+bc1t 'send_nav_values_0xe4
+nop
+mtc1 v0,$f0
+trunc.w.s $f0,$f0
+mfc1 v0,$f0
+j 'send_nav_values_0x108
+nop
+'send_nav_values_0xe4 mtc1 v0,$f1
+mtc1 a0,$f2
+sub $f1,$f1,$f2
+mfc1 v0,$f1
+lui v1,65284
+mtc1 v0,$f3
+trunc.w.s $f3,$f3
+mfc1 v0,$f3
+or v0,v0,v1
+'send_nav_values_0x108 andi v0,v0,255
+move a3,v0
+lui v0,65284
+lw v0,896(v0)
+lui v1,65284
+lw a0,412(v1)
+mtc1 v0,$f0
+mtc1 a0,$f1
+c.le.s $f1,$f0
+lui v1,65284
+movf v1,zero,$f0
+mtc1 v1,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+bc1t 'send_nav_values_0x15c
+nop
+mtc1 v0,$f0
+trunc.w.s $f0,$f0
+mfc1 v0,$f0
+j 'send_nav_values_0x180
+nop
+'send_nav_values_0x15c mtc1 v0,$f1
+mtc1 a0,$f2
+sub $f1,$f1,$f2
+mfc1 v0,$f1
+lui v1,65284
+mtc1 v0,$f3
+trunc.w.s $f3,$f3
+mfc1 v0,$f3
+or v0,v0,v1
+'send_nav_values_0x180 andi v0,v0,255
+move t3,v0
+lui v0,65284
+lw v0,0(v0)
+lui v1,65284
+lw a0,412(v1)
+mtc1 v0,$f0
+mtc1 a0,$f1
+c.le.s $f1,$f0
+lui v1,65284
+movf v1,zero,$f0
+mtc1 v1,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+bc1t 'send_nav_values_0x1d4
+nop
+mtc1 v0,$f0
+trunc.w.s $f0,$f0
+mfc1 v0,$f0
+j 'send_nav_values_0x1f8
+nop
+'send_nav_values_0x1d4 mtc1 v0,$f1
+mtc1 a0,$f2
+sub $f1,$f1,$f2
+mfc1 v0,$f1
+lui v1,65284
+mtc1 v0,$f3
+trunc.w.s $f3,$f3
+mfc1 v0,$f3
+or v0,v0,v1
+'send_nav_values_0x1f8 andi v0,v0,255
+move t2,v0
+lui v0,65284
+lw v0,532(v0)
+lui v1,65284
+lw a0,412(v1)
+mtc1 v0,$f0
+mtc1 a0,$f1
+c.le.s $f1,$f0
+lui v1,65284
+movf v1,zero,$f0
+mtc1 v1,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+bc1t 'send_nav_values_0x24c
+nop
+mtc1 v0,$f0
+trunc.w.s $f0,$f0
+mfc1 v0,$f0
+j 'send_nav_values_0x270
+nop
+'send_nav_values_0x24c mtc1 v0,$f1
+mtc1 a0,$f2
+sub $f1,$f1,$f2
+mfc1 v0,$f1
+lui v1,65284
+mtc1 v0,$f3
+trunc.w.s $f3,$f3
+mfc1 v0,$f3
+or v0,v0,v1
+'send_nav_values_0x270 andi v0,v0,255
+move t1,v0
+lui v0,65284
+lw v0,0(v0)
+lui v1,65284
+lw a0,412(v1)
+mtc1 v0,$f0
+mtc1 a0,$f1
+c.le.s $f1,$f0
+lui v1,65284
+movf v1,zero,$f0
+mtc1 v1,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+bc1t 'send_nav_values_0x2c4
+nop
+mtc1 v0,$f0
+trunc.w.s $f0,$f0
+mfc1 v0,$f0
+j 'send_nav_values_0x2e8
+nop
+'send_nav_values_0x2c4 mtc1 v0,$f1
+mtc1 a0,$f2
+sub $f1,$f1,$f2
+mfc1 v0,$f1
+lui v1,65284
+mtc1 v0,$f3
+trunc.w.s $f3,$f3
+mfc1 v0,$f3
+or v0,v0,v1
+'send_nav_values_0x2e8 andi v0,v0,255
+sw t3,16(sp)
+sw t2,20(sp)
+sw t1,24(sp)
+sw v0,28(sp)
+move a0,t0
+jal '_DOWNLINK_SEND_NAVIGATION
+nop
+move sp,s8
+lw ra,36(sp)
+lw s8,32(sp)
+addiu sp,sp,40
+jr ra
+nop
+
+'_DOWNLINK_SEND_NAVIGATION addiu sp,sp,-48
+sw ra,44(sp)
+sw s8,40(sp)
+move s8,sp
+move t2,a0
+move t1,a1
+move t0,a2
+move a2,a3
+lw a1,64(s8)
+lw a0,68(s8)
+lw v1,72(s8)
+lw v0,76(s8)
+sb t2,48(s8)
+sb t1,52(s8)
+sb t0,56(s8)
+sb a2,60(s8)
+sb a1,24(s8)
+sb a0,28(s8)
+sb v1,32(s8)
+sb v0,36(s8)
+lbu v0,16(s8)
+sltiu v0,v0,30
+beqz v0,'_DOWNLINK_SEND_NAVIGATION_0xfc
+nop
+li a0,10
+jal '_ModemStartMessage
+nop
+lbu v0,48(s8)
+move a0,v0
+jal '_MODEM_PUT_1_BYTE_BY_ADDR
+nop
+lbu v0,52(s8)
+move a0,v0
+jal '_MODEM_PUT_1_BYTE_BY_ADDR
+nop
+lbu v0,56(s8)
+move a0,v0
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+nop
+lbu v0,60(s8)
+move a0,v0
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+nop
+lbu v0,24(s8)
+move a0,v0
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+nop
+lbu v0,28(s8)
+move a0,v0
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+nop
+lbu v0,32(s8)
+move a0,v0
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+nop
+lbu v0,36(s8)
+move a0,v0
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+nop
+jal '_ModemEndMessage
+nop
+j '_DOWNLINK_SEND_NAVIGATION_0x10c
+nop
+'_DOWNLINK_SEND_NAVIGATION_0xfc lbu v0,67(gp)
+addiu v0,v0,1
+andi v0,v0,255
+sb v0,67(gp)
+'_DOWNLINK_SEND_NAVIGATION_0x10c move sp,s8
+lw ra,44(sp)
+lw s8,40(sp)
+addiu sp,sp,48
+jr ra
+nop
+
+'_ModemStartMessage addiu sp,sp,-8
+sw s8,4(sp)
+move s8,sp
+move v0,a0
+sb v0,8(s8)
+lbu v1,8(s8)
+li v0,1
+bne v1,v0,'_ModemStartMessage_0x30
+nop
+li v0,1
+j '_ModemStartMessage_0x30
+nop
+'_ModemStartMessage_0x30 move sp,s8
+lw s8,4(sp)
+addiu sp,sp,8
+jr ra
+nop
+
+'_ModemEndMessage addiu sp,sp,-8
+sw s8,4(sp)
+move s8,sp
+li v0,1
+move sp,s8
+lw s8,4(sp)
+addiu sp,sp,8
+jr ra
+nop
+
+'_MODEM_PUT_4_BYTE_BY_ADDR addiu sp,sp,-8
+sw s8,4(sp)
+move s8,sp
+move v0,a0
+sb v0,8(s8)
+lbu v0,8(s8)
+move sp,s8
+lw s8,4(sp)
+addiu sp,sp,8
+jr ra
+nop
+
+'_MODEM_PUT_1_BYTE_BY_ADDR addiu sp,sp,-8
+sw s8,4(sp)
+move s8,sp
+move v0,a0
+sb v0,8(s8)
+lbu v0,8(s8)
+move sp,s8
+lw s8,4(sp)
+addiu sp,sp,8
+jr ra
+nop
+
+'course_run addiu sp,sp,-24
+sw ra,20(sp)
+sw s8,16(sp)
+move s8,sp
+lbu v1,3(gp)
+li v0,2
+beq v1,v0,'course_run_0x30
+nop
+lbu v1,3(gp)
+li v0,3
+bne v1,v0,'course_run_0x58
+nop
+'course_run_0x30 lbu v0,5(gp)
+sltiu v0,v0,3
+bnez v0,'course_run_0x48
+nop
+jal 'course_pid_run
+nop
+'course_run_0x48 lui v0,65284
+lw v1,0(v0)
+lui v0,65284
+sw v1,888(v0)
+'course_run_0x58 move sp,s8
+lw ra,20(sp)
+lw s8,16(sp)
+addiu sp,sp,24
+jr ra
+nop
+
+'course_pid_run addiu sp,sp,-32
+sw ra,28(sp)
+sw s8,24(sp)
+move s8,sp
+lui v0,65284
+lw v1,0(v0)
+lui v0,65284
+lw v0,904(v0)
+mtc1 v1,$f0
+mtc1 v0,$f1
+sub $f0,$f0,$f1
+mfc1 v0,$f0
+sw v0,16(s8)
+lw v0,16(s8)
+lui v1,65284
+lw a0,148(v1)
+mtc1 v0,$f2
+mtc1 a0,$f3
+c.le.s $f3,$f2
+lui v1,65284
+movf v1,zero,$f0
+mtc1 v1,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+bc1t 'course_pid_run_0x7c
+nop
+mtc1 v0,$f0
+trunc.w.s $f0,$f0
+mfc1 v0,$f0
+j 'course_pid_run_0xa0
+nop
+'course_pid_run_0x7c mtc1 v0,$f1
+mtc1 a0,$f2
+sub $f1,$f1,$f2
+mfc1 v0,$f1
+lui v1,65284
+mtc1 v0,$f3
+trunc.w.s $f3,$f3
+mfc1 v0,$f3
+or v0,v0,v1
+'course_pid_run_0xa0 andi v0,v0,255
+move a0,v0
+jal '_NORM_RAD_ANGLE
+nop
+lui v0,65284
+lw v1,540(v0)
+lw v0,16(s8)
+mtc1 v1,$f0
+mtc1 v0,$f1
+mul $f0,$f0,$f1
+mfc1 v1,$f0
+lui v0,65284
+sw v1,0(v0)
+lui v0,65284
+lw v1,0(v0)
+lui v0,65284
+lw v0,544(v0)
+mtc1 v1,$f2
+mtc1 v0,$f3
+c.lt.s $f3,$f2
+lui v0,65284
+movf v0,zero,$f0
+mtc1 v0,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+bc1f 'course_pid_run_0x124
+nop
+lui v0,65284
+lw v1,544(v0)
+lui v0,65284
+sw v1,0(v0)
+j 'course_pid_run_0x17c
+nop
+'course_pid_run_0x124 lui v0,65284
+lw v1,544(v0)
+lui v0,65284
+xor v1,v1,v0
+lui v0,65284
+lw v0,0(v0)
+mtc1 v1,$f0
+mtc1 v0,$f1
+c.lt.s $f1,$f0
+lui v0,65284
+movf v0,zero,$f0
+mtc1 v0,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+bc1f 'course_pid_run_0x17c
+nop
+lui v0,65284
+lw v1,544(v0)
+lui v0,65284
+xor v1,v1,v0
+lui v0,65284
+sw v1,0(v0)
+'course_pid_run_0x17c move sp,s8
+lw ra,28(sp)
+lw s8,24(sp)
+addiu sp,sp,32
+jr ra
+nop
+
+'_NORM_RAD_ANGLE addiu sp,sp,-8
+sw s8,4(sp)
+move s8,sp
+move v0,a0
+sb v0,8(s8)
+j '_NORM_RAD_ANGLE_0xe4
+nop
+'_NORM_RAD_ANGLE_0x1c lbu v0,8(s8)
+mtc1 v0,$f1
+cvt.d.w $f0,$f1
+mfc1 a0,$f0
+mfc1 a1,$f1
+lui v0,65284
+lw v1,124(v0)
+lw v0,120(v0)
+mtc1 a0,$f2
+mtc1 a1,$f3
+mtc1 v0,$f0
+mtc1 v1,$f1
+sub $f2,$f2,$f0
+mfc1 v0,$f2
+mfc1 v1,$f3
+lui a0,65284
+lw a1,108(a0)
+lw a0,104(a0)
+mtc1 v0,$f2
+mtc1 v1,$f3
+mtc1 a0,$f0
+mtc1 a1,$f1
+c.le.d $f0,$f2
+lui a2,65284
+movf a2,zero,$f0
+mtc1 a2,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+bc1t '_NORM_RAD_ANGLE_0xac
+nop
+mtc1 v0,$f0
+mtc1 v1,$f1
+trunc.w.d $f1,$f0
+mfc1 v0,$f1
+j '_NORM_RAD_ANGLE_0xe0
+nop
+'_NORM_RAD_ANGLE_0xac mtc1 v0,$f2
+mtc1 v1,$f3
+mtc1 a0,$f0
+mtc1 a1,$f1
+sub $f2,$f2,$f0
+mfc1 v0,$f2
+mfc1 v1,$f3
+lui a0,65284
+mtc1 v0,$f2
+mtc1 v1,$f3
+trunc.w.d $f3,$f2
+mfc1 v0,$f3
+or v0,v0,a0
+'_NORM_RAD_ANGLE_0xe0 sb v0,8(s8)
+'_NORM_RAD_ANGLE_0xe4 lbu v0,8(s8)
+mtc1 v0,$f1
+cvt.d.w $f0,$f1
+mfc1 a0,$f0
+mfc1 a1,$f1
+lui v0,65284
+lw v1,132(v0)
+lw v0,128(v0)
+mtc1 a0,$f2
+mtc1 a1,$f3
+mtc1 v0,$f0
+mtc1 v1,$f1
+c.lt.d $f0,$f2
+lui v0,65284
+movf v0,zero,$f0
+mtc1 v0,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+bc1t '_NORM_RAD_ANGLE_0x1c
+nop
+j '_NORM_RAD_ANGLE_0x204
+nop
+'_NORM_RAD_ANGLE_0x13c lbu v0,8(s8)
+mtc1 v0,$f1
+cvt.d.w $f0,$f1
+mfc1 a0,$f0
+mfc1 a1,$f1
+lui v0,65284
+lw v1,124(v0)
+lw v0,120(v0)
+mtc1 a0,$f2
+mtc1 a1,$f3
+mtc1 v0,$f0
+mtc1 v1,$f1
+add $f2,$f2,$f0
+mfc1 v0,$f2
+mfc1 v1,$f3
+lui a0,65284
+lw a1,108(a0)
+lw a0,104(a0)
+mtc1 v0,$f2
+mtc1 v1,$f3
+mtc1 a0,$f0
+mtc1 a1,$f1
+c.le.d $f0,$f2
+lui a2,65284
+movf a2,zero,$f0
+mtc1 a2,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+bc1t '_NORM_RAD_ANGLE_0x1cc
+nop
+mtc1 v0,$f0
+mtc1 v1,$f1
+trunc.w.d $f1,$f0
+mfc1 v0,$f1
+j '_NORM_RAD_ANGLE_0x200
+nop
+'_NORM_RAD_ANGLE_0x1cc mtc1 v0,$f2
+mtc1 v1,$f3
+mtc1 a0,$f0
+mtc1 a1,$f1
+sub $f2,$f2,$f0
+mfc1 v0,$f2
+mfc1 v1,$f3
+lui a0,65284
+mtc1 v0,$f2
+mtc1 v1,$f3
+trunc.w.d $f3,$f2
+mfc1 v0,$f3
+or v0,v0,a0
+'_NORM_RAD_ANGLE_0x200 sb v0,8(s8)
+'_NORM_RAD_ANGLE_0x204 lbu v0,8(s8)
+mtc1 v0,$f1
+cvt.d.w $f0,$f1
+mfc1 a0,$f0
+mfc1 a1,$f1
+lui v0,65284
+lw v1,140(v0)
+lw v0,136(v0)
+mtc1 a0,$f2
+mtc1 a1,$f3
+mtc1 v0,$f0
+mtc1 v1,$f1
+c.lt.d $f2,$f0
+lui v0,65284
+movf v0,zero,$f0
+mtc1 v0,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+bc1t '_NORM_RAD_ANGLE_0x13c
+nop
+move sp,s8
+lw s8,4(sp)
+addiu sp,sp,8
+jr ra
+nop

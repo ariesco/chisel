@@ -3,6 +3,375 @@ load ../autopilot.maude
 (mod T12 is
   pr TEST .
 
-  op t12 : -> InsList .
-  eq t12 = climb-control-task climb-pid-run TRIM-UPPRZ .
+  op tt12 : -> InsList .
+  eq tt12 = climb-control-task climb-pid-run TRIM-UPPRZ .
 endm)
+
+eof
+
+'climb_control_task addiu sp,sp,-24
+sw ra,20(sp)
+sw s8,16(sp)
+move s8,sp
+lbu v1,3(gp)
+li v0,2
+beq v1,v0,'climb_control_task_0x30
+nop
+lbu v1,3(gp)
+li v0,3
+bne v1,v0,'climb_control_task_0x90
+nop
+'climb_control_task_0x30 lbu v0,4(gp)
+sltiu v0,v0,2
+bnez v0,'climb_control_task_0x48
+nop
+jal 'climb_pid_run
+nop
+'climb_control_task_0x48 lbu v1,4(gp)
+li v0,1
+bne v1,v0,'climb_control_task_0x68
+nop
+lhu v0,70(gp)
+sll v0,v0,16
+sra v0,v0,16
+sh v0,76(gp)
+'climb_control_task_0x68 lbu v0,24(gp)
+bnez v0,'climb_control_task_0x8c
+nop
+lhu v0,40(gp)
+bnez v0,'climb_control_task_0x90
+nop
+lbu v0,7(gp)
+bnez v0,'climb_control_task_0x90
+nop
+'climb_control_task_0x8c sh zero,76(gp)
+'climb_control_task_0x90 move sp,s8
+lw ra,20(sp)
+lw s8,16(sp)
+addiu sp,sp,24
+jr ra
+nop
+
+'climb_pid_run addiu sp,sp,-32
+sw ra,28(sp)
+sw s8,24(sp)
+move s8,sp
+lui v0,65284
+lw v1,0(v0)
+lui v0,65284
+lw v0,908(v0)
+mtc1 v1,$f0
+mtc1 v0,$f1
+sub $f0,$f0,$f1
+mfc1 v0,$f0
+sw v0,16(s8)
+lbu v0,6(gp)
+beqz v0,'climb_pid_run_0x1f0
+nop
+lhu v0,70(gp)
+sll v0,v0,16
+sra v0,v0,16
+sh v0,76(gp)
+lui v0,65284
+lw v1,552(v0)
+lui v0,65284
+lw v0,920(v0)
+mtc1 v1,$f2
+mtc1 v0,$f3
+mul $f2,$f2,$f3
+mfc1 v1,$f2
+lw v0,16(s8)
+mtc1 v1,$f0
+mtc1 v0,$f1
+add $f0,$f0,$f1
+mfc1 v1,$f0
+lui v0,65284
+lw v0,548(v0)
+mtc1 v1,$f2
+mtc1 v0,$f3
+mul $f2,$f2,$f3
+mfc1 v1,$f2
+lui v0,65284
+sw v1,892(v0)
+lui v0,65284
+lw v1,892(v0)
+lui v0,65284
+lw v0,556(v0)
+mtc1 v1,$f0
+mtc1 v0,$f1
+c.lt.s $f1,$f0
+lui v0,65284
+movf v0,zero,$f0
+mtc1 v0,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+bc1f 'climb_pid_run_0xec
+nop
+lui v0,65284
+lw v1,556(v0)
+lui v0,65284
+sw v1,892(v0)
+'climb_pid_run_0xec lui v0,65284
+lw v1,892(v0)
+lui v0,65284
+lw v0,560(v0)
+mtc1 v1,$f0
+mtc1 v0,$f1
+c.lt.s $f0,$f1
+lui v0,65284
+movf v0,zero,$f0
+mtc1 v0,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+bc1f 'climb_pid_run_0x134
+nop
+lui v0,65284
+lw v1,560(v0)
+lui v0,65284
+sw v1,892(v0)
+'climb_pid_run_0x134 lui v0,65284
+lw v1,920(v0)
+lw v0,16(s8)
+mtc1 v1,$f0
+mtc1 v0,$f1
+add $f0,$f0,$f1
+mfc1 v1,$f0
+lui v0,65284
+sw v1,920(v0)
+lui v0,65284
+lw v1,920(v0)
+lui v0,65284
+lw v0,152(v0)
+mtc1 v1,$f2
+mtc1 v0,$f3
+c.lt.s $f3,$f2
+lui v0,65284
+movf v0,zero,$f0
+mtc1 v0,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+bc1f 'climb_pid_run_0x1a0
+nop
+lui v0,65284
+lui v1,65284
+lw v1,152(v1)
+sw v1,920(v0)
+'climb_pid_run_0x1a0 lui v0,65284
+lw v1,920(v0)
+lui v0,65284
+lw v0,156(v0)
+mtc1 v1,$f0
+mtc1 v0,$f1
+c.lt.s $f0,$f1
+lui v0,65284
+movf v0,zero,$f0
+mtc1 v0,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+bc1f 'climb_pid_run_0x4c8
+nop
+lui v0,65284
+lui v1,65284
+lw v1,156(v1)
+sw v1,920(v0)
+j 'climb_pid_run_0x4c8
+nop
+'climb_pid_run_0x1f0 lui v0,65284
+lw v1,908(v0)
+move v0,zero
+mtc1 v1,$f0
+mtc1 v0,$f1
+c.lt.s $f1,$f0
+lui v0,65284
+movf v0,zero,$f0
+mtc1 v0,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+bc1f 'climb_pid_run_0x24c
+nop
+lui v0,65284
+lw v1,908(v0)
+lui v0,65284
+lw v0,536(v0)
+mtc1 v1,$f0
+mtc1 v0,$f1
+mul $f0,$f0,$f1
+mfc1 v0,$f0
+j 'climb_pid_run_0x250
+nop
+'climb_pid_run_0x24c move v0,zero
+'climb_pid_run_0x250 lui v1,65284
+sw v0,900(v1)
+lui v0,65284
+lw v1,4(v0)
+lui v0,65284
+lw v0,916(v0)
+mtc1 v1,$f2
+mtc1 v0,$f3
+mul $f2,$f2,$f3
+mfc1 v1,$f2
+lw v0,16(s8)
+mtc1 v1,$f0
+mtc1 v0,$f1
+add $f0,$f0,$f1
+mfc1 v1,$f0
+lui v0,65284
+lw v0,0(v0)
+mtc1 v1,$f2
+mtc1 v0,$f3
+mul $f2,$f2,$f3
+mfc1 v0,$f2
+mtc1 v0,$f1
+cvt.d.s $f0,$f1
+mfc1 a0,$f0
+mfc1 a1,$f1
+lui v0,65284
+lw v1,164(v0)
+lw v0,160(v0)
+mtc1 a0,$f2
+mtc1 a1,$f3
+mtc1 v0,$f0
+mtc1 v1,$f1
+add $f2,$f2,$f0
+mfc1 a0,$f2
+mfc1 a1,$f3
+lui v0,65284
+lw v0,908(v0)
+mtc1 v0,$f3
+cvt.d.s $f2,$f3
+mfc1 a2,$f2
+mfc1 a3,$f3
+lui v0,65284
+lw v1,172(v0)
+lw v0,168(v0)
+mtc1 a2,$f0
+mtc1 a3,$f1
+mtc1 v0,$f2
+mtc1 v1,$f3
+mul $f0,$f0,$f2
+mfc1 v0,$f0
+mfc1 v1,$f1
+mtc1 a0,$f0
+mtc1 a1,$f1
+mtc1 v0,$f2
+mtc1 v1,$f3
+add $f0,$f0,$f2
+mfc1 v0,$f0
+mfc1 v1,$f1
+mtc1 v0,$f0
+mtc1 v1,$f1
+cvt.s.d $f1,$f0
+mfc1 v0,$f1
+sw v0,20(s8)
+lui v0,65284
+lw v1,916(v0)
+lw v0,16(s8)
+mtc1 v1,$f2
+mtc1 v0,$f3
+add $f2,$f2,$f3
+mfc1 v1,$f2
+lui v0,65284
+sw v1,916(v0)
+lui v0,65284
+lw v1,916(v0)
+lui v0,65284
+lw v0,152(v0)
+mtc1 v1,$f0
+mtc1 v0,$f1
+c.lt.s $f1,$f0
+lui v0,65284
+movf v0,zero,$f0
+mtc1 v0,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+bc1f 'climb_pid_run_0x3b8
+nop
+lui v0,65284
+lui v1,65284
+lw v1,152(v1)
+sw v1,916(v0)
+'climb_pid_run_0x3b8 lui v0,65284
+lw v1,916(v0)
+lui v0,65284
+lw v0,156(v0)
+mtc1 v1,$f0
+mtc1 v0,$f1
+c.lt.s $f0,$f1
+lui v0,65284
+movf v0,zero,$f0
+mtc1 v0,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+bc1f 'climb_pid_run_0x400
+nop
+lui v0,65284
+lui v1,65284
+lw v1,156(v1)
+sw v1,916(v0)
+'climb_pid_run_0x400 lw v1,20(s8)
+lui v0,65284
+lw v0,112(v0)
+mtc1 v1,$f0
+mtc1 v0,$f1
+mul $f0,$f0,$f1
+mfc1 v0,$f0
+lui v1,65284
+lw a0,148(v1)
+mtc1 v0,$f2
+mtc1 a0,$f3
+c.le.s $f3,$f2
+lui v1,65284
+movf v1,zero,$f0
+mtc1 v1,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+bc1t 'climb_pid_run_0x460
+nop
+mtc1 v0,$f0
+trunc.w.s $f0,$f0
+mfc1 v0,$f0
+j 'climb_pid_run_0x484
+nop
+'climb_pid_run_0x460 mtc1 v0,$f1
+mtc1 a0,$f2
+sub $f1,$f1,$f2
+mfc1 v0,$f1
+lui v1,65284
+mtc1 v0,$f3
+trunc.w.s $f3,$f3
+mfc1 v0,$f3
+or v0,v0,v1
+'climb_pid_run_0x484 andi v0,v0,255
+move a0,v0
+jal '_TRIM_UPPRZ
+nop
+sll v0,v0,16
+sra v0,v0,16
+sh v0,76(gp)
+lui v0,65284
+lw v1,924(v0)
+lui v0,65284
+lw v0,900(v0)
+mtc1 v1,$f0
+mtc1 v0,$f1
+add $f0,$f0,$f1
+mfc1 v1,$f0
+lui v0,65284
+sw v1,892(v0)
+'climb_pid_run_0x4c8 move sp,s8
+lw ra,28(sp)
+lw s8,24(sp)
+addiu sp,sp,32
+jr ra
+nop
+
+'_TRIM_UPPRZ addiu sp,sp,-8
+sw s8,4(sp)
+move s8,sp
+move v0,a0
+sb v0,8(s8)
+move sp,s8
+lw s8,4(sp)
+addiu sp,sp,8
+jr ra
+nop

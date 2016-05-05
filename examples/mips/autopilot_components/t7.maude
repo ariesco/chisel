@@ -3,7 +3,443 @@ load ../autopilot.maude
 (mod T7 is
   pr TEST .
 
-  op t7 : -> InsList .
-  eq t7 = stabilisation-task ir-update estimator-update-state-infrared roll-pitch-pid-run
-          TRIM-PPRZ fabs lookup-arr update-arr .
+  op tt7 : -> InsList .
+  eq tt7 = stabilisation-task ir-update estimator-update-state-infrared roll-pitch-pid-run
+           TRIM-PPRZ fabs lookup-arr update-arr .
 endm)
+
+eof
+
+'stabilisation_task addiu sp,sp,-32
+sw ra,28(sp)
+sw s8,24(sp)
+move s8,sp
+jal 'ir_update
+nop
+jal 'estimator_update_state_infrared
+nop
+jal 'roll_pitch_pid_run
+nop
+lh v0,76(gp)
+andi v0,v0,255
+lui v1,65284
+addiu a0,v1,16
+move a1,zero
+li a2,18
+move a3,v0
+jal 'update_arr
+nop
+lh v0,128(gp)
+andi v0,v0,255
+lui v1,65284
+addiu a0,v1,16
+li a1,1
+li a2,18
+move a3,v0
+jal 'update_arr
+nop
+lh v0,168(gp)
+andi v0,v0,255
+lui v1,65284
+addiu a0,v1,16
+li a1,2
+li a2,18
+move a3,v0
+jal 'update_arr
+nop
+lui v0,65284
+lw v1,0(v0)
+lui v0,65284
+xor v0,v1,v0
+mtc1 v0,$f1
+cvt.d.s $f0,$f1
+mfc1 a0,$f0
+mfc1 a1,$f1
+lui v0,65284
+lw v1,492(v0)
+lw v0,488(v0)
+mtc1 a0,$f2
+mtc1 a1,$f3
+mtc1 v0,$f0
+mtc1 v1,$f1
+mul $f2,$f2,$f0
+mfc1 v0,$f2
+mfc1 v1,$f3
+lui a0,65284
+lw a1,108(a0)
+lw a0,104(a0)
+mtc1 v0,$f2
+mtc1 v1,$f3
+mtc1 a0,$f0
+mtc1 a1,$f1
+c.le.d $f0,$f2
+lui a2,65284
+movf a2,zero,$f0
+mtc1 a2,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+bc1t 'stabilisation_task_0x130
+nop
+mtc1 v0,$f0
+mtc1 v1,$f1
+trunc.w.d $f1,$f0
+mfc1 v0,$f1
+j 'stabilisation_task_0x164
+nop
+'stabilisation_task_0x130 mtc1 v0,$f2
+mtc1 v1,$f3
+mtc1 a0,$f0
+mtc1 a1,$f1
+sub $f2,$f2,$f0
+mfc1 v0,$f2
+mfc1 v1,$f3
+lui a0,65284
+mtc1 v0,$f2
+mtc1 v1,$f3
+trunc.w.d $f3,$f2
+mfc1 v0,$f3
+or v0,v0,a0
+'stabilisation_task_0x164 andi v0,v0,255
+move a0,v0
+jal '_TRIM_PPRZ
+nop
+sb v0,16(s8)
+lbu v0,16(s8)
+lui v1,65284
+addiu a0,v1,16
+li a1,5
+li a2,18
+move a3,v0
+jal 'update_arr
+nop
+move sp,s8
+lw ra,28(sp)
+lw s8,24(sp)
+addiu sp,sp,32
+jr ra
+nop
+
+'ir_update addiu sp,sp,-16
+sw s8,12(sp)
+move s8,sp
+lui v0,65284
+lhu v0,0(v0)
+srl v0,v0,5
+andi v0,v0,16
+sh v0,0(s8)
+lui v0,65284
+lhu v0,0(v0)
+srl v0,v0,5
+andi v0,v0,16
+sh v0,2(s8)
+lhu v0,0(s8)
+negu v0,v0
+andi v1,v0,16
+lhu v0,2(s8)
+subu v0,v1,v0
+andi v1,v0,16
+lh v0,-8(gp)
+andi v0,v0,16
+subu v0,v1,v0
+andi v0,v0,16
+sll v0,v0,16
+sra v0,v0,16
+sh v0,158(gp)
+lhu v1,2(s8)
+lhu v0,0(s8)
+subu v0,v1,v0
+andi v1,v0,16
+lh v0,-6(gp)
+andi v0,v0,16
+subu v0,v1,v0
+andi v0,v0,16
+sll v0,v0,16
+sra v0,v0,16
+sh v0,58(gp)
+move sp,s8
+lw s8,12(sp)
+addiu sp,sp,16
+jr ra
+nop
+
+'estimator_update_state_infrared addiu sp,sp,-16
+sw s8,12(sp)
+move s8,sp
+lbu v1,-2(gp)
+li v0,1
+bne v1,v0,'estimator_update_state_infrared_0x2c
+nop
+lui v0,65284
+lw v0,0(v0)
+j 'estimator_update_state_infrared_0x34
+nop
+'estimator_update_state_infrared_0x2c lui v0,65284
+lw v0,668(v0)
+'estimator_update_state_infrared_0x34 sw v0,0(s8)
+lh v0,158(gp)
+mtc1 v0,$f0
+cvt.s.w $f0,$f0
+mfc1 v1,$f0
+lw v0,0(s8)
+mtc1 v1,$f1
+mtc1 v0,$f0
+mul $f1,$f1,$f0
+mfc1 v1,$f1
+lui v0,65284
+sw v1,0(v0)
+lh v0,58(gp)
+mtc1 v0,$f1
+cvt.s.w $f1,$f1
+mfc1 v1,$f1
+lw v0,0(s8)
+mtc1 v1,$f0
+mtc1 v0,$f1
+mul $f0,$f0,$f1
+mfc1 v1,$f0
+lui v0,65284
+sw v1,0(v0)
+move sp,s8
+lw s8,12(sp)
+addiu sp,sp,16
+jr ra
+nop
+
+'roll_pitch_pid_run addiu sp,sp,-32
+sw ra,28(sp)
+sw s8,24(sp)
+move s8,sp
+lui v0,65284
+lw v1,0(v0)
+lui v0,65284
+lw v0,888(v0)
+mtc1 v1,$f0
+mtc1 v0,$f1
+sub $f0,$f0,$f1
+mfc1 v0,$f0
+sw v0,16(s8)
+lui v0,65284
+lw v1,528(v0)
+lw v0,16(s8)
+mtc1 v1,$f2
+mtc1 v0,$f3
+mul $f2,$f2,$f3
+mfc1 v0,$f2
+lui v1,65284
+lw a0,144(v1)
+mtc1 v0,$f0
+mtc1 a0,$f1
+c.le.s $f1,$f0
+lui v1,65284
+movf v1,zero,$f0
+mtc1 v1,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+bc1t 'roll_pitch_pid_run_0x94
+nop
+mtc1 v0,$f0
+trunc.w.s $f0,$f0
+mfc1 v0,$f0
+j 'roll_pitch_pid_run_0xb8
+nop
+'roll_pitch_pid_run_0x94 mtc1 v0,$f1
+mtc1 a0,$f2
+sub $f1,$f1,$f2
+mfc1 v0,$f1
+lui v1,65284
+mtc1 v0,$f3
+trunc.w.s $f3,$f3
+mfc1 v0,$f3
+or v0,v0,v1
+'roll_pitch_pid_run_0xb8 andi v0,v0,255
+move a0,v0
+jal '_TRIM_PPRZ
+nop
+sll v0,v0,16
+sra v0,v0,16
+sh v0,128(gp)
+lui v0,65284
+lw v1,896(v0)
+move v0,zero
+mtc1 v1,$f0
+mtc1 v0,$f1
+c.lt.s $f0,$f1
+lui v0,65284
+movf v0,zero,$f0
+mtc1 v0,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+bc1f 'roll_pitch_pid_run_0x110
+nop
+lui v0,65284
+sw zero,896(v0)
+'roll_pitch_pid_run_0x110 lui v0,65284
+lw v1,0(v0)
+lui v0,65284
+lw v0,892(v0)
+mtc1 v1,$f0
+mtc1 v0,$f1
+sub $f0,$f0,$f1
+mfc1 v1,$f0
+lui v0,65284
+lw a0,0(v0)
+move v0,zero
+mtc1 a0,$f2
+mtc1 v0,$f3
+c.lt.s $f2,$f3
+lui v0,65284
+movf v0,zero,$f0
+mtc1 v0,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+bc1f 'roll_pitch_pid_run_0x17c
+nop
+lui v0,65284
+lw a0,0(v0)
+lui v0,65284
+xor a0,a0,v0
+j 'roll_pitch_pid_run_0x184
+nop
+'roll_pitch_pid_run_0x17c lui v0,65284
+lw a0,0(v0)
+'roll_pitch_pid_run_0x184 lui v0,65284
+lw v0,896(v0)
+mtc1 a0,$f0
+mtc1 v0,$f1
+mul $f0,$f0,$f1
+mfc1 v0,$f0
+mtc1 v1,$f2
+mtc1 v0,$f3
+sub $f2,$f2,$f3
+mfc1 v1,$f2
+lui v0,65284
+xor v0,v1,v0
+sw v0,16(s8)
+lui v0,65284
+lw v1,532(v0)
+lw v0,16(s8)
+mtc1 v1,$f0
+mtc1 v0,$f1
+mul $f0,$f0,$f1
+mfc1 v0,$f0
+lui v1,65284
+lw a0,144(v1)
+mtc1 v0,$f2
+mtc1 a0,$f3
+c.le.s $f3,$f2
+lui v1,65284
+movf v1,zero,$f0
+mtc1 v1,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+bc1t 'roll_pitch_pid_run_0x218
+nop
+mtc1 v0,$f0
+trunc.w.s $f0,$f0
+mfc1 v0,$f0
+j 'roll_pitch_pid_run_0x23c
+nop
+'roll_pitch_pid_run_0x218 mtc1 v0,$f1
+mtc1 a0,$f2
+sub $f1,$f1,$f2
+mfc1 v0,$f1
+lui v1,65284
+mtc1 v0,$f3
+trunc.w.s $f3,$f3
+mfc1 v0,$f3
+or v0,v0,v1
+'roll_pitch_pid_run_0x23c andi v0,v0,255
+move a0,v0
+jal '_TRIM_PPRZ
+nop
+sll v0,v0,16
+sra v0,v0,16
+sh v0,168(gp)
+move sp,s8
+lw ra,28(sp)
+lw s8,24(sp)
+addiu sp,sp,32
+jr ra
+nop
+
+'_TRIM_PPRZ addiu sp,sp,-8
+sw s8,4(sp)
+move s8,sp
+move v0,a0
+sb v0,8(s8)
+move sp,s8
+lw s8,4(sp)
+addiu sp,sp,8
+jr ra
+nop
+
+'_fabs addiu sp,sp,-8
+sw s8,4(sp)
+move s8,sp
+move v0,a0
+sh v0,8(s8)
+lhu v0,8(s8)
+beqz v0,'_fabs_0x2c
+nop
+lhu v0,8(s8)
+j '_fabs_0x38
+nop
+'_fabs_0x2c lhu v0,8(s8)
+negu v0,v0
+andi v0,v0,16
+'_fabs_0x38 move sp,s8
+lw s8,4(sp)
+addiu sp,sp,8
+jr ra
+nop
+
+'lookup_arr addiu sp,sp,-16
+sw s8,12(sp)
+move s8,sp
+sw a0,16(s8)
+move v1,a1
+move v0,a2
+sb v1,20(s8)
+sb v0,24(s8)
+lbu v1,24(s8)
+lbu v0,20(s8)
+mul v0,v1,v0
+lw v1,16(s8)
+addu v0,v1,v0
+sw v0,0(s8)
+lw v0,0(s8)
+move sp,s8
+lw s8,12(sp)
+addiu sp,sp,16
+jr ra
+nop
+
+'update_arr addiu sp,sp,-32
+sw ra,28(sp)
+sw s8,24(sp)
+move s8,sp
+sw a0,32(s8)
+move a0,a1
+move v1,a2
+move v0,a3
+sb a0,36(s8)
+sb v1,40(s8)
+sb v0,44(s8)
+lbu v1,36(s8)
+lbu v0,40(s8)
+lw a0,32(s8)
+move a1,v1
+move a2,v0
+jal 'lookup_arr
+nop
+sw v0,16(s8)
+lw v0,16(s8)
+andi v1,v0,255
+lbu v0,44(s8)
+addu v0,v1,v0
+andi v0,v0,255
+move sp,s8
+lw ra,28(sp)
+lw s8,24(sp)
+addiu sp,sp,32
+jr ra
+nop

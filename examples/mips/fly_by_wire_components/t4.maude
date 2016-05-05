@@ -3,7 +3,253 @@ load ../fly_by_wire.maude
 (mod T4 is
   pr TEST .
 
-  op t4 : -> InsList .
-  eq t4 = servo-transmit uart-transmit BV update-arr lookup-arr sbi SFR-BYTE
-          shiftr-bitwise .
+  op tt4 : -> InsList .
+  eq tt4 = servo-transmit uart-transmit BV update-arr lookup-arr sbi SFR-BYTE
+           shiftr-bitwise .
 endm)
+
+eof
+
+'servo_transmit addiu sp,sp,-32
+sw ra,28(sp)
+sw s8,24(sp)
+move s8,sp
+move a0,zero
+jal 'uart_transmit
+nop
+move a0,zero
+jal 'uart_transmit
+nop
+sb zero,16(s8)
+j 'servo_transmit_0xc4
+nop
+'servo_transmit_0x34 lbu v0,16(s8)
+lui v1,65284
+addiu a0,v1,340
+move a1,v0
+li a2,20
+jal 'lookup_arr
+nop
+lbu v0,0(v0)
+sb v0,17(s8)
+lbu v0,17(s8)
+move a0,v0
+li a1,8
+jal 'shiftr_bitwise
+nop
+sb v0,18(s8)
+lbu v0,18(s8)
+move a0,v0
+jal 'uart_transmit
+nop
+lbu v0,18(s8)
+move a0,v0
+jal 'uart_transmit
+nop
+lbu v1,16(s8)
+lui v0,65284
+sll v1,v1,1
+addiu v0,v0,340
+addu v0,v1,v0
+lhu v0,0(v0)
+andi v0,v0,255
+move a0,v0
+jal 'uart_transmit
+nop
+lbu v0,16(s8)
+addiu v0,v0,1
+sb v0,16(s8)
+'servo_transmit_0xc4 lbu v0,16(s8)
+sltiu v0,v0,10
+bnez v0,'servo_transmit_0x34
+nop
+li a0,10
+jal 'uart_transmit
+nop
+move sp,s8
+lw ra,28(sp)
+lw s8,24(sp)
+addiu sp,sp,32
+jr ra
+nop
+
+'uart_transmit addiu sp,sp,-40
+sw ra,36(sp)
+sw s8,32(sp)
+sw s0,28(sp)
+move s8,sp
+move v0,a0
+sb v0,40(s8)
+lbu v0,61(gp)
+move s0,v0
+lbu v0,106(gp)
+move a0,v0
+jal '_BV
+nop
+and v0,s0,v0
+beqz v0,'uart_transmit_0xa0
+nop
+lbu v0,7(gp)
+andi v0,v0,255
+move v1,v0
+lbu v0,6(gp)
+addiu v0,v0,1
+beq v1,v0,'uart_transmit_0xcc
+nop
+lbu v0,6(gp)
+move v1,v0
+lbu v0,40(s8)
+lui a0,65284
+addiu a0,a0,360
+move a1,v1
+move a2,zero
+move a3,v0
+jal 'update_arr
+nop
+sb v0,16(s8)
+lbu v0,6(gp)
+addiu v0,v0,1
+andi v0,v0,255
+sb v0,6(gp)
+j 'uart_transmit_0xd0
+nop
+'uart_transmit_0xa0 lbu v0,40(s8)
+sb v0,48(gp)
+lbu v0,61(gp)
+move v1,v0
+lbu v0,106(gp)
+move a0,v1
+move a1,v0
+jal 'sbi
+nop
+j 'uart_transmit_0xd0
+nop
+'uart_transmit_0xcc nop
+'uart_transmit_0xd0 move sp,s8
+lw ra,36(sp)
+lw s8,32(sp)
+lw s0,28(sp)
+addiu sp,sp,40
+jr ra
+nop
+
+'_BV addiu sp,sp,-8
+sw s8,4(sp)
+move s8,sp
+move v0,a0
+sh v0,8(s8)
+lhu v0,8(s8)
+li v1,1
+sllv v0,v1,v0
+andi v0,v0,65535
+move sp,s8
+lw s8,4(sp)
+addiu sp,sp,8
+jr ra
+nop
+
+'update_arr addiu sp,sp,-32
+sw ra,28(sp)
+sw s8,24(sp)
+move s8,sp
+sw a0,32(s8)
+move a0,a1
+move v1,a2
+move v0,a3
+sb a0,36(s8)
+sb v1,40(s8)
+sb v0,44(s8)
+lbu v1,36(s8)
+lbu v0,40(s8)
+lw a0,32(s8)
+move a1,v1
+move a2,v0
+jal 'lookup_arr
+nop
+sw v0,16(s8)
+lw v0,16(s8)
+andi v0,v0,255
+move sp,s8
+lw ra,28(sp)
+lw s8,24(sp)
+addiu sp,sp,32
+jr ra
+nop
+
+'lookup_arr addiu sp,sp,-16
+sw s8,12(sp)
+move s8,sp
+sw a0,16(s8)
+move v1,a1
+move v0,a2
+sb v1,20(s8)
+sb v0,24(s8)
+lbu v1,24(s8)
+lbu v0,20(s8)
+mul v0,v1,v0
+lw v1,16(s8)
+addu v0,v1,v0
+sw v0,0(s8)
+lw v0,0(s8)
+move sp,s8
+lw s8,12(sp)
+addiu sp,sp,16
+jr ra
+nop
+
+'sbi addiu sp,sp,-32
+sw ra,28(sp)
+sw s8,24(sp)
+move s8,sp
+move v1,a0
+move v0,a1
+sb v1,32(s8)
+sb v0,36(s8)
+lbu v0,32(s8)
+move a0,v0
+jal 'SFR_BYTE
+nop
+sb v0,16(s8)
+lbu v0,36(s8)
+move a0,v0
+jal '_BV
+nop
+andi v1,v0,255
+lbu v0,16(s8)
+or v0,v1,v0
+sb v0,17(s8)
+lbu v0,17(s8)
+move sp,s8
+lw ra,28(sp)
+lw s8,24(sp)
+addiu sp,sp,32
+jr ra
+nop
+
+'SFR_BYTE addiu sp,sp,-8
+sw s8,4(sp)
+move s8,sp
+move v0,a0
+sb v0,8(s8)
+addiu v0,s8,8
+andi v0,v0,65535
+lbu v0,0(v0)
+andi v0,v0,255
+move sp,s8
+lw s8,4(sp)
+addiu sp,sp,8
+jr ra
+nop
+
+'shiftr_bitwise addiu sp,sp,-8
+sw s8,4(sp)
+move s8,sp
+move v1,a0
+move v0,a1
+sb v1,8(s8)
+sb v0,12(s8)
+move sp,s8
+lw s8,4(sp)
+addiu sp,sp,8
+jr ra
+nop

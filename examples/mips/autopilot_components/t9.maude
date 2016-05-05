@@ -3,10 +3,643 @@ load ../autopilot.maude
 (mod T9 is
   pr TEST .
 
-  op t9 : -> InsList .
-  eq t9 = receive-gps-data-task send-gps-pos DOWNLINK-SEND-GPS ModemStartMessage
-          ModemEndMessage MODEM-PUT-1-BYTE-BY-ADDR MODEM-PUT-4-BYTE-BY-ADDR
-          estimator-update-state-gps estimator-update-ir-estim send-radIR
-          DOWNLINK-SEND-RAD-OF-IR send-takeOff DOWNLINK-SEND-TAKEOFF
-          MODEM-PUT-2-BYTE-BY-ADDR .
+  op tt9 : -> InsList .
+  eq tt9 = receive-gps-data-task send-gps-pos DOWNLINK-SEND-GPS ModemStartMessage
+           ModemEndMessage MODEM-PUT-1-BYTE-BY-ADDR MODEM-PUT-4-BYTE-BY-ADDR
+           estimator-update-state-gps estimator-update-ir-estim send-radIR
+           DOWNLINK-SEND-RAD-OF-IR send-takeOff DOWNLINK-SEND-TAKEOFF
+           MODEM-PUT-2-BYTE-BY-ADDR .
 endm)
+
+eof
+
+'receive_gps_data_task addiu sp,sp,-24
+sw ra,20(sp)
+sw s8,16(sp)
+move s8,sp
+jal 'send_gps_pos
+nop
+jal 'send_radIR
+nop
+jal 'send_takeOff
+nop
+move sp,s8
+lw ra,20(sp)
+lw s8,16(sp)
+addiu sp,sp,24
+jr ra
+nop
+
+'send_gps_pos addiu sp,sp,-40
+sw ra,36(sp)
+sw s8,32(sp)
+move s8,sp
+sb zero,66(gp)
+lbu v0,122(gp)
+beqz v0,'send_gps_pos_0x2c0
+nop
+lbu v0,148(gp)
+move t0,v0
+lui v0,65284
+lw v0,0(v0)
+andi v0,v0,255
+move a1,v0
+lui v0,65284
+lw v0,0(v0)
+andi v0,v0,255
+move a2,v0
+lui v0,65284
+lw v0,0(v0)
+lui v1,65284
+lw a0,144(v1)
+mtc1 v0,$f0
+mtc1 a0,$f1
+c.le.s $f1,$f0
+lui v1,65284
+movf v1,zero,$f0
+mtc1 v1,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+bc1t 'send_gps_pos_0x94
+nop
+mtc1 v0,$f0
+trunc.w.s $f0,$f0
+mfc1 v0,$f0
+j 'send_gps_pos_0xb8
+nop
+'send_gps_pos_0x94 mtc1 v0,$f1
+mtc1 a0,$f2
+sub $f1,$f1,$f2
+mfc1 v0,$f1
+lui v1,65284
+mtc1 v0,$f3
+trunc.w.s $f3,$f3
+mfc1 v0,$f3
+or v0,v0,v1
+'send_gps_pos_0xb8 andi v0,v0,255
+move a3,v0
+lui v0,65284
+lw v0,0(v0)
+lui v1,65284
+lw a0,144(v1)
+mtc1 v0,$f0
+mtc1 a0,$f1
+c.le.s $f1,$f0
+lui v1,65284
+movf v1,zero,$f0
+mtc1 v1,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+bc1t 'send_gps_pos_0x10c
+nop
+mtc1 v0,$f0
+trunc.w.s $f0,$f0
+mfc1 v0,$f0
+j 'send_gps_pos_0x130
+nop
+'send_gps_pos_0x10c mtc1 v0,$f1
+mtc1 a0,$f2
+sub $f1,$f1,$f2
+mfc1 v0,$f1
+lui v1,65284
+mtc1 v0,$f3
+trunc.w.s $f3,$f3
+mfc1 v0,$f3
+or v0,v0,v1
+'send_gps_pos_0x130 andi v0,v0,255
+move t3,v0
+lui v0,65284
+lw v0,0(v0)
+lui v1,65284
+lw a0,144(v1)
+mtc1 v0,$f0
+mtc1 a0,$f1
+c.le.s $f1,$f0
+lui v1,65284
+movf v1,zero,$f0
+mtc1 v1,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+bc1t 'send_gps_pos_0x184
+nop
+mtc1 v0,$f0
+trunc.w.s $f0,$f0
+mfc1 v0,$f0
+j 'send_gps_pos_0x1a8
+nop
+'send_gps_pos_0x184 mtc1 v0,$f1
+mtc1 a0,$f2
+sub $f1,$f1,$f2
+mfc1 v0,$f1
+lui v1,65284
+mtc1 v0,$f3
+trunc.w.s $f3,$f3
+mfc1 v0,$f3
+or v0,v0,v1
+'send_gps_pos_0x1a8 andi v0,v0,255
+move t2,v0
+lui v0,65284
+lw v0,0(v0)
+lui v1,65284
+lw a0,144(v1)
+mtc1 v0,$f0
+mtc1 a0,$f1
+c.le.s $f1,$f0
+lui v1,65284
+movf v1,zero,$f0
+mtc1 v1,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+bc1t 'send_gps_pos_0x1fc
+nop
+mtc1 v0,$f0
+trunc.w.s $f0,$f0
+mfc1 v0,$f0
+j 'send_gps_pos_0x220
+nop
+'send_gps_pos_0x1fc mtc1 v0,$f1
+mtc1 a0,$f2
+sub $f1,$f1,$f2
+mfc1 v0,$f1
+lui v1,65284
+mtc1 v0,$f3
+trunc.w.s $f3,$f3
+mfc1 v0,$f3
+or v0,v0,v1
+'send_gps_pos_0x220 andi v0,v0,255
+move t1,v0
+lui v0,65284
+lw v0,0(v0)
+lui v1,65284
+lw a0,144(v1)
+mtc1 v0,$f0
+mtc1 a0,$f1
+c.le.s $f1,$f0
+lui v1,65284
+movf v1,zero,$f0
+mtc1 v1,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+bc1t 'send_gps_pos_0x274
+nop
+mtc1 v0,$f0
+trunc.w.s $f0,$f0
+mfc1 v0,$f0
+j 'send_gps_pos_0x298
+nop
+'send_gps_pos_0x274 mtc1 v0,$f1
+mtc1 a0,$f2
+sub $f1,$f1,$f2
+mfc1 v0,$f1
+lui v1,65284
+mtc1 v0,$f3
+trunc.w.s $f3,$f3
+mfc1 v0,$f3
+or v0,v0,v1
+'send_gps_pos_0x298 andi v0,v0,255
+sw t3,16(sp)
+sw t2,20(sp)
+sw t1,24(sp)
+sw v0,28(sp)
+move a0,t0
+jal '_DOWNLINK_SEND_GPS
+nop
+jal 'estimator_update_state_gps
+nop
+'send_gps_pos_0x2c0 move sp,s8
+lw ra,36(sp)
+lw s8,32(sp)
+addiu sp,sp,40
+jr ra
+nop
+
+'_DOWNLINK_SEND_GPS addiu sp,sp,-48
+sw ra,44(sp)
+sw s8,40(sp)
+move s8,sp
+move t2,a0
+move t1,a1
+move t0,a2
+move a2,a3
+lw a1,64(s8)
+lw a0,68(s8)
+lw v1,72(s8)
+lw v0,76(s8)
+sb t2,48(s8)
+sb t1,52(s8)
+sb t0,56(s8)
+sb a2,60(s8)
+sb a1,24(s8)
+sb a0,28(s8)
+sb v1,32(s8)
+sb v0,36(s8)
+lbu v0,16(s8)
+sltiu v0,v0,33
+beqz v0,'_DOWNLINK_SEND_GPS_0xfc
+nop
+li a0,8
+jal '_ModemStartMessage
+nop
+lbu v0,48(s8)
+move a0,v0
+jal '_MODEM_PUT_1_BYTE_BY_ADDR
+nop
+lbu v0,52(s8)
+move a0,v0
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+nop
+lbu v0,56(s8)
+move a0,v0
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+nop
+lbu v0,60(s8)
+move a0,v0
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+nop
+lbu v0,24(s8)
+move a0,v0
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+nop
+lbu v0,28(s8)
+move a0,v0
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+nop
+lbu v0,32(s8)
+move a0,v0
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+nop
+lbu v0,36(s8)
+move a0,v0
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+nop
+jal '_ModemEndMessage
+nop
+j '_DOWNLINK_SEND_GPS_0x10c
+nop
+'_DOWNLINK_SEND_GPS_0xfc lbu v0,67(gp)
+addiu v0,v0,1
+andi v0,v0,255
+sb v0,67(gp)
+'_DOWNLINK_SEND_GPS_0x10c move sp,s8
+lw ra,44(sp)
+lw s8,40(sp)
+addiu sp,sp,48
+jr ra
+nop
+
+'_ModemStartMessage addiu sp,sp,-8
+sw s8,4(sp)
+move s8,sp
+move v0,a0
+sb v0,8(s8)
+lbu v1,8(s8)
+li v0,1
+bne v1,v0,'_ModemStartMessage_0x30
+nop
+li v0,1
+j '_ModemStartMessage_0x30
+nop
+'_ModemStartMessage_0x30 move sp,s8
+lw s8,4(sp)
+addiu sp,sp,8
+jr ra
+nop
+
+'_ModemEndMessage addiu sp,sp,-8
+sw s8,4(sp)
+move s8,sp
+li v0,1
+move sp,s8
+lw s8,4(sp)
+addiu sp,sp,8
+jr ra
+nop
+
+'_MODEM_PUT_1_BYTE_BY_ADDR addiu sp,sp,-8
+sw s8,4(sp)
+move s8,sp
+move v0,a0
+sb v0,8(s8)
+lbu v0,8(s8)
+move sp,s8
+lw s8,4(sp)
+addiu sp,sp,8
+jr ra
+nop
+
+'_MODEM_PUT_4_BYTE_BY_ADDR addiu sp,sp,-8
+sw s8,4(sp)
+move s8,sp
+move v0,a0
+sb v0,8(s8)
+lbu v0,8(s8)
+move sp,s8
+lw s8,4(sp)
+addiu sp,sp,8
+jr ra
+nop
+
+'estimator_update_state_gps addiu sp,sp,-24
+sw ra,20(sp)
+sw s8,16(sp)
+move s8,sp
+lbu v0,148(gp)
+andi v0,v0,32
+beqz v0,'estimator_update_state_gps_0x94
+nop
+lui v0,65284
+lw v1,0(v0)
+lui v0,65284
+sw v1,0(v0)
+lui v0,65284
+lw v1,0(v0)
+lui v0,65284
+sw v1,0(v0)
+lui v0,65284
+lw v1,0(v0)
+lui v0,65284
+sw v1,0(v0)
+lui v0,65284
+lw v1,0(v0)
+lui v0,65284
+sw v1,0(v0)
+lui v0,65284
+lw v1,0(v0)
+lui v0,65284
+sw v1,0(v0)
+lui v0,65284
+lw v1,0(v0)
+lui v0,65284
+sw v1,0(v0)
+lhu v0,40(gp)
+beqz v0,'estimator_update_state_gps_0x94
+nop
+jal '_estimator_update_ir_estim
+nop
+'estimator_update_state_gps_0x94 move sp,s8
+lw ra,20(sp)
+lw s8,16(sp)
+addiu sp,sp,24
+jr ra
+nop
+
+'estimator_update_ir_estim addiu sp,sp,-8
+sw s8,4(sp)
+move s8,sp
+move sp,s8
+lw s8,4(sp)
+addiu sp,sp,8
+jr ra
+nop
+
+'send_radIR addiu sp,sp,-32
+sw ra,28(sp)
+sw s8,24(sp)
+move s8,sp
+lbu v0,122(gp)
+beqz v0,'send_radIR_0x1ac
+nop
+lui v0,65284
+lw v0,0(v0)
+lui v1,65284
+lw a0,144(v1)
+mtc1 v0,$f0
+mtc1 a0,$f1
+c.le.s $f1,$f0
+lui v1,65284
+movf v1,zero,$f0
+mtc1 v1,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+bc1t 'send_radIR_0x68
+nop
+mtc1 v0,$f0
+trunc.w.s $f0,$f0
+mfc1 v0,$f0
+j 'send_radIR_0x8c
+nop
+'send_radIR_0x68 mtc1 v0,$f1
+mtc1 a0,$f2
+sub $f1,$f1,$f2
+mfc1 v0,$f1
+lui v1,65284
+mtc1 v0,$f3
+trunc.w.s $f3,$f3
+mfc1 v0,$f3
+or v0,v0,v1
+'send_radIR_0x8c andi v0,v0,255
+move a2,v0
+lui v0,65284
+lw v0,0(v0)
+lui v1,65284
+lw a0,144(v1)
+mtc1 v0,$f0
+mtc1 a0,$f1
+c.le.s $f1,$f0
+lui v1,65284
+movf v1,zero,$f0
+mtc1 v1,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+bc1t 'send_radIR_0xe0
+nop
+mtc1 v0,$f0
+trunc.w.s $f0,$f0
+mfc1 v0,$f0
+j 'send_radIR_0x104
+nop
+'send_radIR_0xe0 mtc1 v0,$f1
+mtc1 a0,$f2
+sub $f1,$f1,$f2
+mfc1 v0,$f1
+lui v1,65284
+mtc1 v0,$f3
+trunc.w.s $f3,$f3
+mfc1 v0,$f3
+or v0,v0,v1
+'send_radIR_0x104 andi v0,v0,255
+move a1,v0
+lui v0,65284
+lw v0,0(v0)
+lui v1,65284
+lw a0,144(v1)
+mtc1 v0,$f0
+mtc1 a0,$f1
+c.le.s $f1,$f0
+lui v1,65284
+movf v1,zero,$f0
+mtc1 v1,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+bc1t 'send_radIR_0x158
+nop
+mtc1 v0,$f0
+trunc.w.s $f0,$f0
+mfc1 v0,$f0
+j 'send_radIR_0x17c
+nop
+'send_radIR_0x158 mtc1 v0,$f1
+mtc1 a0,$f2
+sub $f1,$f1,$f2
+mfc1 v0,$f1
+lui v1,65284
+mtc1 v0,$f3
+trunc.w.s $f3,$f3
+mfc1 v0,$f3
+or v0,v0,v1
+'send_radIR_0x17c andi v0,v0,255
+move v1,v0
+lh v0,-8(gp)
+andi v0,v0,255
+lh a0,-6(gp)
+andi a0,a0,255
+sw a0,16(sp)
+move a0,a2
+move a2,v1
+move a3,v0
+jal '_DOWNLINK_SEND_RAD_OF_IR
+nop
+'send_radIR_0x1ac move sp,s8
+lw ra,28(sp)
+lw s8,24(sp)
+addiu sp,sp,32
+jr ra
+nop
+
+'_DOWNLINK_SEND_RAD_OF_IR addiu sp,sp,-40
+sw ra,36(sp)
+sw s8,32(sp)
+move s8,sp
+move t0,a0
+move a0,a2
+move v1,a3
+lw v0,56(s8)
+sb t0,40(s8)
+sb a1,44(s8)
+sb a0,48(s8)
+sb v1,52(s8)
+sb v0,24(s8)
+lhu v0,16(s8)
+sltiu v0,v0,21
+bnez v0,'_DOWNLINK_SEND_RAD_OF_IR_0xb0
+nop
+li a0,5
+jal '_ModemStartMessage
+nop
+lbu v0,40(s8)
+move a0,v0
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+nop
+lbu v0,44(s8)
+move a0,v0
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+nop
+lbu v0,48(s8)
+move a0,v0
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+nop
+lbu v0,52(s8)
+move a0,v0
+jal '_MODEM_PUT_2_BYTE_BY_ADDR
+nop
+lbu v0,24(s8)
+move a0,v0
+jal '_MODEM_PUT_2_BYTE_BY_ADDR
+nop
+jal '_ModemEndMessage
+nop
+j '_DOWNLINK_SEND_RAD_OF_IR_0xc0
+nop
+'_DOWNLINK_SEND_RAD_OF_IR_0xb0 lbu v0,73(gp)
+addiu v0,v0,1
+andi v0,v0,255
+sb v0,73(gp)
+'_DOWNLINK_SEND_RAD_OF_IR_0xc0 move sp,s8
+lw ra,36(sp)
+lw s8,32(sp)
+addiu sp,sp,40
+jr ra
+nop
+
+'send_takeOff addiu sp,sp,-24
+sw ra,20(sp)
+sw s8,16(sp)
+move s8,sp
+lbu v0,122(gp)
+beqz v0,'send_takeOff_0x80
+nop
+lhu v0,40(gp)
+bnez v0,'send_takeOff_0x7c
+nop
+lui v0,65284
+lw v1,0(v0)
+lui v0,65284
+lw v0,212(v0)
+mtc1 v1,$f0
+mtc1 v0,$f1
+c.lt.s $f1,$f0
+lui v0,65284
+movf v0,zero,$f0
+mtc1 v0,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+bc1f 'send_takeOff_0x7c
+nop
+li v0,1
+sh v0,40(gp)
+li v0,1
+sb v0,7(gp)
+addiu a0,gp,20
+jal '_DOWNLINK_SEND_TAKEOFF
+nop
+'send_takeOff_0x7c sb zero,122(gp)
+'send_takeOff_0x80 move sp,s8
+lw ra,20(sp)
+lw s8,16(sp)
+addiu sp,sp,24
+jr ra
+nop
+
+'_DOWNLINK_SEND_TAKEOFF addiu sp,sp,-32
+sw ra,28(sp)
+sw s8,24(sp)
+move s8,sp
+sw a0,32(s8)
+lbu v0,16(s8)
+sltiu v0,v0,6
+beqz v0,'_DOWNLINK_SEND_TAKEOFF_0x54
+nop
+li a0,4
+jal '_ModemStartMessage
+nop
+lw v0,32(s8)
+andi v0,v0,255
+move a0,v0
+jal '_MODEM_PUT_2_BYTE_BY_ADDR
+nop
+jal '_ModemEndMessage
+nop
+j '_DOWNLINK_SEND_TAKEOFF_0x64
+nop
+'_DOWNLINK_SEND_TAKEOFF_0x54 lbu v0,67(gp)
+addiu v0,v0,1
+andi v0,v0,255
+sb v0,67(gp)
+'_DOWNLINK_SEND_TAKEOFF_0x64 move sp,s8
+lw ra,28(sp)
+lw s8,24(sp)
+addiu sp,sp,32
+jr ra
+nop
+
+'_MODEM_PUT_2_BYTE_BY_ADDR addiu sp,sp,-8
+sw s8,4(sp)
+move s8,sp
+move v0,a0
+sb v0,8(s8)
+lbu v0,8(s8)
+move sp,s8
+lw s8,4(sp)
+addiu sp,sp,8
+jr ra
+nop
