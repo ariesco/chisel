@@ -1,0 +1,8 @@
+load ../autopilot.maude
+
+(mod T8 is
+  pr TEST .
+
+  op t8 : -> InsList .
+  eq t8 = link-fbw-send and-bitwise SPI-START SPI-SELECT-SLAVE0 lookup-arr BV .
+endm)

@@ -1,0 +1,8 @@
+load ../autopilot.maude
+
+(mod T12 is
+  pr TEST .
+
+  op t12 : -> InsList .
+  eq t12 = climb-control-task climb-pid-run TRIM-UPPRZ .
+endm)

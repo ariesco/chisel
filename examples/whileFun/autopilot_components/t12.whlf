@@ -1,7 +1,7 @@
-load wfe.maude
+load ../wfe.maude
 
 ***
-*** EXAMPLE 15
+*** EXAMPLE 17
 ***
 
 (mod EXAMPLE is

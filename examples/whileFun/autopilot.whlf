@@ -46,7 +46,7 @@ load wfe.maude
 *** & DOWNLINK_SEND_CALIB_CONTRAST & DOWNLINK_SEND_BOOT
 *** & DOWNLINK_SEND_PPRZ_MODE & DOWNLINK_SEND_RAD_OF_IR
 *** & DOWNLINK_SEND_NAVIGATION & DOWNLINK_SEND_GPS
-*** & DOWNLINK_SEND_ATTITUTE & DOWNLINK_SEND_ADC
+*** & DOWNLINK_SEND_ATTITUDE & DOWNLINK_SEND_ADC
 *** & DOWNLINK_SEND_SETTINGS & DOWNLINK_SEND_DESIRED
 *** DOWNLINK_SEND_BAT & DOWNLINK_SEND_CLIMB_PID
 *** & DOWNLINK_SEND_DEBUG & DOWNLINK_SEND_NAVIGATION_REF
@@ -61,7 +61,7 @@ load wfe.maude
 *** & DOWNLINK_SEND_CALIB_CONTRAST & DOWNLINK_SEND_BOOT
 *** & DOWNLINK_SEND_PPRZ_MODE & DOWNLINK_SEND_RAD_OF_IR
 *** & DOWNLINK_SEND_NAVIGATION & DOWNLINK_SEND_GPS
-*** & DOWNLINK_SEND_ATTITUTE & DOWNLINK_SEND_ADC
+*** & DOWNLINK_SEND_ATTITUDE & DOWNLINK_SEND_ADC
 *** & DOWNLINK_SEND_SETTINGS & DOWNLINK_SEND_DESIRED
 *** & DOWNLINK_SEND_BAT & DOWNLINK_SEND_CLIMB_PID
 *** & DOWNLINK_SEND_DEBUG & DOWNLINK_SEND_NAVIGATION_REF
@@ -72,7 +72,7 @@ load wfe.maude
 
 *** called in DOWNLINK_SEND_RAD_OF_IR & DOWNLINK_SEND_CALIB_CONTRAST
 *** & DOWNLINK_SEND_RAD_OF_IR & DOWNLINK_SEND_NAVIGATION
-*** & DOWNLINK_SEND_GPS & DOWNLINK_SEND_ATTITUTE
+*** & DOWNLINK_SEND_GPS & DOWNLINK_SEND_ATTITUDE
 *** & DOWNLINK_SEND_SETTINGS & DOWNLINK_SEND_DESIRED
 *** & DOWNLINK_SEND_CLIMB_PID & DOWNLINK_SEND_NAVIGATION_REF
 'MODEM_PUT_4_BYTE_BY_ADDR ('data)
@@ -424,7 +424,7 @@ load wfe.maude
 }
 
 *** called in PERIODIC_SEND_ATTITUDE
-'DOWNLINK_SEND_ATTITUTE ('estimator_phi, 'estimator_psi, 'estimator_theta)
+'DOWNLINK_SEND_ATTITUDE ('estimator_phi, 'estimator_psi, 'estimator_theta)
 {
 ***	If Gt ('MODEM_CHECK_FREE_SPACE, 16)
 	If Equal ('MODEM_CHECK_FREE_SPACE, 16)
@@ -442,7 +442,7 @@ load wfe.maude
 *** called in send_attitude
 'PERIODIC_SEND_ATTITUDE ('empty)
 {
-	Call 'DOWNLINK_SEND_ATTITUTE ('estimator_phi, 'estimator_psi,
+	Call 'DOWNLINK_SEND_ATTITUDE ('estimator_phi, 'estimator_psi,
 		'estimator_theta)
 }
 
@@ -1494,7 +1494,70 @@ load wfe.maude
 	)
 }
 
-.
+'navigation_task ('empty)
+{
+	Call 'navigation_update ('empty) ;
+	Call 'send_nav_values ('empty) ;
+	Call 'course_run ('empty)
+}
+
+'SPI_START( '_SPCR_VAL ) {
+	Local 'foo ;
+  	Local '__res_bit_is_set ;
+  	Local '__res_BV ;
+  	'SPCR := '_SPCR_VAL ;
+  	Call 'bit_is_set ( 'SPSR, 'SPIF ) ;
+  	If Equal ( '__res_bit_is_set, 0 )
+   Then	'foo := 'SPDR ;
+  	Call 'BV( 'SPIE ) ;
+  	Call 'and_bitwise ( 'SPCR, '__res_BV ) ;
+  	'SPCR := '__res_and_bitwise
+}
+
+'BV ('a)
+{
+	'__res_BV := 'a
+}
+
+'SFR_BYTE ('val1)
+{
+	'__res_SFR_BYTE := 'val1
+}
+
+'SPI_SELECT_SLAVE0('empty)
+{
+  	'spi_cur_slave := 'SPI_SLAVE0 ;
+  	Call 'cbi( 'SPI_SS0_PORT, 'SPI_SS0_PIN )
+}
+
+'cbi ('val1, 'val2)
+{
+	Call 'SFR_BYTE ('val1) ;
+	Call 'BV ('val2) ;
+	'__res_SFR_BYTE := '__res_SFR_BYTE +. '__res_BV
+}
+
+'receive_gps_data_task ('empty)
+{
+	Call 'send_gps_pos ('empty) ;
+	Call 'send_radIR ('empty) ;
+	Call 'send_takeOff ('empty)
+}
+
+'reporting_task ('empty)
+{
+	Call 'send_boot ('empty) ;
+	Call 'send_attitude ('empty) ;
+	Call 'send_adc ('empty) ;
+	Call 'send_settings ('empty) ;
+	Call 'send_desired ('empty) ;
+	Call 'send_bat ('empty) ;
+	Call 'send_climb ('empty) ;
+	Call 'send_mode ('empty) ;
+	Call 'send_debug ('empty) ;
+	Call 'send_nav_ref ('empty)
+} .
+
 endm)
 
 (set side-effect sorts ESt RWBUF .)

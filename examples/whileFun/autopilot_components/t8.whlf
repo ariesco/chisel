@@ -1,0 +1,94 @@
+load ../wfe.maude
+
+***
+*** EXAMPLE 13
+***
+
+(mod EXAMPLE is
+ pr EVALUATION-WHILE .
+
+ op myFuns : -> FunSet .
+ eq myFuns = 'Main (nv)
+{
+  Call 'link_fbw_send ('empty)
+}
+
+'link_fbw_send ('empty)
+{
+	Local '__res1_BV ;
+	Local '__res2_BV ;
+	Local '__res3_BV ;
+	Call 'BV ( 'SPE ) ;
+	Call 'BV ( 'MSTR ) ;
+	Call 'BV ( 'SPR0 ) ;
+	Local '__res1_and_bitwise ;
+	Local '__res2_and_bitwise ;
+	(If Not Equal ('spi_cur_slave, 'SPI_NAME)
+	Then 'spi_nb_ovrn := 'spi_nb_ovrn +. 1 ) ;
+	Call 'and_bitwise ( '__res1_BV, '__res2_BV ) ;
+	Call 'and_bitwise ( '__res1_and_bitwise, '__res3_BV ) ;
+	Call 'SPI_START ( '__res2_and_bitwise ) ;
+	Call 'SPI_SELECT_SLAVE0 ( 'empty ) ;
+
+  	'idx_buf := 0 ;
+  	'xor_in := 0 ;
+	Call 'lookup_arr ('to_fbw, 'idx_buf ) ;
+	'xor_out := '__res_lookup_arr ;
+	'SPDR := 'xor_out ;
+	'link_fbw_receive_valid := 'FALSE
+}
+
+'and_bitwise ('val1, 'val2)
+{
+	If Equal ('val1, 'val2)
+	Then '__res_and_bitwise := 1
+	Else '__res_and_bitwise := 0
+}
+
+'SPI_START( '_SPCR_VAL ) {
+	Local 'foo ;
+  	Local '__res_bit_is_set ;
+  	Local '__res_BV ;
+  	'SPCR := '_SPCR_VAL ;
+  	Call 'bit_is_set ( 'SPSR, 'SPIF ) ;
+  	If Equal ( '__res_bit_is_set, 0 )
+   Then	'foo := 'SPDR ;
+  	Call 'BV( 'SPIE ) ;
+  	Call 'and_bitwise ( 'SPCR, '__res_BV ) ;
+  	'SPCR := '__res_and_bitwise
+}
+
+'bit_is_set ('sfr, 'bit)
+{
+	If (Equal ('sfr, 1)) And (Equal ('bit, 1))
+	Then '__res_bit_is_set := 1
+	Else '__res_bit_is_set := 0
+}
+
+'BV ('a)
+{
+	'__res_BV := 'a
+}
+
+'SFR_BYTE ('val1)
+{
+	'__res_SFR_BYTE := 'val1
+}
+
+'SPI_SELECT_SLAVE0('empty)
+{
+  	'spi_cur_slave := 'SPI_SLAVE0 ;
+  	Call 'cbi( 'SPI_SS0_PORT, 'SPI_SS0_PIN )
+}
+
+'cbi ('val1, 'val2)
+{
+	Call 'SFR_BYTE ('val1) ;
+	Call 'BV ('val2) ;
+	'__res_SFR_BYTE := '__res_SFR_BYTE +. '__res_BV
+} .
+
+
+endm)
+
+(red myFuns .)

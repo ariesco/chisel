@@ -1,0 +1,8 @@
+load ../fly_by_wire.maude
+
+(mod T5 is
+  pr TEST .
+
+  op t5 : -> InsList .
+  eq t5 = check-failsafe-task servo-set ServoSet update-arr lookup-arr ChopServo .
+endm)

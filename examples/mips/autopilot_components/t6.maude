@@ -1,0 +1,16 @@
+load ../autopilot.maude
+
+(mod T6 is
+  pr TEST .
+
+  op t6 : -> InsList .
+  eq t6 = radio-control-task copy-from-to-fbw update-arr lookup-arr bit-is-set
+          pprz-mode-update CheckEvent PPRZ-MODE-OF-PULSE ModeUpdate and-bitwise
+          ir-estim-mode-update IR-ESTIM-MODE-OF-PULSE inflight-calib-mode-update
+          IF-CALIB-MODE-OF-PULSE inflight-calib mcu1-status-update DOWNLINK-SEND-PPRZ-MODE
+          ModemStartMessage ModemEndMessage MODEM-PUT-1-BYTE-BY-ADDR FLOAT-OF-PPRZ
+          events-update EventPos EventNeg EventUpdate shiftl-bitwise ground-calibrate
+          DOWNLINK-SEND-CALIB-START STICK-PUSHED ir-gain-calib RadOfIrFromConstrast
+          DOWNLINK-SEND-RAD-OF-IR MODEM-PUT-4-BYTE-BY-ADDR MODEM-PUT-2-BYTE-BY-ADDR
+          DOWNLINK-SEND-CALIB-CONTRAST .
+endm)

@@ -1,0 +1,8 @@
+load ../autopilot.maude
+
+(mod T11 is
+  pr TEST .
+
+  op t11 : -> InsList .
+  eq t11 = altitude-control-task altitude-pid-run .
+endm)

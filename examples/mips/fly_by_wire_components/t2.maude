@@ -1,0 +1,9 @@
+load ../fly_by_wire.maude
+
+(mod T2 is
+  pr TEST .
+
+  op t2 : -> InsList .
+  eq t2 = send-data-to-autopilot-task SpiIsSelected bit-is-set to-autopilot-from-last-radio
+          spi-reset lookup-arr BV VoltageOfAdc .
+endm)

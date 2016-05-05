@@ -1,0 +1,413 @@
+load ../wfe.maude
+
+***
+*** EXAMPLE 18
+***
+
+(mod EXAMPLE is
+ pr EVALUATION-WHILE .
+
+ op myFuns : -> FunSet .
+ eq myFuns = 'Main (nv)
+{
+  Call 'reporting_task ('empty)
+}
+
+'reporting_task ('empty)
+{
+	Call 'send_boot ('empty) ;
+	Call 'send_attitude ('empty) ;
+	Call 'send_adc ('empty) ;
+	Call 'send_settings ('empty) ;
+	Call 'send_desired ('empty) ;
+	Call 'send_bat ('empty) ;
+	Call 'send_climb ('empty) ;
+	Call 'send_mode ('empty) ;
+	Call 'send_debug ('empty) ;
+	Call 'send_nav_ref ('empty)
+}
+
+'send_boot ('empty)
+{
+	If Equal ('boot, 1)
+	Then
+	(
+		Call 'DOWNLINK_SEND_BOOT ('version) ;
+		Call 'DOWNLINK_SEND_RAD_OF_IR ('estimator_ir, 'estimator_rad,
+			'estimator_rad_of_ir, 'ir_roll_neutral,
+			'ir_pitch_neutral) ;
+		'boot := 0
+	)
+}
+
+'DOWNLINK_SEND_BOOT ('version)
+{
+	If Gt ('MODEM_CHECK_FREE_SPACE, 6)
+	Then
+	(
+          Call 'ModemStartMessage ('DL_BOOT) ;
+          Call 'MODEM_PUT_2_BYTE_BY_ADDR ('version) ;
+          Call 'ModemEndMessage ('empty)
+        )
+        Else 'modem_nb_ovrn := 'modem_nb_ovrn +. 1
+}
+
+'ModemStartMessage ('DL_CALIB_START)
+{
+	If Equal ('DL_CALIB_START, 1)
+	Then '__res_ModemStartMessage := 1
+	Else '__res_ModemStartMessage := 0
+}
+
+'ModemEndMessage ('empty)
+{
+	'__res_ModemEndMessage := 1
+}
+
+'MODEM_PUT_2_BYTE_BY_ADDR ('data)
+{
+	'__res_MODEM_PUT_2_BYTE_BY_ADDR := 'data
+}
+
+'DOWNLINK_SEND_RAD_OF_IR ('estimator_ir, 'estimator_rad, 'estimator_rad_of_ir,
+			'ir_roll_neutral, 'ir_pitch_neutral)
+{
+	If Gt ('MODEM_CHECK_FREE_SPACE, 20)
+	Then
+	(
+          Call 'ModemStartMessage ('DL_RAD_OF_IR) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('estimator_ir) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('estimator_rad) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('estimator_rad_of_ir) ;
+          Call 'MODEM_PUT_2_BYTE_BY_ADDR ('ir_roll_neutral) ;
+          Call 'MODEM_PUT_2_BYTE_BY_ADDR ('ir_pitch_neutral) ;
+          Call 'ModemEndMessage ('empty)
+        )
+        Else 'modem_nb_ovrn := 'modem_nb_ovrn +. 1
+}
+
+'MODEM_PUT_2_BYTE_BY_ADDR ('data)
+{
+	'__res_MODEM_PUT_2_BYTE_BY_ADDR := 'data
+}
+
+'MODEM_PUT_4_BYTE_BY_ADDR ('data)
+{
+	'__res_MODEM_PUT_4_BYTE_BY_ADDR := 'data
+}
+
+'send_attitude ('empty)
+{
+	If Not Equal ('boot, 1)
+	Then
+	(
+		'count := 'count +. 1 ;
+		(If Equal ('count, 250)
+		Then 'count := 0);
+		Local '__tmp__ ;
+***		'__tmp__ := 'count %. 5 ;
+		'__tmp__ := 'count +. 5 ;
+		If Equal ('__tmp__, 0)
+		Then Call 'PERIODIC_SEND_ATTITUDE ('empty)
+	)
+}
+
+'PERIODIC_SEND_ATTITUDE ('empty)
+{
+	Call 'DOWNLINK_SEND_ATTITUDE ('estimator_phi, 'estimator_psi,
+		'estimator_theta)
+}
+
+'DOWNLINK_SEND_ATTITUDE ('estimator_phi, 'estimator_psi, 'estimator_theta)
+{
+	If Gt ('MODEM_CHECK_FREE_SPACE, 16)
+	Then
+	(
+          Call 'ModemStartMessage ('DL_ATTITUDE) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('estimator_phi) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('estimator_psi) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('estimator_theta) ;
+          Call 'ModemEndMessage ('empty)
+        )
+        Else 'modem_nb_ovrn := 'modem_nb_ovrn +. 1
+}
+
+'send_adc ('empty)
+{
+	If Not Equal ('boot, 1)
+	Then
+	(
+		Local '__tmp__ ;
+***		'__tmp__ := 'count %. 5 ;
+		'__tmp__ := 'count +. 5 ;
+		If Equal ('__tmp, 1)
+		Then Call 'PERIODIC_SEND_ADC ('empty)
+	)
+}
+
+'PERIODIC_SEND_ADC ('empty)
+{
+	Call 'DOWNLINK_SEND_ADC ('ir_roll, 'ir_pitch)
+}
+
+'DOWNLINK_SEND_ADC ('roll, 'pitch)
+{
+	If Gt ('MODEM_CHECK_FREE_SPACE, 8)
+	Then
+	(
+          Call 'ModemStartMessage ('DL_ADC) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('roll) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('pitch) ;
+          Call 'ModemEndMessage ('empty)
+        )
+        Else 'modem_nb_ovrn := 'modem_nb_ovrn +. 1
+}
+
+'send_settings ('empty)
+{
+	If Not Equal ('boot, 1)
+	Then
+	(
+		Local '__tmp__ ;
+***		'__tmp__ := 'count %. 5 ;
+		'__tmp__ := 'count +. 5 ;
+		If Equal ('__tmp, 2)
+		Then Call 'PERIODIC_SEND_SETTINGS ('empty)
+	)
+}
+
+'PERIODIC_SEND_SETTINGS ('empty)
+{
+	Call 'DOWNLINK_SEND_SETTINGS ('mode, 'slider_1_val, 'slider_2_val)
+}
+
+'DOWNLINK_SEND_SETTINGS ('mode, 'slider_1_val, 'slider_2_val)
+{
+	If Gt ('MODEM_CHECK_FREE_SPACE, 13)
+	Then
+	(
+          Call 'ModemStartMessage ('DL_ADC) ;
+          Call 'MODEM_PUT_1_BYTE_BY_ADDR ('mode) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('slider_1_val) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('slider_2_val) ;
+          Call 'ModemEndMessage ('empty)
+        )
+        Else 'modem_nb_ovrn := 'modem_nb_ovrn +. 1
+
+}
+
+'MODEM_PUT_1_BYTE_BY_ADDR ('data)
+{
+	'__res_MODEM_PUT_1_BYTE_BY_ADDR := 'data
+}
+
+'send_desired ('empty)
+{
+	If Not Equal ('boot, 1)
+	Then
+	(
+		Local '__tmp__ ;
+***		'__tmp__ := 'count %. 10 ;
+		'__tmp__ := 'count +. 10 ;
+		If Equal ('__tmp, 3)
+		Then Call 'PERIODIC_SEND_DESIRED ('empty)
+	)
+}
+
+'PERIODIC_SEND_DESIRED ('empty)
+{
+	Call 'DOWNLINK_SEND_DESIRED ('desired_roll, 'desired_pitch, 'desired_x,
+		'desired_y, 'desired_altitude)
+}
+
+'DOWNLINK_SEND_DESIRED ('roll, 'pitch, 'x, 'y, 'altitude)
+{
+	If Gt ('MODEM_CHECK_FREE_SPACE, 24)
+	Then
+	(
+          Call 'ModemStartMessage ('DL_DESIRED) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('roll) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('pitch) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('x) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('y) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('altitude) ;
+          Call 'ModemEndMessage ('empty)
+        )
+        Else 'modem_nb_ovrn := 'modem_nb_ovrn +. 1
+}
+
+'send_bat ('empty)
+{
+	If Not Equal ('boot, 1)
+	Then
+	(
+		Local '__tmp__ ;
+***		'__tmp__ := 'count %. 20 ;
+		'__tmp__ := 'count +. 20 ;
+		If Equal ('__tmp, 8)
+		Then Call 'PERIODIC_SEND_BAT ('empty)
+	)
+}
+
+'PERIODIC_SEND_BAT ('empty)
+{
+	Call 'DOWNLINK_SEND_BAT ('vsupply, 'estimator_flight_time,
+		'low_battery, 'block_time, 'stage_time)
+}
+
+'DOWNLINK_SEND_BAT ('voltage, 'flight_time,
+		'battery, 'block_time, 'stage_time)
+{
+	If Gt ('MODEM_CHECK_FREE_SPACE, 12)
+	Then
+	(
+          Call 'ModemStartMessage ('DL_BAT) ;
+          Call 'MODEM_PUT_1_BYTE_BY_ADDR ('voltage) ;
+          Call 'MODEM_PUT_2_BYTE_BY_ADDR ('flight_time) ;
+          Call 'MODEM_PUT_1_BYTE_BY_ADDR ('battery) ;
+          Call 'MODEM_PUT_2_BYTE_BY_ADDR ('block_time) ;
+          Call 'MODEM_PUT_2_BYTE_BY_ADDR ('stage_time) ;
+          Call 'ModemEndMessage ('empty)
+        )
+        Else 'modem_nb_ovrn := 'modem_nb_ovrn +. 1
+}
+
+'send_climb ('empty)
+{
+	If Not Equal ('boot, 1)
+	Then
+	(
+		Local '__tmp__ ;
+***		'__tmp__ := 'count %. 20 ;
+		'__tmp__ := 'count +. 20 ;
+		If Equal ('__tmp, 18)
+		Then Call 'PERIODIC_SEND_CLIMB_PID ('empty)
+	)
+}
+
+'PERIODIC_SEND_CLIMB_PID ('empty)
+{
+	Call 'DOWNLINK_SEND_CLIMB_PID('gaz, 'climb, 'climb_sum_err, 'climb_pgain)
+}
+
+'DOWNLINK_SEND_CLIMB_PID('gaz, 'climb, 'sum_err, 'pgain)
+{
+	If Gt ('MODEM_CHECK_FREE_SPACE, 18)
+	Then
+	(
+          Call 'ModemStartMessage ('DL_CLIMB_PID) ;
+          Call 'MODEM_PUT_2_BYTE_BY_ADDR ('gaz) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('climb) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('sum_err) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('pgain) ;
+          Call 'ModemEndMessage ('empty)
+        )
+        Else 'modem_nb_ovrn := 'modem_nb_ovrn +. 1
+}
+
+'send_mode ('empty)
+{
+	If Not Equal ('boot, 1)
+	Then
+	(
+		Local '__tmp__ ;
+***		'__tmp__ := 'count %. 50 ;
+		'__tmp__ := 'count +. 50 ;
+		If Equal ('__tmp, 9)
+		Then Call 'PERIODIC_SEND_PPRZ_MODE ('empty)
+	)
+}
+
+'PERIODIC_SEND_PPRZ_MODE ('empty)
+{
+	Call 'DOWNLINK_SEND_PPRZ_MODE('pprz, 'vertical,
+		'inflight_calib, 'mcu1_status, 'ir_estim)
+}
+
+'DOWNLINK_SEND_PPRZ_MODE ('pprz_mode, 'vertical_mode,
+	'inflight_calib_mode, 'mcu1_status, 'ir_estim_mode)
+{
+	If Gt ('MODEM_CHECK_FREE_SPACE, 9)
+	Then
+	(
+          Call 'ModemStartMessage ('DL_PPRZ_MODE) ;
+          Call 'MODEM_PUT_1_BYTE_BY_ADDR ('pprz_mode) ;
+          Call 'MODEM_PUT_1_BYTE_BY_ADDR ('vertical_mode) ;
+          Call 'MODEM_PUT_1_BYTE_BY_ADDR ('inflight_calib_mode) ;
+          Call 'MODEM_PUT_1_BYTE_BY_ADDR ('mcu1_status) ;
+          Call 'MODEM_PUT_1_BYTE_BY_ADDR ('ir_estim_mode) ;
+          Call 'ModemEndMessage ('empty)
+        )
+        Else 'modem_nb_ovrn := 'modem_nb_ovrn +. 1
+}
+
+'send_debug ('empty)
+{
+	If Not Equal ('boot, 1)
+	Then
+	(
+		Local '__tmp__ ;
+***		'__tmp__ := 'count %. 50 ;
+		'__tmp__ := 'count +. 50 ;
+		If Equal ('__tmp, 29)
+		Then Call 'PERIODIC_SEND_DEBUG ('empty)
+	)
+}
+
+'PERIODIC_SEND_DEBUG ('empty)
+{
+	Call 'DOWNLINK_SEND_DEBUG ('link_fbw_nb_err, 'link_fbw_fbw_nb_err,
+		'modem_nb_ovrn, 'gps_nb_ovrn, 'mcu1_ppm_cpt)
+}
+
+'DOWNLINK_SEND_DEBUG ('link_fbw_nb_err, 'link_fbw_fbw_nb_err,
+		'modem_nb_ovrn, 'gps_nb_ovrn, 'mcu1_ppm_cpt)
+{
+	If Gt ('MODEM_CHECK_FREE_SPACE, 9)
+	Then
+	(
+          Call 'ModemStartMessage ('DL_DEBUG) ;
+          Call 'MODEM_PUT_1_BYTE_BY_ADDR ('link_fbw_nb_err) ;
+          Call 'MODEM_PUT_1_BYTE_BY_ADDR ('link_fbw_fbw_nb_err) ;
+          Call 'MODEM_PUT_1_BYTE_BY_ADDR ('modem_nb_ovrn) ;
+          Call 'MODEM_PUT_1_BYTE_BY_ADDR ('gps_nb_ovrn) ;
+          Call 'MODEM_PUT_1_BYTE_BY_ADDR ('mcu1_ppm_cpt) ;
+          Call 'ModemEndMessage ('empty)
+        )
+        Else 'modem_nb_ovrn := 'modem_nb_ovrn +. 1
+}
+
+'send_nav_ref ('empty)
+{
+	If Not Equal ('boot, 1)
+	Then
+	(
+		Local '__tmp__ ;
+***		'__tmp__ := 'count %. 100 ;
+		'__tmp__ := 'count +. 100 ;
+		If Equal ('__tmp, 49)
+		Then Call 'PERIODIC_SEND_NAVIGATION_REF ('empty)
+	)
+}
+
+'PERIODIC_SEND_NAVIGATION_REF ('empty)
+{
+	Call 'DOWNLINK_SEND_NAVIGATION_REF ('nav_east0, 'nav_north0)
+}
+
+'DOWNLINK_SEND_NAVIGATION_REF ('east, 'north)
+{
+	If Gt ('MODEM_CHECK_FREE_SPACE, 12)
+	Then
+	(
+          Call 'ModemStartMessage ('DL_NAVIGATION_REF) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('east) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('north) ;
+          Call 'ModemEndMessage ('empty)
+        )
+        Else 'modem_nb_ovrn := 'modem_nb_ovrn +. 1
+} .
+
+endm)
+
+(red myFuns .)

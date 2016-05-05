@@ -1,4 +1,4 @@
-load wfe.maude
+load ../wfe.maude
 
 ***
 *** EXAMPLE 9

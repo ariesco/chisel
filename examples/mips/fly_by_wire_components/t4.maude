@@ -1,0 +1,9 @@
+load ../fly_by_wire.maude
+
+(mod T4 is
+  pr TEST .
+
+  op t4 : -> InsList .
+  eq t4 = servo-transmit uart-transmit BV update-arr lookup-arr sbi SFR-BYTE
+          shiftr-bitwise .
+endm)

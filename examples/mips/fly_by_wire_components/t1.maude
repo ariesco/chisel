@@ -1,4 +1,4 @@
-load fly_by_wire.maude
+load ../fly_by_wire.maude
 
 (mod T1 is
   pr TEST .

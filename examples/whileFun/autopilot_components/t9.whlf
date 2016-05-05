@@ -1,0 +1,160 @@
+load ../wfe.maude
+
+***
+*** EXAMPLE 14
+***
+
+(mod EXAMPLE is
+ pr EVALUATION-WHILE .
+
+ op myFuns : -> FunSet .
+ eq myFuns = 'Main (nv)
+{
+  Call 'receive_gps_data_task ('empty)
+}
+
+'receive_gps_data_task ('empty)
+{
+	Call 'send_gps_pos ('empty) ;
+	Call 'send_radIR ('empty) ;
+	Call 'send_takeOff ('empty)
+}
+
+'send_gps_pos ('empty)
+{
+	'gps_msg_received := 0 ;
+	If Equal ('gps_pos_available, 1)
+	Then
+	(
+		Call 'DOWNLINK_SEND_GPS('gps_mode, 'gps_utm_east, 'gps_utm_north,
+			'gps_fcourse, 'gps_falt, 'gps_fspeed, 'gps_fclimb, 'gps_ftow);
+		Call 'estimator_update_state_gps ('empty)
+	)
+}
+
+'DOWNLINK_SEND_GPS('gps_mode, 'gps_utm_east, 'gps_utm_north, 'gps_fcourse,
+		'gps_falt, 'gps_fspeed, 'gps_fclimb, 'gps_ftow)
+{
+	If Gt ('MODEM_CHECK_FREE_SPACE, 33)
+	Then
+	(
+          Call 'ModemStartMessage ('DL_GPS) ;
+          Call 'MODEM_PUT_1_BYTE_BY_ADDR ('gps_mode) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('gps_utm_east) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('gps_utm_north) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('gps_fcourse) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('desired_course) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('gps_falt) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('gps_fspeed) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('gps_fclimb) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('gps_ftow) ;
+          Call 'ModemEndMessage ('empty)
+        )
+        Else 'modem_nb_ovrn := 'modem_nb_ovrn +. 1
+
+}
+
+'ModemStartMessage ('DL_CALIB_START)
+{
+	If Equal ('DL_CALIB_START, 1)
+	Then '__res_ModemStartMessage := 1
+	Else '__res_ModemStartMessage := 0
+}
+
+'ModemEndMessage ('empty)
+{
+	'__res_ModemEndMessage := 1
+}
+
+'MODEM_PUT_1_BYTE_BY_ADDR ('data)
+{
+	'__res_MODEM_PUT_1_BYTE_BY_ADDR := 'data
+}
+
+'MODEM_PUT_4_BYTE_BY_ADDR ('data)
+{
+	'__res_MODEM_PUT_4_BYTE_BY_ADDR := 'data
+}
+
+'estimator_update_state_gps ('empty)
+{
+	If Equal ('gps_mode, 3)
+	Then
+	(
+		'estimator_x := 'gps_east ;
+		'estimator_y := 'gps_north ;
+		'estimator_z := 'gps_falt ;
+		'estimator_hspeed_mod := 'gps_fspeed ;
+		'estimator_hspeed_dir := 'gps_fcourse ;
+		'estimator_z_dot := 'gps_fclimb ;
+		If Equal ('estimator_flight_time, 1)
+		Then Call 'estimator_update_ir_estim ('empty)
+  	)
+}
+
+'estimator_update_ir_estim ('empty)
+{
+	'to_complete := 1
+}
+
+'send_radIR ('empty)
+{
+	If Equal ('gps_pos_available, 1)
+	Then Call 'DOWNLINK_SEND_RAD_OF_IR('estimator_ir, 'estimator_rad,
+		'estimator_rad_of_ir, 'ir_roll_neutral, 'ir_pitch_neutral)
+}
+
+'DOWNLINK_SEND_RAD_OF_IR ('estimator_ir, 'estimator_rad, 'estimator_rad_of_ir,
+			'ir_roll_neutral, 'ir_pitch_neutral)
+{
+	If Gt ('MODEM_CHECK_FREE_SPACE, 20)
+	Then
+	(
+          Call 'ModemStartMessage ('DL_RAD_OF_IR) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('estimator_ir) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('estimator_rad) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('estimator_rad_of_ir) ;
+          Call 'MODEM_PUT_2_BYTE_BY_ADDR ('ir_roll_neutral) ;
+          Call 'MODEM_PUT_2_BYTE_BY_ADDR ('ir_pitch_neutral) ;
+          Call 'ModemEndMessage ('empty)
+        )
+        Else 'modem_nb_ovrn := 'modem_nb_ovrn +. 1
+}
+
+'send_takeOff ('empty)
+{
+	If Equal ('gps_pos_available, 1)
+	Then
+	(
+		(If ((Not Equal ('estimator_flight_time, 1)) And
+			Gt ('estimator_hspeed_mod, 'MIN_SPEED_FOR_TAKEOFF))
+		Then
+		(
+			'estimator_flight_time := 1 ;
+			'launch := 1 ;
+			Call 'DOWNLINK_SEND_TAKEOFF ('cputime)
+		)) ;
+		'gps_pos_available := 0
+	)
+}
+
+'DOWNLINK_SEND_TAKEOFF ('cputime)
+{
+	If Gt ('MODEM_CHECK_FREE_SPACE, 6)
+	Then
+	(
+          Call 'ModemStartMessage ('DL_TAKEOFF) ;
+          Call 'MODEM_PUT_2_BYTE_BY_ADDR ('cputime) ;
+          Call 'ModemEndMessage ('empty)
+        )
+        Else 'modem_nb_ovrn := 'modem_nb_ovrn +. 1
+}
+
+'MODEM_PUT_2_BYTE_BY_ADDR ('data)
+{
+	'__res_MODEM_PUT_2_BYTE_BY_ADDR := 'data
+} .
+
+endm)
+
+(red myFuns .)

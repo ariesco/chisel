@@ -1,0 +1,175 @@
+load ../wfe.maude
+
+***
+*** EXAMPLE 15
+***
+
+(mod EXAMPLE is
+ pr EVALUATION-WHILE .
+
+ op myFuns : -> FunSet .
+ eq myFuns = 'Main (nv)
+{
+  Call 'navigation_task ('empty)
+}
+
+'navigation_task ('empty)
+{
+	Call 'navigation_update ('empty) ;
+	Call 'send_nav_values ('empty) ;
+	Call 'course_run ('empty)
+}
+
+'navigation_update ('empty)
+{
+	'lateral_mode := 'LATERAL_MODE_COURSE ;
+	If Equal ('pprz_mode, 'PPRZ_MODE_HOME)
+	Then Call 'nav_home ('empty)
+	Else Call 'nav_update ('empty)
+}
+
+'nav_home ('empty)
+{
+	Local '__tmp_1_ ;
+	'__tmp_1_ := 50 ;
+	Call 'Circle ('WP_HOME, '__tmp_1_) ;
+	'nav_pitch := 0 ;
+	'vertical_mode := 'VERTICAL_MODE_AUTO_ALT ;
+	'desired_altitude := 'GROUND_ALT +. 50 ;
+	Call 'compute_dist2_to_home ('empty) ;
+	'dist2_to_wp := 'dist2_to_home
+}
+
+'Circle ('wp, 'radius)
+{
+	Local 'alpha ;
+	Local 'alpha_carrot ;
+	Local '__tmp_1_ ;
+	Local '__tmp_2_ ;
+	Call 'lookup_arr ('waypoints_x, 'wp) ;
+	'__tmp_1_ := '__res_lookup_arr ;
+	Call 'lookup_arr ('waypoints_y, 'wp) ;
+	'__tmp_2_ := '__res_lookup_arr ;
+	'alpha := ('estimator_y -. '__tmp_1_) +. ('estimator_x -. '__tmp_2_) ;
+***	'alpha_carrot := 'alpha +. ('CARROT /. ('radius *. 'estimator_speed_mod)) ;
+	'alpha_carrot := 'alpha +. ('CARROT +. ('radius *. 'estimator_speed_mod)) ;
+***	'qdr := ('M_PI /. 2) -. 'alpha_carrot ;
+	'qdr := ('M_PI +. 2) -. 'alpha_carrot ;
+	While Lt ('qdr, 0) Do 'qdr := 'qdr +. 360 ;
+	While Gte ('qdr, 360) Do 'qdr := 'qdr -. 360
+}
+
+'lookup_arr ('a, 'idx)
+{
+	'__res_lookup_arr := 'a +. 'idx
+}
+
+'compute_dist2_to_home ('empty)
+{
+	Local 'ph_x ;
+	Local 'ph_y ;
+	Call 'lookup_arr ('waypoints_x, 'WP_HOME) ;
+	'ph_x := '__res_lookup_arr -. 'estimator_x ;
+	Call 'lookup_arr ('waypoints_y, 'WP_HOME) ;
+	'ph_y := '__res_lookup_arr -. 'estimator_y ;
+	'dist2_to_home := ('ph_x *. 'ph_x) +. ('ph_y *. 'ph_y) ;
+	If Gt ('dist2_to_home, 'MAX_DIST_FROM_HOME2)
+	Then 'too_far_from_home := 1
+	Else 'too_far_from_home := 0
+}
+
+'nav_update ('empty)
+{
+	Call 'compute_dist2_to_home ('empty) ;
+	Call 'auto_nav ('empty)
+}
+
+'auto_nav ('empty)
+{
+	'to_complete := 1
+}
+
+'send_nav_values ('empty)
+{
+	Call 'DOWNLINK_SEND_NAVIGATION('nav_block, 'nav_stage, 'estimator_x,
+		'estimator_y, 'desired_course, 'dist2_to_wp, 'course_pgain, 'dist2_to_home)
+}
+
+'DOWNLINK_SEND_NAVIGATION('nav_block, 'nav_stage, 'estimator_x, 'estimator_y,
+		'desired_course, 'dist2_to_wp, 'course_pgain, 'dist2_to_home)
+{
+	If Gt ('MODEM_CHECK_FREE_SPACE, 30)
+	Then
+	(
+          Call 'ModemStartMessage ('DL_NAVIGATION) ;
+          Call 'MODEM_PUT_1_BYTE_BY_ADDR ('nav_block) ;
+          Call 'MODEM_PUT_1_BYTE_BY_ADDR ('nav_stage) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('estimator_x) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('estimator_y) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('desired_course) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('dist2_to_wp) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('course_pgain) ;
+          Call 'MODEM_PUT_4_BYTE_BY_ADDR ('dist2_to_home) ;
+          Call 'ModemEndMessage ('empty)
+        )
+        Else 'modem_nb_ovrn := 'modem_nb_ovrn +. 1
+}
+
+'ModemStartMessage ('DL_CALIB_START)
+{
+	If Equal ('DL_CALIB_START, 1)
+	Then '__res_ModemStartMessage := 1
+	Else '__res_ModemStartMessage := 0
+}
+
+'ModemEndMessage ('empty)
+{
+	'__res_ModemEndMessage := 1
+}
+
+'MODEM_PUT_4_BYTE_BY_ADDR ('data)
+{
+	'__res_MODEM_PUT_4_BYTE_BY_ADDR := 'data
+}
+
+'MODEM_PUT_1_BYTE_BY_ADDR ('data)
+{
+	'__res_MODEM_PUT_1_BYTE_BY_ADDR := 'data
+}
+
+'course_run ('empty)
+{
+	If (Equal ('pprz_mode, 'PPRZ_MODE_AUTO2) Or
+		(Equal ('pprz_mode, 'PPRZ_MODE_HOME)))
+	Then
+	(
+		(If Gte ('lateral_mode, 'LATERAL_MODE_COURSE)
+		Then Call 'course_pid_run ('empty)) ;
+		'desired_roll := 'nav_desired_roll
+	)
+}
+
+'course_pid_run ('empty)
+{
+	Local 'err ;
+	'err := 'estimator_hspeed_dir -. 'desired_course ;
+	Call 'NORM_RAD_ANGLE ('err) ;
+	'nav_desired_roll := 'course_pgain *. 'err ;
+	If Gt ('nav_desired_roll, 'max_roll)
+	Then 'nav_desired_roll := 'max_roll
+	Else
+	(
+		If Lt ('nav_desired_roll, 'min_roll)
+		Then 'nav_desired_roll := 'min_roll
+	)
+}
+
+'NORM_RAD_ANGLE ('val)
+{
+	While Gt ('val, 'M_PI) Do 'val := 'val -. (2 *. 'M_PI) ;
+	While Lt ('val, 'm_PI) Do 'val := 'val +. (2 *. 'M_PI)
+} .
+
+endm)
+
+(red myFuns .)

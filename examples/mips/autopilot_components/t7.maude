@@ -1,0 +1,9 @@
+load ../autopilot.maude
+
+(mod T7 is
+  pr TEST .
+
+  op t7 : -> InsList .
+  eq t7 = stabilisation-task ir-update estimator-update-state-infrared roll-pitch-pid-run
+          TRIM-PPRZ fabs lookup-arr update-arr .
+endm)

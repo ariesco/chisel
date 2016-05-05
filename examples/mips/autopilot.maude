@@ -5918,6 +5918,185 @@ load assembly.maude
         nop
  .
 
+ op navigation-task : -> InsList .
+ eq navigation-task =
+  'navigation_task:
+				addiu   sp,sp,-24
+				sw      ra,20(sp)
+				sw      s8,16(sp)
+				move    s8,sp
+				jal     'navigation_update
+				nop
+				jal     'send_nav_values
+				nop
+				jal     'course_run
+				nop
+				move    sp,s8
+				lw      ra,20(sp)
+				lw      s8,16(sp)
+				addiu   sp,sp,24
+				jr      ra
+				nop .
+
+
+ op SPI-START : -> InsList .
+ eq SPI-START =
+  'SPI_START
+				addiu   sp,sp,-32
+				sw      ra,28(sp)
+				sw      s8,24(sp)
+				move    s8,sp
+				move    v0,a0
+				sb      v0,32(s8)
+				lbu     v0,32(s8)
+				andi    v0,v0,65535
+				sh      v0,0(gp)
+				addiu   v0,gp,0
+				andi    v0,v0,65535
+				lbu     v0,0(v0)
+				andi    v0,v0,255
+				sll     v1,v0,24
+				sra     v1,v1,24
+				lbu     v0,0(gp)
+				li      a0,1
+				sllv    v0,a0,v0
+				sll     v0,v0,24
+				sra     v0,v0,24
+				and     v0,v1,v0
+				sll     v0,v0,24
+				sra     v0,v0,24
+				sb      v0,16(s8)
+				lbu     v0,16(s8)
+				beqz    v0, 'SPI_START_0x74
+				nop
+				lhu     v0,0(gp)
+				sb      v0,17(s8)
+ 'SPI_START_0x74	lhu     v0,0(gp)
+				andi    v0,v0,255
+				move    a0,v0
+				jal     'BV
+				nop
+				sb      v0,18(s8)
+				lhu     v0,0(gp)
+				andi    v0,v0,255
+				move    v1,v0
+				lbu     v0,18(s8)
+				move    a0,v1
+				move    a1,v0
+				jal     'and_bitwise
+				nop
+				sh      v0,0(gp)
+				move    sp,s8
+				lw      ra,28(sp)
+				lw      s8,24(sp)
+				addiu   sp,sp,32
+				jr      ra
+				nop .
+
+ op SPI-SELECT-SLAVE0 : -> InsList .
+ eq SPI-SELECT-SLAVE0 =
+  'SPI_SELECT_SLAVE0
+			addiu   sp,sp,-8
+			sw      s8,4(sp)
+			move    s8,sp
+			li      v0,1
+			sb      v0,0(gp)
+			addiu   v0,gp,0
+			andi    v0,v0,65535
+			addiu   v1,gp,0
+			andi    v1,v1,65535
+			lbu     v1,0(v1)
+			andi    v1,v1,255
+			sll     a0,v1,24
+			sra     a0,a0,24
+			lbu     v1,0(gp)
+			li      a1,1
+			sllv    v1,a1,v1
+			sll     v1,v1,24
+			sra     v1,v1,24
+			nor     v1,zero,v1
+			sll     v1,v1,24
+			sra     v1,v1,24
+			and     v1,a0,v1
+			sll     v1,v1,24
+			sra     v1,v1,24
+			andi    v1,v1,255
+			sb      v1,0(v0)
+			move    sp,s8
+			lw      s8,4(sp)
+			addiu   sp,sp,8
+			jr      ra
+			nop .
+
+ op BV : -> InsList .
+ eq BV =
+  'BV
+	addiu   sp,sp,-8
+	sw      s8,4(sp)
+	move    s8,sp
+	move    v0,a0
+	sb      v0,8(s8)
+	lbu     v0,8(s8)
+	move    sp,s8
+	lw      s8,4(sp)
+	addiu   sp,sp,8
+	jr      ra
+	nop .
+
+ op receive-gps-data-task : -> InsList .
+ eq receive-gps-data-task =
+  'receive_gps_data_task
+			addiu   sp,sp,-24
+			sw      ra,20(sp)
+			sw      s8,16(sp)
+			move    s8,sp
+			jal     'send_gps_pos
+			nop
+			jal     'send_radIR
+			nop
+			jal     'send_takeOff
+			nop
+			move    sp,s8
+			lw      ra,20(sp)
+			lw      s8,16(sp)
+			addiu   sp,sp,24
+			jr      ra
+			nop .
+
+ op reporting-task : -> InsList .
+ eq reporting-task =
+  'reporting_task
+		addiu   sp,sp,-24
+		sw      ra,20(sp)
+		sw      s8,16(sp)
+		move    s8,sp
+		jal     'send_boot
+		nop
+		jal     'send_attitude
+		nop
+		jal     'send_adc
+		nop
+		jal     'send_settings
+		nop
+		jal     'send_desired
+		nop
+		jal     'send_bat
+		nop
+		jal     'send_climb
+		nop
+		jal     'send_mode
+		nop
+		jal     'send_debug
+		nop
+		jal     'send_nav_ref
+		nop
+		move    sp,s8
+		lw      ra,20(sp)
+		lw      s8,16(sp)
+		addiu   sp,sp,24
+		jr      ra
+		nop .
+
  op autopilot : -> InsList .
  eq autopilot =
     main-autopilot ModemStartMessage ModemEndMessage MODEM-PUT-4-BYTE-BY-ADDR
@@ -5943,7 +6122,8 @@ load assembly.maude
     estimator-update-state-infrared fabs TRIM-PPRZ roll-pitch-pid-run
     stabilisation-task DOWNLINK-SEND-GPS estimator-update-ir-estim
     estimator-update-state-gps send-gps-pos send-radIR DOWNLINK-SEND-TAKEOFF
-    send-takeOff .
+    send-takeOff navigation-task SPI-START SPI-SELECT-SLAVE0 receive-gps-data-task
+    reporting-task .
 
   *****************************************************************************
   ******************************* end autopilot *******************************
@@ -5952,6 +6132,8 @@ load assembly.maude
   op autopilotSystem : -> System .
   eq autopilotSystem = [ preprocess(autopilot) | mtReg | mtMem | 0 ] .
 endm)
+
+eof
 
 *** (red autopilot .)
 

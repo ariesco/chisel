@@ -1,7 +1,7 @@
-load wfe.maude
+load ../wfe.maude
 
 ***
-*** EXAMPLE 8
+*** EXAMPLE 6
 ***
 
 (mod EXAMPLE is
@@ -10,39 +10,61 @@ load wfe.maude
  op myFuns : -> FunSet .
  eq myFuns = 'Main (nv)
 {
-	Call 'check_mega128_values_task ('empty)
+  Call 'test_ppm_task ('empty)
 }
 
-'check_mega128_values_task ('empty)
+'test_ppm_task ('empty)
 {
-	Call 'SpiIsSelected ('empty) ;
-	(If (Not Equal ('__res_SpiIsSelected, 1)) And (Equal ('spi_was_interrupted, 1))
+	(If Equal ('ppm_valid, 1)
 	Then
 	(
-		If Equal ('mega128_receive_valid, 1)
+		'ppm_valid := 0 ;
+		'ppm_cpt := 'ppm_cpt +. 1 ;
+		'radio_ok := 1 ;
+		'radio_really_lost := 0 ;
+		'time_since_last_ppm := 0 ;
+		Call 'last_radio_from_ppm ('empty) ;
+		(If Equal ('last_radio_contains_avg_channels, 1)
 		Then
 		(
-			'time_since_last_mega128 := 0 ;
-			'mega128_ok := 1 ;
-			If Equal ('mode, 'MODE_AUTO)
-			Then Call 'servo_set ('from_mega128.channels)
-		)
+			Call 'lookup_arr ('last_radio, 'RADIO_MODE) ;
+			Call 'MODE_OF_PPRZ ('__res_lookup_arr) ;
+			'mode := 'res_MODE_OF_PPRZ
+		)) ;
+		If Equal ('mode, 'MODE_MANUAL)
+		Then Call 'servo_set ('last_radio)
+	)
+	Else
+	(
+		If (Equal ('mode, 'MODE_MANUAL)) And (Equal ('radio_really_lost, 1))
+		Then 'mode := 'MODE_AUTO
 	)) ;
-	If Equal ('time_since_last_mega128, 'STALLED_TIME)
-	Then 'mega128_ok := 0
+	(If Gte ('time_since_last_ppm, 'STALLED_TIME)
+	Then 'radio_ok := 0) ;
+	If Gte ('time_since_last_ppm, 'REALLY_STALLED_TIME)
+	Then 'radio_really_lost := 0
 }
 
-'SpiIsSelected ('empty)
+'last_radio_from_ppm ('empty)
 {
-	Call 'bit_is_set ('SPI_PIN, 'SPI_SS_PIN) ;
-	'__res_SpiIsSelected := '__res_bit_is_set
+	Call 'LastRadioFromPpm ('empty)
 }
 
-'bit_is_set ('sfr, 'bit)
+'LastRadioFromPpm ('empty)
 {
-	If (Equal ('sfr, 1)) And (Equal ('bit, 1))
-	Then '__res_bit_is_set := 1
-	Else '__res_bit_is_set := 0
+	'to_complete := 1
+}
+
+'lookup_arr ('a, 'idx)
+{
+	'__res_lookup_arr := 'a +. 'idx
+}
+
+'MODE_OF_PPRZ ('mode)
+{
+	If Lt ('mode, 'THRESHOLD_MANUAL_PPRZ)
+	Then '__res_MODE_OF_PPRZ := 'MODE_MANUAL
+	Else '__res_MODE_OF_PPRZ := 'MODE_AUTO
 }
 
 'servo_set ('values)
@@ -98,11 +120,6 @@ load wfe.maude
 	Call 'update_arr ('servo_widths, 'SERVO_RUDDER, '__res_ChopServo)
 }
 
-'lookup_arr ('a, 'idx)
-{
-	'__res_lookup_arr := 'a +. 'idx
-}
-
 'ChopServo ('value)
 {
 	If Lt ('value, 'SERVO_MIN)
@@ -120,7 +137,7 @@ load wfe.maude
 	Call 'lookup_arr ('a, 'idx) ;
 	'__res_update_arr := 'val
 } .
-
 endm)
 
 (red myFuns .)
+

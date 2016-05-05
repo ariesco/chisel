@@ -1,0 +1,12 @@
+load ../autopilot.maude
+
+(mod T10 is
+  pr TEST .
+
+  op t10 : -> InsList .
+  eq t10 = navigation-task navigation-update nav-home Circle lookup-arr
+           compute-dist2-to-home nav-update auto-nav send-nav-values
+           DOWNLINK-SEND-NAVIGATION ModemStartMessage ModemEndMessage
+           MODEM-PUT-4-BYTE-BY-ADDR MODEM-PUT-1-BYTE-BY-ADDR course-run
+           course-pid-run NORM-RAD-ANGLE .
+endm)

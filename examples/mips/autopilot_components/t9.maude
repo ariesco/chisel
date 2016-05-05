@@ -1,0 +1,12 @@
+load ../autopilot.maude
+
+(mod T9 is
+  pr TEST .
+
+  op t9 : -> InsList .
+  eq t9 = receive-gps-data-task send-gps-pos DOWNLINK-SEND-GPS ModemStartMessage
+          ModemEndMessage MODEM-PUT-1-BYTE-BY-ADDR MODEM-PUT-4-BYTE-BY-ADDR
+          estimator-update-state-gps estimator-update-ir-estim send-radIR
+          DOWNLINK-SEND-RAD-OF-IR send-takeOff DOWNLINK-SEND-TAKEOFF
+          MODEM-PUT-2-BYTE-BY-ADDR .
+endm)

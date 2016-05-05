@@ -1,0 +1,9 @@
+load ../fly_by_wire.maude
+
+(mod T3 is
+  pr TEST .
+
+  op t3 : -> InsList .
+  eq t3 = check-mega128-values-task SpiIsSelected bit-is-set servo-set ServoSet
+          lookup-arr ChopServo update-arr .
+endm)
