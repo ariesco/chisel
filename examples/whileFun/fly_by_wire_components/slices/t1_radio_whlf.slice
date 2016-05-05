@@ -1,0 +1,46 @@
+*************** This is the slice w.r.t. the variable 'radio_ok,'radio_really_lost ***************
+
+
+
+The variables to slice 'ChopServo are {}
+The variables to slice 'LastRadioFromPpm are {}
+The variables to slice 'MODE_OF_PPRZ are {}
+The variables to slice 'Main are {}
+The variables to slice 'ServoSet are {}
+The variables to slice 'last_radio_from_ppm are {}
+The variables to slice 'lookup_arr are {}
+The variables to slice 'servo_set are {}
+The variables to slice 'test_ppm_task are {'radio_ok, 'radio_really_lost}
+The variables to slice 'update_arr are {}
+
+'ChopServo(_){_}
+
+'LastRadioFromPpm(_){_}
+
+'MODE_OF_PPRZ(_){_}
+
+'Main(_){_}
+
+'ServoSet(_){_}
+
+'last_radio_from_ppm(_){_}
+
+'lookup_arr(_){_}
+
+'servo_set(_){_}
+
+'test_ppm_task(_){If _ Then
+  _ ;
+    _ ;
+      'radio_ok := _ ;
+      'radio_really_lost := 0 ;
+  _
+Else
+  If _ And Equal('radio_really_lost,_)Then
+_ ;
+If _ Then
+  'radio_ok := 0 ;
+If _ Then
+  'radio_really_lost := 0}
+
+'update_arr(_){_}

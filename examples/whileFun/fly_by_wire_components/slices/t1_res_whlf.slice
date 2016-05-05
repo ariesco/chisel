@@ -1,0 +1,95 @@
+*************** This is the slice w.r.t. the variable '__res_MODE_OF_PPRZ,'__res_ChopServo,'__res_lookup_arr,'__res_update_arr ***************
+
+
+
+The variables to slice 'ChopServo are {'SERVO_MIN, 'SERVO_MAX, 'value, '__res_ChopServo}
+The variables to slice 'LastRadioFromPpm are {}
+The variables to slice 'MODE_OF_PPRZ are {'mode, 'MODE_MANUAL, 'MODE_AUTO, '__res_MODE_OF_PPRZ}
+The variables to slice 'Main are {}
+The variables to slice 'ServoSet are {'__res_ChopServo, '__res_lookup_arr}
+The variables to slice 'last_radio_from_ppm are {}
+The variables to slice 'lookup_arr are {'a, 'idx, '__res_lookup_arr}
+The variables to slice 'servo_set are {}
+The variables to slice 'test_ppm_task are {'__res_lookup_arr}
+The variables to slice 'update_arr are {'val, '__res_update_arr}
+
+'ChopServo('value){If Lt('value,'SERVO_MIN)Then
+  '__res_ChopServo := 'SERVO_MIN
+Else
+  If Gt('value,'SERVO_MAX)Then
+    '__res_ChopServo := 'SERVO_MAX
+Else
+    '__res_ChopServo := 'value}
+
+'LastRadioFromPpm(_){_}
+
+'MODE_OF_PPRZ('mode){If Lt('mode,_)Then
+  '__res_MODE_OF_PPRZ := 'MODE_MANUAL
+Else
+  '__res_MODE_OF_PPRZ := 'MODE_AUTO}
+
+'Main(_){_}
+
+'ServoSet(_){_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ := _ +.((_ *. '__res_lookup_arr)*. _);
+_ ;
+Call 'update_arr(_,_,'__res_ChopServo);
+_ ;
+_ := _ +.((_ *. '__res_lookup_arr)*. _);
+_ ;
+Call 'update_arr(_,_,'__res_ChopServo);
+_ ;
+_ := _ +.('__res_lookup_arr *. _);
+_ ;
+Call 'update_arr(_,_,'__res_ChopServo);
+_ ;
+_ := '__res_lookup_arr ;
+_ ;
+_ ;
+_ ;
+_ ;
+Call 'update_arr(_,_,'__res_ChopServo);
+_ ;
+_ ;
+_ ;
+Call 'update_arr(_,_,'__res_ChopServo);
+_ ;
+_ ;
+_ := '__res_lookup_arr ;
+_ ;
+_ := _ +.('__res_lookup_arr +. _);
+_ ;
+Call 'update_arr(_,_,'__res_ChopServo)}
+
+'last_radio_from_ppm(_){_}
+
+'lookup_arr('a,'idx){'__res_lookup_arr := 'a +. 'idx}
+
+'servo_set(_){_}
+
+'test_ppm_task(_){If _ Then
+  _ ;
+    _ ;
+    _ ;
+    _ ;
+    _ ;
+    _ ;
+      If _ Then
+(    _ ;
+        Call 'MODE_OF_PPRZ('__res_lookup_arr);
+    _);
+  _
+Else
+_ ;
+_}
+
+'update_arr(_,_,'val){_ ;
+'__res_update_arr := 'val}

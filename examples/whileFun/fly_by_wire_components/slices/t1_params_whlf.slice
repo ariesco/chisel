@@ -1,0 +1,55 @@
+*************** This is the slice w.r.t. the variable 'RADIO_MODE,'MODE_MANUAL,'STALLED_TIME,'REALLY_STALLED_TIME ***************
+
+
+
+The variables to slice 'ChopServo are {}
+The variables to slice 'LastRadioFromPpm are {}
+The variables to slice 'MODE_OF_PPRZ are {'MODE_MANUAL}
+The variables to slice 'Main are {}
+The variables to slice 'ServoSet are {}
+The variables to slice 'last_radio_from_ppm are {}
+The variables to slice 'lookup_arr are {'idx}
+The variables to slice 'servo_set are {}
+The variables to slice 'test_ppm_task are {'RADIO_MODE, 'MODE_MANUAL, 'STALLED_TIME, 'REALLY_STALLED_TIME}
+The variables to slice 'update_arr are {}
+
+'ChopServo(_){_}
+
+'LastRadioFromPpm(_){_}
+
+'MODE_OF_PPRZ(_){If _ Then
+  _ := 'MODE_MANUAL
+Else
+_}
+
+'Main(_){_}
+
+'ServoSet(_){_}
+
+'last_radio_from_ppm(_){_}
+
+'lookup_arr(_,'idx){_ := _ +. 'idx}
+
+'servo_set(_){_}
+
+'test_ppm_task(_){If _ Then
+  _ ;
+    _ ;
+    _ ;
+    _ ;
+    _ ;
+    _ ;
+      If _ Then
+(    Call 'lookup_arr(_,'RADIO_MODE);
+    _);
+    If Equal(_,'MODE_MANUAL)Then
+_
+Else
+  If Equal(_,'MODE_MANUAL)And _ Then
+_ ;
+If Gte(_,'STALLED_TIME)Then
+_ ;
+If Gte(_,'REALLY_STALLED_TIME)Then
+_}
+
+'update_arr(_){_}

@@ -1,0 +1,52 @@
+*************** This is the slice w.r.t. the variable 'mode ***************
+
+
+The variables to slice 'ChopServo are {}
+The variables to slice 'LastRadioFromPpm are {}
+The variables to slice 'MODE_OF_PPRZ are {'mode}
+The variables to slice 'Main are {}
+The variables to slice 'ServoSet are {}
+The variables to slice 'last_radio_from_ppm are {}
+The variables to slice 'lookup_arr are {}
+The variables to slice 'servo_set are {}
+The variables to slice 'test_ppm_task are {'__res_lookup_arr, 'res_MODE_OF_PPRZ, 'MODE_AUTO, 'mode}
+The variables to slice 'update_arr are {}
+
+'ChopServo(_){_}
+
+'LastRadioFromPpm(_){_}
+
+'MODE_OF_PPRZ('mode){If Lt('mode,_)Then
+_
+Else
+_}
+
+'Main(_){_}
+
+'ServoSet(_){_}
+
+'last_radio_from_ppm(_){_}
+
+'lookup_arr(_){_}
+
+'servo_set(_){_}
+
+'test_ppm_task(_){If _ Then
+  _ ;
+    _ ;
+    _ ;
+    _ ;
+    _ ;
+    _ ;
+      If _ Then
+(    _ ;
+        Call 'MODE_OF_PPRZ('__res_lookup_arr);
+        'mode := 'res_MODE_OF_PPRZ);
+    If Equal('mode,_)Then
+_
+Else
+  If Equal('mode,_)And _ Then
+    'mode := 'MODE_AUTO ;
+_}
+
+'update_arr(_){_}

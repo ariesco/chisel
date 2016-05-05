@@ -139,5 +139,26 @@ load ../wfe.maude
 } .
 endm)
 
+(set side-effect sorts ESt RWBUF .)
+
+(set context-update rules CallF .)
+
+eof
+
+(islice Statement with defs myFuns wrt 'ppm_valid 'ppm_cpt 'time_since_last_ppm .)
+
+(islice Statement with defs myFuns wrt 'radio_ok 'radio_really_lost .)
+
+(islice Statement with defs myFuns wrt 'mode .)
+
+(islice Statement with defs myFuns wrt 'servo_value 'servo_widths .)
+
+(islice Statement with defs myFuns wrt 'RADIO_MODE 'MODE_MANUAL 'STALLED_TIME 'REALLY_STALLED_TIME .)
+
+(islice Statement with defs myFuns wrt '__res_MODE_OF_PPRZ '__res_ChopServo
+                                       '__res_lookup_arr '__res_update_arr .)
+
+(islice Statement with defs myFuns wrt '__res_lookup_arr '__res_update_arr .)
+
 (red myFuns .)
 
