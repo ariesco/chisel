@@ -83,10 +83,8 @@ load ../wfe.maude
 			Call 'lookup_arr ('from_fbw.channels, 'RADIO_THROTTLE) ;
 			'desired_gaz := '__res_lookup_arr ;
 			Call 'lookup_arr ('from_fbw.channels, 'RADIO_THROTTLE) ;
-***			'roll_pgain := 'ROLL_PGAIN *. (1 - 5 / 7 * '__res_lookup_arr / 'MAX_PPRZ) ;
 			'roll_pgain := 'ROLL_PGAIN *. ('__res_lookup_arr *. 'MAX_PPRZ) ;
 			Call 'lookup_arr ('from_fbw.channels, 'RADIO_THROTTLE) ;
-***			'pitch_pgain := 'PITCH_PGAIN * (1 - 1 / 3 * '__res_lookup_arr / 'MAX_PPRZ)
 			'pitch_pgain := 'PITCH_PGAIN *. ('__res_lookup_arr *. 'MAX_PPRZ)
 		)) ;
 		'mcu1_ppm_cpt := 'from_fbw.ppm_cpt ;
@@ -289,7 +287,6 @@ load ../wfe.maude
 'FLOAT_OF_PPRZ ('from_fbw.channels, 'RADIO_ROLL, 'center, 'travel)
 {
 	Call 'lookup_arr ('from_fbw.channels, 'RADIO_ROLL) ;
-***	'__res_FLOAT_OF_PPRZ := '__res_lookup_arr /. (('MAX_PPRZ *. 'center) +. 'travel)
 	'__res_FLOAT_OF_PPRZ := '__res_lookup_arr +. (('MAX_PPRZ *. 'center) +. 'travel)
 }
 

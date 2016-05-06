@@ -22,7 +22,6 @@ load ../wfe.maude
 	Call 'update_arr ('to_fbw.channels, 'RADIO_ROLL, 'desired_aileron) ;
 	Call 'update_arr ('to_fbw.channels, 'RADIO_PITCH, 'desired_elevator) ;
 	Local '__tmp_1_ ;
-***	'__tmp_1_ := 'MAX_PPRZ /. 75 *. -'estimator_phi ;
 	'__tmp_1_ := 'MAX_PPRZ *. 'estimator_phi ;
 	Call 'TRIM_PPRZ ('__tmp_1_) ;
 	Call 'update_arr ('to_fbw.channels, 'RADIO_GAIN1, '__res_TRIM_PPRZ)
