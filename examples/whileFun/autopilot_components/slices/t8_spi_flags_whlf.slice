@@ -1,0 +1,68 @@
+*************** This is the slice w.r.t. the variable 'SPI_NAME,'SPCR,'SPSR,'SPIF,'SPDR ***************
+
+
+
+The variables to slice 'BV are {}
+The variables to slice 'Main are {}
+The variables to slice 'SFR_BYTE are {}
+The variables to slice 'SPI_SELECT_SLAVE0 are {}
+The variables to slice 'SPI_START are {'_SPCR_VAL, '__res_and_bitwise, 'SPCR, 'SPSR, 'SPIF, 'SPDR}
+The variables to slice 'and_bitwise are {'val1}
+The variables to slice 'bit_is_set are {'sfr, 'bit}
+The variables to slice 'cbi are {}
+The variables to slice 'link_fbw_send are {'xor_out, '__res_lookup_arr, 'SPI_NAME, 'SPDR}
+The variables to slice 'lookup_arr are {}
+
+'BV(_){_}
+
+'Main(_){_}
+
+'SFR_BYTE(_){_}
+
+'SPI_SELECT_SLAVE0(_){_}
+
+'SPI_START('_SPCR_VAL){_ ;
+_ ;
+_ ;
+'SPCR := '_SPCR_VAL ;
+Call 'bit_is_set('SPSR,'SPIF);
+If _ Then
+  _ := 'SPDR ;
+_ ;
+Call 'and_bitwise('SPCR,_);
+'SPCR := '__res_and_bitwise}
+
+'and_bitwise('val1,_){If Equal('val1,_)Then
+_
+Else
+_}
+
+'bit_is_set('sfr,'bit){If Equal('sfr,_)And Equal('bit,_)Then
+_
+Else
+_}
+
+'cbi(_){_}
+
+'link_fbw_send(_){_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+If Not Equal(_,'SPI_NAME)Then
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+'xor_out := '__res_lookup_arr ;
+'SPDR := 'xor_out ;
+_}
+
+'lookup_arr(_){_}

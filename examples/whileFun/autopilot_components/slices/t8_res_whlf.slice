@@ -1,0 +1,67 @@
+*************** This is the slice w.r.t. the variable '__res1_BV,'__res2_BV,'__res3_BV,'__res1_and_bitwise,'__res2_and_bitwise,'__res_bit_is_set,'__res_SFR_BYTE,
+    '__res_lookup_arr ***************
+
+
+
+The variables to slice 'BV are {}
+The variables to slice 'Main are {}
+The variables to slice 'SFR_BYTE are {'val1, '__res_SFR_BYTE}
+The variables to slice 'SPI_SELECT_SLAVE0 are {}
+The variables to slice 'SPI_START are {'_SPCR_VAL, '__res_bit_is_set}
+The variables to slice 'and_bitwise are {'val1, 'val2}
+The variables to slice 'bit_is_set are {'__res_bit_is_set}
+The variables to slice 'cbi are {'__res_BV, '__res_SFR_BYTE}
+The variables to slice 'link_fbw_send are {'__res1_BV, '__res2_BV, '__res3_BV, '__res1_and_bitwise, '__res2_and_bitwise, '__res_lookup_arr}
+The variables to slice 'lookup_arr are {'a, 'idx, '__res_lookup_arr}
+
+'BV(_){_}
+
+'Main(_){_}
+
+'SFR_BYTE('val1){'__res_SFR_BYTE := 'val1}
+
+'SPI_SELECT_SLAVE0(_){_}
+
+'SPI_START('_SPCR_VAL){_ ;
+Local '__res_bit_is_set ;
+_ ;
+_ := '_SPCR_VAL ;
+_ ;
+If Equal('__res_bit_is_set,0)Then
+_ ;
+_}
+
+'and_bitwise('val1,'val2){If Equal('val1,'val2)Then
+_
+Else
+_}
+
+'bit_is_set(_){If _ Then
+  '__res_bit_is_set := _
+Else
+  '__res_bit_is_set := 0}
+
+'cbi(_){_ ;
+_ ;
+'__res_SFR_BYTE := '__res_SFR_BYTE +. '__res_BV}
+
+'link_fbw_send(_){Local '__res1_BV ;
+Local '__res2_BV ;
+Local '__res3_BV ;
+_ ;
+_ ;
+_ ;
+Local '__res1_and_bitwise ;
+Local '__res2_and_bitwise ;
+_ ;
+Call 'and_bitwise('__res1_BV,'__res2_BV);
+Call 'and_bitwise('__res1_and_bitwise,'__res3_BV);
+Call 'SPI_START('__res2_and_bitwise);
+_ ;
+_ ;
+_ ;
+_ ;
+_ := '__res_lookup_arr ;
+_}
+
+'lookup_arr('a,'idx){'__res_lookup_arr := 'a +. 'idx}

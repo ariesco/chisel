@@ -1,0 +1,45 @@
+*************** This is the slice w.r.t. the variable 'spi_cur_slave,'spi_nb_ovrn ***************
+
+
+
+The variables to slice 'BV are {}
+The variables to slice 'Main are {}
+The variables to slice 'SFR_BYTE are {}
+The variables to slice 'SPI_SELECT_SLAVE0 are {'SPI_SLAVE0, 'spi_cur_slave}
+The variables to slice 'SPI_START are {}
+The variables to slice 'and_bitwise are {}
+The variables to slice 'bit_is_set are {}
+The variables to slice 'cbi are {}
+The variables to slice 'link_fbw_send are {'spi_cur_slave, 'spi_nb_ovrn}
+The variables to slice 'lookup_arr are {}
+
+'BV(_){_}
+
+'Main(_){_}
+
+'SFR_BYTE(_){_}
+
+'SPI_SELECT_SLAVE0(_){'spi_cur_slave := 'SPI_SLAVE0 ;
+_}
+
+'SPI_START(_){_}
+
+'and_bitwise(_){_}
+
+'bit_is_set(_){_}
+
+'cbi(_){_}
+
+'link_fbw_send(_){_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+If Not Equal('spi_cur_slave,_)Then
+  'spi_nb_ovrn := 'spi_nb_ovrn +. _ ;
+_}
+
+'lookup_arr(_){_}

@@ -23,19 +23,23 @@ load ../wfe.maude
 	Call 'BV ( 'SPR0 ) ;
 	Local '__res1_and_bitwise ;
 	Local '__res2_and_bitwise ;
-	(If Not Equal ('spi_cur_slave, 'SPI_NAME)
-	Then 'spi_nb_ovrn := 'spi_nb_ovrn +. 1 ) ;
+	If Not Equal ('spi_cur_slave, 'SPI_NAME)
+	Then 'spi_nb_ovrn := 'spi_nb_ovrn +. 1  ;
 	Call 'and_bitwise ( '__res1_BV, '__res2_BV ) ;
 	Call 'and_bitwise ( '__res1_and_bitwise, '__res3_BV ) ;
 	Call 'SPI_START ( '__res2_and_bitwise ) ;
 	Call 'SPI_SELECT_SLAVE0 ( 'empty ) ;
-
   	'idx_buf := 0 ;
   	'xor_in := 0 ;
 	Call 'lookup_arr ('to_fbw, 'idx_buf ) ;
 	'xor_out := '__res_lookup_arr ;
 	'SPDR := 'xor_out ;
 	'link_fbw_receive_valid := 'FALSE
+}
+
+'lookup_arr ('a, 'idx)
+{
+	'__res_lookup_arr := 'a +. 'idx
 }
 
 'and_bitwise ('val1, 'val2)

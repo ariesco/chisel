@@ -1,0 +1,37 @@
+*************** This is the slice w.r.t. the variable 'SPI_SS0_PORT,'SPI_SS0_PIN ***************
+
+
+
+The variables to slice 'BV are {'a}
+The variables to slice 'Main are {}
+The variables to slice 'SFR_BYTE are {'val1}
+The variables to slice 'SPI_SELECT_SLAVE0 are {'SPI_SS0_PORT, 'SPI_SS0_PIN}
+The variables to slice 'SPI_START are {}
+The variables to slice 'and_bitwise are {}
+The variables to slice 'bit_is_set are {}
+The variables to slice 'cbi are {'val1, 'val2}
+The variables to slice 'link_fbw_send are {}
+The variables to slice 'lookup_arr are {}
+
+'BV('a){_ := 'a}
+
+'Main(_){_}
+
+'SFR_BYTE('val1){_ := 'val1}
+
+'SPI_SELECT_SLAVE0(_){_ ;
+Call 'cbi('SPI_SS0_PORT,'SPI_SS0_PIN)}
+
+'SPI_START(_){_}
+
+'and_bitwise(_){_}
+
+'bit_is_set(_){_}
+
+'cbi('val1,'val2){Call 'SFR_BYTE('val1);
+Call 'BV('val2);
+_}
+
+'link_fbw_send(_){_}
+
+'lookup_arr(_){_}

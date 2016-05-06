@@ -1,0 +1,50 @@
+*************** This is the slice w.r.t. the variable '__res_lookup_arr ***************
+
+
+The variables to slice 'BV are {}
+The variables to slice 'Main are {}
+The variables to slice 'SFR_BYTE are {}
+The variables to slice 'SPI_SELECT_SLAVE0 are {}
+The variables to slice 'SPI_START are {}
+The variables to slice 'and_bitwise are {}
+The variables to slice 'bit_is_set are {}
+The variables to slice 'cbi are {}
+The variables to slice 'link_fbw_send are {'__res_lookup_arr}
+The variables to slice 'lookup_arr are {'a, 'idx, '__res_lookup_arr}
+
+'BV(_){_}
+
+'Main(_){_}
+
+'SFR_BYTE(_){_}
+
+'SPI_SELECT_SLAVE0(_){_}
+
+'SPI_START(_){_}
+
+'and_bitwise(_){_}
+
+'bit_is_set(_){_}
+
+'cbi(_){_}
+
+'link_fbw_send(_){_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ := '__res_lookup_arr ;
+_}
+
+'lookup_arr('a,'idx){'__res_lookup_arr := 'a +. 'idx}

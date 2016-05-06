@@ -1,0 +1,52 @@
+*************** This is the slice w.r.t. the variable 'to_fbw,'link_fbw_receive_valid ***************
+
+
+
+The variables to slice 'BV are {}
+The variables to slice 'Main are {}
+The variables to slice 'SFR_BYTE are {}
+The variables to slice 'SPI_SELECT_SLAVE0 are {}
+The variables to slice 'SPI_START are {}
+The variables to slice 'and_bitwise are {}
+The variables to slice 'bit_is_set are {}
+The variables to slice 'cbi are {}
+The variables to slice 'link_fbw_send are {'FALSE, 'to_fbw, 'link_fbw_receive_valid}
+The variables to slice 'lookup_arr are {'a}
+
+'BV(_){_}
+
+'Main(_){_}
+
+'SFR_BYTE(_){_}
+
+'SPI_SELECT_SLAVE0(_){_}
+
+'SPI_START(_){_}
+
+'and_bitwise(_){_}
+
+'bit_is_set(_){_}
+
+'cbi(_){_}
+
+'link_fbw_send(_){_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+Call 'lookup_arr('to_fbw,_);
+_ ;
+_ ;
+'link_fbw_receive_valid := 'FALSE}
+
+'lookup_arr('a,_){_ := 'a +. _}

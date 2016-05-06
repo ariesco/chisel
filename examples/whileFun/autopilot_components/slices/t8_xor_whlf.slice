@@ -1,0 +1,52 @@
+*************** This is the slice w.r.t. the variable 'xor_in,'xor_out ***************
+
+
+
+The variables to slice 'BV are {}
+The variables to slice 'Main are {}
+The variables to slice 'SFR_BYTE are {}
+The variables to slice 'SPI_SELECT_SLAVE0 are {}
+The variables to slice 'SPI_START are {}
+The variables to slice 'and_bitwise are {}
+The variables to slice 'bit_is_set are {}
+The variables to slice 'cbi are {}
+The variables to slice 'link_fbw_send are {'__res_lookup_arr, 'xor_in, 'xor_out}
+The variables to slice 'lookup_arr are {}
+
+'BV(_){_}
+
+'Main(_){_}
+
+'SFR_BYTE(_){_}
+
+'SPI_SELECT_SLAVE0(_){_}
+
+'SPI_START(_){_}
+
+'and_bitwise(_){_}
+
+'bit_is_set(_){_}
+
+'cbi(_){_}
+
+'link_fbw_send(_){_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+'xor_in := 0 ;
+_ ;
+'xor_out := '__res_lookup_arr ;
+_ := 'xor_out ;
+_}
+
+'lookup_arr(_){_}
