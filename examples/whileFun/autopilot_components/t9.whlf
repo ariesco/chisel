@@ -157,4 +157,40 @@ load ../wfe.maude
 
 endm)
 
+(set side-effect sorts ESt RWBUF .)
+
+(set context-update rules CallF .)
+
+eof
+
+1. (islice Statement with defs myFuns wrt 'gps_mode .)
+
+2. (islice Statement with defs myFuns wrt 'spi_cur_slave .)
+
+3. (islice Statement with defs myFuns wrt 'spi_cur_slave .)
+
+4. (islice Statement with defs myFuns wrt 'spi_cur_slave .)
+
+5. (islice Statement with defs myFuns wrt 'spi_cur_slave .)
+
+6. (islice Statement with defs myFuns wrt 'spi_cur_slave .)
+
+7. (islice Statement with defs myFuns wrt 'spi_cur_slave .)
+
+	1. { gps_mode } -> file t9_gps_mode_whlf.slice
+	2. { gps_fcourse, gps_speed, gps_climb, gps_ftow, gps_falt }
+	-> file t9_gps_funct_params_whlf.slice
+	3. { gps_east, gps_north, gps_pos_available }
+		-> file t9_gps_coord_whlf.slice
+	4. { estimator_hspeed_mod, estimator_flight_time }
+		-> file t9_estimator_coord_params_whlf.slice
+	5. { estimator_rad_of_ir, estimator_rad, estimator_ir }
+		-> file t9_estimator_funct_params_whlf.slice
+	6. { __res_ModemStartMessage, __res_ModemEndMessage,
+		__res_MODEM_PUT_1_BYTE_BY_ADDR, __res_MODEM_PUT_2_BYTE_BY_ADDR,
+		__res_MODEM_PUT_4_BYTE_BY_ADDR } -> file t9_res_whlf.slice
+	7. { __res_MODEM_PUT_1_BYTE_BY_ADDR, __res_MODEM_PUT_2_BYTE_BY_ADDR,
+		__res_MODEM_PUT_4_BYTE_BY_ADDR }
+		-> file t9_modem_comm_whlf.slice
+
 (red myFuns .)
