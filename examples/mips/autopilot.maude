@@ -6133,11 +6133,11 @@ load assembly.maude
   eq autopilotSystem = [ preprocess(autopilot) | mtReg | mtMem | 0 ] .
 endm)
 
+(set side-effect sorts Memory Registers .)
+
 eof
 
 *** (red autopilot .)
-
-(set side-effect sorts Memory Registers .)
 
 eof
 

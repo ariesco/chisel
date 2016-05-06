@@ -1,0 +1,220 @@
+The variables obtained by the slicing process are: v1 v0 gp a0 zero a1 s8 sp ra a2
+
+_ addiu sp,sp,_
+sw s8,_(sp)
+move s8,sp
+_
+andi v0,v0,_
+beqz v0,_
+_
+_
+addiu v0,v0,_
+andi v0,v0,_
+sb v0,_(gp)
+j 'link_fbw_send_0x154
+_
+_ _
+_
+sllv v0,v1,v0
+sll v1,v0,_
+sra v1,v1,_
+_
+_
+sllv v0,a0,v0
+sll v0,v0,_
+sra v0,v0,_
+or v0,v1,v0
+sll v1,v0,_
+sra v1,v1,_
+_
+_
+sllv v0,a0,v0
+sll v0,v0,_
+sra v0,v0,_
+or v0,v1,v0
+sll v0,v0,_
+sra v0,v0,_
+andi v0,v0,_
+sb v0,_(gp)
+addiu v0,gp,_
+andi v0,v0,_
+_
+andi v0,v0,_
+move v1,v0
+_
+srav v0,v1,v0
+andi v0,v0,_
+beqz v0,_
+_
+_
+sb v0,_(s8)
+_ _
+_
+sllv v0,v1,v0
+sll v1,v0,_
+sra v1,v1,_
+_
+sll v0,v0,_
+sra v0,v0,_
+or v0,v1,v0
+sll v0,v0,_
+sra v0,v0,_
+andi v0,v0,_
+sb v0,_(gp)
+_
+sb v0,_(gp)
+addiu v0,gp,_
+andi v0,v0,_
+addiu v1,gp,_
+andi v1,v1,_
+_
+andi a0,v1,_
+_
+and v1,a0,v1
+andi v1,v1,_
+sb v1,_(v0)
+sb zero,_(gp)
+sb zero,_(gp)
+_
+move v1,v0
+_
+addiu v0,v0,_
+addu v0,v1,v0
+_
+sb v0,_(gp)
+_
+sb v0,_(gp)
+sb zero,_(gp)
+_ move sp,s8
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw s8,_(sp)
+move s8,sp
+move v1,a0
+move v0,a1
+sb v1,_(s8)
+sb v0,_(s8)
+_
+_
+and v0,v1,v0
+andi v0,v0,_
+move sp,s8
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw ra,_(sp)
+sw s8,_(sp)
+move s8,sp
+move v0,a0
+sb v0,_(s8)
+_
+andi v0,v0,_
+sh v0,_(gp)
+addiu v0,gp,_
+andi v0,v0,_
+_
+andi v0,v0,_
+sll v1,v0,_
+sra v1,v1,_
+_
+_
+sllv v0,a0,v0
+sll v0,v0,_
+sra v0,v0,_
+and v0,v1,v0
+sll v0,v0,_
+sra v0,v0,_
+sb v0,_(s8)
+_
+beqz v0,_
+_
+_
+sb v0,_(s8)
+_ _
+andi v0,v0,_
+move a0,v0
+jal 'BV
+_
+sb v0,_(s8)
+_
+andi v0,v0,_
+move v1,v0
+_
+move a0,v1
+move a1,v0
+jal 'and_bitwise
+_
+sh v0,_(gp)
+move sp,s8
+_
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw s8,_(sp)
+move s8,sp
+_
+sb v0,_(gp)
+addiu v0,gp,_
+andi v0,v0,_
+addiu v1,gp,_
+andi v1,v1,_
+_
+andi v1,v1,_
+sll a0,v1,_
+sra a0,a0,_
+_
+_
+sllv v1,a1,v1
+sll v1,v1,_
+sra v1,v1,_
+nor v1,zero,v1
+sll v1,v1,_
+sra v1,v1,_
+and v1,a0,v1
+sll v1,v1,_
+sra v1,v1,_
+andi v1,v1,_
+sb v1,_(v0)
+move sp,s8
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw s8,_(sp)
+move s8,sp
+sw a0,_(s8)
+move v1,a1
+move v0,a2
+sb v1,_(s8)
+sb v0,_(s8)
+_
+_
+mul v0,v1,v0
+_
+addu v0,v1,v0
+sw v0,_(s8)
+_
+move sp,s8
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw s8,_(sp)
+move s8,sp
+move v0,a0
+sb v0,_(s8)
+_
+move sp,s8
+_
+addiu sp,sp,_
+jr ra
+_

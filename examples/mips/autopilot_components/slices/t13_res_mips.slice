@@ -1,0 +1,1538 @@
+The variables obtained by the slicing process are: a0 a1 a2 v0 s8 v1 $f0 $f1 zero $f2 $f3 gp sp ra a3 t0
+
+_ addiu sp,sp,_
+sw ra,_(sp)
+sw s8,_(sp)
+move s8,sp
+jal 'send_boot
+_
+jal 'send_attitude
+_
+jal 'send_adc
+_
+jal 'send_settings
+_
+jal 'send_desired
+_
+jal 'send_bat
+_
+jal 'send_climb
+_
+jal 'send_mode
+_
+jal 'send_debug
+_
+jal 'send_nav_ref
+_
+move sp,s8
+_
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw ra,_(sp)
+sw s8,_(sp)
+move s8,sp
+_
+beqz v0,_
+_
+_
+andi v0,v0,_
+move a0,v0
+jal '_DOWNLINK_SEND_BOOT
+_
+_
+_
+_
+_
+_
+mtc1 v0,$f0
+mtc1 a0,$f1
+c.le.s $f1,$f0
+_
+movf v1,zero,$f0
+mtc1 v1,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+_
+_
+mtc1 v0,$f0
+trunc.w.s $f0,$f0
+mfc1 v0,$f0
+j 'send_boot_0xa4
+_
+_ mtc1 v0,$f1
+mtc1 a0,$f2
+sub $f1,$f1,$f2
+mfc1 v0,$f1
+_
+mtc1 v0,$f3
+trunc.w.s $f3,$f3
+mfc1 v0,$f3
+or v0,v0,v1
+_ andi v0,v0,_
+move a1,v0
+_
+_
+_
+_
+mtc1 v0,$f0
+mtc1 a0,$f1
+c.le.s $f1,$f0
+_
+movf v1,zero,$f0
+mtc1 v1,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+_
+_
+mtc1 v0,$f0
+trunc.w.s $f0,$f0
+mfc1 v0,$f0
+j 'send_boot_0x11c
+_
+_ mtc1 v0,$f1
+mtc1 a0,$f2
+sub $f1,$f1,$f2
+mfc1 v0,$f1
+_
+mtc1 v0,$f3
+trunc.w.s $f3,$f3
+mfc1 v0,$f3
+or v0,v0,v1
+_ andi v0,v0,_
+move v1,v0
+_
+andi v0,v0,_
+_
+andi a0,a0,_
+sw a0,_(sp)
+move a0,a2
+move a2,v1
+move a3,v0
+jal '_DOWNLINK_SEND_RAD_OF_IR
+_
+sb zero,_(gp)
+_ move sp,s8
+_
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw ra,_(sp)
+sw s8,_(sp)
+move s8,sp
+move v0,a0
+sb v0,_(s8)
+_
+sltiu v0,v0,_
+bnez v0,_
+_
+_
+jal '_ModemStartMessage
+_
+_
+move a0,v0
+jal '_MODEM_PUT_2_BYTE_BY_ADDR
+_
+jal '_ModemEndMessage
+_
+j '_DOWNLINK_SEND_BOOT_0x64
+_
+_ _
+addiu v0,v0,_
+andi v0,v0,_
+sb v0,_(gp)
+_ move sp,s8
+_
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw s8,_(sp)
+move s8,sp
+move v0,a0
+sb v0,_(s8)
+_
+_
+bne v1,v0,_
+_
+_
+j '_ModemStartMessage_0x30
+_
+_ move sp,s8
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw s8,_(sp)
+move s8,sp
+_
+move sp,s8
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw s8,_(sp)
+move s8,sp
+move v0,a0
+sb v0,_(s8)
+_
+move sp,s8
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw ra,_(sp)
+sw s8,_(sp)
+move s8,sp
+move t0,a0
+move a0,a2
+move v1,a3
+_
+sb t0,_(s8)
+sb a1,_(s8)
+sb a0,_(s8)
+sb v1,_(s8)
+sb v0,_(s8)
+_
+sltiu v0,v0,_
+bnez v0,_
+_
+_
+jal '_ModemStartMessage
+_
+_
+move a0,v0
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+_
+_
+move a0,v0
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+_
+_
+move a0,v0
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+_
+_
+move a0,v0
+jal '_MODEM_PUT_2_BYTE_BY_ADDR
+_
+_
+move a0,v0
+jal '_MODEM_PUT_2_BYTE_BY_ADDR
+_
+jal '_ModemEndMessage
+_
+j '_DOWNLINK_SEND_RAD_OF_IR_0xc0
+_
+_ _
+addiu v0,v0,_
+andi v0,v0,_
+sb v0,_(gp)
+_ move sp,s8
+_
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw s8,_(sp)
+move s8,sp
+move v0,a0
+sb v0,_(s8)
+_
+move sp,s8
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw s8,_(sp)
+move s8,sp
+move v0,a0
+sb v0,_(s8)
+_
+move sp,s8
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw ra,_(sp)
+sw s8,_(sp)
+move s8,sp
+_
+bnez v0,_
+_
+_
+addiu v0,v0,_
+andi v0,v0,_
+sb v0,_(gp)
+_
+_
+bne v1,v0,_
+_
+sb zero,_(gp)
+_ _
+_
+ori v0,v0,_
+multu v1,v0
+mfhi v0
+srl a0,v0,_
+move v0,a0
+sll v0,v0,_
+addu v0,v0,a0
+subu v0,v1,v0
+andi v0,v0,_
+bnez v0,_
+_
+jal '_PERIODIC_SEND_ATTITUDE
+_
+_ move sp,s8
+_
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw ra,_(sp)
+sw s8,_(sp)
+move s8,sp
+_
+_
+_
+_
+mtc1 v0,$f0
+mtc1 a0,$f1
+c.le.s $f1,$f0
+_
+movf v1,zero,$f0
+mtc1 v1,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+_
+_
+mtc1 v0,$f0
+trunc.w.s $f0,$f0
+mfc1 v0,$f0
+j '_PERIODIC_SEND_ATTITUDE_0x80
+_
+_ mtc1 v0,$f1
+mtc1 a0,$f2
+sub $f1,$f1,$f2
+mfc1 v0,$f1
+_
+mtc1 v0,$f3
+trunc.w.s $f3,$f3
+mfc1 v0,$f3
+or v0,v0,v1
+_ andi v0,v0,_
+move a2,v0
+_
+_
+_
+_
+mtc1 v0,$f0
+mtc1 a0,$f1
+c.le.s $f1,$f0
+_
+movf v1,zero,$f0
+mtc1 v1,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+_
+_
+mtc1 v0,$f0
+trunc.w.s $f0,$f0
+mfc1 v0,$f0
+j '_PERIODIC_SEND_ATTITUDE_0xf8
+_
+_ mtc1 v0,$f1
+mtc1 a0,$f2
+sub $f1,$f1,$f2
+mfc1 v0,$f1
+_
+mtc1 v0,$f3
+trunc.w.s $f3,$f3
+mfc1 v0,$f3
+or v0,v0,v1
+_ andi v0,v0,_
+move a1,v0
+_
+_
+_
+_
+mtc1 v0,$f0
+mtc1 a0,$f1
+c.le.s $f1,$f0
+_
+movf v1,zero,$f0
+mtc1 v1,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+_
+_
+mtc1 v0,$f0
+trunc.w.s $f0,$f0
+mfc1 v0,$f0
+j '_PERIODIC_SEND_ATTITUDE_0x170
+_
+_ mtc1 v0,$f1
+mtc1 a0,$f2
+sub $f1,$f1,$f2
+mfc1 v0,$f1
+_
+mtc1 v0,$f3
+trunc.w.s $f3,$f3
+mfc1 v0,$f3
+or v0,v0,v1
+_ andi v0,v0,_
+move a0,a2
+move a2,v0
+jal '_DOWNLINK_SEND_ATTITUDE
+_
+move sp,s8
+_
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw ra,_(sp)
+sw s8,_(sp)
+move s8,sp
+move v1,a1
+move v0,a2
+sb a0,_(s8)
+sb v1,_(s8)
+sb v0,_(s8)
+_
+sltiu v0,v0,_
+bnez v0,_
+_
+_
+jal '_ModemStartMessage
+_
+_
+move a0,v0
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+_
+_
+move a0,v0
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+_
+_
+move a0,v0
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+_
+jal '_ModemEndMessage
+_
+j '_DOWNLINK_SEND_ATTITUDE_0x90
+_
+_ _
+addiu v0,v0,_
+andi v0,v0,_
+sb v0,_(gp)
+_ move sp,s8
+_
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw ra,_(sp)
+sw s8,_(sp)
+move s8,sp
+_
+bnez v0,_
+_
+_
+_
+ori v0,v0,_
+multu v1,v0
+mfhi v0
+srl a0,v0,_
+move v0,a0
+sll v0,v0,_
+addu v0,v0,a0
+subu v0,v1,v0
+andi v1,v0,_
+_
+bne v1,v0,_
+_
+jal '_PERIODIC_SEND_ADC
+_
+_ move sp,s8
+_
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw ra,_(sp)
+sw s8,_(sp)
+move s8,sp
+_
+andi v0,v0,_
+move v1,v0
+_
+andi v0,v0,_
+move a0,v1
+move a1,v0
+jal '_DOWNLINK_SEND_ADC
+_
+move sp,s8
+_
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw ra,_(sp)
+sw s8,_(sp)
+move s8,sp
+move v1,a0
+move v0,a1
+sb v1,_(s8)
+sb v0,_(s8)
+_
+sltiu v0,v0,_
+bnez v0,_
+_
+_
+jal '_ModemStartMessage
+_
+_
+move a0,v0
+jal '_MODEM_PUT_2_BYTE_BY_ADDR
+_
+_
+move a0,v0
+jal '_MODEM_PUT_2_BYTE_BY_ADDR
+_
+jal '_ModemEndMessage
+_
+j '_DOWNLINK_SEND_ADC_0x7c
+_
+_ _
+addiu v0,v0,_
+andi v0,v0,_
+sb v0,_(gp)
+_ move sp,s8
+_
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw ra,_(sp)
+sw s8,_(sp)
+move s8,sp
+_
+bnez v0,_
+_
+_
+_
+ori v0,v0,_
+multu v1,v0
+mfhi v0
+srl a0,v0,_
+move v0,a0
+sll v0,v0,_
+addu v0,v0,a0
+subu v0,v1,v0
+andi v1,v0,_
+_
+bne v1,v0,_
+_
+jal '_PERIODIC_SEND_SETTINGS
+_
+_ move sp,s8
+_
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw ra,_(sp)
+sw s8,_(sp)
+move s8,sp
+_
+beqz v0,_
+_
+_
+move a2,v0
+_
+_
+_
+_
+mtc1 v0,$f0
+mtc1 a0,$f1
+c.le.s $f1,$f0
+_
+movf v1,zero,$f0
+mtc1 v1,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+_
+_
+mtc1 v0,$f0
+trunc.w.s $f0,$f0
+mfc1 v0,$f0
+j '_PERIODIC_SEND_SETTINGS_0x94
+_
+_ mtc1 v0,$f1
+mtc1 a0,$f2
+sub $f1,$f1,$f2
+mfc1 v0,$f1
+_
+mtc1 v0,$f3
+trunc.w.s $f3,$f3
+mfc1 v0,$f3
+or v0,v0,v1
+_ andi v0,v0,_
+move a1,v0
+_
+_
+_
+_
+mtc1 v0,$f0
+mtc1 a0,$f1
+c.le.s $f1,$f0
+_
+movf v1,zero,$f0
+mtc1 v1,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+_
+_
+mtc1 v0,$f0
+trunc.w.s $f0,$f0
+mfc1 v0,$f0
+j '_PERIODIC_SEND_SETTINGS_0x10c
+_
+_ mtc1 v0,$f1
+mtc1 a0,$f2
+sub $f1,$f1,$f2
+mfc1 v0,$f1
+_
+mtc1 v0,$f3
+trunc.w.s $f3,$f3
+mfc1 v0,$f3
+or v0,v0,v1
+_ andi v0,v0,_
+move a0,a2
+move a2,v0
+jal '_DOWNLINK_SEND_SETTINGS
+_
+_ move sp,s8
+_
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw ra,_(sp)
+sw s8,_(sp)
+move s8,sp
+move v1,a1
+move v0,a2
+sb a0,_(s8)
+sb v1,_(s8)
+sb v0,_(s8)
+_
+sltiu v0,v0,_
+bnez v0,_
+_
+_
+jal '_ModemStartMessage
+_
+_
+move a0,v0
+jal '_MODEM_PUT_1_BYTE_BY_ADDR
+_
+_
+move a0,v0
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+_
+_
+move a0,v0
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+_
+jal '_ModemEndMessage
+_
+j '_DOWNLINK_SEND_SETTINGS_0x90
+_
+_ _
+addiu v0,v0,_
+andi v0,v0,_
+sb v0,_(gp)
+_ move sp,s8
+_
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw s8,_(sp)
+move s8,sp
+move v0,a0
+sb v0,_(s8)
+_
+move sp,s8
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw ra,_(sp)
+sw s8,_(sp)
+move s8,sp
+_
+bnez v0,_
+_
+_
+_
+ori v0,v0,_
+multu v1,v0
+mfhi v0
+srl v0,v0,_
+sll v0,v0,_
+sll a0,v0,_
+addu v0,v0,a0
+subu v0,v1,v0
+andi v1,v0,_
+_
+bne v1,v0,_
+_
+jal '_PERIODIC_SEND_DESIRED
+_
+_ move sp,s8
+_
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw ra,_(sp)
+sw s8,_(sp)
+move s8,sp
+_
+_
+_
+_
+mtc1 v0,$f0
+mtc1 a0,$f1
+c.le.s $f1,$f0
+_
+movf v1,zero,$f0
+mtc1 v1,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+_
+_
+mtc1 v0,$f0
+trunc.w.s $f0,$f0
+mfc1 v0,$f0
+j '_PERIODIC_SEND_DESIRED_0x80
+_
+_ mtc1 v0,$f1
+mtc1 a0,$f2
+sub $f1,$f1,$f2
+mfc1 v0,$f1
+_
+mtc1 v0,$f3
+trunc.w.s $f3,$f3
+mfc1 v0,$f3
+or v0,v0,v1
+_ andi v0,v0,_
+move t0,v0
+_
+_
+_
+_
+mtc1 v0,$f0
+mtc1 a0,$f1
+c.le.s $f1,$f0
+_
+movf v1,zero,$f0
+mtc1 v1,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+_
+_
+mtc1 v0,$f0
+trunc.w.s $f0,$f0
+mfc1 v0,$f0
+j '_PERIODIC_SEND_DESIRED_0xf8
+_
+_ mtc1 v0,$f1
+mtc1 a0,$f2
+sub $f1,$f1,$f2
+mfc1 v0,$f1
+_
+mtc1 v0,$f3
+trunc.w.s $f3,$f3
+mfc1 v0,$f3
+or v0,v0,v1
+_ andi v0,v0,_
+move a1,v0
+_
+_
+_
+_
+mtc1 v0,$f0
+mtc1 a0,$f1
+c.le.s $f1,$f0
+_
+movf v1,zero,$f0
+mtc1 v1,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+_
+_
+mtc1 v0,$f0
+trunc.w.s $f0,$f0
+mfc1 v0,$f0
+j '_PERIODIC_SEND_DESIRED_0x170
+_
+_ mtc1 v0,$f1
+mtc1 a0,$f2
+sub $f1,$f1,$f2
+mfc1 v0,$f1
+_
+mtc1 v0,$f3
+trunc.w.s $f3,$f3
+mfc1 v0,$f3
+or v0,v0,v1
+_ andi v0,v0,_
+move a2,v0
+_
+_
+_
+_
+mtc1 v0,$f0
+mtc1 a0,$f1
+c.le.s $f1,$f0
+_
+movf v1,zero,$f0
+mtc1 v1,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+_
+_
+mtc1 v0,$f0
+trunc.w.s $f0,$f0
+mfc1 v0,$f0
+j '_PERIODIC_SEND_DESIRED_0x1e8
+_
+_ mtc1 v0,$f1
+mtc1 a0,$f2
+sub $f1,$f1,$f2
+mfc1 v0,$f1
+_
+mtc1 v0,$f3
+trunc.w.s $f3,$f3
+mfc1 v0,$f3
+or v0,v0,v1
+_ andi v0,v0,_
+move a3,v0
+_
+_
+_
+_
+mtc1 v0,$f0
+mtc1 a0,$f1
+c.le.s $f1,$f0
+_
+movf v1,zero,$f0
+mtc1 v1,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+_
+_
+mtc1 v0,$f0
+trunc.w.s $f0,$f0
+mfc1 v0,$f0
+j '_PERIODIC_SEND_DESIRED_0x260
+_
+_ mtc1 v0,$f1
+mtc1 a0,$f2
+sub $f1,$f1,$f2
+mfc1 v0,$f1
+_
+mtc1 v0,$f3
+trunc.w.s $f3,$f3
+mfc1 v0,$f3
+or v0,v0,v1
+_ andi v0,v0,_
+sw v0,_(sp)
+move a0,t0
+jal '_DOWNLINK_SEND_DESIRED
+_
+move sp,s8
+_
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw ra,_(sp)
+sw s8,_(sp)
+move s8,sp
+move t0,a0
+move a0,a2
+move v1,a3
+_
+sb t0,_(s8)
+sb a1,_(s8)
+sb a0,_(s8)
+sb v1,_(s8)
+sb v0,_(s8)
+_
+sltiu v0,v0,_
+bnez v0,_
+_
+_
+jal '_ModemStartMessage
+_
+_
+move a0,v0
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+_
+_
+move a0,v0
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+_
+_
+move a0,v0
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+_
+_
+move a0,v0
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+_
+_
+move a0,v0
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+_
+jal '_ModemEndMessage
+_
+j '_DOWNLINK_SEND_DESIRED_0xc0
+_
+_ _
+addiu v0,v0,_
+andi v0,v0,_
+sb v0,_(gp)
+_ move sp,s8
+_
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw ra,_(sp)
+sw s8,_(sp)
+move s8,sp
+_
+bnez v0,_
+_
+_
+_
+ori v0,v0,_
+multu v1,v0
+mfhi v0
+srl v0,v0,_
+sll v0,v0,_
+sll a0,v0,_
+addu v0,v0,a0
+subu v0,v1,v0
+andi v1,v0,_
+_
+bne v1,v0,_
+_
+jal '_PERIODIC_SEND_BAT
+_
+_ move sp,s8
+_
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw ra,_(sp)
+sw s8,_(sp)
+move s8,sp
+_
+move a0,v0
+_
+andi v0,v0,_
+move a1,v0
+_
+move v1,v0
+_
+andi v0,v0,_
+_
+andi a2,a2,_
+sw a2,_(sp)
+move a2,v1
+move a3,v0
+jal '_DOWNLINK_SEND_BAT
+_
+move sp,s8
+_
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw ra,_(sp)
+sw s8,_(sp)
+move s8,sp
+move t0,a0
+move a0,a2
+move v1,a3
+_
+sb t0,_(s8)
+sb a1,_(s8)
+sb a0,_(s8)
+sb v1,_(s8)
+sb v0,_(s8)
+_
+sltiu v0,v0,_
+bnez v0,_
+_
+_
+jal '_ModemStartMessage
+_
+_
+move a0,v0
+jal '_MODEM_PUT_1_BYTE_BY_ADDR
+_
+_
+move a0,v0
+jal '_MODEM_PUT_2_BYTE_BY_ADDR
+_
+_
+move a0,v0
+jal '_MODEM_PUT_1_BYTE_BY_ADDR
+_
+_
+move a0,v0
+jal '_MODEM_PUT_2_BYTE_BY_ADDR
+_
+_
+move a0,v0
+jal '_MODEM_PUT_2_BYTE_BY_ADDR
+_
+jal '_ModemEndMessage
+_
+j '_DOWNLINK_SEND_BAT_0xc0
+_
+_ _
+addiu v0,v0,_
+andi v0,v0,_
+sb v0,_(gp)
+_ move sp,s8
+_
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw ra,_(sp)
+sw s8,_(sp)
+move s8,sp
+_
+bnez v0,_
+_
+_
+_
+ori v0,v0,_
+multu v1,v0
+mfhi v0
+srl v0,v0,_
+sll v0,v0,_
+sll a0,v0,_
+addu v0,v0,a0
+subu v0,v1,v0
+andi v1,v0,_
+_
+bne v1,v0,_
+_
+jal '_PERIODIC_SEND_CLIMB_PID
+_
+_ move sp,s8
+_
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw ra,_(sp)
+sw s8,_(sp)
+move s8,sp
+_
+andi v0,v0,_
+move a3,v0
+_
+_
+_
+_
+mtc1 v0,$f0
+mtc1 a0,$f1
+c.le.s $f1,$f0
+_
+movf v1,zero,$f0
+mtc1 v1,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+_
+_
+mtc1 v0,$f0
+trunc.w.s $f0,$f0
+mfc1 v0,$f0
+j '_PERIODIC_SEND_CLIMB_PID_0x8c
+_
+_ mtc1 v0,$f1
+mtc1 a0,$f2
+sub $f1,$f1,$f2
+mfc1 v0,$f1
+_
+mtc1 v0,$f3
+trunc.w.s $f3,$f3
+mfc1 v0,$f3
+or v0,v0,v1
+_ andi v0,v0,_
+move a1,v0
+_
+_
+_
+_
+mtc1 v0,$f0
+mtc1 a0,$f1
+c.le.s $f1,$f0
+_
+movf v1,zero,$f0
+mtc1 v1,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+_
+_
+mtc1 v0,$f0
+trunc.w.s $f0,$f0
+mfc1 v0,$f0
+j '_PERIODIC_SEND_CLIMB_PID_0x104
+_
+_ mtc1 v0,$f1
+mtc1 a0,$f2
+sub $f1,$f1,$f2
+mfc1 v0,$f1
+_
+mtc1 v0,$f3
+trunc.w.s $f3,$f3
+mfc1 v0,$f3
+or v0,v0,v1
+_ andi v0,v0,_
+move a2,v0
+_
+_
+_
+_
+mtc1 v0,$f0
+mtc1 a0,$f1
+c.le.s $f1,$f0
+_
+movf v1,zero,$f0
+mtc1 v1,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+_
+_
+mtc1 v0,$f0
+trunc.w.s $f0,$f0
+mfc1 v0,$f0
+j '_PERIODIC_SEND_CLIMB_PID_0x17c
+_
+_ mtc1 v0,$f1
+mtc1 a0,$f2
+sub $f1,$f1,$f2
+mfc1 v0,$f1
+_
+mtc1 v0,$f3
+trunc.w.s $f3,$f3
+mfc1 v0,$f3
+or v0,v0,v1
+_ andi v0,v0,_
+move a0,a3
+move a3,v0
+jal '_DOWNLINK_SEND_CLIMB_PID
+_
+move sp,s8
+_
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw ra,_(sp)
+sw s8,_(sp)
+move s8,sp
+move t0,a0
+move a0,a1
+move v1,a2
+move v0,a3
+sb t0,_(s8)
+sb a0,_(s8)
+sb v1,_(s8)
+sb v0,_(s8)
+_
+sltiu v0,v0,_
+bnez v0,_
+_
+_
+jal '_ModemStartMessage
+_
+_
+move a0,v0
+jal '_MODEM_PUT_2_BYTE_BY_ADDR
+_
+_
+move a0,v0
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+_
+_
+move a0,v0
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+_
+_
+move a0,v0
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+_
+jal '_ModemEndMessage
+_
+j '_DOWNLINK_SEND_CLIMB_PID_0xac
+_
+_ _
+addiu v0,v0,_
+andi v0,v0,_
+sb v0,_(gp)
+_ move sp,s8
+_
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw ra,_(sp)
+sw s8,_(sp)
+move s8,sp
+_
+bnez v0,_
+_
+_
+_
+ori v0,v0,_
+multu v1,v0
+mfhi v0
+srl v0,v0,_
+sll v0,v0,_
+sll a0,v0,_
+addu v0,v0,a0
+sll a0,v0,_
+addu v0,v0,a0
+subu v0,v1,v0
+andi v1,v0,_
+_
+bne v1,v0,_
+_
+jal '_PERIODIC_SEND_PPRZ_MODE
+_
+_ move sp,s8
+_
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw ra,_(sp)
+sw s8,_(sp)
+move s8,sp
+_
+move a0,v0
+_
+move a1,v0
+_
+move v1,v0
+_
+_
+sw a2,_(sp)
+move a2,v1
+move a3,v0
+jal '_DOWNLINK_SEND_PPRZ_MODE
+_
+move sp,s8
+_
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw ra,_(sp)
+sw s8,_(sp)
+move s8,sp
+move t0,a0
+move a0,a2
+move v1,a3
+_
+sb t0,_(s8)
+sb a1,_(s8)
+sb a0,_(s8)
+sb v1,_(s8)
+sb v0,_(s8)
+_
+sltiu v0,v0,_
+bnez v0,_
+_
+_
+jal '_ModemStartMessage
+_
+_
+move a0,v0
+jal '_MODEM_PUT_1_BYTE_BY_ADDR
+_
+_
+move a0,v0
+jal '_MODEM_PUT_1_BYTE_BY_ADDR
+_
+_
+move a0,v0
+jal '_MODEM_PUT_1_BYTE_BY_ADDR
+_
+_
+move a0,v0
+jal '_MODEM_PUT_1_BYTE_BY_ADDR
+_
+_
+move a0,v0
+jal '_MODEM_PUT_1_BYTE_BY_ADDR
+_
+jal '_ModemEndMessage
+_
+j '_DOWNLINK_SEND_PPRZ_MODE_0xc0
+_
+_ _
+addiu v0,v0,_
+andi v0,v0,_
+sb v0,_(gp)
+_ move sp,s8
+_
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw ra,_(sp)
+sw s8,_(sp)
+move s8,sp
+_
+bnez v0,_
+_
+_
+_
+ori v0,v0,_
+multu v1,v0
+mfhi v0
+srl v0,v0,_
+sll v0,v0,_
+sll a0,v0,_
+addu v0,v0,a0
+sll a0,v0,_
+addu v0,v0,a0
+subu v0,v1,v0
+andi v1,v0,_
+_
+bne v1,v0,_
+_
+jal '_PERIODIC_SEND_DEBUG
+_
+_ move sp,s8
+_
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw ra,_(sp)
+sw s8,_(sp)
+move s8,sp
+_
+andi v0,v0,_
+move a0,v0
+_
+move a1,v0
+_
+move v1,v0
+_
+_
+sw a2,_(sp)
+move a2,v1
+move a3,v0
+jal '_DOWNLINK_SEND_DEBUG
+_
+move sp,s8
+_
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw ra,_(sp)
+sw s8,_(sp)
+move s8,sp
+move t0,a0
+move a0,a2
+move v1,a3
+_
+sb t0,_(s8)
+sb a1,_(s8)
+sb a0,_(s8)
+sb v1,_(s8)
+sb v0,_(s8)
+_
+sltiu v0,v0,_
+bnez v0,_
+_
+_
+jal '_ModemStartMessage
+_
+_
+move a0,v0
+jal '_MODEM_PUT_1_BYTE_BY_ADDR
+_
+_
+move a0,v0
+jal '_MODEM_PUT_1_BYTE_BY_ADDR
+_
+_
+move a0,v0
+jal '_MODEM_PUT_1_BYTE_BY_ADDR
+_
+_
+move a0,v0
+jal '_MODEM_PUT_1_BYTE_BY_ADDR
+_
+_
+move a0,v0
+jal '_MODEM_PUT_1_BYTE_BY_ADDR
+_
+jal '_ModemEndMessage
+_
+j '_DOWNLINK_SEND_DEBUG_0xc0
+_
+_ _
+addiu v0,v0,_
+andi v0,v0,_
+sb v0,_(gp)
+_ move sp,s8
+_
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw ra,_(sp)
+sw s8,_(sp)
+move s8,sp
+_
+bnez v0,_
+_
+_
+_
+ori v0,v0,_
+multu v1,v0
+mfhi v0
+srl v0,v0,_
+sll v0,v0,_
+sll a0,v0,_
+addu v0,v0,a0
+sll a0,v0,_
+addu v0,v0,a0
+subu v0,v1,v0
+andi v1,v0,_
+_
+bne v1,v0,_
+_
+jal '_PERIODIC_SEND_NAVIGATION_REF
+_
+_ move sp,s8
+_
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw ra,_(sp)
+sw s8,_(sp)
+move s8,sp
+_
+_
+andi v0,v0,_
+move v1,v0
+_
+_
+andi v0,v0,_
+move a0,v1
+move a1,v0
+jal '_DOWNLINK_SEND_NAVIGATION_REF
+_
+move sp,s8
+_
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw ra,_(sp)
+sw s8,_(sp)
+move s8,sp
+move v1,a0
+move v0,a1
+sb v1,_(s8)
+sb v0,_(s8)
+_
+sltiu v0,v0,_
+bnez v0,_
+_
+_
+jal '_ModemStartMessage
+_
+_
+move a0,v0
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+_
+_
+move a0,v0
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+_
+jal '_ModemEndMessage
+_
+j '_DOWNLINK_SEND_NAVIGATION_REF_0x7c
+_
+_ _
+addiu v0,v0,_
+andi v0,v0,_
+sb v0,_(gp)
+_ move sp,s8
+_
+_
+addiu sp,sp,_
+jr ra
+_

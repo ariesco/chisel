@@ -1,0 +1,1004 @@
+The variables obtained by the slicing process are: v0 v1 gp zero a0 s8 $f0 $f2 $f1 $f3 sp a1 a2 ra t3 t2 t1 t0 a3 s0
+
+_ addiu sp,sp,_
+sw ra,_(sp)
+sw s8,_(sp)
+move s8,sp
+jal 'navigation_update
+_
+jal 'send_nav_values
+_
+jal 'course_run
+_
+move sp,s8
+_
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw ra,_(sp)
+sw s8,_(sp)
+move s8,sp
+_
+sb v0,_(gp)
+_
+_
+bne v1,v0,_
+_
+jal 'nav_home
+_
+j 'navigation_update_0x40
+_
+_
+_
+_ move sp,s8
+_
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw ra,_(sp)
+sw s8,_(sp)
+move s8,sp
+_
+_
+move a0,zero
+move a1,v0
+jal '_Circle
+_
+_
+sw zero,_(v0)
+_
+sb v0,_(gp)
+_
+_
+_
+sw v1,_(v0)
+jal 'compute_dist2_to_home
+_
+_
+_
+_
+sw v1,_(v0)
+move sp,s8
+_
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw ra,_(sp)
+sw s8,_(sp)
+sw s0,_(sp)
+move s8,sp
+move v0,a0
+sw a1,_(s8)
+sb v0,_(s8)
+_
+_
+_
+_
+_
+addiu a0,a0,_
+move a1,v1
+move a2,v0
+jal 'lookup_arr
+_
+_
+mtc1 v0,$f0
+cvt.s.w $f0,$f0
+mfc1 v0,$f0
+mtc1 s0,$f1
+mtc1 v0,$f2
+sub $f1,$f1,$f2
+mfc1 v1,$f1
+_
+_
+mtc1 v1,$f3
+mtc1 v0,$f0
+add $f3,$f3,$f0
+mfc1 s0,$f3
+_
+_
+_
+addiu a0,a0,_
+move a1,v1
+move a2,v0
+jal 'lookup_arr
+_
+_
+mtc1 v0,$f1
+cvt.s.w $f1,$f1
+mfc1 v0,$f1
+mtc1 s0,$f2
+mtc1 v0,$f3
+sub $f2,$f2,$f3
+mfc1 v0,$f2
+sw v0,_(s8)
+_
+mtc1 v0,$f1
+cvt.d.s $f0,$f1
+mfc1 a0,$f0
+mfc1 a1,$f1
+_
+_
+xor v1,v1,v0
+_
+_
+mtc1 v1,$f2
+mtc1 v0,$f3
+mul $f2,$f2,$f3
+mfc1 v0,$f2
+mtc1 v0,$f1
+cvt.d.s $f0,$f1
+mfc1 v0,$f0
+mfc1 v1,$f1
+_
+_
+_
+mtc1 a2,$f2
+mtc1 a3,$f3
+mtc1 v0,$f0
+mtc1 v1,$f1
+div $f2,$f2,$f0
+mfc1 v0,$f2
+mfc1 v1,$f3
+mtc1 a0,$f2
+mtc1 a1,$f3
+mtc1 v0,$f0
+mtc1 v1,$f1
+add $f2,$f2,$f0
+mfc1 v0,$f2
+mfc1 v1,$f3
+mtc1 v0,$f2
+mtc1 v1,$f3
+cvt.s.d $f3,$f2
+mfc1 v0,$f3
+sw v0,_(s8)
+_
+_
+_
+addiu a0,a0,_
+move a1,v1
+move a2,v0
+jal 'lookup_arr
+_
+_
+_
+_
+addiu a0,a0,_
+move a1,v1
+move a2,v0
+jal 'lookup_arr
+_
+_
+mtc1 v0,$f1
+cvt.d.s $f0,$f1
+mfc1 v0,$f0
+mfc1 v1,$f1
+_
+_
+_
+mtc1 a0,$f2
+mtc1 a1,$f3
+mtc1 v0,$f0
+mtc1 v1,$f1
+sub $f2,$f2,$f0
+mfc1 a0,$f2
+mfc1 a1,$f3
+_
+_
+_
+mtc1 a0,$f2
+mtc1 a1,$f3
+mtc1 v0,$f0
+mtc1 v1,$f1
+div $f2,$f2,$f0
+mfc1 a0,$f2
+mfc1 a1,$f3
+_
+_
+_
+mtc1 a0,$f2
+mtc1 a1,$f3
+mtc1 v0,$f0
+mtc1 v1,$f1
+mul $f2,$f2,$f0
+mfc1 v0,$f2
+mfc1 v1,$f3
+mtc1 v0,$f2
+mtc1 v1,$f3
+cvt.s.d $f3,$f2
+mfc1 v1,$f3
+_
+sw v1,_(v0)
+j '_Circle_0x278
+_
+_ _
+_
+_
+_
+mtc1 v1,$f0
+mtc1 v0,$f1
+add $f0,$f0,$f1
+mfc1 v1,$f0
+_
+sw v1,_(v0)
+_ _
+_
+move v0,zero
+mtc1 v1,$f2
+mtc1 v0,$f3
+c.lt.s $f2,$f3
+_
+movf v0,zero,$f0
+mtc1 v0,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+_
+_
+j '_Circle_0x2dc
+_
+_ _
+_
+_
+_
+mtc1 v1,$f0
+mtc1 v0,$f1
+sub $f0,$f0,$f1
+mfc1 v1,$f0
+_
+sw v1,_(v0)
+_ _
+_
+_
+_
+mtc1 v1,$f2
+mtc1 v0,$f3
+c.le.s $f3,$f2
+_
+movf v0,zero,$f0
+mtc1 v0,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+_
+_
+mtc1 v0,$f0
+move sp,s8
+_
+_
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw s8,_(sp)
+move s8,sp
+sw a0,_(s8)
+move v1,a1
+move v0,a2
+sb v1,_(s8)
+sb v0,_(s8)
+_
+_
+mul v0,v1,v0
+_
+addu v0,v1,v0
+sw v0,_(s8)
+_
+move sp,s8
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw ra,_(sp)
+sw s8,_(sp)
+move s8,sp
+_
+_
+addiu a0,v1,_
+move a1,zero
+move a2,v0
+jal 'lookup_arr
+_
+_
+mtc1 v0,$f0
+cvt.s.w $f0,$f0
+mfc1 v1,$f0
+_
+_
+mtc1 v1,$f1
+mtc1 v0,$f2
+sub $f1,$f1,$f2
+mfc1 v0,$f1
+sw v0,_(s8)
+_
+_
+addiu a0,v1,_
+move a1,zero
+move a2,v0
+jal 'lookup_arr
+_
+_
+mtc1 v0,$f3
+cvt.s.w $f3,$f3
+mfc1 v1,$f3
+_
+_
+mtc1 v1,$f0
+mtc1 v0,$f1
+sub $f0,$f0,$f1
+mfc1 v0,$f0
+sw v0,_(s8)
+_
+_
+mtc1 v1,$f2
+mtc1 v0,$f3
+mul $f2,$f2,$f3
+mfc1 v1,$f2
+_
+_
+mtc1 a0,$f0
+mtc1 v0,$f1
+mul $f0,$f0,$f1
+mfc1 v0,$f0
+mtc1 v1,$f2
+mtc1 v0,$f3
+add $f2,$f2,$f3
+mfc1 v1,$f2
+_
+sw v1,_(v0)
+_
+_
+_
+_
+mtc1 v1,$f0
+mtc1 v0,$f1
+c.lt.s $f1,$f0
+_
+movf v0,zero,$f0
+mtc1 v0,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+_
+_
+_
+sb v0,_(gp)
+j 'compute_dist2_to_home_0x134
+_
+_ sb zero,_(gp)
+_ move sp,s8
+_
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw ra,_(sp)
+sw s8,_(sp)
+move s8,sp
+jal 'compute_dist2_to_home
+_
+jal '_auto_nav
+_
+move sp,s8
+_
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw s8,_(sp)
+move s8,sp
+move sp,s8
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw ra,_(sp)
+sw s8,_(sp)
+move s8,sp
+_
+move t0,v0
+_
+move a1,v0
+_
+_
+_
+_
+mtc1 v0,$f0
+mtc1 a0,$f1
+c.le.s $f1,$f0
+_
+movf v1,zero,$f0
+mtc1 v1,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+_
+_
+mtc1 v0,$f0
+trunc.w.s $f0,$f0
+mfc1 v0,$f0
+j 'send_nav_values_0x90
+_
+_ mtc1 v0,$f1
+mtc1 a0,$f2
+sub $f1,$f1,$f2
+mfc1 v0,$f1
+_
+mtc1 v0,$f3
+trunc.w.s $f3,$f3
+mfc1 v0,$f3
+or v0,v0,v1
+_ andi v0,v0,_
+move a2,v0
+_
+_
+_
+_
+mtc1 v0,$f0
+mtc1 a0,$f1
+c.le.s $f1,$f0
+_
+movf v1,zero,$f0
+mtc1 v1,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+_
+_
+mtc1 v0,$f0
+trunc.w.s $f0,$f0
+mfc1 v0,$f0
+j 'send_nav_values_0x108
+_
+_ mtc1 v0,$f1
+mtc1 a0,$f2
+sub $f1,$f1,$f2
+mfc1 v0,$f1
+_
+mtc1 v0,$f3
+trunc.w.s $f3,$f3
+mfc1 v0,$f3
+or v0,v0,v1
+_ andi v0,v0,_
+move a3,v0
+_
+_
+_
+_
+mtc1 v0,$f0
+mtc1 a0,$f1
+c.le.s $f1,$f0
+_
+movf v1,zero,$f0
+mtc1 v1,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+_
+_
+mtc1 v0,$f0
+trunc.w.s $f0,$f0
+mfc1 v0,$f0
+j 'send_nav_values_0x180
+_
+_ mtc1 v0,$f1
+mtc1 a0,$f2
+sub $f1,$f1,$f2
+mfc1 v0,$f1
+_
+mtc1 v0,$f3
+trunc.w.s $f3,$f3
+mfc1 v0,$f3
+or v0,v0,v1
+_ andi v0,v0,_
+move t3,v0
+_
+_
+_
+_
+mtc1 v0,$f0
+mtc1 a0,$f1
+c.le.s $f1,$f0
+_
+movf v1,zero,$f0
+mtc1 v1,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+_
+_
+mtc1 v0,$f0
+trunc.w.s $f0,$f0
+mfc1 v0,$f0
+j 'send_nav_values_0x1f8
+_
+_ mtc1 v0,$f1
+mtc1 a0,$f2
+sub $f1,$f1,$f2
+mfc1 v0,$f1
+_
+mtc1 v0,$f3
+trunc.w.s $f3,$f3
+mfc1 v0,$f3
+or v0,v0,v1
+_ andi v0,v0,_
+move t2,v0
+_
+_
+_
+_
+mtc1 v0,$f0
+mtc1 a0,$f1
+c.le.s $f1,$f0
+_
+movf v1,zero,$f0
+mtc1 v1,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+_
+_
+mtc1 v0,$f0
+trunc.w.s $f0,$f0
+mfc1 v0,$f0
+j 'send_nav_values_0x270
+_
+_ mtc1 v0,$f1
+mtc1 a0,$f2
+sub $f1,$f1,$f2
+mfc1 v0,$f1
+_
+mtc1 v0,$f3
+trunc.w.s $f3,$f3
+mfc1 v0,$f3
+or v0,v0,v1
+_ andi v0,v0,_
+move t1,v0
+_
+_
+_
+_
+mtc1 v0,$f0
+mtc1 a0,$f1
+c.le.s $f1,$f0
+_
+movf v1,zero,$f0
+mtc1 v1,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+_
+_
+mtc1 v0,$f0
+trunc.w.s $f0,$f0
+mfc1 v0,$f0
+j 'send_nav_values_0x2e8
+_
+_ mtc1 v0,$f1
+mtc1 a0,$f2
+sub $f1,$f1,$f2
+mfc1 v0,$f1
+_
+mtc1 v0,$f3
+trunc.w.s $f3,$f3
+mfc1 v0,$f3
+or v0,v0,v1
+_ andi v0,v0,_
+sw t3,_(sp)
+sw t2,_(sp)
+sw t1,_(sp)
+sw v0,_(sp)
+move a0,t0
+jal '_DOWNLINK_SEND_NAVIGATION
+_
+move sp,s8
+_
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw ra,_(sp)
+sw s8,_(sp)
+move s8,sp
+move t2,a0
+move t1,a1
+move t0,a2
+move a2,a3
+_
+_
+_
+_
+sb t2,_(s8)
+sb t1,_(s8)
+sb t0,_(s8)
+sb a2,_(s8)
+sb a1,_(s8)
+sb a0,_(s8)
+sb v1,_(s8)
+sb v0,_(s8)
+_
+sltiu v0,v0,_
+beqz v0,_
+_
+_
+jal '_ModemStartMessage
+_
+_
+move a0,v0
+jal '_MODEM_PUT_1_BYTE_BY_ADDR
+_
+_
+move a0,v0
+jal '_MODEM_PUT_1_BYTE_BY_ADDR
+_
+_
+move a0,v0
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+_
+_
+move a0,v0
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+_
+_
+move a0,v0
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+_
+_
+move a0,v0
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+_
+_
+move a0,v0
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+_
+_
+move a0,v0
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+_
+jal '_ModemEndMessage
+_
+j '_DOWNLINK_SEND_NAVIGATION_0x10c
+_
+_ _
+addiu v0,v0,_
+andi v0,v0,_
+sb v0,_(gp)
+_ move sp,s8
+_
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw s8,_(sp)
+move s8,sp
+move v0,a0
+sb v0,_(s8)
+_
+_
+bne v1,v0,_
+_
+_
+j '_ModemStartMessage_0x30
+_
+_ move sp,s8
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw s8,_(sp)
+move s8,sp
+_
+move sp,s8
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw s8,_(sp)
+move s8,sp
+move v0,a0
+sb v0,_(s8)
+_
+move sp,s8
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw s8,_(sp)
+move s8,sp
+move v0,a0
+sb v0,_(s8)
+_
+move sp,s8
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw ra,_(sp)
+sw s8,_(sp)
+move s8,sp
+_
+_
+beq v1,v0,_
+_
+_
+_
+bne v1,v0,_
+_
+_ _
+sltiu v0,v0,_
+bnez v0,_
+_
+jal 'course_pid_run
+_
+_ _
+_
+_
+sw v1,_(v0)
+_ move sp,s8
+_
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw ra,_(sp)
+sw s8,_(sp)
+move s8,sp
+_
+_
+_
+_
+mtc1 v1,$f0
+mtc1 v0,$f1
+sub $f0,$f0,$f1
+mfc1 v0,$f0
+sw v0,_(s8)
+_
+_
+_
+mtc1 v0,$f2
+mtc1 a0,$f3
+c.le.s $f3,$f2
+_
+movf v1,zero,$f0
+mtc1 v1,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+_
+_
+mtc1 v0,$f0
+trunc.w.s $f0,$f0
+mfc1 v0,$f0
+j 'course_pid_run_0xa0
+_
+_ mtc1 v0,$f1
+mtc1 a0,$f2
+sub $f1,$f1,$f2
+mfc1 v0,$f1
+_
+mtc1 v0,$f3
+trunc.w.s $f3,$f3
+mfc1 v0,$f3
+or v0,v0,v1
+_ andi v0,v0,_
+move a0,v0
+jal '_NORM_RAD_ANGLE
+_
+_
+_
+_
+mtc1 v1,$f0
+mtc1 v0,$f1
+mul $f0,$f0,$f1
+mfc1 v1,$f0
+_
+sw v1,_(v0)
+_
+_
+_
+_
+mtc1 v1,$f2
+mtc1 v0,$f3
+c.lt.s $f3,$f2
+_
+movf v0,zero,$f0
+mtc1 v0,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+_
+_
+_
+_
+_
+sw v1,_(v0)
+j 'course_pid_run_0x17c
+_
+_ _
+_
+_
+xor v1,v1,v0
+_
+_
+mtc1 v1,$f0
+mtc1 v0,$f1
+c.lt.s $f1,$f0
+_
+movf v0,zero,$f0
+mtc1 v0,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+_
+_
+_
+_
+_
+xor v1,v1,v0
+_
+sw v1,_(v0)
+_ move sp,s8
+_
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw s8,_(sp)
+move s8,sp
+move v0,a0
+sb v0,_(s8)
+j '_NORM_RAD_ANGLE_0xe4
+_
+_ _
+mtc1 v0,$f1
+cvt.d.w $f0,$f1
+mfc1 a0,$f0
+mfc1 a1,$f1
+_
+_
+_
+mtc1 a0,$f2
+mtc1 a1,$f3
+mtc1 v0,$f0
+mtc1 v1,$f1
+sub $f2,$f2,$f0
+mfc1 v0,$f2
+mfc1 v1,$f3
+_
+_
+_
+mtc1 v0,$f2
+mtc1 v1,$f3
+mtc1 a0,$f0
+mtc1 a1,$f1
+c.le.d $f0,$f2
+_
+movf a2,zero,$f0
+mtc1 a2,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+_
+_
+mtc1 v0,$f0
+mtc1 v1,$f1
+trunc.w.d $f1,$f0
+mfc1 v0,$f1
+j '_NORM_RAD_ANGLE_0xe0
+_
+_ mtc1 v0,$f2
+mtc1 v1,$f3
+mtc1 a0,$f0
+mtc1 a1,$f1
+sub $f2,$f2,$f0
+mfc1 v0,$f2
+mfc1 v1,$f3
+_
+mtc1 v0,$f2
+mtc1 v1,$f3
+trunc.w.d $f3,$f2
+mfc1 v0,$f3
+or v0,v0,a0
+_ sb v0,_(s8)
+_ _
+mtc1 v0,$f1
+cvt.d.w $f0,$f1
+mfc1 a0,$f0
+mfc1 a1,$f1
+_
+_
+_
+mtc1 a0,$f2
+mtc1 a1,$f3
+mtc1 v0,$f0
+mtc1 v1,$f1
+c.lt.d $f0,$f2
+_
+movf v0,zero,$f0
+mtc1 v0,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+_
+_
+j '_NORM_RAD_ANGLE_0x204
+_
+_ _
+mtc1 v0,$f1
+cvt.d.w $f0,$f1
+mfc1 a0,$f0
+mfc1 a1,$f1
+_
+_
+_
+mtc1 a0,$f2
+mtc1 a1,$f3
+mtc1 v0,$f0
+mtc1 v1,$f1
+add $f2,$f2,$f0
+mfc1 v0,$f2
+mfc1 v1,$f3
+_
+_
+_
+mtc1 v0,$f2
+mtc1 v1,$f3
+mtc1 a0,$f0
+mtc1 a1,$f1
+c.le.d $f0,$f2
+_
+movf a2,zero,$f0
+mtc1 a2,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+_
+_
+mtc1 v0,$f0
+mtc1 v1,$f1
+trunc.w.d $f1,$f0
+mfc1 v0,$f1
+j '_NORM_RAD_ANGLE_0x200
+_
+_ mtc1 v0,$f2
+mtc1 v1,$f3
+mtc1 a0,$f0
+mtc1 a1,$f1
+sub $f2,$f2,$f0
+mfc1 v0,$f2
+mfc1 v1,$f3
+_
+mtc1 v0,$f2
+mtc1 v1,$f3
+trunc.w.d $f3,$f2
+mfc1 v0,$f3
+or v0,v0,a0
+_ sb v0,_(s8)
+_ _
+mtc1 v0,$f1
+cvt.d.w $f0,$f1
+mfc1 a0,$f0
+mfc1 a1,$f1
+_
+_
+_
+mtc1 a0,$f2
+mtc1 a1,$f3
+mtc1 v0,$f0
+mtc1 v1,$f1
+c.lt.d $f2,$f0
+_
+movf v0,zero,$f0
+mtc1 v0,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+_
+_
+move sp,s8
+_
+addiu sp,sp,_
+jr ra
+_

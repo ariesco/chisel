@@ -1,0 +1,94 @@
+The variables obtained by the slicing process are: v0 $f1 $f0 s8 $f3 v1 $f2 zero sp ra gp
+
+_ addiu sp,sp,_
+sw ra,_(sp)
+sw s8,_(sp)
+move s8,sp
+_
+_
+beq v1,v0,_
+_
+_
+_
+bne v1,v0,_
+_
+_ _
+_
+bne v1,v0,_
+_
+jal 'altitude_pid_run
+_
+_ move sp,s8
+_
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw s8,_(sp)
+move s8,sp
+_
+_
+_
+_
+mtc1 v1,$f0
+mtc1 v0,$f1
+sub $f0,$f0,$f1
+mfc1 v0,$f0
+sw v0,_(s8)
+_
+_
+_
+mtc1 v1,$f2
+mtc1 v0,$f3
+mul $f2,$f2,$f3
+mfc1 v1,$f2
+_
+_
+mtc1 v1,$f0
+mtc1 v0,$f1
+add $f0,$f0,$f1
+mfc1 v1,$f0
+_
+sw v1,_(v0)
+_
+_
+_
+_
+mtc1 v1,$f2
+mtc1 v0,$f3
+c.lt.s $f2,$f3
+_
+movf v0,zero,$f0
+mtc1 v0,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+_
+_
+_
+_
+_
+sw v1,_(v0)
+_ _
+_
+_
+_
+mtc1 v1,$f0
+mtc1 v0,$f1
+c.lt.s $f1,$f0
+_
+movf v0,zero,$f0
+mtc1 v0,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+_
+_
+_
+_
+_
+sw v1,_(v0)
+_ move sp,s8
+_
+addiu sp,sp,_
+jr ra
+_

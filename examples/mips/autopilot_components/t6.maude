@@ -29,7 +29,7 @@ eof
 
 6. (slice tt6 wrt zero a0 a1 a2 a3 v0 .)
 
-7. (slice tt6 wrt a1 a2 A3 .)
+7. (slice tt6 wrt a1 a2 a3 .)
 
 	1. { v0 } -> file t6_pprz_mode_mips.slice
 	2. { v0, a0, a1, a2 } -> file t6_mode_changed_mips.slice

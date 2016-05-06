@@ -1,0 +1,366 @@
+The variables obtained by the slicing process are: a0 $f0 $f2 $f3 $f1 v1 zero v0 gp s8 sp ra
+
+_ addiu sp,sp,_
+sw ra,_(sp)
+sw s8,_(sp)
+move s8,sp
+_
+_
+beq v1,v0,_
+_
+_
+_
+bne v1,v0,_
+_
+_ _
+sltiu v0,v0,_
+bnez v0,_
+_
+jal 'climb_pid_run
+_
+_ _
+_
+bne v1,v0,_
+_
+_
+sll v0,v0,_
+sra v0,v0,_
+sh v0,_(gp)
+_ _
+bnez v0,_
+_
+_
+bnez v0,_
+_
+_
+bnez v0,_
+_
+_ sh zero,_(gp)
+_ move sp,s8
+_
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw ra,_(sp)
+sw s8,_(sp)
+move s8,sp
+_
+_
+_
+_
+mtc1 v1,$f0
+mtc1 v0,$f1
+sub $f0,$f0,$f1
+mfc1 v0,$f0
+sw v0,_(s8)
+_
+beqz v0,_
+_
+_
+sll v0,v0,_
+sra v0,v0,_
+sh v0,_(gp)
+_
+_
+_
+_
+mtc1 v1,$f2
+mtc1 v0,$f3
+mul $f2,$f2,$f3
+mfc1 v1,$f2
+_
+mtc1 v1,$f0
+mtc1 v0,$f1
+add $f0,$f0,$f1
+mfc1 v1,$f0
+_
+_
+mtc1 v1,$f2
+mtc1 v0,$f3
+mul $f2,$f2,$f3
+mfc1 v1,$f2
+_
+sw v1,_(v0)
+_
+_
+_
+_
+mtc1 v1,$f0
+mtc1 v0,$f1
+c.lt.s $f1,$f0
+_
+movf v0,zero,$f0
+mtc1 v0,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+_
+_
+_
+_
+_
+sw v1,_(v0)
+_ _
+_
+_
+_
+mtc1 v1,$f0
+mtc1 v0,$f1
+c.lt.s $f0,$f1
+_
+movf v0,zero,$f0
+mtc1 v0,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+_
+_
+_
+_
+_
+sw v1,_(v0)
+_ _
+_
+_
+mtc1 v1,$f0
+mtc1 v0,$f1
+add $f0,$f0,$f1
+mfc1 v1,$f0
+_
+sw v1,_(v0)
+_
+_
+_
+_
+mtc1 v1,$f2
+mtc1 v0,$f3
+c.lt.s $f3,$f2
+_
+movf v0,zero,$f0
+mtc1 v0,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+_
+_
+_
+_
+_
+sw v1,_(v0)
+_ _
+_
+_
+_
+mtc1 v1,$f0
+mtc1 v0,$f1
+c.lt.s $f0,$f1
+_
+movf v0,zero,$f0
+mtc1 v0,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+_
+_
+_
+_
+_
+sw v1,_(v0)
+j 'climb_pid_run_0x4c8
+_
+_ _
+_
+move v0,zero
+mtc1 v1,$f0
+mtc1 v0,$f1
+c.lt.s $f1,$f0
+_
+movf v0,zero,$f0
+mtc1 v0,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+_
+_
+_
+_
+_
+_
+mtc1 v1,$f0
+mtc1 v0,$f1
+mul $f0,$f0,$f1
+mfc1 v0,$f0
+j 'climb_pid_run_0x250
+_
+_ move v0,zero
+_ _
+sw v0,_(v1)
+_
+_
+_
+_
+mtc1 v1,$f2
+mtc1 v0,$f3
+mul $f2,$f2,$f3
+mfc1 v1,$f2
+_
+mtc1 v1,$f0
+mtc1 v0,$f1
+add $f0,$f0,$f1
+mfc1 v1,$f0
+_
+_
+mtc1 v1,$f2
+mtc1 v0,$f3
+mul $f2,$f2,$f3
+mfc1 v0,$f2
+mtc1 v0,$f1
+cvt.d.s $f0,$f1
+mfc1 a0,$f0
+_
+_
+_
+_
+mtc1 a0,$f2
+_
+mtc1 v0,$f0
+mtc1 v1,$f1
+add $f2,$f2,$f0
+mfc1 a0,$f2
+_
+_
+_
+mtc1 v0,$f3
+cvt.d.s $f2,$f3
+_
+_
+_
+_
+_
+_
+_
+mtc1 v0,$f2
+mtc1 v1,$f3
+mul $f0,$f0,$f2
+mfc1 v0,$f0
+mfc1 v1,$f1
+mtc1 a0,$f0
+_
+mtc1 v0,$f2
+mtc1 v1,$f3
+add $f0,$f0,$f2
+mfc1 v0,$f0
+mfc1 v1,$f1
+mtc1 v0,$f0
+mtc1 v1,$f1
+cvt.s.d $f1,$f0
+mfc1 v0,$f1
+sw v0,_(s8)
+_
+_
+_
+mtc1 v1,$f2
+mtc1 v0,$f3
+add $f2,$f2,$f3
+mfc1 v1,$f2
+_
+sw v1,_(v0)
+_
+_
+_
+_
+mtc1 v1,$f0
+mtc1 v0,$f1
+c.lt.s $f1,$f0
+_
+movf v0,zero,$f0
+mtc1 v0,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+_
+_
+_
+_
+_
+sw v1,_(v0)
+_ _
+_
+_
+_
+mtc1 v1,$f0
+mtc1 v0,$f1
+c.lt.s $f0,$f1
+_
+movf v0,zero,$f0
+mtc1 v0,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+_
+_
+_
+_
+_
+sw v1,_(v0)
+_ _
+_
+_
+mtc1 v1,$f0
+mtc1 v0,$f1
+mul $f0,$f0,$f1
+mfc1 v0,$f0
+_
+_
+mtc1 v0,$f2
+mtc1 a0,$f3
+c.le.s $f3,$f2
+_
+movf v1,zero,$f0
+mtc1 v1,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+_
+_
+mtc1 v0,$f0
+trunc.w.s $f0,$f0
+mfc1 v0,$f0
+j 'climb_pid_run_0x484
+_
+_ mtc1 v0,$f1
+mtc1 a0,$f2
+sub $f1,$f1,$f2
+mfc1 v0,$f1
+_
+mtc1 v0,$f3
+trunc.w.s $f3,$f3
+mfc1 v0,$f3
+or v0,v0,v1
+_ andi v0,v0,_
+move a0,v0
+jal '_TRIM_UPPRZ
+_
+sll v0,v0,_
+sra v0,v0,_
+sh v0,_(gp)
+_
+_
+_
+_
+mtc1 v1,$f0
+mtc1 v0,$f1
+add $f0,$f0,$f1
+mfc1 v1,$f0
+_
+sw v1,_(v0)
+_ move sp,s8
+_
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw s8,_(sp)
+move s8,sp
+move v0,a0
+sb v0,_(s8)
+move sp,s8
+_
+addiu sp,sp,_
+jr ra
+_

@@ -1,0 +1,428 @@
+The variables obtained by the slicing process are: a2 a3 v0 gp v1 $f1 $f0 $f2 $f3 zero a0 s8 sp ra a1
+
+_ addiu sp,sp,_
+sw ra,_(sp)
+sw s8,_(sp)
+move s8,sp
+jal 'ir_update
+_
+jal 'estimator_update_state_infrared
+_
+jal 'roll_pitch_pid_run
+_
+_
+andi v0,v0,_
+_
+addiu a0,v1,_
+move a1,zero
+_
+move a3,v0
+jal 'update_arr
+_
+_
+andi v0,v0,_
+_
+addiu a0,v1,_
+_
+_
+move a3,v0
+jal 'update_arr
+_
+_
+andi v0,v0,_
+_
+addiu a0,v1,_
+_
+_
+move a3,v0
+jal 'update_arr
+_
+_
+_
+_
+xor v0,v1,v0
+mtc1 v0,$f1
+cvt.d.s $f0,$f1
+mfc1 a0,$f0
+mfc1 a1,$f1
+_
+_
+_
+mtc1 a0,$f2
+mtc1 a1,$f3
+mtc1 v0,$f0
+mtc1 v1,$f1
+mul $f2,$f2,$f0
+mfc1 v0,$f2
+mfc1 v1,$f3
+_
+_
+_
+mtc1 v0,$f2
+mtc1 v1,$f3
+mtc1 a0,$f0
+mtc1 a1,$f1
+c.le.d $f0,$f2
+_
+movf a2,zero,$f0
+mtc1 a2,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+_
+_
+mtc1 v0,$f0
+mtc1 v1,$f1
+trunc.w.d $f1,$f0
+mfc1 v0,$f1
+j 'stabilisation_task_0x164
+_
+_ mtc1 v0,$f2
+mtc1 v1,$f3
+mtc1 a0,$f0
+mtc1 a1,$f1
+sub $f2,$f2,$f0
+mfc1 v0,$f2
+mfc1 v1,$f3
+_
+mtc1 v0,$f2
+mtc1 v1,$f3
+trunc.w.d $f3,$f2
+mfc1 v0,$f3
+or v0,v0,a0
+_ andi v0,v0,_
+move a0,v0
+jal '_TRIM_PPRZ
+_
+sb v0,_(s8)
+_
+_
+addiu a0,v1,_
+_
+_
+move a3,v0
+jal 'update_arr
+_
+move sp,s8
+_
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw s8,_(sp)
+move s8,sp
+_
+_
+srl v0,v0,_
+andi v0,v0,_
+sh v0,_(s8)
+_
+_
+srl v0,v0,_
+andi v0,v0,_
+sh v0,_(s8)
+_
+negu v0,v0
+andi v1,v0,_
+_
+subu v0,v1,v0
+andi v1,v0,_
+_
+andi v0,v0,_
+subu v0,v1,v0
+andi v0,v0,_
+sll v0,v0,_
+sra v0,v0,_
+sh v0,_(gp)
+_
+_
+subu v0,v1,v0
+andi v1,v0,_
+_
+andi v0,v0,_
+subu v0,v1,v0
+andi v0,v0,_
+sll v0,v0,_
+sra v0,v0,_
+sh v0,_(gp)
+move sp,s8
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw s8,_(sp)
+move s8,sp
+_
+_
+bne v1,v0,_
+_
+_
+_
+j 'estimator_update_state_infrared_0x34
+_
+_ _
+_
+_ sw v0,_(s8)
+_
+mtc1 v0,$f0
+cvt.s.w $f0,$f0
+mfc1 v1,$f0
+_
+mtc1 v1,$f1
+mtc1 v0,$f0
+mul $f1,$f1,$f0
+mfc1 v1,$f1
+_
+sw v1,_(v0)
+_
+mtc1 v0,$f1
+cvt.s.w $f1,$f1
+mfc1 v1,$f1
+_
+mtc1 v1,$f0
+mtc1 v0,$f1
+mul $f0,$f0,$f1
+mfc1 v1,$f0
+_
+sw v1,_(v0)
+move sp,s8
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw ra,_(sp)
+sw s8,_(sp)
+move s8,sp
+_
+_
+_
+_
+mtc1 v1,$f0
+mtc1 v0,$f1
+sub $f0,$f0,$f1
+mfc1 v0,$f0
+sw v0,_(s8)
+_
+_
+_
+mtc1 v1,$f2
+mtc1 v0,$f3
+mul $f2,$f2,$f3
+mfc1 v0,$f2
+_
+_
+mtc1 v0,$f0
+mtc1 a0,$f1
+c.le.s $f1,$f0
+_
+movf v1,zero,$f0
+mtc1 v1,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+_
+_
+mtc1 v0,$f0
+trunc.w.s $f0,$f0
+mfc1 v0,$f0
+j 'roll_pitch_pid_run_0xb8
+_
+_ mtc1 v0,$f1
+mtc1 a0,$f2
+sub $f1,$f1,$f2
+mfc1 v0,$f1
+_
+mtc1 v0,$f3
+trunc.w.s $f3,$f3
+mfc1 v0,$f3
+or v0,v0,v1
+_ andi v0,v0,_
+move a0,v0
+jal '_TRIM_PPRZ
+_
+sll v0,v0,_
+sra v0,v0,_
+sh v0,_(gp)
+_
+_
+move v0,zero
+mtc1 v1,$f0
+mtc1 v0,$f1
+c.lt.s $f0,$f1
+_
+movf v0,zero,$f0
+mtc1 v0,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+_
+_
+_
+sw zero,_(v0)
+_ _
+_
+_
+_
+mtc1 v1,$f0
+mtc1 v0,$f1
+sub $f0,$f0,$f1
+mfc1 v1,$f0
+_
+_
+move v0,zero
+mtc1 a0,$f2
+mtc1 v0,$f3
+c.lt.s $f2,$f3
+_
+movf v0,zero,$f0
+mtc1 v0,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+_
+_
+_
+_
+_
+xor a0,a0,v0
+j 'roll_pitch_pid_run_0x184
+_
+_ _
+_
+_ _
+_
+mtc1 a0,$f0
+mtc1 v0,$f1
+mul $f0,$f0,$f1
+mfc1 v0,$f0
+mtc1 v1,$f2
+mtc1 v0,$f3
+sub $f2,$f2,$f3
+mfc1 v1,$f2
+_
+xor v0,v1,v0
+sw v0,_(s8)
+_
+_
+_
+mtc1 v1,$f0
+mtc1 v0,$f1
+mul $f0,$f0,$f1
+mfc1 v0,$f0
+_
+_
+mtc1 v0,$f2
+mtc1 a0,$f3
+c.le.s $f3,$f2
+_
+movf v1,zero,$f0
+mtc1 v1,$f0
+mtc1 zero,$f2
+c.lt.s $f2,$f0
+_
+_
+mtc1 v0,$f0
+trunc.w.s $f0,$f0
+mfc1 v0,$f0
+j 'roll_pitch_pid_run_0x23c
+_
+_ mtc1 v0,$f1
+mtc1 a0,$f2
+sub $f1,$f1,$f2
+mfc1 v0,$f1
+_
+mtc1 v0,$f3
+trunc.w.s $f3,$f3
+mfc1 v0,$f3
+or v0,v0,v1
+_ andi v0,v0,_
+move a0,v0
+jal '_TRIM_PPRZ
+_
+sll v0,v0,_
+sra v0,v0,_
+sh v0,_(gp)
+move sp,s8
+_
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw s8,_(sp)
+move s8,sp
+move v0,a0
+sb v0,_(s8)
+move sp,s8
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw s8,_(sp)
+move s8,sp
+move v0,a0
+sh v0,_(s8)
+_
+beqz v0,_
+_
+_
+j '_fabs_0x38
+_
+_ _
+negu v0,v0
+andi v0,v0,_
+_ move sp,s8
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw s8,_(sp)
+move s8,sp
+sw a0,_(s8)
+move v1,a1
+move v0,a2
+sb v1,_(s8)
+sb v0,_(s8)
+_
+_
+mul v0,v1,v0
+_
+addu v0,v1,v0
+sw v0,_(s8)
+_
+move sp,s8
+_
+addiu sp,sp,_
+jr ra
+_
+_ addiu sp,sp,_
+sw ra,_(sp)
+sw s8,_(sp)
+move s8,sp
+sw a0,_(s8)
+move a0,a1
+move v1,a2
+move v0,a3
+sb a0,_(s8)
+sb v1,_(s8)
+sb v0,_(s8)
+_
+_
+_
+move a1,v1
+move a2,v0
+jal 'lookup_arr
+_
+sw v0,_(s8)
+_
+andi v1,v0,_
+_
+addu v0,v1,v0
+andi v0,v0,_
+move sp,s8
+_
+_
+addiu sp,sp,_
+jr ra
+_

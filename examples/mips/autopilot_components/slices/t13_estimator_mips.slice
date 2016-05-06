@@ -1,0 +1,1538 @@
+The variables obtained by the slicing process are: $f0 $f1 $f2 $f3
+
+_
+_
+_
+_
+jal 'send_boot
+_
+jal 'send_attitude
+_
+jal 'send_adc
+_
+jal 'send_settings
+_
+jal 'send_desired
+_
+jal 'send_bat
+_
+jal 'send_climb
+_
+jal 'send_mode
+_
+jal 'send_debug
+_
+jal 'send_nav_ref
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+jal '_DOWNLINK_SEND_BOOT
+_
+_
+_
+_
+_
+_
+_
+_
+c.le.s $f1,$f0
+_
+_
+_
+_
+c.lt.s $f2,$f0
+_
+_
+_
+trunc.w.s $f0,$f0
+_
+j 'send_boot_0xa4
+_
+_ _
+_
+sub $f1,$f1,$f2
+_
+_
+_
+trunc.w.s $f3,$f3
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+c.le.s $f1,$f0
+_
+_
+_
+_
+c.lt.s $f2,$f0
+_
+_
+_
+trunc.w.s $f0,$f0
+_
+j 'send_boot_0x11c
+_
+_ _
+_
+sub $f1,$f1,$f2
+_
+_
+_
+trunc.w.s $f3,$f3
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+jal '_DOWNLINK_SEND_RAD_OF_IR
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+jal '_ModemStartMessage
+_
+_
+_
+jal '_MODEM_PUT_2_BYTE_BY_ADDR
+_
+jal '_ModemEndMessage
+_
+j '_DOWNLINK_SEND_BOOT_0x64
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+j '_ModemStartMessage_0x30
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+jal '_ModemStartMessage
+_
+_
+_
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+_
+_
+_
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+_
+_
+_
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+_
+_
+_
+jal '_MODEM_PUT_2_BYTE_BY_ADDR
+_
+_
+_
+jal '_MODEM_PUT_2_BYTE_BY_ADDR
+_
+jal '_ModemEndMessage
+_
+j '_DOWNLINK_SEND_RAD_OF_IR_0xc0
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+jal '_PERIODIC_SEND_ATTITUDE
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+c.le.s $f1,$f0
+_
+_
+_
+_
+c.lt.s $f2,$f0
+_
+_
+_
+trunc.w.s $f0,$f0
+_
+j '_PERIODIC_SEND_ATTITUDE_0x80
+_
+_ _
+_
+sub $f1,$f1,$f2
+_
+_
+_
+trunc.w.s $f3,$f3
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+c.le.s $f1,$f0
+_
+_
+_
+_
+c.lt.s $f2,$f0
+_
+_
+_
+trunc.w.s $f0,$f0
+_
+j '_PERIODIC_SEND_ATTITUDE_0xf8
+_
+_ _
+_
+sub $f1,$f1,$f2
+_
+_
+_
+trunc.w.s $f3,$f3
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+c.le.s $f1,$f0
+_
+_
+_
+_
+c.lt.s $f2,$f0
+_
+_
+_
+trunc.w.s $f0,$f0
+_
+j '_PERIODIC_SEND_ATTITUDE_0x170
+_
+_ _
+_
+sub $f1,$f1,$f2
+_
+_
+_
+trunc.w.s $f3,$f3
+_
+_
+_
+_
+_
+jal '_DOWNLINK_SEND_ATTITUDE
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+jal '_ModemStartMessage
+_
+_
+_
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+_
+_
+_
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+_
+_
+_
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+_
+jal '_ModemEndMessage
+_
+j '_DOWNLINK_SEND_ATTITUDE_0x90
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+jal '_PERIODIC_SEND_ADC
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+jal '_DOWNLINK_SEND_ADC
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+jal '_ModemStartMessage
+_
+_
+_
+jal '_MODEM_PUT_2_BYTE_BY_ADDR
+_
+_
+_
+jal '_MODEM_PUT_2_BYTE_BY_ADDR
+_
+jal '_ModemEndMessage
+_
+j '_DOWNLINK_SEND_ADC_0x7c
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+jal '_PERIODIC_SEND_SETTINGS
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+c.le.s $f1,$f0
+_
+_
+_
+_
+c.lt.s $f2,$f0
+_
+_
+_
+trunc.w.s $f0,$f0
+_
+j '_PERIODIC_SEND_SETTINGS_0x94
+_
+_ _
+_
+sub $f1,$f1,$f2
+_
+_
+_
+trunc.w.s $f3,$f3
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+c.le.s $f1,$f0
+_
+_
+_
+_
+c.lt.s $f2,$f0
+_
+_
+_
+trunc.w.s $f0,$f0
+_
+j '_PERIODIC_SEND_SETTINGS_0x10c
+_
+_ _
+_
+sub $f1,$f1,$f2
+_
+_
+_
+trunc.w.s $f3,$f3
+_
+_
+_
+_
+_
+jal '_DOWNLINK_SEND_SETTINGS
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+jal '_ModemStartMessage
+_
+_
+_
+jal '_MODEM_PUT_1_BYTE_BY_ADDR
+_
+_
+_
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+_
+_
+_
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+_
+jal '_ModemEndMessage
+_
+j '_DOWNLINK_SEND_SETTINGS_0x90
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+jal '_PERIODIC_SEND_DESIRED
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+c.le.s $f1,$f0
+_
+_
+_
+_
+c.lt.s $f2,$f0
+_
+_
+_
+trunc.w.s $f0,$f0
+_
+j '_PERIODIC_SEND_DESIRED_0x80
+_
+_ _
+_
+sub $f1,$f1,$f2
+_
+_
+_
+trunc.w.s $f3,$f3
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+c.le.s $f1,$f0
+_
+_
+_
+_
+c.lt.s $f2,$f0
+_
+_
+_
+trunc.w.s $f0,$f0
+_
+j '_PERIODIC_SEND_DESIRED_0xf8
+_
+_ _
+_
+sub $f1,$f1,$f2
+_
+_
+_
+trunc.w.s $f3,$f3
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+c.le.s $f1,$f0
+_
+_
+_
+_
+c.lt.s $f2,$f0
+_
+_
+_
+trunc.w.s $f0,$f0
+_
+j '_PERIODIC_SEND_DESIRED_0x170
+_
+_ _
+_
+sub $f1,$f1,$f2
+_
+_
+_
+trunc.w.s $f3,$f3
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+c.le.s $f1,$f0
+_
+_
+_
+_
+c.lt.s $f2,$f0
+_
+_
+_
+trunc.w.s $f0,$f0
+_
+j '_PERIODIC_SEND_DESIRED_0x1e8
+_
+_ _
+_
+sub $f1,$f1,$f2
+_
+_
+_
+trunc.w.s $f3,$f3
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+c.le.s $f1,$f0
+_
+_
+_
+_
+c.lt.s $f2,$f0
+_
+_
+_
+trunc.w.s $f0,$f0
+_
+j '_PERIODIC_SEND_DESIRED_0x260
+_
+_ _
+_
+sub $f1,$f1,$f2
+_
+_
+_
+trunc.w.s $f3,$f3
+_
+_
+_
+_
+_
+jal '_DOWNLINK_SEND_DESIRED
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+jal '_ModemStartMessage
+_
+_
+_
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+_
+_
+_
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+_
+_
+_
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+_
+_
+_
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+_
+_
+_
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+_
+jal '_ModemEndMessage
+_
+j '_DOWNLINK_SEND_DESIRED_0xc0
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+jal '_PERIODIC_SEND_BAT
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+jal '_DOWNLINK_SEND_BAT
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+jal '_ModemStartMessage
+_
+_
+_
+jal '_MODEM_PUT_1_BYTE_BY_ADDR
+_
+_
+_
+jal '_MODEM_PUT_2_BYTE_BY_ADDR
+_
+_
+_
+jal '_MODEM_PUT_1_BYTE_BY_ADDR
+_
+_
+_
+jal '_MODEM_PUT_2_BYTE_BY_ADDR
+_
+_
+_
+jal '_MODEM_PUT_2_BYTE_BY_ADDR
+_
+jal '_ModemEndMessage
+_
+j '_DOWNLINK_SEND_BAT_0xc0
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+jal '_PERIODIC_SEND_CLIMB_PID
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+c.le.s $f1,$f0
+_
+_
+_
+_
+c.lt.s $f2,$f0
+_
+_
+_
+trunc.w.s $f0,$f0
+_
+j '_PERIODIC_SEND_CLIMB_PID_0x8c
+_
+_ _
+_
+sub $f1,$f1,$f2
+_
+_
+_
+trunc.w.s $f3,$f3
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+c.le.s $f1,$f0
+_
+_
+_
+_
+c.lt.s $f2,$f0
+_
+_
+_
+trunc.w.s $f0,$f0
+_
+j '_PERIODIC_SEND_CLIMB_PID_0x104
+_
+_ _
+_
+sub $f1,$f1,$f2
+_
+_
+_
+trunc.w.s $f3,$f3
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+c.le.s $f1,$f0
+_
+_
+_
+_
+c.lt.s $f2,$f0
+_
+_
+_
+trunc.w.s $f0,$f0
+_
+j '_PERIODIC_SEND_CLIMB_PID_0x17c
+_
+_ _
+_
+sub $f1,$f1,$f2
+_
+_
+_
+trunc.w.s $f3,$f3
+_
+_
+_
+_
+_
+jal '_DOWNLINK_SEND_CLIMB_PID
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+jal '_ModemStartMessage
+_
+_
+_
+jal '_MODEM_PUT_2_BYTE_BY_ADDR
+_
+_
+_
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+_
+_
+_
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+_
+_
+_
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+_
+jal '_ModemEndMessage
+_
+j '_DOWNLINK_SEND_CLIMB_PID_0xac
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+jal '_PERIODIC_SEND_PPRZ_MODE
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+jal '_DOWNLINK_SEND_PPRZ_MODE
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+jal '_ModemStartMessage
+_
+_
+_
+jal '_MODEM_PUT_1_BYTE_BY_ADDR
+_
+_
+_
+jal '_MODEM_PUT_1_BYTE_BY_ADDR
+_
+_
+_
+jal '_MODEM_PUT_1_BYTE_BY_ADDR
+_
+_
+_
+jal '_MODEM_PUT_1_BYTE_BY_ADDR
+_
+_
+_
+jal '_MODEM_PUT_1_BYTE_BY_ADDR
+_
+jal '_ModemEndMessage
+_
+j '_DOWNLINK_SEND_PPRZ_MODE_0xc0
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+jal '_PERIODIC_SEND_DEBUG
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+jal '_DOWNLINK_SEND_DEBUG
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+jal '_ModemStartMessage
+_
+_
+_
+jal '_MODEM_PUT_1_BYTE_BY_ADDR
+_
+_
+_
+jal '_MODEM_PUT_1_BYTE_BY_ADDR
+_
+_
+_
+jal '_MODEM_PUT_1_BYTE_BY_ADDR
+_
+_
+_
+jal '_MODEM_PUT_1_BYTE_BY_ADDR
+_
+_
+_
+jal '_MODEM_PUT_1_BYTE_BY_ADDR
+_
+jal '_ModemEndMessage
+_
+j '_DOWNLINK_SEND_DEBUG_0xc0
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+jal '_PERIODIC_SEND_NAVIGATION_REF
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+jal '_DOWNLINK_SEND_NAVIGATION_REF
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+jal '_ModemStartMessage
+_
+_
+_
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+_
+_
+_
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+_
+jal '_ModemEndMessage
+_
+j '_DOWNLINK_SEND_NAVIGATION_REF_0x7c
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_

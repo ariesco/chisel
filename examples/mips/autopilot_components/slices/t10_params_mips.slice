@@ -1,0 +1,1004 @@
+The variables obtained by the slicing process are: $f0 $f1 $f2 $f3
+
+_
+_
+_
+_
+jal 'navigation_update
+_
+jal 'send_nav_values
+_
+jal 'course_run
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+jal 'nav_home
+_
+j 'navigation_update_0x40
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+jal '_Circle
+_
+_
+_
+_
+_
+_
+_
+_
+_
+jal 'compute_dist2_to_home
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+jal 'lookup_arr
+_
+_
+_
+cvt.s.w $f0,$f0
+_
+_
+_
+sub $f1,$f1,$f2
+_
+_
+_
+_
+_
+add $f3,$f3,$f0
+_
+_
+_
+_
+_
+_
+_
+jal 'lookup_arr
+_
+_
+_
+cvt.s.w $f1,$f1
+_
+_
+_
+sub $f2,$f2,$f3
+_
+_
+_
+_
+cvt.d.s $f0,$f1
+_
+_
+_
+_
+_
+_
+_
+_
+_
+mul $f2,$f2,$f3
+_
+_
+cvt.d.s $f0,$f1
+_
+_
+_
+_
+_
+_
+_
+_
+_
+div $f2,$f2,$f0
+_
+_
+_
+_
+_
+_
+add $f2,$f2,$f0
+_
+_
+_
+_
+cvt.s.d $f3,$f2
+_
+_
+_
+_
+_
+_
+_
+_
+jal 'lookup_arr
+_
+_
+_
+_
+_
+_
+_
+jal 'lookup_arr
+_
+_
+_
+cvt.d.s $f0,$f1
+_
+_
+_
+_
+_
+_
+_
+_
+_
+sub $f2,$f2,$f0
+_
+_
+_
+_
+_
+_
+_
+_
+_
+div $f2,$f2,$f0
+_
+_
+_
+_
+_
+_
+_
+_
+_
+mul $f2,$f2,$f0
+_
+_
+_
+_
+cvt.s.d $f3,$f2
+_
+_
+_
+j '_Circle_0x278
+_
+_
+_
+_
+_
+_
+_
+add $f0,$f0,$f1
+_
+_
+_
+_
+_
+_
+_
+_
+c.lt.s $f2,$f3
+_
+_
+_
+_
+c.lt.s $f2,$f0
+_
+_
+j '_Circle_0x2dc
+_
+_
+_
+_
+_
+_
+_
+sub $f0,$f0,$f1
+_
+_
+_
+_
+_
+_
+_
+_
+_
+c.le.s $f3,$f2
+_
+_
+_
+_
+c.lt.s $f2,$f0
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+jal 'lookup_arr
+_
+_
+_
+cvt.s.w $f0,$f0
+_
+_
+_
+_
+_
+sub $f1,$f1,$f2
+_
+_
+_
+_
+_
+_
+_
+jal 'lookup_arr
+_
+_
+_
+cvt.s.w $f3,$f3
+_
+_
+_
+_
+_
+sub $f0,$f0,$f1
+_
+_
+_
+_
+_
+_
+mul $f2,$f2,$f3
+_
+_
+_
+_
+_
+mul $f0,$f0,$f1
+_
+_
+_
+add $f2,$f2,$f3
+_
+_
+_
+_
+_
+_
+_
+_
+_
+c.lt.s $f1,$f0
+_
+_
+_
+_
+c.lt.s $f2,$f0
+_
+_
+_
+_
+j 'compute_dist2_to_home_0x134
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+jal 'compute_dist2_to_home
+_
+jal '_auto_nav
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+c.le.s $f1,$f0
+_
+_
+_
+_
+c.lt.s $f2,$f0
+_
+_
+_
+trunc.w.s $f0,$f0
+_
+j 'send_nav_values_0x90
+_
+_ _
+_
+sub $f1,$f1,$f2
+_
+_
+_
+trunc.w.s $f3,$f3
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+c.le.s $f1,$f0
+_
+_
+_
+_
+c.lt.s $f2,$f0
+_
+_
+_
+trunc.w.s $f0,$f0
+_
+j 'send_nav_values_0x108
+_
+_ _
+_
+sub $f1,$f1,$f2
+_
+_
+_
+trunc.w.s $f3,$f3
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+c.le.s $f1,$f0
+_
+_
+_
+_
+c.lt.s $f2,$f0
+_
+_
+_
+trunc.w.s $f0,$f0
+_
+j 'send_nav_values_0x180
+_
+_ _
+_
+sub $f1,$f1,$f2
+_
+_
+_
+trunc.w.s $f3,$f3
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+c.le.s $f1,$f0
+_
+_
+_
+_
+c.lt.s $f2,$f0
+_
+_
+_
+trunc.w.s $f0,$f0
+_
+j 'send_nav_values_0x1f8
+_
+_ _
+_
+sub $f1,$f1,$f2
+_
+_
+_
+trunc.w.s $f3,$f3
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+c.le.s $f1,$f0
+_
+_
+_
+_
+c.lt.s $f2,$f0
+_
+_
+_
+trunc.w.s $f0,$f0
+_
+j 'send_nav_values_0x270
+_
+_ _
+_
+sub $f1,$f1,$f2
+_
+_
+_
+trunc.w.s $f3,$f3
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+c.le.s $f1,$f0
+_
+_
+_
+_
+c.lt.s $f2,$f0
+_
+_
+_
+trunc.w.s $f0,$f0
+_
+j 'send_nav_values_0x2e8
+_
+_ _
+_
+sub $f1,$f1,$f2
+_
+_
+_
+trunc.w.s $f3,$f3
+_
+_
+_
+_
+_
+_
+_
+_
+jal '_DOWNLINK_SEND_NAVIGATION
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+jal '_ModemStartMessage
+_
+_
+_
+jal '_MODEM_PUT_1_BYTE_BY_ADDR
+_
+_
+_
+jal '_MODEM_PUT_1_BYTE_BY_ADDR
+_
+_
+_
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+_
+_
+_
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+_
+_
+_
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+_
+_
+_
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+_
+_
+_
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+_
+_
+_
+jal '_MODEM_PUT_4_BYTE_BY_ADDR
+_
+jal '_ModemEndMessage
+_
+j '_DOWNLINK_SEND_NAVIGATION_0x10c
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+j '_ModemStartMessage_0x30
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+jal 'course_pid_run
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+sub $f0,$f0,$f1
+_
+_
+_
+_
+_
+_
+_
+c.le.s $f3,$f2
+_
+_
+_
+_
+c.lt.s $f2,$f0
+_
+_
+_
+trunc.w.s $f0,$f0
+_
+j 'course_pid_run_0xa0
+_
+_ _
+_
+sub $f1,$f1,$f2
+_
+_
+_
+trunc.w.s $f3,$f3
+_
+_
+_
+_
+jal '_NORM_RAD_ANGLE
+_
+_
+_
+_
+_
+_
+mul $f0,$f0,$f1
+_
+_
+_
+_
+_
+_
+_
+_
+_
+c.lt.s $f3,$f2
+_
+_
+_
+_
+c.lt.s $f2,$f0
+_
+_
+_
+_
+_
+_
+j 'course_pid_run_0x17c
+_
+_
+_
+_
+_
+_
+_
+_
+_
+c.lt.s $f1,$f0
+_
+_
+_
+_
+c.lt.s $f2,$f0
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+_
+j '_NORM_RAD_ANGLE_0xe4
+_
+_
+_
+cvt.d.w $f0,$f1
+_
+_
+_
+_
+_
+_
+_
+_
+_
+sub $f2,$f2,$f0
+_
+_
+_
+_
+_
+_
+_
+_
+_
+c.le.d $f0,$f2
+_
+_
+_
+_
+c.lt.s $f2,$f0
+_
+_
+_
+_
+trunc.w.d $f1,$f0
+_
+j '_NORM_RAD_ANGLE_0xe0
+_
+_ _
+_
+_
+_
+sub $f2,$f2,$f0
+_
+_
+_
+_
+_
+trunc.w.d $f3,$f2
+_
+_
+_
+_
+_
+cvt.d.w $f0,$f1
+_
+_
+_
+_
+_
+_
+_
+_
+_
+c.lt.d $f0,$f2
+_
+_
+_
+_
+c.lt.s $f2,$f0
+_
+_
+j '_NORM_RAD_ANGLE_0x204
+_
+_
+_
+cvt.d.w $f0,$f1
+_
+_
+_
+_
+_
+_
+_
+_
+_
+add $f2,$f2,$f0
+_
+_
+_
+_
+_
+_
+_
+_
+_
+c.le.d $f0,$f2
+_
+_
+_
+_
+c.lt.s $f2,$f0
+_
+_
+_
+_
+trunc.w.d $f1,$f0
+_
+j '_NORM_RAD_ANGLE_0x200
+_
+_ _
+_
+_
+_
+sub $f2,$f2,$f0
+_
+_
+_
+_
+_
+trunc.w.d $f3,$f2
+_
+_
+_
+_
+_
+cvt.d.w $f0,$f1
+_
+_
+_
+_
+_
+_
+_
+_
+_
+c.lt.d $f2,$f0
+_
+_
+_
+_
+c.lt.s $f2,$f0
+_
+_
+_
+_
+_
+_
+_
