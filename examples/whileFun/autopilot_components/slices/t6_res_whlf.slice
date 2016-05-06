@@ -1,0 +1,236 @@
+*************** This is the slice w.r.t. the variable '__res_and_bitwise,'__res_FLOAT_OF_PPRZ,'__res_mcu1_status_update,'__res_bit_is_set,'__res_CheckEvent,
+    '__res_PPRZ_MODE_OF_PULSE,'__res_IR_ESTIM_MODE_OF_PULSE,'__res_IF_CALIB_MODE_OF_PULSE,'__res_STICK_PUSHED,'__res_shiftl_bitwise,'__res_lookup_arr,
+    '__res_update_arr ***************
+
+
+
+The variables to slice 'CheckEvent are {'__res_CheckEvent}
+The variables to slice 'DOWNLINK_SEND_CALIB_CONTRAST are {}
+The variables to slice 'DOWNLINK_SEND_CALIB_START are {}
+The variables to slice 'DOWNLINK_SEND_PPRZ_MODE are {}
+The variables to slice 'DOWNLINK_SEND_RAD_OF_IR are {}
+The variables to slice 'EventNeg are {'__res_lookup_arr}
+The variables to slice 'EventPos are {'__res_lookup_arr}
+The variables to slice 'EventUpdate are {}
+The variables to slice 'FLOAT_OF_PPRZ are {'MAX_PPRZ, 'center, 'travel, '__res_FLOAT_OF_PPRZ, '__res_lookup_arr}
+The variables to slice 'IF_CALIB_MODE_OF_PULSE are {'IF_CALIB_MODE_UP, 'IF_CALIB_MODE_NONE, '__res_IF_CALIB_MODE_OF_PULSE, '__res_lookup_arr}
+The variables to slice 'IR_ESTIM_MODE_OF_PULSE are {'IR_ESTIM_MODE_OFF, 'IR_ESTIM_MODE_ON, '__res_IR_ESTIM_MODE_OF_PULSE, '__res_lookup_arr}
+The variables to slice 'MODEM_PUT_1_BYTE_BY_ADDR are {}
+The variables to slice 'MODEM_PUT_2_BYTE_BY_ADDR are {}
+The variables to slice 'MODEM_PUT_4_BYTE_BY_ADDR are {}
+The variables to slice 'Main are {}
+The variables to slice 'ModeUpdate are {'_n_value}
+The variables to slice 'ModemEndMessage are {}
+The variables to slice 'ModemStartMessage are {}
+The variables to slice 'PPRZ_MODE_OF_PULSE are {'PPRZ_MODE_AUTO2, 'PPRZ_MODE_AUTO1, 'PPRZ_MODE_MANUAL, '__res_PPRZ_MODE_OF_PULSE, '__res_lookup_arr}
+The variables to slice 'RadOfIrFromConstrast are {}
+The variables to slice 'STICK_PUSHED are {'__res_STICK_PUSHED, '__res_lookup_arr}
+The variables to slice 'and_bitwise are {'val2, '__res_and_bitwise}
+The variables to slice 'bit_is_set are {'__res_bit_is_set}
+The variables to slice 'copy_from_to_fbw are {'__res_lookup_arr}
+The variables to slice 'events_update are {}
+The variables to slice 'ground_calibrate are {'__res_STICK_PUSHED}
+The variables to slice 'inflight_calib are {}
+The variables to slice 'inflight_calib_mode_update are {'__res_IF_CALIB_MODE_OF_PULSE}
+The variables to slice 'ir_estim_mode_update are {'__res_IR_ESTIM_MODE_OF_PULSE}
+The variables to slice 'ir_gain_calib are {}
+The variables to slice 'lookup_arr are {'a, 'idx, '__res_lookup_arr}
+The variables to slice 'mcu1_status_update are {}
+The variables to slice 'pprz_mode_update are {'__res_CheckEvent, '__res_PPRZ_MODE_OF_PULSE}
+The variables to slice 'radio_control_task are {'__res_pprz_mode_update, '__res_inflight_calib_mode_update, 'calib_mode_changed, '__res_ir_estim_mode_update,
+    'pprz_mode_changed, '__res_and_bitwise, '__res_FLOAT_OF_PPRZ, '__res_mcu1_status_update, '__res_bit_is_set, '__res_shiftl_bitwise, '__res_lookup_arr}
+The variables to slice 'shiftl_bitwise are {'val1, 'val2, '__res_shiftl_bitwise}
+The variables to slice 'update_arr are {'val, '__res_update_arr}
+
+'CheckEvent(_){If _ Then
+  '__res_CheckEvent := _
+Else
+  '__res_CheckEvent := 0}
+
+'DOWNLINK_SEND_CALIB_CONTRAST(_){_}
+
+'DOWNLINK_SEND_CALIB_START(_){_}
+
+'DOWNLINK_SEND_PPRZ_MODE(_){_}
+
+'DOWNLINK_SEND_RAD_OF_IR(_){_}
+
+'EventNeg(_){_ ;
+_ ;
+_ := '__res_lookup_arr ;
+_}
+
+'EventPos(_){_ ;
+_ ;
+_ := '__res_lookup_arr ;
+_}
+
+'EventUpdate(_){_}
+
+'FLOAT_OF_PPRZ(_,_,'center,'travel){_ ;
+'__res_FLOAT_OF_PPRZ := '__res_lookup_arr +.(('MAX_PPRZ *. 'center)+. 'travel)}
+
+'IF_CALIB_MODE_OF_PULSE(_){_ ;
+If Lt('__res_lookup_arr,_)Then
+  '__res_IF_CALIB_MODE_OF_PULSE := 'IF_CALIB_MODE_UP
+Else
+  '__res_IF_CALIB_MODE_OF_PULSE := 'IF_CALIB_MODE_NONE}
+
+'IR_ESTIM_MODE_OF_PULSE(_){_ ;
+If Lt('__res_lookup_arr,_)Then
+  '__res_IR_ESTIM_MODE_OF_PULSE := 'IR_ESTIM_MODE_OFF
+Else
+  '__res_IR_ESTIM_MODE_OF_PULSE := 'IR_ESTIM_MODE_ON}
+
+'MODEM_PUT_1_BYTE_BY_ADDR(_){_}
+
+'MODEM_PUT_2_BYTE_BY_ADDR(_){_}
+
+'MODEM_PUT_4_BYTE_BY_ADDR(_){_}
+
+'Main(_){_}
+
+'ModeUpdate(_,'_n_value){_ ;
+_ := '_n_value ;
+_}
+
+'ModemEndMessage(_){_}
+
+'ModemStartMessage(_){_}
+
+'PPRZ_MODE_OF_PULSE(_){_ ;
+If Gt('__res_lookup_arr,_)Then
+  '__res_PPRZ_MODE_OF_PULSE := 'PPRZ_MODE_AUTO2
+Else
+  If _ Then
+    '__res_PPRZ_MODE_OF_PULSE := 'PPRZ_MODE_AUTO1
+Else
+    '__res_PPRZ_MODE_OF_PULSE := 'PPRZ_MODE_MANUAL}
+
+'RadOfIrFromConstrast(_){_}
+
+'STICK_PUSHED(_){_ ;
+If Gt('__res_lookup_arr,_)Or Lt('__res_lookup_arr,_)Then
+  '__res_STICK_PUSHED := _
+Else
+  '__res_STICK_PUSHED := 0}
+
+'and_bitwise(_,'val2){If Equal(_,'val2)Then
+  '__res_and_bitwise := _
+Else
+  '__res_and_bitwise := 0}
+
+'bit_is_set(_){If _ Then
+  '__res_bit_is_set := _
+Else
+  '__res_bit_is_set := 0}
+
+'copy_from_to_fbw(_){_ ;
+Call 'update_arr(_,_,'__res_lookup_arr);
+_ ;
+Call 'update_arr(_,_,'__res_lookup_arr);
+_}
+
+'events_update(_){_}
+
+'ground_calibrate(_){_ ;
+If _ Then
+_
+Else
+  If _ Then
+(    _ ;
+        If Equal('__res_STICK_PUSHED,_)Then
+_)}
+
+'inflight_calib(_){_}
+
+'inflight_calib_mode_update(_){_ ;
+Call 'ModeUpdate(_,'__res_IF_CALIB_MODE_OF_PULSE);
+_}
+
+'ir_estim_mode_update(_){_ ;
+Call 'ModeUpdate(_,'__res_IR_ESTIM_MODE_OF_PULSE);
+_}
+
+'ir_gain_calib(_){_}
+
+'lookup_arr('a,'idx){'__res_lookup_arr := 'a +. 'idx}
+
+'mcu1_status_update(_){_}
+
+'pprz_mode_update(_){_ ;
+_ ;
+_ ;
+If _ Or Equal('__res_CheckEvent,_)Then
+  _ ;
+  Call 'ModeUpdate(_,'__res_PPRZ_MODE_OF_PULSE)
+Else
+_ ;
+_}
+
+'radio_control_task(_){Local 'calib_mode_changed ;
+If _ Then
+(  _ ;
+    _ ;
+    _ ;
+    _ ;
+      If Equal('__res_bit_is_set,_)And _ Then
+_ ;
+    _ ;
+      If Equal('__res_bit_is_set,_)Then
+(    Local 'pprz_mode_changed ;
+        _ ;
+            'pprz_mode_changed := '__res_pprz_mode_update ;
+        Call 'and_bitwise(_,'pprz_mode_changed);
+            _ := '__res_and_bitwise ;
+        _ ;
+        Call 'and_bitwise(_,'__res_ir_estim_mode_update);
+            _ := '__res_and_bitwise ;
+        _ ;
+            'calib_mode_changed := '__res_inflight_calib_mode_update ;
+        _ ;
+            If Equal('calib_mode_changed,_)Or Equal('pprz_mode_changed,_)Then
+_
+Else
+_ ;
+        _ ;
+        Call 'and_bitwise(_,'calib_mode_changed);
+        _ := '__res_and_bitwise);
+    _ ;
+    Call 'and_bitwise(_,'__res_mcu1_status_update);
+      _ := '__res_and_bitwise ;
+    _ ;
+      If _ Then
+(    _ ;
+        _ ;
+        _ ;
+        _ ;
+        _ ;
+            _ := '__res_FLOAT_OF_PPRZ ;
+        _ ;
+        _ ;
+        _ := '__res_FLOAT_OF_PPRZ);
+      If _ Then
+(    _ ;
+            _ := '__res_lookup_arr ;
+        _ ;
+            _ := _ *.('__res_lookup_arr *. _);
+        _ ;
+        _ := _ *.('__res_lookup_arr *. _));
+    _ ;
+    _ ;
+    _ ;
+    If _ Then
+(    _ ;
+        _ ;
+        Call 'shiftl_bitwise('__res_lookup_arr,_);
+        If _ And Equal('__res_shiftl_bitwise,_)Then
+_))}
+
+'shiftl_bitwise('val1,'val2){If Equal('val1,'val2)Then
+  '__res_shiftl_bitwise := 'val1 *. 'val2
+Else
+  '__res_shiftl_bitwise := 'val1}
+
+'update_arr(_,_,'val){_ ;
+'__res_update_arr := 'val}

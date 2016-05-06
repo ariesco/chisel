@@ -1,0 +1,58 @@
+*************** This is the slice w.r.t. the variable '__res_TRIM_PPRZ,'__res_lookup_arr,'__res_update_arr ***************
+
+
+
+The variables to slice 'Main are {}
+The variables to slice 'TRIM_PPRZ are {'MIN_PPRZ, 'MAX_PPRZ, 'pprz, '__res_TRIM_PPRZ}
+The variables to slice 'estimator_update_state_infrared are {}
+The variables to slice 'fabs are {}
+The variables to slice 'ir_update are {}
+The variables to slice 'lookup_arr are {'a, 'idx, '__res_lookup_arr}
+The variables to slice 'roll_pitch_pid_run are {'__res_TRIM_PPRZ}
+The variables to slice 'stabilisation_task are {'desired_elevator, 'desired_aileron, 'desired_gaz, '__res_TRIM_PPRZ}
+The variables to slice 'update_arr are {'val, '__res_update_arr}
+
+'Main(_){_}
+
+'TRIM_PPRZ('pprz){If Lt('pprz,'MIN_PPRZ)Then
+  '__res_TRIM_PPRZ := 'MIN_PPRZ
+Else
+  If Gt('pprz,'MAX_PPRZ)Then
+    '__res_TRIM_PPRZ := 'MAX_PPRZ
+Else
+    '__res_TRIM_PPRZ := 'pprz}
+
+'estimator_update_state_infrared(_){_}
+
+'fabs(_){_}
+
+'ir_update(_){_}
+
+'lookup_arr('a,'idx){'__res_lookup_arr := 'a +. 'idx}
+
+'roll_pitch_pid_run(_){_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ := '__res_TRIM_PPRZ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ := '__res_TRIM_PPRZ}
+
+'stabilisation_task(_){_ ;
+_ ;
+_ ;
+Call 'update_arr(_,_,'desired_gaz);
+Call 'update_arr(_,_,'desired_aileron);
+Call 'update_arr(_,_,'desired_elevator);
+_ ;
+_ ;
+_ ;
+Call 'update_arr(_,_,'__res_TRIM_PPRZ)}
+
+'update_arr(_,_,'val){_ ;
+'__res_update_arr := 'val}

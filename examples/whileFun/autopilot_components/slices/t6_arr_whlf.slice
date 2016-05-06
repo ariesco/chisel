@@ -1,0 +1,171 @@
+*************** This is the slice w.r.t. the variable '__res_lookup_arr,'__res_update_arr ***************
+
+
+
+The variables to slice 'CheckEvent are {}
+The variables to slice 'DOWNLINK_SEND_CALIB_CONTRAST are {}
+The variables to slice 'DOWNLINK_SEND_CALIB_START are {}
+The variables to slice 'DOWNLINK_SEND_PPRZ_MODE are {}
+The variables to slice 'DOWNLINK_SEND_RAD_OF_IR are {}
+The variables to slice 'EventNeg are {'__res_lookup_arr}
+The variables to slice 'EventPos are {'__res_lookup_arr}
+The variables to slice 'EventUpdate are {}
+The variables to slice 'FLOAT_OF_PPRZ are {'__res_lookup_arr}
+The variables to slice 'IF_CALIB_MODE_OF_PULSE are {'__res_lookup_arr}
+The variables to slice 'IR_ESTIM_MODE_OF_PULSE are {'__res_lookup_arr}
+The variables to slice 'MODEM_PUT_1_BYTE_BY_ADDR are {}
+The variables to slice 'MODEM_PUT_2_BYTE_BY_ADDR are {}
+The variables to slice 'MODEM_PUT_4_BYTE_BY_ADDR are {}
+The variables to slice 'Main are {}
+The variables to slice 'ModeUpdate are {}
+The variables to slice 'ModemEndMessage are {}
+The variables to slice 'ModemStartMessage are {}
+The variables to slice 'PPRZ_MODE_OF_PULSE are {'__res_lookup_arr}
+The variables to slice 'RadOfIrFromConstrast are {}
+The variables to slice 'STICK_PUSHED are {'__res_lookup_arr}
+The variables to slice 'and_bitwise are {}
+The variables to slice 'bit_is_set are {}
+The variables to slice 'copy_from_to_fbw are {'__res_lookup_arr}
+The variables to slice 'events_update are {}
+The variables to slice 'ground_calibrate are {}
+The variables to slice 'inflight_calib are {}
+The variables to slice 'inflight_calib_mode_update are {}
+The variables to slice 'ir_estim_mode_update are {}
+The variables to slice 'ir_gain_calib are {}
+The variables to slice 'lookup_arr are {'a, 'idx, '__res_lookup_arr}
+The variables to slice 'mcu1_status_update are {}
+The variables to slice 'pprz_mode_update are {}
+The variables to slice 'radio_control_task are {'__res_lookup_arr}
+The variables to slice 'shiftl_bitwise are {'val1}
+The variables to slice 'update_arr are {'val, '__res_update_arr}
+
+'CheckEvent(_){_}
+
+'DOWNLINK_SEND_CALIB_CONTRAST(_){_}
+
+'DOWNLINK_SEND_CALIB_START(_){_}
+
+'DOWNLINK_SEND_PPRZ_MODE(_){_}
+
+'DOWNLINK_SEND_RAD_OF_IR(_){_}
+
+'EventNeg(_){_ ;
+_ ;
+_ := '__res_lookup_arr ;
+_}
+
+'EventPos(_){_ ;
+_ ;
+_ := '__res_lookup_arr ;
+_}
+
+'EventUpdate(_){_}
+
+'FLOAT_OF_PPRZ(_){_ ;
+_ := '__res_lookup_arr +. _}
+
+'IF_CALIB_MODE_OF_PULSE(_){_ ;
+If Lt('__res_lookup_arr,_)Then
+_
+Else
+_}
+
+'IR_ESTIM_MODE_OF_PULSE(_){_ ;
+If Lt('__res_lookup_arr,_)Then
+_
+Else
+_}
+
+'MODEM_PUT_1_BYTE_BY_ADDR(_){_}
+
+'MODEM_PUT_2_BYTE_BY_ADDR(_){_}
+
+'MODEM_PUT_4_BYTE_BY_ADDR(_){_}
+
+'Main(_){_}
+
+'ModeUpdate(_){_}
+
+'ModemEndMessage(_){_}
+
+'ModemStartMessage(_){_}
+
+'PPRZ_MODE_OF_PULSE(_){_ ;
+If Gt('__res_lookup_arr,_)Then
+_
+Else
+_}
+
+'RadOfIrFromConstrast(_){_}
+
+'STICK_PUSHED(_){_ ;
+If Gt('__res_lookup_arr,_)Or Lt('__res_lookup_arr,_)Then
+_
+Else
+_}
+
+'and_bitwise(_){_}
+
+'bit_is_set(_){_}
+
+'copy_from_to_fbw(_){_ ;
+Call 'update_arr(_,_,'__res_lookup_arr);
+_ ;
+Call 'update_arr(_,_,'__res_lookup_arr);
+_}
+
+'events_update(_){_}
+
+'ground_calibrate(_){_}
+
+'inflight_calib(_){_}
+
+'inflight_calib_mode_update(_){_}
+
+'ir_estim_mode_update(_){_}
+
+'ir_gain_calib(_){_}
+
+'lookup_arr('a,'idx){'__res_lookup_arr := 'a +. 'idx}
+
+'mcu1_status_update(_){_}
+
+'pprz_mode_update(_){_}
+
+'radio_control_task(_){_ ;
+If _ Then
+(  _ ;
+    _ ;
+    _ ;
+    _ ;
+    _ ;
+    _ ;
+    _ ;
+    _ ;
+    _ ;
+    _ ;
+    _ ;
+    _ ;
+      If _ Then
+(    _ ;
+            _ := '__res_lookup_arr ;
+        _ ;
+            _ := _ *.('__res_lookup_arr *. _);
+        _ ;
+        _ := _ *.('__res_lookup_arr *. _));
+    _ ;
+    _ ;
+    _ ;
+    If _ Then
+(    _ ;
+        _ ;
+        Call 'shiftl_bitwise('__res_lookup_arr,_);
+    _))}
+
+'shiftl_bitwise('val1,_){If Equal('val1,_)Then
+  _ := 'val1 *. _
+Else
+  _ := 'val1}
+
+'update_arr(_,_,'val){_ ;
+'__res_update_arr := 'val}

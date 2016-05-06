@@ -97,4 +97,40 @@ load ../wfe.maude
 
 endm)
 
+(set side-effect sorts ESt RWBUF .)
+
+(set context-update rules CallF .)
+
+eof
+
+1. (islice Statement with defs myFuns wrt 'desired_gaz 'desired_aileron
+                                          'desired_elevator 'desired_roll .)
+
+2. (islice Statement with defs myFuns wrt 'estimator_phi 'estimator_theta
+                                          'estimator_rad_of_ir .)
+
+3. (islice Statement with defs myFuns wrt 'to_fbw.channels .)
+
+4. (islice Statement with defs myFuns wrt 'simul_ir_roll 'simul_ir_pitch .)
+
+5. (islice Statement with defs myFuns wrt 'RADIO_THROTTLE 'RADIO_ROLL
+                                          'RADIO_PITCH 'MIN_PPRZ 'MAX_PPRZ .)
+
+6. (islice Statement with defs myFuns wrt '__res_TRIM_PPRZ '__res_lookup_arr
+                                          '__res_update_arr .)
+
+7. (islice Statement with defs myFuns wrt '__res_lookup_arr '__res_update_arr .)
+
+	1. { desired_gaz, desired_aileron, desired_elevator, desired_roll }
+		-> file t7_desired_whlf.slice
+	2. { estimator_phi, estimator_theta, estimator_rad_of_ir }
+		-> file t7_estimator_whlf.slice
+	3. { to_fbw.channels } -> file t7_fbw_channels_whlf.slice
+	4. { simul_ir_roll, simul_ir_pitch } -> file t7_simul_ir_whlf.slice
+	5. { RADIO_THROTTLE, RADIO_ROLL, RADIO_PITCH,
+		MIN_PPRZ, MAX_PPRZ } -> file t7_radio_params_whlf.slice
+	6. { __res_TRIM_PPRZ, __res_lookup_arr, __res_update_arr }
+		-> file t7_res_whlf.slice
+	7. { __res_lookup_arr, __res_update_arr } -> file t7_arr_whlf.slice
+
 (red myFuns .)

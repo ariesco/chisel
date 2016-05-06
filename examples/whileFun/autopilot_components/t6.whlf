@@ -467,6 +467,10 @@ load ../wfe.maude
 
 endm)
 
+(set side-effect sorts ESt RWBUF .)
+
+(set context-update rules CallF .)
+
 eof
 
 1. (islice Statement with defs myFuns wrt 'pprz_mode .)

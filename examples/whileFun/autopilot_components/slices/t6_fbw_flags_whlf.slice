@@ -1,0 +1,142 @@
+*************** This is the slice w.r.t. the variable 'link_fbw_receive_valid,'from_fbw.status,'from_fbw,'channels ***************
+
+
+
+The variables to slice 'CheckEvent are {}
+The variables to slice 'DOWNLINK_SEND_CALIB_CONTRAST are {}
+The variables to slice 'DOWNLINK_SEND_CALIB_START are {}
+The variables to slice 'DOWNLINK_SEND_PPRZ_MODE are {}
+The variables to slice 'DOWNLINK_SEND_RAD_OF_IR are {}
+The variables to slice 'EventNeg are {}
+The variables to slice 'EventPos are {}
+The variables to slice 'EventUpdate are {}
+The variables to slice 'FLOAT_OF_PPRZ are {}
+The variables to slice 'IF_CALIB_MODE_OF_PULSE are {}
+The variables to slice 'IR_ESTIM_MODE_OF_PULSE are {}
+The variables to slice 'MODEM_PUT_1_BYTE_BY_ADDR are {}
+The variables to slice 'MODEM_PUT_2_BYTE_BY_ADDR are {}
+The variables to slice 'MODEM_PUT_4_BYTE_BY_ADDR are {}
+The variables to slice 'Main are {}
+The variables to slice 'ModeUpdate are {}
+The variables to slice 'ModemEndMessage are {}
+The variables to slice 'ModemStartMessage are {}
+The variables to slice 'PPRZ_MODE_OF_PULSE are {'from_fbw.status}
+The variables to slice 'RadOfIrFromConstrast are {}
+The variables to slice 'STICK_PUSHED are {}
+The variables to slice 'and_bitwise are {}
+The variables to slice 'bit_is_set are {'sfr}
+The variables to slice 'copy_from_to_fbw are {}
+The variables to slice 'events_update are {}
+The variables to slice 'ground_calibrate are {}
+The variables to slice 'inflight_calib are {}
+The variables to slice 'inflight_calib_mode_update are {}
+The variables to slice 'ir_estim_mode_update are {}
+The variables to slice 'ir_gain_calib are {}
+The variables to slice 'lookup_arr are {}
+The variables to slice 'mcu1_status_update are {'from_fbw.status}
+The variables to slice 'pprz_mode_update are {'from_fbw.status}
+The variables to slice 'radio_control_task are {'link_fbw_receive_valid, 'from_fbw.status}
+The variables to slice 'shiftl_bitwise are {}
+The variables to slice 'update_arr are {}
+
+'CheckEvent(_){_}
+
+'DOWNLINK_SEND_CALIB_CONTRAST(_){_}
+
+'DOWNLINK_SEND_CALIB_START(_){_}
+
+'DOWNLINK_SEND_PPRZ_MODE(_){_}
+
+'DOWNLINK_SEND_RAD_OF_IR(_){_}
+
+'EventNeg(_){_}
+
+'EventPos(_){_}
+
+'EventUpdate(_){_}
+
+'FLOAT_OF_PPRZ(_){_}
+
+'IF_CALIB_MODE_OF_PULSE(_){_}
+
+'IR_ESTIM_MODE_OF_PULSE(_){_}
+
+'MODEM_PUT_1_BYTE_BY_ADDR(_){_}
+
+'MODEM_PUT_2_BYTE_BY_ADDR(_){_}
+
+'MODEM_PUT_4_BYTE_BY_ADDR(_){_}
+
+'Main(_){_}
+
+'ModeUpdate(_){_}
+
+'ModemEndMessage(_){_}
+
+'ModemStartMessage(_){_}
+
+'PPRZ_MODE_OF_PULSE(_,_,'from_fbw.status){_ ;
+If _ Then
+_
+Else
+  If Gt('from_fbw.status,_)Then
+_
+Else
+_}
+
+'RadOfIrFromConstrast(_){_}
+
+'STICK_PUSHED(_){_}
+
+'and_bitwise(_){_}
+
+'bit_is_set('sfr,_){If Equal('sfr,_)And _ Then
+_
+Else
+_}
+
+'copy_from_to_fbw(_){_}
+
+'events_update(_){_}
+
+'ground_calibrate(_){_}
+
+'inflight_calib(_){_}
+
+'inflight_calib_mode_update(_){_}
+
+'ir_estim_mode_update(_){_}
+
+'ir_gain_calib(_){_}
+
+'lookup_arr(_){_}
+
+'mcu1_status_update(_){_ ;
+_ ;
+_ ;
+_ := 'from_fbw.status ;
+_}
+
+'pprz_mode_update(_){_ ;
+_ ;
+_ ;
+If _ Then
+  Call 'PPRZ_MODE_OF_PULSE(_,_,'from_fbw.status);
+  _
+Else
+_ ;
+_}
+
+'radio_control_task(_){_ ;
+If Equal('link_fbw_receive_valid,_)Then
+(  _ ;
+    _ ;
+    _ ;
+    Call 'bit_is_set('from_fbw.status,_);
+    _ ;
+    Call 'bit_is_set('from_fbw.status,_);
+  _)}
+
+'shiftl_bitwise(_){_}
+
+'update_arr(_){_}

@@ -91,4 +91,37 @@ load ../wfe.maude
 
 endm)
 
+(set side-effect sorts ESt RWBUF .)
+
+(set context-update rules CallF .)
+
+eof
+
+1. (islice Statement with defs myFuns wrt 'spi_cur_slave 'spi_nb_ovrn .)
+
+2. (islice Statement with defs myFuns wrt 'to_fbw 'link_fbw_receive_valid .)
+
+3. (islice Statement with defs myFuns wrt 'xor_in 'xor_out .)
+
+4. (islice Statement with defs myFuns wrt 'SPI_SS0_PORT 'SPI_SS0_PIN .)
+
+5. (islice Statement with defs myFuns wrt 'SPI_NAME 'SPCR 'SPSR 'SPIF 'SPDR .)
+
+6. (islice Statement with defs myFuns wrt '__res1_BV '__res2_BV '__res3_BV
+                                          '__res1_and_bitwise '__res2_and_bitwise
+                                          '__res_bit_is_set '__res_SFR_BYTE
+		                                        '__res_lookup_arr .)
+
+7. (islice Statement with defs myFuns wrt '__res_lookup_arr .)
+
+	1. { spi_cur_slave, spi_nb_ovrn } -> file t8_spi_whlf.slice
+	2. { to_fbw, link_fbw_receive_valid } -> file t8_fbw_comm_whlf.slice
+	3. { xor_in, xor_out } -> file t8_xor_whlf.slice
+	4. { SPI_SS0_PORT, SPI_SS0_PIN } -> file t8_spi_slave_whlf.slice
+	5. { SPI_NAME, SPCR, SPSR, SPIF, SPDR } -> file t8_spi_flags_whlf.slice
+	6. { __res1_BV, __res2_BV, __res3_BV, __res1_and_bitwise,
+		__res2_and_bitwise, __res_bit_is_set, __res_SFR_BYTE,
+		__res_lookup_arr } -> file t8_res_whlf.slice
+	7. { __res_lookup_arr } -> file t8_arr_whlf.slice
+
 (red myFuns .)

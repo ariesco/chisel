@@ -1,0 +1,34 @@
+*************** This is the slice w.r.t. the variable 'simul_ir_roll,'simul_ir_pitch ***************
+
+
+
+The variables to slice 'Main are {}
+The variables to slice 'TRIM_PPRZ are {}
+The variables to slice 'estimator_update_state_infrared are {}
+The variables to slice 'fabs are {}
+The variables to slice 'ir_update are {'simul_ir_roll, 'simul_ir_pitch}
+The variables to slice 'lookup_arr are {}
+The variables to slice 'roll_pitch_pid_run are {}
+The variables to slice 'stabilisation_task are {}
+The variables to slice 'update_arr are {}
+
+'Main(_){_}
+
+'TRIM_PPRZ(_){_}
+
+'estimator_update_state_infrared(_){_}
+
+'fabs(_){_}
+
+'ir_update(_){Local 'simul_ir_roll ;
+Local 'simul_ir_pitch ;
+_ := 'simul_ir_roll -. _ ;
+_ := 'simul_ir_pitch -. _}
+
+'lookup_arr(_){_}
+
+'roll_pitch_pid_run(_){_}
+
+'stabilisation_task(_){_}
+
+'update_arr(_){_}

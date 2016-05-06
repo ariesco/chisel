@@ -1,0 +1,47 @@
+*************** This is the slice w.r.t. the variable 'RADIO_THROTTLE,'RADIO_ROLL,'RADIO_PITCH,'MIN_PPRZ,'MAX_PPRZ ***************
+
+
+
+The variables to slice 'Main are {}
+The variables to slice 'TRIM_PPRZ are {'MIN_PPRZ, 'MAX_PPRZ}
+The variables to slice 'estimator_update_state_infrared are {}
+The variables to slice 'fabs are {}
+The variables to slice 'ir_update are {}
+The variables to slice 'lookup_arr are {'idx}
+The variables to slice 'roll_pitch_pid_run are {}
+The variables to slice 'stabilisation_task are {'RADIO_GAIN1, 'RADIO_THROTTLE, 'RADIO_ROLL, 'RADIO_PITCH, 'MAX_PPRZ}
+The variables to slice 'update_arr are {'idx}
+
+'Main(_){_}
+
+'TRIM_PPRZ(_){If Lt(_,'MIN_PPRZ)Then
+  _ := 'MIN_PPRZ
+Else
+  If Gt(_,'MAX_PPRZ)Then
+    _ := 'MAX_PPRZ
+Else
+_}
+
+'estimator_update_state_infrared(_){_}
+
+'fabs(_){_}
+
+'ir_update(_){_}
+
+'lookup_arr(_,'idx){_ := _ +. 'idx}
+
+'roll_pitch_pid_run(_){_}
+
+'stabilisation_task(_){_ ;
+_ ;
+_ ;
+Call 'update_arr(_,'RADIO_THROTTLE,_);
+Call 'update_arr(_,'RADIO_ROLL,_);
+Call 'update_arr(_,'RADIO_PITCH,_);
+_ ;
+_ := 'MAX_PPRZ *. _ ;
+_ ;
+Call 'update_arr(_,'RADIO_GAIN1,_)}
+
+'update_arr(_,'idx,_){Call 'lookup_arr(_,'idx);
+_}

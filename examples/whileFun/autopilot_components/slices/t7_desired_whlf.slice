@@ -1,0 +1,52 @@
+*************** This is the slice w.r.t. the variable 'desired_gaz,'desired_aileron,'desired_elevator,'desired_roll ***************
+
+
+
+The variables to slice 'Main are {}
+The variables to slice 'TRIM_PPRZ are {}
+The variables to slice 'estimator_update_state_infrared are {}
+The variables to slice 'fabs are {}
+The variables to slice 'ir_update are {}
+The variables to slice 'lookup_arr are {}
+The variables to slice 'roll_pitch_pid_run are {'__res_TRIM_PPRZ, 'desired_aileron, 'desired_elevator, 'desired_roll}
+The variables to slice 'stabilisation_task are {'__res_TRIM_PPRZ, 'desired_gaz, 'desired_aileron, 'desired_elevator}
+The variables to slice 'update_arr are {'val}
+
+'Main(_){_}
+
+'TRIM_PPRZ(_){_}
+
+'estimator_update_state_infrared(_){_}
+
+'fabs(_){_}
+
+'ir_update(_){_}
+
+'lookup_arr(_){_}
+
+'roll_pitch_pid_run(_){_ ;
+_ := _ -. 'desired_roll ;
+_ ;
+_ ;
+_ ;
+'desired_aileron := '__res_TRIM_PPRZ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+'desired_elevator := '__res_TRIM_PPRZ}
+
+'stabilisation_task(_){_ ;
+_ ;
+_ ;
+Call 'update_arr(_,_,'desired_gaz);
+Call 'update_arr(_,_,'desired_aileron);
+Call 'update_arr(_,_,'desired_elevator);
+_ ;
+_ ;
+_ ;
+Call 'update_arr(_,_,'__res_TRIM_PPRZ)}
+
+'update_arr(_,_,'val){_ ;
+_ := 'val}

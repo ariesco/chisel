@@ -1,0 +1,58 @@
+*************** This is the slice w.r.t. the variable 'estimator_phi,'estimator_theta,'estimator_rad_of_ir ***************
+
+
+
+The variables to slice 'Main are {}
+The variables to slice 'TRIM_PPRZ are {}
+The variables to slice 'estimator_update_state_infrared are {'rad_of_ir, 'ir_roll, 'ir_pitch, 'ir_rad_of_ir, 'estimator_phi, 'estimator_theta,
+    'estimator_rad_of_ir}
+The variables to slice 'fabs are {'val}
+The variables to slice 'ir_update are {}
+The variables to slice 'lookup_arr are {}
+The variables to slice 'roll_pitch_pid_run are {'estimator_phi, 'estimator_theta}
+The variables to slice 'stabilisation_task are {'estimator_phi}
+The variables to slice 'update_arr are {}
+
+'Main(_){_}
+
+'TRIM_PPRZ(_){_}
+
+'estimator_update_state_infrared(_){Local 'rad_of_ir ;
+If _ Then
+  'rad_of_ir := 'estimator_rad_of_ir
+Else
+  'rad_of_ir := 'ir_rad_of_ir ;
+'estimator_phi := 'rad_of_ir *. 'ir_roll ;
+'estimator_theta := 'rad_of_ir *. 'ir_pitch}
+
+'fabs('val){If Gt('val,0)Then
+  _ := 'val
+Else
+  _ := 0 -. 'val}
+
+'ir_update(_){_}
+
+'lookup_arr(_){_}
+
+'roll_pitch_pid_run(_){_ ;
+_ := 'estimator_phi -. _ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+Call 'fabs('estimator_phi);
+_ := 0 -.(('estimator_theta -. _)-. _);
+_}
+
+'stabilisation_task(_){_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ := _ *. 'estimator_phi ;
+_}
+
+'update_arr(_){_}
