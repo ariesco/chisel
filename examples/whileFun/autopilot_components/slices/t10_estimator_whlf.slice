@@ -1,0 +1,86 @@
+*************** This is the slice w.r.t. the variable 'estimator_speed_mod,'estimator_x,'estimator_y ***************
+
+
+
+The variables to slice 'Circle are {'estimator_speed_mod, 'estimator_x, 'estimator_y}
+The variables to slice 'DOWNLINK_SEND_NAVIGATION are {'dist2_to_home, 'course_pgain, 'dist2_to_wp, 'desired_course, 'estimator_x, 'estimator_y}
+The variables to slice 'MODEM_PUT_1_BYTE_BY_ADDR are {}
+The variables to slice 'MODEM_PUT_4_BYTE_BY_ADDR are {'data}
+The variables to slice 'Main are {}
+The variables to slice 'ModemEndMessage are {}
+The variables to slice 'ModemStartMessage are {}
+The variables to slice 'NORM_RAD_ANGLE are {}
+The variables to slice 'auto_nav are {}
+The variables to slice 'compute_dist2_to_home are {'estimator_x, 'estimator_y}
+The variables to slice 'course_pid_run are {}
+The variables to slice 'course_run are {}
+The variables to slice 'lookup_arr are {}
+The variables to slice 'nav_home are {}
+The variables to slice 'nav_update are {}
+The variables to slice 'navigation_task are {}
+The variables to slice 'navigation_update are {}
+The variables to slice 'send_nav_values are {'estimator_x, 'estimator_y}
+
+'Circle(_){_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ :=('estimator_y -. _)+.('estimator_x -. _);
+_ := _ +.(_ +.(_ *. 'estimator_speed_mod));
+_}
+
+'DOWNLINK_SEND_NAVIGATION(_,_,'estimator_x,'estimator_y,'desired_course,'dist2_to_wp,'course_pgain,'dist2_to_home){If _ Then
+  _ ;
+    _ ;
+    _ ;
+    Call 'MODEM_PUT_4_BYTE_BY_ADDR('estimator_x);
+    Call 'MODEM_PUT_4_BYTE_BY_ADDR('estimator_y);
+    Call 'MODEM_PUT_4_BYTE_BY_ADDR('desired_course);
+    Call 'MODEM_PUT_4_BYTE_BY_ADDR('dist2_to_wp);
+    Call 'MODEM_PUT_4_BYTE_BY_ADDR('course_pgain);
+    Call 'MODEM_PUT_4_BYTE_BY_ADDR('dist2_to_home);
+  _
+Else
+_}
+
+'MODEM_PUT_1_BYTE_BY_ADDR(_){_}
+
+'MODEM_PUT_4_BYTE_BY_ADDR('data){_ := 'data}
+
+'Main(_){_}
+
+'ModemEndMessage(_){_}
+
+'ModemStartMessage(_){_}
+
+'NORM_RAD_ANGLE(_){_}
+
+'auto_nav(_){_}
+
+'compute_dist2_to_home(_){_ ;
+_ ;
+_ ;
+_ := _ -. 'estimator_x ;
+_ ;
+_ := _ -. 'estimator_y ;
+_}
+
+'course_pid_run(_){_}
+
+'course_run(_){_}
+
+'lookup_arr(_){_}
+
+'nav_home(_){_}
+
+'nav_update(_){_}
+
+'navigation_task(_){_}
+
+'navigation_update(_){_}
+
+'send_nav_values(_){Call 'DOWNLINK_SEND_NAVIGATION(_,_,'estimator_x,'estimator_y,_,_,_,_)}

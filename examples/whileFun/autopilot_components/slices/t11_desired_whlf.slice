@@ -1,0 +1,19 @@
+*************** This is the slice w.r.t. the variable 'desired_climb,'desired_altitude ***************
+
+
+
+The variables to slice 'Main are {}
+The variables to slice 'altitude_control_task are {}
+The variables to slice 'altitude_pid_run are {'pre_climb, 'altitude_pgain, 'err, 'CLIMB_MAX_m, 'CLIMB_MAX, 'estimator_z, 'desired_climb, 'desired_altitude}
+
+'Main(_){_}
+
+'altitude_control_task(_){_}
+
+'altitude_pid_run(_){Local 'err ;
+'err := 'estimator_z -. 'desired_altitude ;
+'desired_climb := 'pre_climb +.('altitude_pgain *. 'err);
+If Lt('desired_climb,'CLIMB_MAX_m)Then
+  'desired_climb := 'CLIMB_MAX_m ;
+If Gt('desired_climb,'CLIMB_MAX)Then
+  'desired_climb := 'CLIMB_MAX}

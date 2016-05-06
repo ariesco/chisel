@@ -1,0 +1,71 @@
+*************** This is the slice w.r.t. the variable 'gps_fcourse,'gps_speed,'gps_climb,'gps_ftow,'gps_falt ***************
+
+
+
+The variables to slice 'DOWNLINK_SEND_GPS are {'gps_fclimb, 'gps_fspeed, 'desired_course, 'gps_utm_north, 'gps_utm_east, 'gps_fcourse, 'gps_ftow, 'gps_falt}
+The variables to slice 'DOWNLINK_SEND_RAD_OF_IR are {}
+The variables to slice 'DOWNLINK_SEND_TAKEOFF are {}
+The variables to slice 'MODEM_PUT_1_BYTE_BY_ADDR are {}
+The variables to slice 'MODEM_PUT_2_BYTE_BY_ADDR are {}
+The variables to slice 'MODEM_PUT_4_BYTE_BY_ADDR are {'data}
+The variables to slice 'Main are {}
+The variables to slice 'ModemEndMessage are {}
+The variables to slice 'ModemStartMessage are {}
+The variables to slice 'estimator_update_ir_estim are {}
+The variables to slice 'estimator_update_state_gps are {'gps_fcourse, 'gps_falt}
+The variables to slice 'receive_gps_data_task are {}
+The variables to slice 'send_gps_pos are {'gps_fcourse, 'gps_ftow, 'gps_falt}
+The variables to slice 'send_radIR are {}
+The variables to slice 'send_takeOff are {}
+
+'DOWNLINK_SEND_GPS(_,'gps_utm_east,'gps_utm_north,'gps_fcourse,'gps_falt,'gps_fspeed,'gps_fclimb,'gps_ftow){If _ Then
+  _ ;
+    _ ;
+    Call 'MODEM_PUT_4_BYTE_BY_ADDR('gps_utm_east);
+    Call 'MODEM_PUT_4_BYTE_BY_ADDR('gps_utm_north);
+    Call 'MODEM_PUT_4_BYTE_BY_ADDR('gps_fcourse);
+    Call 'MODEM_PUT_4_BYTE_BY_ADDR('desired_course);
+    Call 'MODEM_PUT_4_BYTE_BY_ADDR('gps_falt);
+    Call 'MODEM_PUT_4_BYTE_BY_ADDR('gps_fspeed);
+    Call 'MODEM_PUT_4_BYTE_BY_ADDR('gps_fclimb);
+    Call 'MODEM_PUT_4_BYTE_BY_ADDR('gps_ftow);
+  _
+Else
+_}
+
+'DOWNLINK_SEND_RAD_OF_IR(_){_}
+
+'DOWNLINK_SEND_TAKEOFF(_){_}
+
+'MODEM_PUT_1_BYTE_BY_ADDR(_){_}
+
+'MODEM_PUT_2_BYTE_BY_ADDR(_){_}
+
+'MODEM_PUT_4_BYTE_BY_ADDR('data){_ := 'data}
+
+'Main(_){_}
+
+'ModemEndMessage(_){_}
+
+'ModemStartMessage(_){_}
+
+'estimator_update_ir_estim(_){_}
+
+'estimator_update_state_gps(_){If _ Then
+(  _ ;
+    _ ;
+      _ := 'gps_falt ;
+    _ ;
+      _ := 'gps_fcourse ;
+  _)}
+
+'receive_gps_data_task(_){_}
+
+'send_gps_pos(_){_ ;
+If _ Then
+(  Call 'DOWNLINK_SEND_GPS(_,_,_,'gps_fcourse,'gps_falt,_,_,'gps_ftow);
+  _)}
+
+'send_radIR(_){_}
+
+'send_takeOff(_){_}

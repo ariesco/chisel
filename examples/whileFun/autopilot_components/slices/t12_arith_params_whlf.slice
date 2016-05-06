@@ -1,0 +1,36 @@
+*************** This is the slice w.r.t. the variable 'CLIMB_LEVEL_GAZ,'CLIMB_GAZ_OF_FLIMB,'MAX_PITCH_CLIMB_SUM_ERR,'MAX_CLIMB_SUM_ERR ***************
+
+
+
+The variables to slice 'Main are {}
+The variables to slice 'TRIM_UPPRZ are {}
+The variables to slice 'climb_control_task are {}
+The variables to slice 'climb_pid_run are {'CLIMB_LEVEL_GAZ, 'MAX_PITCH_CLIMB_SUM_ERR, 'MAX_CLIMB_SUM_ERR}
+
+'Main(_){_}
+
+'TRIM_UPPRZ(_){_}
+
+'climb_control_task(_){_}
+
+'climb_pid_run(_){_ ;
+_ ;
+_ ;
+If _ Then
+  _ ;
+    _ ;
+    _ ;
+    _ ;
+      If Gt(_,'MAX_PITCH_CLIMB_SUM_ERR)Then
+    _ := 'MAX_PITCH_CLIMB_SUM_ERR ;
+    If Lt(_,'MAX_PITCH_CLIMB_SUM_ERR)Then
+    _ := 0 -. 'MAX_PITCH_CLIMB_SUM_ERR
+Else
+(  _ ;
+      _ := _ +.('CLIMB_LEVEL_GAZ +. _);
+    _ ;
+      If Gt(_,'MAX_CLIMB_SUM_ERR)Then
+    _ := 'MAX_CLIMB_SUM_ERR ;
+      If Lt(_,'MAX_CLIMB_SUM_ERR)Then
+    _ := 0 -. 'MAX_CLIMB_SUM_ERR ;
+  _)}

@@ -1,0 +1,73 @@
+*************** This is the slice w.r.t. the variable 'min_roll,'max_roll,'nav_desired_roll,'desired_roll ***************
+
+
+
+The variables to slice 'Circle are {}
+The variables to slice 'DOWNLINK_SEND_NAVIGATION are {}
+The variables to slice 'MODEM_PUT_1_BYTE_BY_ADDR are {}
+The variables to slice 'MODEM_PUT_4_BYTE_BY_ADDR are {}
+The variables to slice 'Main are {}
+The variables to slice 'ModemEndMessage are {}
+The variables to slice 'ModemStartMessage are {}
+The variables to slice 'NORM_RAD_ANGLE are {'M_PI, 'val}
+The variables to slice 'auto_nav are {}
+The variables to slice 'compute_dist2_to_home are {}
+The variables to slice 'course_pid_run are {'course_pgain, 'err, 'estimator_hspeed_dir, 'desired_course, 'min_roll, 'max_roll, 'nav_desired_roll}
+The variables to slice 'course_run are {'nav_desired_roll, 'desired_roll}
+The variables to slice 'lookup_arr are {}
+The variables to slice 'nav_home are {}
+The variables to slice 'nav_update are {}
+The variables to slice 'navigation_task are {}
+The variables to slice 'navigation_update are {}
+The variables to slice 'send_nav_values are {}
+
+'Circle(_){_}
+
+'DOWNLINK_SEND_NAVIGATION(_){_}
+
+'MODEM_PUT_1_BYTE_BY_ADDR(_){_}
+
+'MODEM_PUT_4_BYTE_BY_ADDR(_){_}
+
+'Main(_){_}
+
+'ModemEndMessage(_){_}
+
+'ModemStartMessage(_){_}
+
+'NORM_RAD_ANGLE('val){While Gt('val,'M_PI)Do
+  'val := 'val -.(_ *. 'M_PI)
+;
+While Lt('val,_)Do
+  'val := 'val +.(_ *. 'M_PI)
+}
+
+'auto_nav(_){_}
+
+'compute_dist2_to_home(_){_}
+
+'course_pid_run(_){Local 'err ;
+'err := 'estimator_hspeed_dir -. 'desired_course ;
+Call 'NORM_RAD_ANGLE('err);
+'nav_desired_roll := 'course_pgain *. 'err ;
+If Gt('nav_desired_roll,'max_roll)Then
+  'nav_desired_roll := 'max_roll
+Else
+  If Lt('nav_desired_roll,'min_roll)Then
+    'nav_desired_roll := 'min_roll}
+
+'course_run(_){If _ Then
+(  _ ;
+    'desired_roll := 'nav_desired_roll)}
+
+'lookup_arr(_){_}
+
+'nav_home(_){_}
+
+'nav_update(_){_}
+
+'navigation_task(_){_}
+
+'navigation_update(_){_}
+
+'send_nav_values(_){_}

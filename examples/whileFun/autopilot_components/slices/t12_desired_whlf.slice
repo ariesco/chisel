@@ -1,0 +1,48 @@
+*************** This is the slice w.r.t. the variable 'desired_gaz,'desired_pitch,'desired_climb ***************
+
+
+
+The variables to slice 'Main are {}
+The variables to slice 'TRIM_UPPRZ are {}
+The variables to slice 'climb_control_task are {'nav_desired_gaz, 'desired_gaz}
+The variables to slice 'climb_pid_run are {'nav_desired_gaz, 'climb_pitch_pgain, 'err, 'climb_pitch_igain, 'climb_pitch_sum_err, 'max_pitch, 'MAX_PITCH_CLIMB_SUM_ERR,
+    '__res_TRIM_UPPRZ, 'nav_pitch, 'pitch_of_vz, 'estimator_z_dot, 'pitch_of_vz_pgain, 'desired_gaz, 'desired_pitch, 'desired_climb}
+
+'Main(_){_}
+
+'TRIM_UPPRZ(_){_}
+
+'climb_control_task(_){If _ Then
+(  _ ;
+      If _ Then
+    'desired_gaz := 'nav_desired_gaz ;
+    If _ Then
+    'desired_gaz := 0)}
+
+'climb_pid_run(_){Local 'err ;
+'err := 'estimator_z_dot -. 'desired_climb ;
+_ ;
+If _ Then
+    'desired_gaz := 'nav_desired_gaz ;
+      'desired_pitch := 'climb_pitch_pgain *.('err +.('climb_pitch_igain *. 'climb_pitch_sum_err));
+      If Gt('desired_pitch,'max_pitch)Then
+    'desired_pitch := 'max_pitch ;
+      'climb_pitch_sum_err := 'climb_pitch_sum_err +. 'err ;
+      If Gt('climb_pitch_sum_err,'MAX_PITCH_CLIMB_SUM_ERR)Then
+    'climb_pitch_sum_err := 'MAX_PITCH_CLIMB_SUM_ERR ;
+    If Lt('climb_pitch_sum_err,'MAX_PITCH_CLIMB_SUM_ERR)Then
+    'climb_pitch_sum_err := 0 -. 'MAX_PITCH_CLIMB_SUM_ERR
+Else
+(    If Gt('desired_climb,0)Then
+    'pitch_of_vz := 'desired_climb *. 'pitch_of_vz_pgain
+Else
+    'pitch_of_vz := 0 ;
+      _ :=(_ *.('err +. _))+.(_ +.(_ *. 'desired_climb));
+      _ := _ +. 'err ;
+    _ ;
+    _ ;
+    _ ;
+    _ ;
+    _ ;
+      'desired_gaz := '__res_TRIM_UPPRZ ;
+    'desired_pitch := 'nav_pitch +. 'pitch_of_vz)}

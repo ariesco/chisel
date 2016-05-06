@@ -37,4 +37,23 @@ load ../wfe.maude
 
 endm)
 
+(set side-effect sorts ESt RWBUF .)
+
+(set context-update rules CallF .)
+
+eof
+
+1. (islice Statement with defs myFuns wrt 'pprz_mode .)
+
+2. (islice Statement with defs myFuns wrt 'vertical_mode .)
+
+3. (islice Statement with defs myFuns wrt 'desired_climb 'desired_altitude .)
+
+4. (islice Statement with defs myFuns wrt 'PPRZ_MODE_AUTO2 'PPRZ_MODE_HOME .)
+
+	1. { pprz_mode } -> file t11_pprz_mode_whlf.slice
+	2. { vertical_mode } -> file t11_vertical_mode_whlf.slice
+	3. { desired_climb, desired_altitude } -> file t11_desired_whlf.slice
+	4. { PPRZ_MODE_AUTO2, PPRZ_MODE_HOME } -> file t11_params_whlf.slice
+
 (red myFuns .)

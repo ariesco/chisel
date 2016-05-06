@@ -1,0 +1,53 @@
+*************** This is the slice w.r.t. the variable '__res_ModemStartMessage,'__res_ModemEndMessage,'__res_MODEM_PUT_1_BYTE_BY_ADDR,'__res_MODEM_PUT_2_BYTE_BY_ADDR,
+    '__res_MODEM_PUT_4_BYTE_BY_ADDR ***************
+
+
+
+The variables to slice 'DOWNLINK_SEND_GPS are {}
+The variables to slice 'DOWNLINK_SEND_RAD_OF_IR are {}
+The variables to slice 'DOWNLINK_SEND_TAKEOFF are {}
+The variables to slice 'MODEM_PUT_1_BYTE_BY_ADDR are {'data, '__res_MODEM_PUT_1_BYTE_BY_ADDR}
+The variables to slice 'MODEM_PUT_2_BYTE_BY_ADDR are {'data, '__res_MODEM_PUT_2_BYTE_BY_ADDR}
+The variables to slice 'MODEM_PUT_4_BYTE_BY_ADDR are {'data, '__res_MODEM_PUT_4_BYTE_BY_ADDR}
+The variables to slice 'Main are {}
+The variables to slice 'ModemEndMessage are {'__res_ModemEndMessage}
+The variables to slice 'ModemStartMessage are {'__res_ModemStartMessage}
+The variables to slice 'estimator_update_ir_estim are {}
+The variables to slice 'estimator_update_state_gps are {}
+The variables to slice 'receive_gps_data_task are {}
+The variables to slice 'send_gps_pos are {}
+The variables to slice 'send_radIR are {}
+The variables to slice 'send_takeOff are {}
+
+'DOWNLINK_SEND_GPS(_){_}
+
+'DOWNLINK_SEND_RAD_OF_IR(_){_}
+
+'DOWNLINK_SEND_TAKEOFF(_){_}
+
+'MODEM_PUT_1_BYTE_BY_ADDR('data){'__res_MODEM_PUT_1_BYTE_BY_ADDR := 'data}
+
+'MODEM_PUT_2_BYTE_BY_ADDR('data){'__res_MODEM_PUT_2_BYTE_BY_ADDR := 'data}
+
+'MODEM_PUT_4_BYTE_BY_ADDR('data){'__res_MODEM_PUT_4_BYTE_BY_ADDR := 'data}
+
+'Main(_){_}
+
+'ModemEndMessage(_){'__res_ModemEndMessage := _}
+
+'ModemStartMessage(_){If _ Then
+  '__res_ModemStartMessage := _
+Else
+  '__res_ModemStartMessage := 0}
+
+'estimator_update_ir_estim(_){_}
+
+'estimator_update_state_gps(_){_}
+
+'receive_gps_data_task(_){_}
+
+'send_gps_pos(_){_}
+
+'send_radIR(_){_}
+
+'send_takeOff(_){_}

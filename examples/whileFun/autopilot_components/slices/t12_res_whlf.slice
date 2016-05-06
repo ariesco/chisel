@@ -1,0 +1,30 @@
+*************** This is the slice w.r.t. the variable '__res_TRIM_UPPRZ ***************
+
+
+The variables to slice 'Main are {}
+The variables to slice 'TRIM_UPPRZ are {}
+The variables to slice 'climb_control_task are {}
+The variables to slice 'climb_pid_run are {'__res_TRIM_UPPRZ}
+
+'Main(_){_}
+
+'TRIM_UPPRZ(_){_}
+
+'climb_control_task(_){_}
+
+'climb_pid_run(_){_ ;
+_ ;
+_ ;
+If _ Then
+_
+Else
+(  _ ;
+    _ ;
+    _ ;
+    _ ;
+    _ ;
+    _ ;
+    _ ;
+    _ ;
+      _ := '__res_TRIM_UPPRZ ;
+  _)}

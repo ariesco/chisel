@@ -1,0 +1,166 @@
+*************** This is the slice w.r.t. the variable 'DL_CALIB_START,'DL_ALTITUDE,'DL_ADC,'DL_DESIRED,'DL_BAT,'DL_CLIMB_PID,'DL_PPRZ_MODE,'DL_DEBUG,'DL_NAVIGATION_REF
+    ***************
+
+
+
+The variables to slice 'DOWNLINK_SEND_ADC are {'DL_ADC}
+The variables to slice 'DOWNLINK_SEND_ATTITUDE are {'DL_ATTITUDE}
+The variables to slice 'DOWNLINK_SEND_BAT are {'DL_BAT}
+The variables to slice 'DOWNLINK_SEND_BOOT are {'DL_BOOT}
+The variables to slice 'DOWNLINK_SEND_CLIMB_PID are {'DL_CLIMB_PID}
+The variables to slice 'DOWNLINK_SEND_DEBUG are {'DL_DEBUG}
+The variables to slice 'DOWNLINK_SEND_DESIRED are {'DL_DESIRED}
+The variables to slice 'DOWNLINK_SEND_NAVIGATION_REF are {'DL_NAVIGATION_REF}
+The variables to slice 'DOWNLINK_SEND_PPRZ_MODE are {'DL_PPRZ_MODE}
+The variables to slice 'DOWNLINK_SEND_RAD_OF_IR are {'DL_RAD_OF_IR}
+The variables to slice 'DOWNLINK_SEND_SETTINGS are {'DL_ADC}
+The variables to slice 'MODEM_PUT_1_BYTE_BY_ADDR are {}
+The variables to slice 'MODEM_PUT_2_BYTE_BY_ADDR are {}
+The variables to slice 'MODEM_PUT_2_BYTE_BY_ADDR are {}
+The variables to slice 'MODEM_PUT_4_BYTE_BY_ADDR are {}
+The variables to slice 'Main are {}
+The variables to slice 'ModemEndMessage are {}
+The variables to slice 'ModemStartMessage are {'DL_CALIB_START}
+The variables to slice 'PERIODIC_SEND_ADC are {}
+The variables to slice 'PERIODIC_SEND_ATTITUDE are {}
+The variables to slice 'PERIODIC_SEND_BAT are {}
+The variables to slice 'PERIODIC_SEND_CLIMB_PID are {}
+The variables to slice 'PERIODIC_SEND_DEBUG are {}
+The variables to slice 'PERIODIC_SEND_DESIRED are {}
+The variables to slice 'PERIODIC_SEND_NAVIGATION_REF are {}
+The variables to slice 'PERIODIC_SEND_PPRZ_MODE are {}
+The variables to slice 'PERIODIC_SEND_SETTINGS are {}
+The variables to slice 'reporting_task are {}
+The variables to slice 'send_adc are {}
+The variables to slice 'send_attitude are {}
+The variables to slice 'send_bat are {}
+The variables to slice 'send_boot are {}
+The variables to slice 'send_climb are {}
+The variables to slice 'send_debug are {}
+The variables to slice 'send_desired are {}
+The variables to slice 'send_mode are {}
+The variables to slice 'send_nav_ref are {}
+The variables to slice 'send_settings are {}
+
+'DOWNLINK_SEND_ADC(_){If _ Then
+  Call 'ModemStartMessage('DL_ADC);
+  _
+Else
+_}
+
+'DOWNLINK_SEND_ATTITUDE(_){If _ Then
+  Call 'ModemStartMessage('DL_ATTITUDE);
+  _
+Else
+_}
+
+'DOWNLINK_SEND_BAT(_){If _ Then
+  Call 'ModemStartMessage('DL_BAT);
+  _
+Else
+_}
+
+'DOWNLINK_SEND_BOOT(_){If _ Then
+  Call 'ModemStartMessage('DL_BOOT);
+  _
+Else
+_}
+
+'DOWNLINK_SEND_CLIMB_PID(_){If _ Then
+  Call 'ModemStartMessage('DL_CLIMB_PID);
+  _
+Else
+_}
+
+'DOWNLINK_SEND_DEBUG(_){If _ Then
+  Call 'ModemStartMessage('DL_DEBUG);
+  _
+Else
+_}
+
+'DOWNLINK_SEND_DESIRED(_){If _ Then
+  Call 'ModemStartMessage('DL_DESIRED);
+  _
+Else
+_}
+
+'DOWNLINK_SEND_NAVIGATION_REF(_){If _ Then
+  Call 'ModemStartMessage('DL_NAVIGATION_REF);
+  _
+Else
+_}
+
+'DOWNLINK_SEND_PPRZ_MODE(_){If _ Then
+  Call 'ModemStartMessage('DL_PPRZ_MODE);
+  _
+Else
+_}
+
+'DOWNLINK_SEND_RAD_OF_IR(_){If _ Then
+  Call 'ModemStartMessage('DL_RAD_OF_IR);
+  _
+Else
+_}
+
+'DOWNLINK_SEND_SETTINGS(_){If _ Then
+  Call 'ModemStartMessage('DL_ADC);
+  _
+Else
+_}
+
+'MODEM_PUT_1_BYTE_BY_ADDR(_){_}
+
+'MODEM_PUT_2_BYTE_BY_ADDR(_){_}
+
+'MODEM_PUT_2_BYTE_BY_ADDR(_){_}
+
+'MODEM_PUT_4_BYTE_BY_ADDR(_){_}
+
+'Main(_){_}
+
+'ModemEndMessage(_){_}
+
+'ModemStartMessage('DL_CALIB_START){If Equal('DL_CALIB_START,_)Then
+_
+Else
+_}
+
+'PERIODIC_SEND_ADC(_){_}
+
+'PERIODIC_SEND_ATTITUDE(_){_}
+
+'PERIODIC_SEND_BAT(_){_}
+
+'PERIODIC_SEND_CLIMB_PID(_){_}
+
+'PERIODIC_SEND_DEBUG(_){_}
+
+'PERIODIC_SEND_DESIRED(_){_}
+
+'PERIODIC_SEND_NAVIGATION_REF(_){_}
+
+'PERIODIC_SEND_PPRZ_MODE(_){_}
+
+'PERIODIC_SEND_SETTINGS(_){_}
+
+'reporting_task(_){_}
+
+'send_adc(_){_}
+
+'send_attitude(_){_}
+
+'send_bat(_){_}
+
+'send_boot(_){_}
+
+'send_climb(_){_}
+
+'send_debug(_){_}
+
+'send_desired(_){_}
+
+'send_mode(_){_}
+
+'send_nav_ref(_){_}
+
+'send_settings(_){_}

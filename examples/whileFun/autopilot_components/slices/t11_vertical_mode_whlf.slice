@@ -1,0 +1,14 @@
+*************** This is the slice w.r.t. the variable 'vertical_mode ***************
+
+
+The variables to slice 'Main are {}
+The variables to slice 'altitude_control_task are {'vertical_mode}
+The variables to slice 'altitude_pid_run are {}
+
+'Main(_){_}
+
+'altitude_control_task(_){If _ Then
+  If Equal('vertical_mode,_)Then
+_}
+
+'altitude_pid_run(_){_}

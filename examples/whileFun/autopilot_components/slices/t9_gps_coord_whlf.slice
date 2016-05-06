@@ -1,0 +1,57 @@
+*************** This is the slice w.r.t. the variable 'gps_east,'gps_north,'gps_pos_available ***************
+
+
+
+The variables to slice 'DOWNLINK_SEND_GPS are {}
+The variables to slice 'DOWNLINK_SEND_RAD_OF_IR are {}
+The variables to slice 'DOWNLINK_SEND_TAKEOFF are {}
+The variables to slice 'MODEM_PUT_1_BYTE_BY_ADDR are {}
+The variables to slice 'MODEM_PUT_2_BYTE_BY_ADDR are {}
+The variables to slice 'MODEM_PUT_4_BYTE_BY_ADDR are {}
+The variables to slice 'Main are {}
+The variables to slice 'ModemEndMessage are {}
+The variables to slice 'ModemStartMessage are {}
+The variables to slice 'estimator_update_ir_estim are {}
+The variables to slice 'estimator_update_state_gps are {'gps_east, 'gps_north}
+The variables to slice 'receive_gps_data_task are {}
+The variables to slice 'send_gps_pos are {'gps_pos_available}
+The variables to slice 'send_radIR are {'gps_pos_available}
+The variables to slice 'send_takeOff are {'gps_pos_available}
+
+'DOWNLINK_SEND_GPS(_){_}
+
+'DOWNLINK_SEND_RAD_OF_IR(_){_}
+
+'DOWNLINK_SEND_TAKEOFF(_){_}
+
+'MODEM_PUT_1_BYTE_BY_ADDR(_){_}
+
+'MODEM_PUT_2_BYTE_BY_ADDR(_){_}
+
+'MODEM_PUT_4_BYTE_BY_ADDR(_){_}
+
+'Main(_){_}
+
+'ModemEndMessage(_){_}
+
+'ModemStartMessage(_){_}
+
+'estimator_update_ir_estim(_){_}
+
+'estimator_update_state_gps(_){If _ Then
+(    _ := 'gps_east ;
+      _ := 'gps_north ;
+  _)}
+
+'receive_gps_data_task(_){_}
+
+'send_gps_pos(_){_ ;
+If Equal('gps_pos_available,_)Then
+_}
+
+'send_radIR(_){If Equal('gps_pos_available,_)Then
+_}
+
+'send_takeOff(_){If Equal('gps_pos_available,_)Then
+(  _ ;
+    'gps_pos_available := 0)}

@@ -1,0 +1,13 @@
+*************** This is the slice w.r.t. the variable 'pprz_mode ***************
+
+
+The variables to slice 'Main are {}
+The variables to slice 'altitude_control_task are {'pprz_mode}
+The variables to slice 'altitude_pid_run are {}
+
+'Main(_){_}
+
+'altitude_control_task(_){If Equal('pprz_mode,_)Or Equal('pprz_mode,_)Then
+_}
+
+'altitude_pid_run(_){_}

@@ -75,4 +75,39 @@ load ../wfe.maude
 
 endm)
 
+(set side-effect sorts ESt RWBUF .)
+
+(set context-update rules CallF .)
+
+eof
+
+1. (islice Statement with defs myFuns wrt 'pprz_mode 'vertical_mode .)
+
+2. (islice Statement with defs myFuns wrt 'desired_gaz 'desired_pitch 'desired_climb .)
+
+3. (islice Statement with defs myFuns wrt 'desired_pitch 'climb_pitch_pgain
+                                          'climb_pitch_sum_err 'max_pitch .)
+
+4. (islice Statement with defs myFuns wrt 'err 'climb_pitch_sum_err 'climb_sum_err .)
+
+5. (islice Statement with defs myFuns wrt 'CLIMB_LEVEL_GAZ 'CLIMB_GAZ_OF_FLIMB
+                                          'MAX_PITCH_CLIMB_SUM_ERR 'MAX_CLIMB_SUM_ERR .)
+
+6. (islice Statement with defs myFuns wrt 'PPRZ_MODE_AUTO2 'VERTICAL_MODE_AUTO_CLIMB
+                                          'VERTICAL_MODE_AUTO_GAZ .)
+
+7. (islice Statement with defs myFuns wrt '__res_TRIM_UPPRZ .)
+
+	1. { pprz_mode, vertical_mode } -> file t12_modes_whlf.slice
+	2. { desired_gaz, desired_pitch, desired_climb }
+		-> file t12_desired_whlf.slice
+	3. { desired_pitch, climb_pitch_pgain, climb_pitch_sum_err,
+		max_pitch } -> file t12_pitch_param_whlf.slice
+	4. { err, climb_pitch_sum_err, climb_sum_err } -> file t12_err_whlf.slice
+	5. { CLIMB_LEVEL_GAZ, CLIMB_GAZ_OF_FLIMB , MAX_PITCH_CLIMB_SUM_ERR,
+		MAX_CLIMB_SUM_ERR } -> file t12_arith_params_whlf.slice
+	6. { PPRZ_MODE_AUTO2, VERTICAL_MODE_AUTO_CLIMB, VERTICAL_MODE_AUTO_GAZ }
+		-> file t12_autos_whlf.slice
+	7. { __res_TRIM_UPPRZ } -> file t12_res_whlf.slice
+
 (red myFuns .)

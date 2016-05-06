@@ -1,0 +1,135 @@
+*************** This is the slice w.r.t. the variable 'estimator_phi,'estimator_psi,'estimator_theta,'estimator_rad,'estimator_ir,'estimator_rad_of_ir ***************
+
+
+
+The variables to slice 'DOWNLINK_SEND_ADC are {}
+The variables to slice 'DOWNLINK_SEND_ATTITUDE are {'estimator_phi, 'estimator_psi, 'estimator_theta}
+The variables to slice 'DOWNLINK_SEND_BAT are {}
+The variables to slice 'DOWNLINK_SEND_BOOT are {}
+The variables to slice 'DOWNLINK_SEND_CLIMB_PID are {}
+The variables to slice 'DOWNLINK_SEND_DEBUG are {}
+The variables to slice 'DOWNLINK_SEND_DESIRED are {}
+The variables to slice 'DOWNLINK_SEND_NAVIGATION_REF are {}
+The variables to slice 'DOWNLINK_SEND_PPRZ_MODE are {}
+The variables to slice 'DOWNLINK_SEND_RAD_OF_IR are {'estimator_rad, 'estimator_ir, 'estimator_rad_of_ir}
+The variables to slice 'DOWNLINK_SEND_SETTINGS are {}
+The variables to slice 'MODEM_PUT_1_BYTE_BY_ADDR are {}
+The variables to slice 'MODEM_PUT_2_BYTE_BY_ADDR are {}
+The variables to slice 'MODEM_PUT_2_BYTE_BY_ADDR are {}
+The variables to slice 'MODEM_PUT_4_BYTE_BY_ADDR are {'data}
+The variables to slice 'Main are {}
+The variables to slice 'ModemEndMessage are {}
+The variables to slice 'ModemStartMessage are {}
+The variables to slice 'PERIODIC_SEND_ADC are {}
+The variables to slice 'PERIODIC_SEND_ATTITUDE are {'estimator_phi, 'estimator_psi, 'estimator_theta}
+The variables to slice 'PERIODIC_SEND_BAT are {}
+The variables to slice 'PERIODIC_SEND_CLIMB_PID are {}
+The variables to slice 'PERIODIC_SEND_DEBUG are {}
+The variables to slice 'PERIODIC_SEND_DESIRED are {}
+The variables to slice 'PERIODIC_SEND_NAVIGATION_REF are {}
+The variables to slice 'PERIODIC_SEND_PPRZ_MODE are {}
+The variables to slice 'PERIODIC_SEND_SETTINGS are {}
+The variables to slice 'reporting_task are {}
+The variables to slice 'send_adc are {}
+The variables to slice 'send_attitude are {}
+The variables to slice 'send_bat are {}
+The variables to slice 'send_boot are {'estimator_rad, 'estimator_ir, 'estimator_rad_of_ir}
+The variables to slice 'send_climb are {}
+The variables to slice 'send_debug are {}
+The variables to slice 'send_desired are {}
+The variables to slice 'send_mode are {}
+The variables to slice 'send_nav_ref are {}
+The variables to slice 'send_settings are {}
+
+'DOWNLINK_SEND_ADC(_){_}
+
+'DOWNLINK_SEND_ATTITUDE('estimator_phi,'estimator_psi,'estimator_theta){If _ Then
+  _ ;
+    Call 'MODEM_PUT_4_BYTE_BY_ADDR('estimator_phi);
+    Call 'MODEM_PUT_4_BYTE_BY_ADDR('estimator_psi);
+    Call 'MODEM_PUT_4_BYTE_BY_ADDR('estimator_theta);
+  _
+Else
+_}
+
+'DOWNLINK_SEND_BAT(_){_}
+
+'DOWNLINK_SEND_BOOT(_){_}
+
+'DOWNLINK_SEND_CLIMB_PID(_){_}
+
+'DOWNLINK_SEND_DEBUG(_){_}
+
+'DOWNLINK_SEND_DESIRED(_){_}
+
+'DOWNLINK_SEND_NAVIGATION_REF(_){_}
+
+'DOWNLINK_SEND_PPRZ_MODE(_){_}
+
+'DOWNLINK_SEND_RAD_OF_IR('estimator_ir,'estimator_rad,'estimator_rad_of_ir,_,_){If _ Then
+  _ ;
+    Call 'MODEM_PUT_4_BYTE_BY_ADDR('estimator_ir);
+    Call 'MODEM_PUT_4_BYTE_BY_ADDR('estimator_rad);
+    Call 'MODEM_PUT_4_BYTE_BY_ADDR('estimator_rad_of_ir);
+  _
+Else
+_}
+
+'DOWNLINK_SEND_SETTINGS(_){_}
+
+'MODEM_PUT_1_BYTE_BY_ADDR(_){_}
+
+'MODEM_PUT_2_BYTE_BY_ADDR(_){_}
+
+'MODEM_PUT_2_BYTE_BY_ADDR(_){_}
+
+'MODEM_PUT_4_BYTE_BY_ADDR('data){_ := 'data}
+
+'Main(_){_}
+
+'ModemEndMessage(_){_}
+
+'ModemStartMessage(_){_}
+
+'PERIODIC_SEND_ADC(_){_}
+
+'PERIODIC_SEND_ATTITUDE(_){Call 'DOWNLINK_SEND_ATTITUDE('estimator_phi,'estimator_psi,'estimator_theta)}
+
+'PERIODIC_SEND_BAT(_){_}
+
+'PERIODIC_SEND_CLIMB_PID(_){_}
+
+'PERIODIC_SEND_DEBUG(_){_}
+
+'PERIODIC_SEND_DESIRED(_){_}
+
+'PERIODIC_SEND_NAVIGATION_REF(_){_}
+
+'PERIODIC_SEND_PPRZ_MODE(_){_}
+
+'PERIODIC_SEND_SETTINGS(_){_}
+
+'reporting_task(_){_}
+
+'send_adc(_){_}
+
+'send_attitude(_){_}
+
+'send_bat(_){_}
+
+'send_boot(_){If _ Then
+(  _ ;
+    Call 'DOWNLINK_SEND_RAD_OF_IR('estimator_ir,'estimator_rad,'estimator_rad_of_ir,_,_);
+  _)}
+
+'send_climb(_){_}
+
+'send_debug(_){_}
+
+'send_desired(_){_}
+
+'send_mode(_){_}
+
+'send_nav_ref(_){_}
+
+'send_settings(_){_}

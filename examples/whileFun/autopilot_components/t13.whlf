@@ -410,4 +410,50 @@ load ../wfe.maude
 
 endm)
 
+(set side-effect sorts ESt RWBUF .)
+
+(set context-update rules CallF .)
+
+eof
+
+1. (islice Statement with defs myFuns wrt 'boot .)
+
+2. (islice Statement with defs myFuns wrt 'estimator_flight_time 'block_time 'stage_time .)
+
+3. (islice Statement with defs myFuns wrt 'pprz_mode 'vertical_mode
+                                          'inflight_calib_mode 'ir_estim_mode .)
+
+4. (islice Statement with defs myFuns wrt 'estimator_phi 'estimator_psi 'estimator_theta
+                                          'estimator_rad 'estimator_ir 'estimator_rad_of_ir .)
+
+5. (islice Statement with defs myFuns wrt 'DL_CALIB_START 'DL_ALTITUDE 'DL_ADC
+                                          'DL_DESIRED 'DL_BAT 'DL_CLIMB_PID 'DL_PPRZ_MODE
+                                          'DL_DEBUG 'DL_NAVIGATION_REF .)
+
+6. (islice Statement with defs myFuns wrt '__res_ModemStartMessage '__res_ModemEndMessage
+		                                        '__res_MODEM_PUT_1_BYTE_BY_ADDR
+		                                        '__res_MODEM_PUT_2_BYTE_BY_ADDR
+		                                        '__res_MODEM_PUT_4_BYTE_BY_ADDR .)
+
+7. (islice Statement with defs myFuns wrt '__res_MODEM_PUT_1_BYTE_BY_ADDR
+                                          '__res_MODEM_PUT_2_BYTE_BY_ADDR
+                                          '__res_MODEM_PUT_4_BYTE_BY_ADDR .)
+
+	1. { boot } -> file t13_boot_whlf.slice
+	2. { estimator_flight_time, block_time, stage_time }
+		-> file t13_time_params_whlf.slice
+	3. { pprz_mode, vertical_mode, inflight_calib_mode, ir_estim_mode }
+		-> file t13_modes_whlf.slice
+	4. { estimator_phi, estimator_psi, estimator_theta, estimator_rad,
+		estimator_ir, estimator_rad_of_ir } -> file t13_estimator_whlf.slice
+	5. { DL_CALIB_START, DL_ALTITUDE, DL_ADC, DL_DESIRED, DL_BAT,
+		DL_CLIMB_PID, DL_PPRZ_MODE, DL_DEBUG, DL_NAVIGATION_REF }
+		-> file t13_downlink_whlf.slice
+	6. { __res_ModemStartMessage, __res_ModemEndMessage,
+		__res_MODEM_PUT_1_BYTE_BY_ADDR, __res_MODEM_PUT_2_BYTE_BY_ADDR,
+		__res_MODEM_PUT_4_BYTE_BY_ADDR } -> file t13_res_whlf.slice
+	7. { __res_MODEM_PUT_1_BYTE_BY_ADDR, __res_MODEM_PUT_2_BYTE_BY_ADDR,
+		__res_MODEM_PUT_4_BYTE_BY_ADDR }
+		-> file t13_modem_comm_whlf.slice
+
 (red myFuns .)

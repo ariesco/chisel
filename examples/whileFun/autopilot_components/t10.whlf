@@ -172,4 +172,42 @@ load ../wfe.maude
 
 endm)
 
+(set side-effect sorts ESt RWBUF .)
+
+(set context-update rules CallF .)
+
+eof
+
+1. (islice Statement with defs myFuns wrt 'nav_block 'nav_stage .)
+
+2. (islice Statement with defs myFuns wrt 'dist2_to_wp 'dist2_to_home 'too_far_from_home .)
+
+3. (islice Statement with defs myFuns wrt 'estimator_speed_mod 'estimator_x 'estimator_y .)
+
+4. (islice Statement with defs myFuns wrt 'min_roll 'max_roll 'nav_desired_roll 'desired_roll .)
+
+5. (islice Statement with defs myFuns wrt 'LATERAL_MODE_COURSE 'GROUND_ALT
+                                          'PPRZ_MODE_HOME 'WP_HOME 'MAX_DIST_FROM_HOME2 .)
+
+6. (islice Statement with defs myFuns wrt '__res_ModemStartMessage '__res_ModemEndMessage
+                                          '__res_MODEM_PUT_1_BYTE_BY_ADDR '__res_MODEM_PUT_2_BYTE_BY_ADDR
+                                          '__res_MODEM_PUT_4_BYTE_BY_ADDR '__res_lookup_arr .)
+
+7. (islice Statement with defs myFuns wrt '__res_lookup_arr .)
+
+	1. { nav_block, nav_stage } -> file t10_nav_whlf.slice
+	2. { dist2_to_wp, dist2_to_home, too_far_from_home }
+		-> file t10_dist2_whlf.slice
+	3. { estimator_speed_mod, estimator_x, estimator_y }
+		-> file t10_estimator_whlf.slice
+	4. { min_roll, max_roll, nav_desired_roll, desired_roll }
+		-> file t10_roll_info_whlf.slice
+	5. { LATERAL_MODE_COURSE, GROUND_ALT, PPRZ_MODE_HOME, WP_HOME,
+		MAX_DIST_FROM_HOME2 } -> file t10_params_whlf.slice
+	6. { __res_ModemStartMessage, __res_ModemEndMessage,
+		__res_MODEM_PUT_1_BYTE_BY_ADDR, __res_MODEM_PUT_2_BYTE_BY_ADDR,
+		__res_MODEM_PUT_4_BYTE_BY_ADDR, __res_lookup_arr }
+		-> file t10_res_whlf.slice
+	7. { __res_lookup_arr } -> file t10_arr_whlf.slice
+
 (red myFuns .)

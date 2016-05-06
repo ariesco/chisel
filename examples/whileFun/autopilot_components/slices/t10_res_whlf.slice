@@ -1,0 +1,76 @@
+*************** This is the slice w.r.t. the variable '__res_ModemStartMessage,'__res_ModemEndMessage,'__res_MODEM_PUT_1_BYTE_BY_ADDR,'__res_MODEM_PUT_2_BYTE_BY_ADDR,
+    '__res_MODEM_PUT_4_BYTE_BY_ADDR,'__res_lookup_arr ***************
+
+
+
+The variables to slice 'Circle are {'__res_lookup_arr}
+The variables to slice 'DOWNLINK_SEND_NAVIGATION are {}
+The variables to slice 'MODEM_PUT_1_BYTE_BY_ADDR are {'data, '__res_MODEM_PUT_1_BYTE_BY_ADDR}
+The variables to slice 'MODEM_PUT_4_BYTE_BY_ADDR are {'data, '__res_MODEM_PUT_4_BYTE_BY_ADDR}
+The variables to slice 'Main are {}
+The variables to slice 'ModemEndMessage are {'__res_ModemEndMessage}
+The variables to slice 'ModemStartMessage are {'__res_ModemStartMessage}
+The variables to slice 'NORM_RAD_ANGLE are {}
+The variables to slice 'auto_nav are {}
+The variables to slice 'compute_dist2_to_home are {'__res_lookup_arr}
+The variables to slice 'course_pid_run are {}
+The variables to slice 'course_run are {}
+The variables to slice 'lookup_arr are {'a, 'idx, '__res_lookup_arr}
+The variables to slice 'nav_home are {}
+The variables to slice 'nav_update are {}
+The variables to slice 'navigation_task are {}
+The variables to slice 'navigation_update are {}
+The variables to slice 'send_nav_values are {}
+
+'Circle(_){_ ;
+_ ;
+_ ;
+_ ;
+_ ;
+_ := '__res_lookup_arr ;
+_ ;
+_ := '__res_lookup_arr ;
+_}
+
+'DOWNLINK_SEND_NAVIGATION(_){_}
+
+'MODEM_PUT_1_BYTE_BY_ADDR('data){'__res_MODEM_PUT_1_BYTE_BY_ADDR := 'data}
+
+'MODEM_PUT_4_BYTE_BY_ADDR('data){'__res_MODEM_PUT_4_BYTE_BY_ADDR := 'data}
+
+'Main(_){_}
+
+'ModemEndMessage(_){'__res_ModemEndMessage := _}
+
+'ModemStartMessage(_){If _ Then
+  '__res_ModemStartMessage := _
+Else
+  '__res_ModemStartMessage := 0}
+
+'NORM_RAD_ANGLE(_){_}
+
+'auto_nav(_){_}
+
+'compute_dist2_to_home(_){_ ;
+_ ;
+_ ;
+_ := '__res_lookup_arr -. _ ;
+_ ;
+_ := '__res_lookup_arr -. _ ;
+_}
+
+'course_pid_run(_){_}
+
+'course_run(_){_}
+
+'lookup_arr('a,'idx){'__res_lookup_arr := 'a +. 'idx}
+
+'nav_home(_){_}
+
+'nav_update(_){_}
+
+'navigation_task(_){_}
+
+'navigation_update(_){_}
+
+'send_nav_values(_){_}

@@ -1,0 +1,64 @@
+*************** This is the slice w.r.t. the variable 'nav_block,'nav_stage ***************
+
+
+
+The variables to slice 'Circle are {}
+The variables to slice 'DOWNLINK_SEND_NAVIGATION are {'nav_block, 'nav_stage}
+The variables to slice 'MODEM_PUT_1_BYTE_BY_ADDR are {'data}
+The variables to slice 'MODEM_PUT_4_BYTE_BY_ADDR are {}
+The variables to slice 'Main are {}
+The variables to slice 'ModemEndMessage are {}
+The variables to slice 'ModemStartMessage are {}
+The variables to slice 'NORM_RAD_ANGLE are {}
+The variables to slice 'auto_nav are {}
+The variables to slice 'compute_dist2_to_home are {}
+The variables to slice 'course_pid_run are {}
+The variables to slice 'course_run are {}
+The variables to slice 'lookup_arr are {}
+The variables to slice 'nav_home are {}
+The variables to slice 'nav_update are {}
+The variables to slice 'navigation_task are {}
+The variables to slice 'navigation_update are {}
+The variables to slice 'send_nav_values are {'nav_block, 'nav_stage}
+
+'Circle(_){_}
+
+'DOWNLINK_SEND_NAVIGATION('nav_block,'nav_stage,_,_,_,_,_,_){If _ Then
+  _ ;
+    Call 'MODEM_PUT_1_BYTE_BY_ADDR('nav_block);
+    Call 'MODEM_PUT_1_BYTE_BY_ADDR('nav_stage);
+  _
+Else
+_}
+
+'MODEM_PUT_1_BYTE_BY_ADDR('data){_ := 'data}
+
+'MODEM_PUT_4_BYTE_BY_ADDR(_){_}
+
+'Main(_){_}
+
+'ModemEndMessage(_){_}
+
+'ModemStartMessage(_){_}
+
+'NORM_RAD_ANGLE(_){_}
+
+'auto_nav(_){_}
+
+'compute_dist2_to_home(_){_}
+
+'course_pid_run(_){_}
+
+'course_run(_){_}
+
+'lookup_arr(_){_}
+
+'nav_home(_){_}
+
+'nav_update(_){_}
+
+'navigation_task(_){_}
+
+'navigation_update(_){_}
+
+'send_nav_values(_){Call 'DOWNLINK_SEND_NAVIGATION('nav_block,'nav_stage,_,_,_,_,_,_)}

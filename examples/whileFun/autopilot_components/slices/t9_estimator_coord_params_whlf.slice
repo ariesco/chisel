@@ -1,0 +1,61 @@
+*************** This is the slice w.r.t. the variable 'estimator_hspeed_mod,'estimator_flight_time ***************
+
+
+
+The variables to slice 'DOWNLINK_SEND_GPS are {}
+The variables to slice 'DOWNLINK_SEND_RAD_OF_IR are {}
+The variables to slice 'DOWNLINK_SEND_TAKEOFF are {}
+The variables to slice 'MODEM_PUT_1_BYTE_BY_ADDR are {}
+The variables to slice 'MODEM_PUT_2_BYTE_BY_ADDR are {}
+The variables to slice 'MODEM_PUT_4_BYTE_BY_ADDR are {}
+The variables to slice 'Main are {}
+The variables to slice 'ModemEndMessage are {}
+The variables to slice 'ModemStartMessage are {}
+The variables to slice 'estimator_update_ir_estim are {}
+The variables to slice 'estimator_update_state_gps are {'gps_fspeed, 'estimator_hspeed_mod, 'estimator_flight_time}
+The variables to slice 'receive_gps_data_task are {}
+The variables to slice 'send_gps_pos are {}
+The variables to slice 'send_radIR are {}
+The variables to slice 'send_takeOff are {'estimator_hspeed_mod, 'estimator_flight_time}
+
+'DOWNLINK_SEND_GPS(_){_}
+
+'DOWNLINK_SEND_RAD_OF_IR(_){_}
+
+'DOWNLINK_SEND_TAKEOFF(_){_}
+
+'MODEM_PUT_1_BYTE_BY_ADDR(_){_}
+
+'MODEM_PUT_2_BYTE_BY_ADDR(_){_}
+
+'MODEM_PUT_4_BYTE_BY_ADDR(_){_}
+
+'Main(_){_}
+
+'ModemEndMessage(_){_}
+
+'ModemStartMessage(_){_}
+
+'estimator_update_ir_estim(_){_}
+
+'estimator_update_state_gps(_){If _ Then
+(  _ ;
+    _ ;
+    _ ;
+      'estimator_hspeed_mod := 'gps_fspeed ;
+    _ ;
+    _ ;
+    If Equal('estimator_flight_time,_)Then
+_)}
+
+'receive_gps_data_task(_){_}
+
+'send_gps_pos(_){_}
+
+'send_radIR(_){_}
+
+'send_takeOff(_){If _ Then
+(    If Not Equal('estimator_flight_time,_)And Gt('estimator_hspeed_mod,_)Then
+(        'estimator_flight_time := _ ;
+    _);
+  _)}
