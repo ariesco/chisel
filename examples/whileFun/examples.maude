@@ -43,7 +43,7 @@ load wfe.maude
              'Inc (z) { Local i ;
                         Local j ;
                         i := 1 ;
-                        j := i ;
+                        i := j ;
                         Call 'Add ( z, i );
                         Call 'Inc (j) } .
 
@@ -53,6 +53,10 @@ endm)
 (set side-effect sorts ESt RWBUF .)
 
 (dataflow inferences Com .)
+
+(slice pow wrt x .)
+
+(slice pow wrt y .)
 
 (set context-update rules CallF .)
 

@@ -20,7 +20,7 @@ load ../../slicing.prj
 
   ops f g h : -> FunId [ctor] .
 
-  ops +. -. *. %. /. : -> Op .
+  ops +. -. *. %. /. : -> Op [ctor] .
 
   op ___ : Exp Op Exp -> Exp [prec 10] .
 
@@ -32,30 +32,30 @@ load ../../slicing.prj
   subsorts Qid < BVar < BExp .
   subsort Boolean < BExp .
 
-  ops T F : -> Boolean .
-  ops And Or : -> BOp [format(! o)] .
-  op ___ : BExp BOp BExp -> BExp [prec 20] .
-  op Not_ : BExp -> BExp [prec 15 format(! o o)] .
-  op Equal : Exp Exp -> BExp [format(! o)] .
-  op Lt : Exp Exp -> BExp [format(! o)] .
-  op Lte : Exp Exp -> BExp [format(! o)] .
-  op Gt : Exp Exp -> BExp [format(! o)] .
-  op Gte : Exp Exp -> BExp [format(! o)] .
+  ops T F : -> Boolean [ctor] .
+  ops And Or : -> BOp [ctor format(! o)] .
+  op ___ : BExp BOp BExp -> BExp [ctor prec 20] .
+  op Not_ : BExp -> BExp [ctor prec 15 format(! o o)] .
+  op Equal : Exp Exp -> BExp [ctor format(! o)] .
+  op Lt : Exp Exp -> BExp [ctor format(! o)] .
+  op Lte : Exp Exp -> BExp [ctor format(! o)] .
+  op Gt : Exp Exp -> BExp [ctor format(! o)] .
+  op Gte : Exp Exp -> BExp [ctor format(! o)] .
 
-  op skip : -> Com [format(!r o)] .
-  op _:=_ : Var Exp -> Com [prec 30 format(i d d d)] .
-  op _;_ : Com Com -> Com [prec 60 gather(e E) format(i d ni d)] .
-  op If_Then_Else_ : BExp Com Com -> Com [prec 50 format(i! o ! on++ --!n on++ --o)] .
-  op If_Then_ : BExp Com -> Com [prec 50 format(i! o ! on++ --o)] .
-  op While_Do_ : BExp Com -> Com [prec 55 format(i! o ! on++ --no)] .
-  op Call_`(_`) : FunId ExpL -> Com [prec 20 format(r! o o o o o)] .
-  op Local_ : VarL -> Com [prec 35 format(! o o)] .
+  op skip : -> Com [ctor format(!r o)] .
+  op _:=_ : Var Exp -> Com [ctor prec 30 format(i d d d)] .
+  op _;_ : Com Com -> Com [ctor prec 60 gather(e E) format(i d ni d)] .
+  op If_Then_Else_ : BExp Com Com -> Com [ctor prec 50 format(i! o ! on++ --!n on++ --o)] .
+  op If_Then_ : BExp Com -> Com [ctor prec 50 format(i! o ! on++ --o)] .
+  op While_Do_ : BExp Com -> Com [ctor prec 55 format(i! o ! on++ --no)] .
+  op Call_`(_`) : FunId ExpL -> Com [ctor prec 20 format(r! o o o o o)] .
+  op Local_ : VarL -> Com [ctor prec 35 format(! o o)] .
 
-  op _+=_ : Var Exp -> Com [prec 15] .
-  op _++ : Var -> Com [prec 15] .
+  op _+=_ : Var Exp -> Com [ctor prec 15] .
+  op _++ : Var -> Com [ctor prec 15] .
 
-  op Read_ : Var -> Com [prec 30 format(i d d)] .
-  op Write_ : Exp -> Com [prec 30 format(i d d)] .
+  op Read_ : Var -> Com [ctor prec 30 format(i d d)] .
+  op Write_ : Exp -> Com [ctor prec 30 format(i d d)] .
 endfm)
 
 (fmod AP-EVAL is

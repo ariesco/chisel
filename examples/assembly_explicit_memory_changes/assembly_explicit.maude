@@ -123,11 +123,11 @@ endfm)
   vars M M' : Memory .
   vars I I' : Int .
 
-  sorts System Instructions .
+  sorts System Program .
 
-  subsort InsList IndexInsList < Instructions .
+  subsort InsList IndexInsList < Program .
 
-  op `[_|_|_|_`] : Instructions Registers Memory Nat -> System [ctor] .
+  op `[_|_|_|_`] : Program Registers Memory Nat -> System [ctor] .
 
   eq [prepare] : [ IL | RS | M | PC] =
                  [ preprocess(IL) | RS | M | PC] .

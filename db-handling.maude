@@ -7,6 +7,7 @@ fmod SLI-SIGNATURE is
   op set`side-effect`sorts_. : @NeTokenList@ -> @Command@ .
   op set`context-update`rules_. : @NeTokenList@ -> @Command@ .
   op dataflow`inferences_. : @Token@ -> @Command@ .
+  op memory`inferences_. : @Token@ -> @Command@ .
 endfm
 
 fmod META-SLI-SIGN is
@@ -371,11 +372,11 @@ mod SLI-DATABASE-HANDLING is
   eq sortset2qidlist(none) = nil .
   eq sortset2qidlist(S ; SS) = S sortset2qidlist(SS) .
 
-**********************************************************************************
-******************************** DIRECTION INFERENCE *****************************
-**********************************************************************************
+  **********************************************************************************
+  ******************************** DIRECTION INFERENCE *****************************
+  **********************************************************************************
 
-  crl [infer] :
+  crl [infer-direction] :
       < O : SDC | db : DB, input : ('dataflow`inferences_.['token[T]]), output : nil,
                   sideEffectSorts : SS, default : ME, AtS >
    => < O : SDC | db : DB, input : nilTermList, output : ('\n printDirection(M, DS) '\o '\n),
@@ -384,10 +385,14 @@ mod SLI-DATABASE-HANDLING is
       M := getFlatModule(modExp(evalModExp(ME, DB)), database(evalModExp(ME, DB))) /\
       DS := getDirectionRules(M, Q, SS) .
 
- var DS : DirectionSet .
- var OIL : OpInfoList .
+  **********************************************************************************
+  ********************************* MEMORY INFERENCE *******************************
+  **********************************************************************************
 
- op ds : OpInfoList DirectionSet -> QidList [ctor] .
+  var DS : DirectionSet .
+  var OIL : OpInfoList .
+
+  op ds : OpInfoList DirectionSet -> QidList [ctor] .
 endm
 
 mod SLICING is

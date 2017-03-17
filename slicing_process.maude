@@ -411,6 +411,42 @@ which indicates whether all the nodes of the current hypernode are orange:
 
 endfm
 
+fmod MEMORY-ANALYSIS is
+  pr META-LEVEL .
+
+  var  AtS : AttrSet .
+  var  TL : TermList .
+  var  SS : SortSet .
+  var  RS : RuleSet .
+  var  C : Constant .
+  var  V : Variable .
+  vars T T' : Term .
+  var  M : Module .
+  var  Q : Qid .
+
+  op getMemorySorts : Module -> SortSet .
+  ceq getMemorySorts(M) = SS
+   if SS := getMemorySorts(M, getRls(M)) .
+
+  op getMemorySorts : Module RuleSet -> SortSet .
+  eq getMemorySorts(M, none) = none .
+  eq getMemorySorts(M, rl T => T' [AtS] . RS) = none .
+
+  *** We work under the assumption that the top constructor does not change.
+  op getMemorySortsUnconditional : Module Term Term -> SortSet .
+
+  op getMemorySortsUnconditional* : Module Term Term TermList -> SortSet .
+
+  op getVars : Term -> TermList .
+  eq getVars(C) = empty .
+  eq getVars(V) = V .
+  eq getVars(Q[TL]) = getVars*(TL) .
+
+  op getVars* : TermList -> TermList .
+  eq getVars*(empty) = empty .
+  eq getVars*((T, TL)) = getVars(T), getVars*(TL) .
+endfm
+
 fmod INTRA-PROCEDURAL-SLICING is
   pr SIDE-EFFECTS-ANALYSIS .
   pr CONVERSION .

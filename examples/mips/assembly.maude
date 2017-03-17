@@ -454,7 +454,7 @@ endfm)
              fi .
 
   crl [beqz] : [IIL | RS | M | PC]
-   =>         [IIL | RS | M | PC']
+   =>          [IIL | RS | M | PC']
    if (beqz RI, N) := getIns(IIL, PC) /\
       I := RS [RI] /\
       PC' := if I == 0
@@ -463,7 +463,7 @@ endfm)
              fi .
 
   crl [bgtz] : [IIL | RS | M | PC]
-   =>         [IIL | RS | M | PC']
+   =>          [IIL | RS | M | PC']
    if (bgtz RI, N) := getIns(IIL, PC) /\
       I := RS [RI] /\
       PC' := if I > 0
@@ -472,7 +472,7 @@ endfm)
              fi .
 
   crl [blez] : [IIL | RS | M | PC]
-   =>         [IIL | RS | M | PC']
+   =>          [IIL | RS | M | PC']
    if (blez RI, N) := getIns(IIL, PC) /\
       I := RS [RI] /\
       PC' := if I <= 0
@@ -481,7 +481,7 @@ endfm)
              fi .
 
   crl [bnez] : [IIL | RS | M | PC]
-   =>         [IIL | RS | M | PC']
+   =>          [IIL | RS | M | PC']
    if (bnez RI, N) := getIns(IIL, PC) /\
       I := RS [RI] /\
       PC' := if I =/= 0
