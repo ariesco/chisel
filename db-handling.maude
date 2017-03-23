@@ -7,7 +7,7 @@ fmod SLI-SIGNATURE is
   op set`side-effect`sorts_. : @NeTokenList@ -> @Command@ .
   op set`context-update`rules_. : @NeTokenList@ -> @Command@ .
   op dataflow`inferences_. : @Token@ -> @Command@ .
-  op memory`inferences_. : @Token@ -> @Command@ .
+  op memory`inferences`. : -> @Command@ .
 endfm
 
 fmod META-SLI-SIGN is
@@ -384,6 +384,13 @@ mod SLI-DATABASE-HANDLING is
    if Q := downQid(T) /\
       M := getFlatModule(modExp(evalModExp(ME, DB)), database(evalModExp(ME, DB))) /\
       DS := getDirectionRules(M, Q, SS) .
+
+  crl [infer-side-effects-sorts] :
+      < O : SDC | db : DB, input : ('memory`inferences`..@Command@), output : nil,
+                  sideEffectSorts : SS, default : ME, AtS >
+   => < O : SDC | db : DB, input : nilTermList, output : ('\n getMemorySorts(M) '\o '\n),
+                  sideEffectSorts : SS, default : ME, AtS >
+   if M := getFlatModule(modExp(evalModExp(ME, DB)), database(evalModExp(ME, DB))) .
 
   **********************************************************************************
   ********************************* MEMORY INFERENCE *******************************

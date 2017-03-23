@@ -409,4 +409,100 @@ fmod SEMANTIC-INFERENCE is
                                        searchMemory(M, T, COND, S, TS, CS) [owise] .
 endfm
 
+fmod MEMORY-ANALYSIS is
+  pr SEMANTIC-INFERENCE .
+
+  vars TL TL' TL'' VS : TermList .
+  vars TS TS' TS'' : STermSet .
+  var  COND : Condition .
+  var  AtS : AttrSet .
+  var  SS : SortSet .
+  var  RS : RuleSet .
+  var  C : Constant .
+  var  V : Variable .
+  vars T T' : Term .
+  var  M : Module .
+  var  Q : Qid .
+
+  op getMemorySorts : Module -> SortSet .
+  ceq getMemorySorts(M) = SS
+   if SS := getMemorySorts(M, getRls(M)) .
+
+  op getMemorySorts : Module RuleSet -> SortSet .
+  *** We work under the assumption that the top constructor does not change.
+  eq getMemorySorts(M, rl Q[TL] => Q[TL'] [AtS] . RS) =
+                                  getMemorySortsUnconditional*(M, TL, TL') .
+  eq getMemorySorts(M, crl Q[TL] => Q[TL'] if COND [AtS] . RS) =
+                                  getMemorySortsConditional*(M, TL, TL', COND, getVars(Q[TL])) .
+  eq getMemorySorts(M, RS) = none [owise] .
+
+  op getMemorySortsUnconditional : Module Term Term -> SortSet .
+  ceq getMemorySortsUnconditional(M, T, T') = if TL' diff TL == empty
+                                              then none
+                                              else getType(metaReduce(M, T'))
+                                              fi
+   if TL := getVars(T) /\
+      TL' := getVars(T') .
+
+  op getMemorySortsUnconditional* : Module TermList TermList -> SortSet .
+  eq getMemorySortsUnconditional*(M, (T, TL), (T', TL')) =
+                               getMemorySortsUnconditional(M, T, T') ;
+                               getMemorySortsUnconditional*(M, TL, TL') .
+  eq getMemorySortsUnconditional*(M, TL, TL') = none [owise] .
+
+  op getMemorySortsConditional : Module Term Term Condition TermList -> SortSet .
+  ceq getMemorySortsConditional(M, T, T', COND, VS) =
+                                           if TS' int TS'' == mtTS
+                                              then none
+                                              else getType(metaReduce(M, T'))
+                                              fi
+   if TL := getVars(T) /\
+      TS := getVarsTS(T') /\
+      TS' := maudeSlicing(COND, TS) /\
+      TL' := VS diff TL /\
+      TS'' := tl2ts(TL') .
+
+  op getMemorySortsConditional* : Module TermList TermList Condition TermList -> SortSet .
+  eq getMemorySortsConditional*(M, (T, TL), (T', TL'), COND, VS) =
+                    getMemorySortsConditional(M, T, T', COND, VS) ;
+                    getMemorySortsConditional*(M, TL, TL', COND, VS) .
+  eq getMemorySortsConditional*(M, TL, TL', COND, VS) = none [owise] .
+
+  op getVars : Term -> TermList .
+  eq getVars(C) = empty .
+  eq getVars(V) = V .
+  eq getVars(Q[TL]) = getVars*(TL) .
+
+  op getVars* : TermList -> TermList .
+  eq getVars*(empty) = empty .
+  eq getVars*((T, TL)) = getVars(T), getVars*(TL) .
+
+  op getVarsTS : Term -> STermSet .
+  eq getVarsTS(C) = empty .
+  eq getVarsTS(V) = V .
+  eq getVarsTS(Q[TL]) = getVarsTS*(TL) .
+
+  op getVarsTS* : TermList -> STermSet .
+  eq getVarsTS*(empty) = empty .
+  eq getVarsTS*((T, TL)) = getVarsTS(T) $ getVarsTS*(TL) .
+
+  op _diff_ : TermList TermList -> TermList .
+  eq TL diff empty = TL .
+  eq TL diff (T', TL') = (TL quit T') diff TL' .
+
+  op _quit_ : TermList Term -> TermList .
+  eq empty quit T = empty .
+  eq (T, TL) quit T' = if T == T'
+                       then TL quit T'
+                       else T, (TL quit T')
+                       fi .
+  op tl2ts : TermList -> STermSet .
+  eq tl2ts(empty) = mtTS .
+  eq tl2ts((T, TL)) = T $ tl2ts(TL) .
+
+  op _int_ : STermSet STermSet -> STermSet [comm] .
+  eq (T $ TS) int (T $ TS') = T $ (TS int TS') .
+  eq TS int TS' = mtTS [owise] .
+endfm
+
 
