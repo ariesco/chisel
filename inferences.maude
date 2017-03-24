@@ -414,7 +414,7 @@ fmod MEMORY-ANALYSIS is
 
   vars TL TL' TL'' VS : TermList .
   vars TS TS' TS'' : STermSet .
-  var  COND : Condition .
+  vars COND COND' : Condition .
   var  AtS : AttrSet .
   var  SS : SortSet .
   var  RS : RuleSet .
@@ -422,11 +422,42 @@ fmod MEMORY-ANALYSIS is
   var  V : Variable .
   vars T T' : Term .
   var  M : Module .
-  var  Q : Qid .
+  vars Q Q' : Qid .
+
+  op getTopSort : Module ~> Qid .
+  eq getTopSort(M) = getTopSort(getRls(M)) .
+
+  op getTopSort : RuleSet ~> Qid .
+  ceq getTopSort(rl Q[TL] => Q[TL'] [AtS] . RS) = Q
+   if not appearInConditions(RS, Q) .
+  ceq getTopSort(crl Q[TL] => Q[TL'] if COND [AtS] . RS) = Q
+   if not appearInConditions(RS, Q) .
+
+  op appearInConditions : RuleSet Qid -> Bool .
+  ceq appearInConditions(crl Q[TL] => Q[TL'] if COND [AtS] . RS, Q') = true
+   if Q =/= Q' /\
+      appearInCondition(COND, Q') .
+  eq appearInConditions(RS, Q) = false [owise] .
+
+  op appearInCondition : Condition Qid -> Bool .
+  eq appearInCondition(COND /\ Q[TL] => T /\ COND', Q) = true .
+  eq appearInCondition(COND, Q) = false [owise] .
+
+  op getRlsOp : Module Qid -> RuleSet .
+  eq getRlsOp(M, Q) = getRlsOp(getRls(M), Q) .
+
+  op getRlsOp : RuleSet Qid -> RuleSet .
+  eq getRlsOp(rl Q[TL] => T [AtS] . RS, Q) = rl Q[TL] => T [AtS] .
+                                             getRlsOp(RS, Q) .
+  eq getRlsOp(crl Q[TL] => T if COND [AtS] . RS, Q) = crl Q[TL] => T if COND [AtS] .
+                                                      getRlsOp(RS, Q) .
+  eq getRlsOp(RS, Q) = none [owise] .
 
   op getMemorySorts : Module -> SortSet .
   ceq getMemorySorts(M) = SS
-   if SS := getMemorySorts(M, getRls(M)) .
+   if Q := getTopSort(M) /\
+      SS := getMemorySorts(M, getRlsOp(M, Q)) .
+  eq getMemorySorts(M) = none [owise] .
 
   op getMemorySorts : Module RuleSet -> SortSet .
   *** We work under the assumption that the top constructor does not change.
@@ -461,6 +492,7 @@ fmod MEMORY-ANALYSIS is
       TS' := maudeSlicing(COND, TS) /\
       TL' := VS diff TL /\
       TS'' := tl2ts(TL') .
+  eq getMemorySortsConditional(M, T, T', COND, VS) = none .
 
   op getMemorySortsConditional* : Module TermList TermList Condition TermList -> SortSet .
   eq getMemorySortsConditional*(M, (T, TL), (T', TL'), COND, VS) =

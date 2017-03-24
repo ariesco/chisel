@@ -388,9 +388,10 @@ mod SLI-DATABASE-HANDLING is
   crl [infer-side-effects-sorts] :
       < O : SDC | db : DB, input : ('memory`inferences`..@Command@), output : nil,
                   sideEffectSorts : SS, default : ME, AtS >
-   => < O : SDC | db : DB, input : nilTermList, output : ('\n getMemorySorts(M) '\o '\n),
+   => < O : SDC | db : DB, input : nilTermList, output : ('\n ss2qil(SS') '\o '\n),
                   sideEffectSorts : SS, default : ME, AtS >
-   if M := getFlatModule(modExp(evalModExp(ME, DB)), database(evalModExp(ME, DB))) .
+   if M := getFlatModule(modExp(evalModExp(ME, DB)), database(evalModExp(ME, DB))) /\
+      SS' := getMemorySorts(M) .
 
   **********************************************************************************
   ********************************* MEMORY INFERENCE *******************************
@@ -400,6 +401,10 @@ mod SLI-DATABASE-HANDLING is
   var OIL : OpInfoList .
 
   op ds : OpInfoList DirectionSet -> QidList [ctor] .
+
+  op ss2qil : SortSet -> QidList .
+  eq ss2qil(none) = nil .
+  eq ss2qil(S ; SS) = S ss2qil(SS) .
 endm
 
 mod SLICING is
@@ -487,6 +492,8 @@ set print conceal on .
 print conceal mod_is_sorts_._____endm .
 print conceal fmod_is_sorts_.____endfm .
 print conceal db .
+
+*** set print attribute on .
 
 set show advisories off .
 set show loop stats off .
