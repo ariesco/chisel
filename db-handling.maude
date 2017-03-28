@@ -8,6 +8,7 @@ fmod SLI-SIGNATURE is
   op set`context-update`rules_. : @NeTokenList@ -> @Command@ .
   op dataflow`inferences_. : @Token@ -> @Command@ .
   op memory`inferences`. : -> @Command@ .
+  op context`updates`. : -> @Command@ .
 endfm
 
 fmod META-SLI-SIGN is
@@ -389,9 +390,17 @@ mod SLI-DATABASE-HANDLING is
       < O : SDC | db : DB, input : ('memory`inferences`..@Command@), output : nil,
                   sideEffectSorts : SS, default : ME, AtS >
    => < O : SDC | db : DB, input : nilTermList, output : ('\n ss2qil(SS') '\o '\n),
-                  sideEffectSorts : SS, default : ME, AtS >
+                  sideEffectSorts : SS', default : ME, AtS >
    if M := getFlatModule(modExp(evalModExp(ME, DB)), database(evalModExp(ME, DB))) /\
       SS' := getMemorySorts(M) .
+
+  crl [infer-context-update-sorts] :
+      < O : SDC | db : DB, input : ('context`updates`..@Command@), output : nil,
+                  default : ME, AtS >
+   => < O : SDC | db : DB, input : nilTermList, output : ('\n ss2qil(SS') '\o '\n),
+                  default : ME, AtS >
+   if M := getFlatModule(modExp(evalModExp(ME, DB)), database(evalModExp(ME, DB))) /\
+      SS' := getContextUpdateSort(M) .
 
   **********************************************************************************
   ********************************* MEMORY INFERENCE *******************************
@@ -493,7 +502,7 @@ print conceal mod_is_sorts_._____endm .
 print conceal fmod_is_sorts_.____endfm .
 print conceal db .
 
-*** set print attribute on .
+set print attribute on .
 
 set show advisories off .
 set show loop stats off .

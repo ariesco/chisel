@@ -413,16 +413,20 @@ fmod MEMORY-ANALYSIS is
   pr SEMANTIC-INFERENCE .
 
   vars TL TL' TL'' VS : TermList .
+  vars TyL TyL' TyL'' : TypeList .
   vars TS TS' TS'' : STermSet .
   vars COND COND' : Condition .
+  vars Ty Ty' Ty'' : Type .
+  vars SS SS' : SortSet .
+  var  ODS : OpDeclSet .
   var  AtS : AttrSet .
-  var  SS : SortSet .
   var  RS : RuleSet .
   var  C : Constant .
   var  V : Variable .
   vars T T' : Term .
   var  M : Module .
   vars Q Q' : Qid .
+  var  S : Sort .
 
   op getTopSort : Module ~> Qid .
   eq getTopSort(M) = getTopSort(getRls(M)) .
@@ -453,8 +457,13 @@ fmod MEMORY-ANALYSIS is
                                                       getRlsOp(RS, Q) .
   eq getRlsOp(RS, Q) = none [owise] .
 
+  op getContextUpdateSort : Module -> Sort .
+  ceq getContextUpdateSort(M) = SS'
+   if SS := getMemorySorts(M) /\
+      SS' := contextUpdateSorts(M, SS) .
+
   op getMemorySorts : Module -> SortSet .
-  ceq getMemorySorts(M) = SS
+  ceq getMemorySorts(M) = removeNonAdditiveSorts(M, SS)
    if Q := getTopSort(M) /\
       SS := getMemorySorts(M, getRlsOp(M, Q)) .
   eq getMemorySorts(M) = none [owise] .
@@ -462,9 +471,11 @@ fmod MEMORY-ANALYSIS is
   op getMemorySorts : Module RuleSet -> SortSet .
   *** We work under the assumption that the top constructor does not change.
   eq getMemorySorts(M, rl Q[TL] => Q[TL'] [AtS] . RS) =
-                                  getMemorySortsUnconditional*(M, TL, TL') .
+                                  getMemorySortsUnconditional*(M, TL, TL') ;
+                                  getMemorySorts(M, RS) .
   eq getMemorySorts(M, crl Q[TL] => Q[TL'] if COND [AtS] . RS) =
-                                  getMemorySortsConditional*(M, TL, TL', COND, getVars(Q[TL])) .
+                                  getMemorySortsConditional*(M, TL, TL', COND, getVars(Q[TL])) ;
+                                  getMemorySorts(M, RS) .
   eq getMemorySorts(M, RS) = none [owise] .
 
   op getMemorySortsUnconditional : Module Term Term -> SortSet .
@@ -483,10 +494,10 @@ fmod MEMORY-ANALYSIS is
 
   op getMemorySortsConditional : Module Term Term Condition TermList -> SortSet .
   ceq getMemorySortsConditional(M, T, T', COND, VS) =
-                                           if TS' int TS'' == mtTS
-                                              then none
-                                              else getType(metaReduce(M, T'))
-                                              fi
+                                           if T =/= T' and TS' int TS'' =/= mtTS
+                                           then getType(metaReduce(M, T'))
+                                           else none
+                                           fi
    if TL := getVars(T) /\
       TS := getVarsTS(T') /\
       TS' := maudeSlicing(COND, TS) /\
@@ -535,6 +546,41 @@ fmod MEMORY-ANALYSIS is
   op _int_ : STermSet STermSet -> STermSet [comm] .
   eq (T $ TS) int (T $ TS') = T $ (TS int TS') .
   eq TS int TS' = mtTS [owise] .
+
+  op removeNonAdditiveSorts : Module SortSet -> SortSet .
+  eq removeNonAdditiveSorts(M, none) = none .
+  eq removeNonAdditiveSorts(M, S ; SS) = if putsElementsTogether(M, S)
+                                         then S
+                                         else none
+                                         fi ; removeNonAdditiveSorts(M, SS) .
+
+  op putsElementsTogether : Module Type -> Bool .
+  eq putsElementsTogether(M, S) = putsElementsTogether(M, getOps(M), S) .
+
+  op putsElementsTogether : Module OpDeclSet Sort -> Bool .
+  ceq putsElementsTogether(M, op Q : TyL Ty TyL' Ty' TyL'' -> S [ctor AtS] . ODS, S) = true
+   if sameKind(M, S, Ty) .
+  ceq putsElementsTogether(M, op Q : TyL Ty TyL' Ty' TyL'' -> S [ctor AtS] . ODS, S) = true
+   if sameKind(M, S, Ty') .
+  ceq putsElementsTogether(M, op Q : TyL Ty TyL' Ty' TyL'' -> S [ctor AtS] . ODS, S) = true
+   if sameKind(M, Ty, Ty') .
+  eq putsElementsTogether(M, ODS, S) = false [owise] .
+
+  *** The precondition is that all the sorts in the set "put elements together".
+  op contextUpdateSorts : Module SortSet -> SortSet .
+  eq contextUpdateSorts(M, none) = none .
+  eq contextUpdateSorts(M, S ; SS) = contextUpdateSorts(M, getOps(M), S) ;
+                                     contextUpdateSorts(M, SS) .
+
+  op contextUpdateSorts : Module OpDeclSet Sort -> SortSet .
+  ceq contextUpdateSorts(M, op Q : TyL Ty TyL' -> S [ctor AtS] . ODS, S) = S
+   if Ty =/= S /\
+      putsElementsTogether(M, Ty) .
+  ceq contextUpdateSorts(M, op Q : TyL -> Ty [ctor AtS] . ODS, S) = S
+   if Ty =/= S /\
+      sortLeq(M, Ty, S) /\
+      putsElementsTogether(M, Ty) .
+  eq contextUpdateSorts(M, ODS, S) = none [owise] .
 endfm
 
 
