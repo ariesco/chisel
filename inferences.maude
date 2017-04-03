@@ -511,6 +511,12 @@ fmod MEMORY-ANALYSIS is
                     getMemorySortsConditional*(M, TL, TL', COND, VS) .
   eq getMemorySortsConditional*(M, TL, TL', COND, VS) = none [owise] .
 
+  op getContextUpdateRules : Module -> QidSet .
+
+  ---------------------------------------------------------------------------------------
+  ---                          AUXILIARY FUNCTIONS                                    ---
+  ---------------------------------------------------------------------------------------
+
   op getVars : Term -> TermList .
   eq getVars(C) = empty .
   eq getVars(V) = V .
