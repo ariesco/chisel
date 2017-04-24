@@ -351,3 +351,8 @@ endm)
 
 endm)
 
+(memory inferences .)
+
+(context update sorts .)
+
+(context update rules .)

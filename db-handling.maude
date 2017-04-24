@@ -8,7 +8,8 @@ fmod SLI-SIGNATURE is
   op set`context-update`rules_. : @NeTokenList@ -> @Command@ .
   op dataflow`inferences_. : @Token@ -> @Command@ .
   op memory`inferences`. : -> @Command@ .
-  op context`updates`. : -> @Command@ .
+  op context`update`sorts`. : -> @Command@ .
+  op context`update`rules`. : -> @Command@ .
 endfm
 
 fmod META-SLI-SIGN is
@@ -395,12 +396,20 @@ mod SLI-DATABASE-HANDLING is
       SS' := getMemorySorts(M) .
 
   crl [infer-context-update-sorts] :
-      < O : SDC | db : DB, input : ('context`updates`..@Command@), output : nil,
+      < O : SDC | db : DB, input : ('context`update`sorts`..@Command@), output : nil,
                   default : ME, AtS >
    => < O : SDC | db : DB, input : nilTermList, output : ('\n ss2qil(SS') '\o '\n),
                   default : ME, AtS >
    if M := getFlatModule(modExp(evalModExp(ME, DB)), database(evalModExp(ME, DB))) /\
       SS' := getContextUpdateSort(M) .
+
+  crl [infer-context-update-sorts] :
+      < O : SDC | db : DB, input : ('context`update`rules`..@Command@), output : nil,
+                  default : ME, AtS >
+   => < O : SDC | db : DB, input : nilTermList, output : ('\n ss2qil(SS') '\o '\n),
+                  default : ME, AtS >
+   if M := getFlatModule(modExp(evalModExp(ME, DB)), database(evalModExp(ME, DB))) /\
+      SS' := getContextUpdateRules(M) .
 
   **********************************************************************************
   ********************************* MEMORY INFERENCE *******************************

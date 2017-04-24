@@ -490,7 +490,7 @@ endfm)
              fi .
 
   crl [nop] : [ IIL | RS | M | PC]
-   =>          [ IIL | RS | M | PC + 1]
+   =>         [ IIL | RS | M | PC + 1]
    if nop := getIns(IIL, PC) .
 
   *** The current implementation stores complete numbers when bit representation is

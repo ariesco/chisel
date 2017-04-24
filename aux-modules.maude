@@ -110,8 +110,8 @@ fmod PRINTING-FUNCTIONS is
                                       printOut(M, TL, N NL, s(N')) .
 
   op sli-banner : -> QidList .
-  eq sli-banner = ('\n '\t '\s '\s '\s '\s 'Slicing 'using 'semantics '2.1
-                   'April '30th '2015 '\n) .
+  eq sli-banner = ('\n '\t '\s '\s '\s '\s 'Slicing 'using 'semantics '2.2
+                   'April '14th '2017 '\n) .
 
   op pos : -> PrintOptionSet .
   eq pos = mixfix number rat format .

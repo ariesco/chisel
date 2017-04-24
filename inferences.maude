@@ -417,8 +417,10 @@ fmod MEMORY-ANALYSIS is
   vars TS TS' TS'' : STermSet .
   vars COND COND' : Condition .
   vars Ty Ty' Ty'' : Type .
+  var  EqS : EquationSet .
   vars SS SS' : SortSet .
   var  ODS : OpDeclSet .
+  vars QS QS' : QidSet .
   var  AtS : AttrSet .
   var  RS : RuleSet .
   var  C : Constant .
@@ -457,7 +459,7 @@ fmod MEMORY-ANALYSIS is
                                                       getRlsOp(RS, Q) .
   eq getRlsOp(RS, Q) = none [owise] .
 
-  op getContextUpdateSort : Module -> Sort .
+  op getContextUpdateSort : Module -> SortSet .
   ceq getContextUpdateSort(M) = SS'
    if SS := getMemorySorts(M) /\
       SS' := contextUpdateSorts(M, SS) .
@@ -512,6 +514,65 @@ fmod MEMORY-ANALYSIS is
   eq getMemorySortsConditional*(M, TL, TL', COND, VS) = none [owise] .
 
   op getContextUpdateRules : Module -> QidSet .
+  ceq getContextUpdateRules(M) = QS'
+   if S := getContextUpdateSort(M) /\
+      Q := getCtor(M, S) /\
+      QS := getEqsAddingContext(M, Q) /\
+      QS' := getRulesAddingContext(M, Q, QS) .
+
+  op getRulesAddingContext : Module Qid QidSet -> QidSet .
+  eq getRulesAddingContext(M, Q, QS) = getRulesAddingContext(getRls(M), Q, QS) .
+
+  op getRulesAddingContext : RuleSet Qid QidSet -> QidSet .
+  ceq getRulesAddingContext(rl T => T' [label(Q) AtS] . RS, Q', QS) =
+                                                 Q ; getRulesAddingContext(RS, Q', QS)
+   if containsAnyOfThese(T', QS) or (countOp(T', Q') > countOp(T, Q')) [print T' " y " QS] .
+  ceq getRulesAddingContext(crl T => T' if COND [label(Q) AtS] . RS, Q', QS) =
+                                                 Q ; getRulesAddingContext(RS, Q', QS)
+   if containsAnyOfThese(T', QS) or (countOp(T, Q') > countOp(T', Q')) or
+      conditionPutsContext(COND, Q', QS) .
+  eq getRulesAddingContext(RS, Q, QS) = none .
+
+  op conditionPutsContext : Condition Qid QidSet -> Bool .
+  eq conditionPutsContext(nil, Q, QS) = false .
+  eq conditionPutsContext(T = T' /\ COND, Q, QS) = conditionPutsContext(COND, Q, QS) .
+  eq conditionPutsContext(T : S /\ COND, Q, QS) = conditionPutsContext(COND, Q, QS) .
+  eq conditionPutsContext(T := T' /\ COND, Q, QS) = containsAnyOfThese(T', Q ; QS) or
+                                                    conditionPutsContext(COND, Q, QS) .
+  eq conditionPutsContext(T => T' /\ COND, Q, QS) = containsAnyOfThese(T, Q ; QS) or
+                                                    conditionPutsContext(COND, Q, QS) .
+
+  op containsAnyOfThese : Term QidSet -> Bool .
+  eq containsAnyOfThese(T, none) = false .
+  eq containsAnyOfThese(T, Q ; QS) = countOp(T, Q) > 0 or containsAnyOfThese(T, QS) .
+
+  op getEqsAddingContext : Module Qid -> QidSet .
+  eq getEqsAddingContext(M, Q) = getEqsAddingContext(getEqs(M), Q) .
+
+  op getEqsAddingContext : EquationSet Qid -> QidSet .
+  ceq getEqsAddingContext(eq Q[TL] = T [AtS] . EqS, Q') =
+                                                       Q ; getEqsAddingContext(EqS, Q')
+   if countOp(Q[TL], Q') < countOp(T, Q') .
+  eq getEqsAddingContext(EqS, Q) = none [owise] .
+
+  op getCtor : Module Sort ~> Qid .
+  eq getCtor(M, S) = getCtor(getOps(M), S) .
+
+  op getCtor : OpDeclSet Sort ~> Qid .
+  eq getCtor(op Q : TyL -> S [ctor AtS] . ODS, S) = Q .
+
+  op countOp : Term Qid -> Nat .
+  eq countOp(C, Q) = 0 .
+  eq countOp(V, Q) = 0 .
+  eq countOp(Q[TL], Q') = countOp*(TL, Q') +
+                          if Q == Q'
+                          then 1
+                          else 0
+                          fi .
+
+  op countOp* : TermList Qid -> Nat .
+  eq countOp*(empty, Q) = 0 .
+  eq countOp*((T, TL), Q) = countOp(T, Q) + countOp*(TL, Q) .
 
   ---------------------------------------------------------------------------------------
   ---                          AUXILIARY FUNCTIONS                                    ---
