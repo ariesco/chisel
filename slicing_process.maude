@@ -61,7 +61,7 @@ combines the results from the functions \texttt{traverseOps} and \texttt{travers
   ceq getSETuple(M, SS) = SET'
    if ODS := getOps(M) /\
       SET := traverseOps(M, ODS, getEqs(M), SS, < none, none, none >) /\
-      SET' := traverseRls(getRls(M), SET) [print ODS] .
+      SET' := traverseRls(getRls(M), SET) .
 
 ***(%
 \end{verbatim}

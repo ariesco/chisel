@@ -403,7 +403,7 @@ mod SLI-DATABASE-HANDLING is
    if M := getFlatModule(modExp(evalModExp(ME, DB)), database(evalModExp(ME, DB))) /\
       SS' := getContextUpdateSort(M) .
 
-  crl [infer-context-update-sorts] :
+  crl [infer-context-update-rules] :
       < O : SDC | db : DB, input : ('context`update`rules`..@Command@), output : nil,
                   default : ME, AtS >
    => < O : SDC | db : DB, input : nilTermList, output : ('\n ss2qil(SS') '\o '\n),

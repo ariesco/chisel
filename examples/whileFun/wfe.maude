@@ -44,7 +44,7 @@ load ../../slicing.prj
 
   op skip : -> Com [ctor format(!r o)] .
   op _:=_ : Var Exp -> Com [ctor prec 30 format(i d d d)] .
-  op _;_ : Com Com -> Com [ctor prec 60 gather(e E) format(i d ni d)] .
+  op _;_ : Com Com -> Com [ctor assoc prec 60 gather(e E) format(i d ni d)] .
   op If_Then_Else_ : BExp Com Com -> Com [ctor prec 50 format(i! o ! on++ --!n on++ --o)] .
   op If_Then_ : BExp Com -> Com [ctor prec 50 format(i! o ! on++ --o)] .
   op While_Do_ : BExp Com -> Com [ctor prec 55 format(i! o ! on++ --no)] .
@@ -81,7 +81,7 @@ endfm)
   eq [ap-or2] : Ap(Or, F, bv) = bv .
 endfm)
 
-(fmod ENV-EVAL is
+(fmod MEMORY is
   protecting WHILE-SYNTAX-EVAL .
 
   sorts Value Variable .
@@ -124,8 +124,8 @@ endfm)
   op allocateLocals : VarL ESt -> ESt .
   eq [aloc1] : allocateLocals(nv, mu | ro) = mu | ro .
   eq [aloc2] : allocateLocals((X,Vs), mu | ro) =
-     	       allocateLocals(Vs, mu | remove(ro, X) (X = nd)) .
-  eq [aloc3] : allocateLocals((X,Vs), ro) = allocateLocals(Vs, (X = nd) ro) .
+     	         allocateLocals(Vs, mu | remove(ro, X) (X = nd)) .
+  eq [aloc3] : allocateLocals((X,Vs), ro) = allocateLocals(Vs, (X = nd) remove(ro, X)) .
   eq [aloc4] : allocateLocals(nv, ro) = ro .
 
 
@@ -179,7 +179,7 @@ endfm)
 endfm)
 
 (mod EVALUATION-EXP-EVAL is
-  protecting ENV-EVAL .
+  protecting MEMORY .
   protecting AP-EVAL .
 
   sort ExpSt .
@@ -350,6 +350,8 @@ endm)
    if st' := allocateLocals(vl, st) .
 
 endm)
+
+eof
 
 (memory inferences .)
 

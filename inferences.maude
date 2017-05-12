@@ -526,7 +526,7 @@ fmod MEMORY-ANALYSIS is
   op getRulesAddingContext : RuleSet Qid QidSet -> QidSet .
   ceq getRulesAddingContext(rl T => T' [label(Q) AtS] . RS, Q', QS) =
                                                  Q ; getRulesAddingContext(RS, Q', QS)
-   if containsAnyOfThese(T', QS) or (countOp(T', Q') > countOp(T, Q')) [print T' " y " QS] .
+   if containsAnyOfThese(T', QS) or (countOp(T', Q') > countOp(T, Q')) .
   ceq getRulesAddingContext(crl T => T' if COND [label(Q) AtS] . RS, Q', QS) =
                                                  Q ; getRulesAddingContext(RS, Q', QS)
    if containsAnyOfThese(T', QS) or (countOp(T, Q') > countOp(T', Q')) or

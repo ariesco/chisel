@@ -6,7 +6,7 @@ load wfe.maude
   op pow : -> Com .
   eq pow = x := 1 ;
            i := y ;
-           While Not Equal(x, 0) Do
+           While Not Equal(i, 0) Do
              x := x *. y ;
              i := i -. 1 .
 
@@ -18,7 +18,7 @@ load wfe.maude
            Then w := 0 .
 
   op testPow : -> Statement .
-  eq testPow = < pow, y = 5, nb, nf > .
+  eq testPow = < pow, y = 5 x = 0 i = 0, nb, nf > .
 
   op testFoo : -> Statement .
   eq testFoo = < foo, mt, nb, nf > .
@@ -33,10 +33,10 @@ load wfe.maude
                             Call 'A (sum, i ) ;
                             Call 'B (sum, j ) ;
                             Call 'A (j, i ) }
-             'A (x, y ) { If (Not Equal(x, 1))
+             'A (x, y) { If (Not Equal(x, 1))
                           Then Call 'Add ( x, y ) ;
                                Call 'Inc ( y ) }
-             'B (x, y ) { If (Not Equal(x, 0))
+             'B (x, y) { If (Not Equal(x, 0))
                           Then Call 'B ( (x +. y), y )
                         }
              'Add (a, b) { a := a +. b }
@@ -51,6 +51,14 @@ endm)
 
 
 (set side-effect sorts ESt RWBUF .)
+
+(set context-update rules CallF .)
+
+(dataflow inferences Com .)
+
+(islice Statement with defs myFuns wrt i .)
+
+eof
 
 (dataflow inferences Com .)
 

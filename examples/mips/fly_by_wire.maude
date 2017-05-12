@@ -2046,10 +2046,6 @@ load assembly.maude
   eq fbwSystem = [ preprocess(fly-by-wire) | mtReg | mtMem | 0 ] .
 endm)
 
-*** (red fly-by-wire .)
-
 (set side-effect sorts Memory Registers .)
-
-eof
 
 (slice fly-by-wire wrt v0 v1 a0 a1 .)

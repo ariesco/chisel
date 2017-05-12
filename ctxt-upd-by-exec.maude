@@ -1,0 +1,222 @@
+view Sort from TRIV to META-MODULE is
+ sort Elt to Sort .
+endv
+
+view OpDeclSet from TRIV to META-MODULE is
+ sort Elt to OpDeclSet .
+endv
+
+view TermList from TRIV to META-MODULE is
+ sort Elt to TermList .
+endv
+
+fmod PROG-GEN is
+ pr MAP{Sort, OpDeclSet} * (sort Map{Sort, OpDeclSet} to OpsTable,
+                            op _|->_ to _||->_,
+                            op undefined to errOT) .
+ pr MAP{Sort, TermList} * (sort Map{Sort, TermList} to ConsTable,
+                           op _|->_ to _||->_,
+                           op undefined to errCT) .
+ pr META-LEVEL .
+
+ var  M : Module .
+ vars ODS POL : OpDeclSet .
+ var  OD : OpDecl .
+ var  MAS : MembAxSet .
+ var  AtS : AttrSet .
+ vars S S' S'' : Sort .
+ var  TyL : TypeList .
+ var  Ty : Type .
+ var  N N' : Nat .
+ vars TL TL' TL'' ATL ATL' : TermList .
+ vars PTL PTL' PTL'' : TermList .
+ vars SS SS' : SortSet .
+ var  V : Variable .
+ vars T T' T'' : Term .
+ var  Q : Qid .
+ var  B : Bool .
+ var  CT : ConsTable .
+ var  OT : OpsTable .
+ var  CND : Condition .
+ var  CNS : Constant .
+ var  ST : Step .
+ var  GR : GenRes .
+
+ sort GenRes .
+ op gr : TermList TermList -> GenRes [ctor] .
+
+ sort Step .
+ subsort TermList < Step .
+
+ op ground : -> Step [ctor] .
+ op error-sort : -> Step [ctor] .
+
+ op generateTerms : Module Sort Nat -> GenRes .
+ ceq generateTerms(M, S, N) = termsModulo(M, S, N, TL, PTL, empty, B)
+  if V := qid("V:" + string(S)) /\
+     CT := createConsTable(M) /\
+     OT := createOpsTable(M) /\
+     gr(TL, PTL) := generateTerms(M, S, N, CT, OT, V, empty) /\
+     B := usesMemberships?(M, S) .
+
+ op generateTerms : Module Sort Nat TermList TermList -> GenRes .
+ ceq generateTerms(M, S, N, PTL, ATL) = generateTerms(M, S, N, CT, OT, PTL, ATL)
+  if CT := createConsTable(M) /\
+     OT := createOpsTable(M) .
+
+ *** Module, Sort de los terminos a ser generados, Nat con el numero de terminos a generar,
+ *** ConsTable con las constantes de cada tipo, OpsTable con los constructores de cada tipo,
+ *** TermList cola con los terminos a medio construir, Lista acumulada
+ op generateTerms : Module Sort Nat ConsTable OpsTable TermList TermList -> GenRes .
+ ceq generateTerms(M, S, s(N), CT, OT, (T, PTL), ATL) = generateTerms(M, S, N', CT, OT, PTL', ATL')
+  if ST := step(M, T, CT, OT) /\
+     PTL' := if ST == ground
+             then PTL
+             else (PTL, ST)
+             fi /\
+     N' := if ST == ground
+           then N
+           else s(N)
+           fi /\
+     ATL' := if ST == ground
+             then (ATL, normal(M, T))
+             else ATL
+             fi .
+ eq generateTerms(M, S, N, CT, OT, PTL, ATL) = gr(ATL, PTL) [owise] .
+
+ op step : Module Term ConsTable OpsTable -> Step .
+ eq step(M, CNS, CT, OT) = ground .
+ eq step(M, Q[TL], CT, OT) = step*(M, Q, TL, empty, CT, OT) .
+ ceq step(M, V, CT, OT) = CT[Ty], ops2terms(OT[Ty])
+  if Ty := getType(V) .
+
+ op step* : Module Qid TermList TermList ConsTable OpsTable -> Step .
+ eq step*(M, Q, empty, TL, CT, OT) = ground .
+ ceq step*(M, Q, (T, TL), TL', CT, OT) = if ST == ground
+                                         then step*(M, Q, TL, (TL', T), CT, OT)
+                                         else createTerms(Q, TL', ST, TL)
+                                         fi
+  if ST := step(M, T, CT, OT) .
+
+ *** Removes terms equal modulo equations and checks memberships
+ op termsModulo : Module Sort Nat TermList TermList TermList Bool -> GenRes .
+ eq termsModulo(M, S, 0, TL, PTL, ATL, B) = gr(ATL, PTL) .
+ ceq termsModulo(M, S, s(N), empty, PTL, ATL, B) = termsModulo(M, S, s(N), TL, PTL', ATL, B)
+  if CT := createConsTable(M) /\
+     OT := createOpsTable(M) /\
+     gr(TL, PTL') := generateTerms(M, S, s(N), CT, OT, PTL, empty) .
+ ceq termsModulo(M, S, s(N), (T, TL), PTL, ATL, B) = termsModulo(M, S, N, TL, PTL, (ATL, T'), B)
+  if {T', Ty} := metaReduce(M, T) /\
+     (not B) or-else hasSort?(M, T', S) /\
+     not ATL contains T' .
+ eq termsModulo(M, S, s(N), (T, TL), PTL, ATL, B) = termsModulo(M, S, s(N), TL, PTL, ATL, B) [owise] .
+
+ op createOpsTable : Module -> OpsTable [memo] .
+ eq createOpsTable(M) = createOpsTable(M, getOps(M), getMbs(M), getSorts(M)) .
+
+ op createOpsTable : Module OpDeclSet MembAxSet SortSet -> OpsTable .
+ eq createOpsTable(M, ODS, MAS, none) = empty .
+ eq createOpsTable(M, ODS, MAS, S ; SS) = S ||-> (getCtorsSubs*(ODS, S ; lesserSorts(M,S))
+                                                 getCtorSuper(M, ODS, MAS, S)),
+                                          createOpsTable(M, ODS, MAS, SS) .
+
+ op getCtorsSubs* : OpDeclSet SortSet -> OpDeclSet .
+ eq getCtorsSubs*(ODS, S ; SS) = getCtorsSubs(ODS, S) getCtorsSubs*(ODS, SS) .
+ eq getCtorsSubs*(ODS, none) = none .
+
+ op getCtorsSubs : OpDeclSet Sort -> OpDeclSet .
+ ceq getCtorsSubs(op Q : TyL -> S [ctor AtS] . ODS, S) = op Q : TyL -> S [ctor AtS] .
+                                                         getCtorsSubs(ODS, S)
+  if TyL =/= nil .
+ eq getCtorsSubs(ODS, S) = none [owise] .
+
+ op getCtorSuper : Module OpDeclSet MembAxSet Sort -> OpDeclSet .
+ eq getCtorSuper(M, ODS, mb T : S [AtS] . MAS, S) = getCtorsSuper*(ODS, greaterSorts(M, S)) .
+ eq getCtorSuper(M, ODS, cmb T : S if CND [AtS] . MAS, S) = getCtorsSuper*(ODS, greaterSorts(M, S)) .
+ eq getCtorSuper(M, ODS, MAS, S) = none [owise] .
+
+ op getCtorsSuper* : OpDeclSet SortSet -> OpDeclSet .
+ eq getCtorsSuper*(ODS, S ; SS) = getCtorsSuper(ODS, S) getCtorsSuper*(ODS, SS) .
+ eq getCtorsSuper*(ODS, none) = none .
+
+ op getCtorsSuper : OpDeclSet Sort -> OpDeclSet .
+ ceq getCtorsSuper(op Q : TyL -> S [ctor AtS] . ODS, S) = op Q : TyL -> S [ctor AtS] .
+                                                          getCtorsSuper(ODS, S)
+  if TyL =/= nil .
+ eq getCtorsSuper(ODS, S) = none [owise] .
+
+ op createConsTable : Module -> ConsTable [memo] .
+ ceq createConsTable(M) = insert('String, initStr, insert('Char, initChar, CT))
+  if CT := createConsTable(M, getOps(M), getSorts(M)) .
+
+ op createConsTable : Module OpDeclSet SortSet -> ConsTable .
+ eq createConsTable(M, ODS, none) = empty .
+ eq createConsTable(M, ODS, S ; SS) = S ||-> getCons(M, ODS, S), createConsTable(M, ODS, SS) .
+
+ op greaterSorts : Module Sort -> SortSet .
+ op greaterSorts : Module Sort SortSet SortSet -> SortSet .
+
+ eq greaterSorts(M, S') = greaterSorts(M, S', getSorts(M), none) .
+ eq greaterSorts(M, S', none, SS) = SS .
+ eq greaterSorts(M, S', S'' ; SS, SS') = if sortLeq(M, S', S'') and-then S' =/= S''
+                                       then greaterSorts(M, S', SS, S'' ; SS')
+                                       else greaterSorts(M, S', SS, SS')
+                                       fi .
+
+
+ op ops2terms : OpDeclSet -> TermList .
+ eq ops2terms(none) = empty .
+ eq ops2terms(op Q : TyL -> Ty [AtS] . ODS) = Q[typeList2vars(TyL)], ops2terms(ODS) .
+
+ op usesMemberships? : Module Sort -> Bool [memo] .
+ eq usesMemberships?(M, S) = usesMemberships?(getMbs(M), S) .
+
+ op usesMemberships? : MembAxSet Sort -> Bool .
+ eq usesMemberships?(mb T : S [AtS] . MAS, S) = true .
+ eq usesMemberships?(cmb T : S if CND [AtS] . MAS, S) = true .
+ eq usesMemberships?(MAS, S) = false [owise] .
+
+ op hasSort? : Module Term Sort -> Bool .
+ ceq hasSort?(M, T, S) = false
+  if Ty := type(M, T) /\
+     not sameKind(M, S, Ty) .
+ ceq hasSort?(M, T, S) = sortLeq(M, Ty, S)
+  if Ty := type(M, T) /\
+     sameKind(M, S, Ty) .
+ eq hasSort?(M, T, S) = false [owise] .
+
+ op type : Module Term ~> Type .
+ eq type(M, T) = getType(metaReduce(M, T)) .
+
+ op normal : Module Term ~> Term .
+ eq normal(M, T) = getTerm(metaNormalize(M, T)) .
+
+ op typeList2vars : TypeList -> TermList .
+ eq typeList2vars(nil) = empty .
+ eq typeList2vars(Ty TyL) = qid("V:" + string(Ty)), typeList2vars(TyL) .
+
+ op getCons : Module OpDeclSet Sort -> TermList .
+ eq getCons(M, op Q : nil -> Ty [AtS] . ODS, S) =
+      if hasSort?(M, qid(string(Q) + "." + string(Ty)), S)
+      then qid(string(Q) + "." + string(Ty))
+      else empty
+      fi, getCons(M, ODS, S) .
+ eq getCons(M, ODS, S) = empty [owise] .
+
+ op _contains_ : TermList Term -> Bool .
+ eq empty contains T = false .
+ eq (T, TL) contains T' = if T == T'
+                          then true
+                          else TL contains T'
+                          fi .
+
+ op initStr : -> TermList .
+ eq initStr = '"ab".String, '"abc".String, '"abcd".String, '"abcde".String .
+
+ op initChar : -> TermList .
+ eq initChar = '"a".Char, '"b".Char, '"c".Char, '"d".Char, '"e".Char .
+
+ op createTerms : Qid TermList TermList TermList -> TermList .
+ eq createTerms(Q, TL, (T, TL'), TL'') = Q[TL, T, TL''], createTerms(Q, TL, TL', TL'') .
+ eq createTerms(Q, TL, empty, TL'') = empty .
+endfm
