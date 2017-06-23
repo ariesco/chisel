@@ -780,3 +780,11 @@ endfm)
   eq I <i I' = if I < I' then 1 else 0 fi .
 endm)
 
+(memory inferences .)
+
+*** Memory Registers
+
+(context update sorts .)
+
+*** Memory
+
