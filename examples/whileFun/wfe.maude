@@ -353,8 +353,14 @@ endm)
 
 eof
 
-(memory inferences .)
+Maude> (memory inferences .)
 
-(context update sorts .)
+ESt RWBUF
 
-(context update rules .)
+Maude> (context update sorts .)
+
+ESt
+
+Maude> (context update rules .)
+
+CallF
