@@ -1,6 +1,6 @@
 load full-maude.maude
 
-load inferences.maude
+load syntheses.maude
 load slicing_process.maude
 load aux-modules.maude
 load ctxt-upd-by-exec.maude
