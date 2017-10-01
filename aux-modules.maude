@@ -8,6 +8,17 @@ view Sort from TRIV to META-MODULE is
  sort Elt to Sort .
 endv
 
+fth CTL-Theory is
+ sort Prop .
+endfth
+
+fmod CTL{X :: CTL-Theory} is
+ sort CTLFormula .
+ subsort X$Prop < CTLFormula .
+
+ ops A_ E_ []_ <>_ not_ : CTLFormula -> CTLFormula [ctor] .
+endfm
+
 fmod PRINTING-FUNCTIONS is
   pr INTER-PROCEDURAL-SLICING .
 
