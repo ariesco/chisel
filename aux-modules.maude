@@ -9,14 +9,16 @@ view Sort from TRIV to META-MODULE is
 endv
 
 fth CTL-Theory is
- sort Prop .
+ sorts Prop HyperTree .
 endfth
 
 fmod CTL{X :: CTL-Theory} is
  sort CTLFormula .
  subsort X$Prop < CTLFormula .
 
- ops A_ E_ []_ <>_ not_ : CTLFormula -> CTLFormula [ctor] .
+ ops A_ E_ []_ O_ <>_ not_ : CTLFormula -> CTLFormula [ctor] .
+
+ op _|=_ : X$HyperTree CTLFormula -> X$HyperTree .
 endfm
 
 fmod PRINTING-FUNCTIONS is
