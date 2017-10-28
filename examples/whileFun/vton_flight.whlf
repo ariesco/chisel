@@ -1,0 +1,4084 @@
+load wfe.maude
+
+***
+*** EXAMPLE 5 - SCHEDULER FLY_BY_WIRE
+***
+
+(mod EXAMPLE is
+ pr EVALUATION-WHILE .
+
+op myFuns : -> FunSet .
+eq myFuns = 'main (nv)
+{
+    Local 'MAX_NUMBER_OF_PROCESSES ;
+    Local 'i ;
+    Local 'L7354_i ;
+    Local 'L7932_i ;
+    Local 'L9096_i ;
+    Local 'H ;
+    Local 'active_partition ;
+    Local 'V4 ;
+    Local 'V3 ;
+    Local 'V2 ;
+    Local 'timedout ;
+    Local 'sema ;
+    Local 'evt ;
+    Local 's_port ;
+    Local 'buff2 ;
+    Local 'buff1 ;
+    Local 'board ;
+    Local 'trigger ;
+    Local 'zblocked ;
+    Local 'blocked ;
+    Local 'L6250_CONTROL_cond ;
+    Local 'rep2 ;
+    Local 'diag_size ;
+    Local 'diag_area ;
+    Local 'rep1 ;
+    Local 'L6342_blocked ;
+    Local 'on_waiting ;
+    Local 'L6345_SEND_BUFFER_cond ;
+    Local 'diagnostic ;
+    Local 'present ;
+    Local 'outofrange ;
+    Local 'available ;
+    Local 'buffer_out ;
+    Local 'buffer_in ;
+    Local 'nowaitingprocess ;
+    Local 'mess ;
+    Local 'some_processID ;
+    Local 'full ;
+    Local 'enabled ;
+    Local 'toolong ;
+    Local 'L6529_toolongXZX_subexpr ;
+    Local 'aux ;
+    Local 'L6657_SEND_cond ;
+    Local 'L6717_blocked ;
+    Local 'L6722_on_waiting ;
+    Local 'L6723_WAIT_EVENT_cond ;
+    Local 'L6759_available ;
+    Local 'L6760_outofrange ;
+    Local 'event_in ;
+    Local 'L6762_present_up ;
+    Local 'L6783_enabled ;
+    Local 'L6821_diagnostic ;
+    Local 'L6922_diagnostic ;
+    Local 'blackboard_in ;
+    Local 'L6941_present ;
+    Local 'L6960_enabled ;
+    Local 'empty ;
+    Local 'L6998_mess ;
+    Local 'L7083_Message_Size_cell ;
+    Local 'L7095_Message_Area_cell ;
+    Local 'L7114_blocked ;
+    Local 'L7116_on_waiting ;
+    Local 'L7117_SEND_BUFFER_cond ;
+    Local 'L7151_diagnostic ;
+    Local 'L7152_present ;
+    Local 'L7153_outofrange ;
+    Local 'L7154_available ;
+    Local 'L7168_buffer_out ;
+    Local 'L7169_buffer_in ;
+    Local 'L7189_nowaitingprocess ;
+    Local 'L7190_mess ;
+    Local 'L7191_some_processID ;
+    Local 'L7259_full ;
+    Local 'L7260_enabled ;
+    Local 'L7261_toolong ;
+    Local 'L7288_toolongXZX_subexpr ;
+    Local 'L7311_aux ;
+    Local 'L7416_SEND_cond ;
+    Local 'L7561_trigger ;
+    Local 'L7562_zblocked ;
+    Local 'L7563_blocked ;
+    Local 'L7591_CONTROL_cond ;
+    Local 'final_rep ;
+    Local 'L7663_blocked ;
+    Local 'retrieve ;
+    Local 'message_2 ;
+    Local 'L7671_RECEIVE_BUFFER_cond ;
+    Local 'L7700_present ;
+    Local 'L7706_available ;
+    Local 'L7710_outofrange ;
+    Local 'L7711_diagnostic ;
+    Local 'L7723_buffer_out ;
+    Local 'L7724_buffer_in ;
+    Local 'L7782_nowaitingprocess ;
+    Local 'some_message ;
+    Local 'L7784_some_processID ;
+    Local 'L7844_empty ;
+    Local 'L7845_enabled ;
+    Local 'L7888_aux ;
+    Local 'L8045_blocked ;
+    Local 'L8050_on_waiting ;
+    Local 'L8051_WAIT_SEMAPHORE_cond ;
+    Local 'L8082_diagnostic ;
+    Local 'sema_out ;
+    Local 'L8093_outofrange ;
+    Local 'L8094_available ;
+    Local 'sema_in ;
+    Local 'L8096_present ;
+    Local 'positive ;
+    Local 'L8117_enabled ;
+    Local 'L8300_some_processID ;
+    Local 'release ;
+    Local 'L8306_diagnostic ;
+    Local 'L8308_sema_out ;
+    Local 'L8311_sema_in ;
+    Local 'L8312_present ;
+    Local 'L8325_enabled ;
+    Local 'event_out ;
+    Local 'L8443_event_in ;
+    Local 'L8444_present ;
+    Local 'L8505_Message_Size_cell ;
+    Local 'L8513_Message_Area_cell ;
+    Local 'samplingPort_out ;
+    Local 'samplingPort_in ;
+    Local 'L8533_mess ;
+    Local 'L8535_present ;
+    Local 'length_OK ;
+    Local 'L8725_trigger ;
+    Local 'L8726_zblocked ;
+    Local 'L8727_blocked ;
+    Local 'L8755_CONTROL_cond ;
+    Local 'diag ;
+    Local 'L8827_blocked ;
+    Local 'L8829_retrieve ;
+    Local 'L8830_message_2 ;
+    Local 'L8835_RECEIVE_BUFFER_cond ;
+    Local 'L8864_present ;
+    Local 'L8870_available ;
+    Local 'L8874_outofrange ;
+    Local 'L8875_diagnostic ;
+    Local 'L8887_buffer_out ;
+    Local 'L8888_buffer_in ;
+    Local 'L8946_nowaitingprocess ;
+    Local 'L8947_some_message ;
+    Local 'L8948_some_processID ;
+    Local 'L9008_empty ;
+    Local 'L9009_enabled ;
+    Local 'L9052_aux ;
+    Local 'L9211_blocked ;
+    Local 'L9216_on_waiting ;
+    Local 'L9217_WAIT_SEMAPHORE_cond ;
+    Local 'L9248_diagnostic ;
+    Local 'L9254_sema_out ;
+    Local 'L9259_outofrange ;
+    Local 'L9260_available ;
+    Local 'L9261_sema_in ;
+    Local 'L9262_present ;
+    Local 'L9282_positive ;
+    Local 'L9283_enabled ;
+    Local 'L9463_some_processID ;
+    Local 'L9465_release ;
+    Local 'L9469_diagnostic ;
+    Local 'L9471_sema_out ;
+    Local 'L9474_sema_in ;
+    Local 'L9475_present ;
+    Local 'L9488_enabled ;
+    Local 'L9596_Message_Size_cell ;
+    Local 'L9604_Message_Area_cell ;
+    Local 'blackboard_out ;
+    Local 'release_all ;
+    Local 'L9627_diagnostic ;
+    Local 'process_range ;
+    Local 'L9632_mess ;
+    Local 'L9634_present ;
+    Local 'L9635_blackboard_in ;
+    Local 'L9650_enabled ;
+    Local 'L9651_toolong ;
+    Local 'L9776_release_all ;
+    Local 'L9778_diagnostic ;
+    Local 'L9780_event_out ;
+    Local 'L9782_process_range ;
+    Local 'L9783_event_in ;
+    Local 'L9784_present ;
+    Local 'L9797_enabled ;
+    Local 'recorded ;
+    Local 'some_blackboardID ;
+    Local 'op_mode ;
+    Local 'L9893_present ;
+    Local 'L9894_full ;
+    Local 'some_bufferID ;
+    Local 'L9998_recorded ;
+    Local 'L9999_full ;
+    Local 'L10000_present ;
+    Local 'L10001_valid_param ;
+    Local 'L10003_op_mode ;
+    Local 'L10006_CREATE_BUFFER_var ;
+    Local 'L10126_some_bufferID ;
+    Local 'L10127_recorded ;
+    Local 'L10128_full ;
+    Local 'L10129_present ;
+    Local 'L10130_valid_param ;
+    Local 'L10132_op_mode ;
+    Local 'L10135_CREATE_BUFFER_var ;
+    Local 'L10240_recorded ;
+    Local 'some_eventID ;
+    Local 'L10247_op_mode ;
+    Local 'L10248_present ;
+    Local 'L10249_full ;
+    Local 'some_semaphoreID ;
+    Local 'L10332_recorded ;
+    Local 'L10338_valid_param ;
+    Local 'L10339_op_mode ;
+    Local 'L10340_present ;
+    Local 'L10341_full ;
+    Local 'L10380_CREATE_SEMAPHORE_var ;
+    Local 'some_samplingPort ;
+    Local 'L10465_recorded ;
+    Local 'exceeded ;
+    Local 'L10467_present ;
+    Local 'created ;
+    Local 'L10472_OK_req ;
+    Local 'L10473_op_mode ;
+    Local 'L10535_CREATE_SAMPLING_PORT_var ;
+    Local 'success ;
+    Local 'pid1 ;
+    Local 'pid2 ;
+    Local 'pid3 ;
+    Local 'recorded1 ;
+    Local 'recorded2 ;
+    Local 'recorded3 ;
+    Local 'att1 ;
+    Local 'att2 ;
+    Local 'att3 ;
+    Local 'L10711_present ;
+    Local 'L10712_op_mode ;
+    Local 'timecap_OK ;
+    Local 'L10714_period_OK ;
+    Local 'L10717_created ;
+    Local 'entrypt_OK ;
+    Local 'L10735_CREATE_PROCESS_var ;
+    Local 'L10868_present ;
+    Local 'L10869_op_mode ;
+    Local 'L10870_timecap_OK ;
+    Local 'L10871_period_OK ;
+    Local 'L10874_created ;
+    Local 'L10875_entrypt_OK ;
+    Local 'L10892_CREATE_PROCESS_var ;
+    Local 'L11025_present ;
+    Local 'L11026_op_mode ;
+    Local 'L11027_timecap_OK ;
+    Local 'L11028_period_OK ;
+    Local 'L11031_created ;
+    Local 'L11032_entrypt_OK ;
+    Local 'L11047_CREATE_PROCESS_var ;
+    Local 'L11139_status ;
+    Local 'cur_time ;
+    Local 'time_capacity ;
+    Local 'L11145_diagnostic ;
+    Local 'L11147_op_mode ;
+    Local 'priority ;
+    Local 'state ;
+    Local 'L11153_present ;
+    Local 'L11194_enabled ;
+    Local 'L11278_status ;
+    Local 'L11280_cur_time ;
+    Local 'L11281_time_capacity ;
+    Local 'L11284_diagnostic ;
+    Local 'L11286_op_mode ;
+    Local 'L11287_priority ;
+    Local 'L11291_state ;
+    Local 'L11292_present ;
+    Local 'L11333_enabled ;
+    Local 'L11417_status ;
+    Local 'L11419_cur_time ;
+    Local 'L11420_time_capacity ;
+    Local 'L11423_diagnostic ;
+    Local 'L11425_op_mode ;
+    Local 'L11426_priority ;
+    Local 'L11430_state ;
+    Local 'L11431_present ;
+    Local 'L11472_enabled ;
+    Local 'pid ;
+    Local 'pstatus ;
+    Local 'ok ;
+    Local 'L11609_diagnostic ;
+    Local 'L11616_enabled ;
+    Local 'L11618_OK_req ;
+    Local 'L11627_pid ;
+    Local 'L11628_pstatus ;
+    Local 'L11629_ok ;
+    Local 'period ;
+    Local 'C_UP_DOWN ;
+    Local 'C_LIN_EXP ;
+    Local 'PI_0 ;
+    Local 'NEW_BOUND ;
+    Local 'V ;
+    Local 'L11797_DYN_EVERY_var ;
+    Local 'L11855_NEW_BOUND ;
+    Local 'VD ;
+    Local 'VU ;
+    Local 'L11881_NEW_BOUND ;
+    Local 'L11892_DELTA ;
+    Local 'L11893_VD ;
+    Local 'L11894_VU ;
+    Local 'CODE_CHANGE ;
+    Local 'NEXTAUTO ;
+    Local 'C_SW_AUTO ;
+    Local 'C_STOP ;
+    Local 'C_TICK ;
+    Local 'DESCR ;
+    Local 'CINIT ;
+    Local 'b_init ;
+    Local 'X ;
+    Local 'L12123_V ;
+    Local 'L12136_V1 ;
+    Local 'L12171_V1 ;
+    Local 'ECRAN ;
+    Local 'X1 ;
+    Local 'X2 ;
+    Local 'L12308_X1 ;
+    Local 'L12310_X2 ;
+    Local 'L12413_X1 ;
+    Local 'L12415_X2 ;
+    Local 'C_aff ;
+    Local 'L12589_C_aff ;
+    Local 'L12649_C_aff ;
+    Local 'L16709_PERIOD_INPUT_var ;
+    Local 'L16714_C_STOP ;
+    Local 'C_ZAUTO ;
+    Local 'C_S_PACE__ ;
+    Local 'L16810_CREATE_SAMPLING_PORT_var ;
+    Local 'L16827_extended_recorded ;
+    Local 'L16961_START_var ;
+    Local 'L16972_START_var ;
+    Local 'L16982_START_var ;
+    Local 'L16993_START_var ;
+    Local 'L17003_START_var ;
+    Local 'L17014_START_var ;
+    Local 'CLK_7071 ;
+    Local 'CLK_7094 ;
+    Local 'L17038_extended_L11766_HS_1 ;
+    Local 'L17043_SET_BOUND_var ;
+    Local 'L17045_VD ;
+    Local 'CLK_7145 ;
+    Local 'CLK_7150 ;
+    Local 'L17055_extended_CLK_7150 ;
+    Local 'CLK_7168 ;
+    Local 'L17065_VD ;
+    Local 'CLK_7183 ;
+    Local 'CLK_7188 ;
+    Local 'L17075_extended_CLK_7188 ;
+    Local 'C_CREATE_BLACKBOARD_ ;
+    Local 'C_CREATE_BUFFER_ ;
+    Local 'L17138_C_CREATE_BUFFER_ ;
+    Local 'C_CREATE_EVENT_ ;
+    Local 'C_CREATE_SEMAPHORE_ ;
+    Local 'C_VU ;
+    Local 'L17231_C_VU ;
+    Local 'C_NEW_BOUND ;
+    Local 'L17246_extended_C_NEW_BOUND ;
+    Local 'L17252_C_NEW_BOUND ;
+    Local 'L17258_extended_C_NEW_BOUND ;
+    Local 'C_b_init ;
+    Local 'L17387_extended_recorded ;
+    Local 'L17396_extended_recorded ;
+    Local 'L17405_extended_recorded ;
+    Local 'L17414_extended_recorded ;
+    Local 'L17423_extended_recorded ;
+    Local 'L17428_ZV ;
+    Local 'L17431_extended_ZV ;
+    Local 'CLK_7353 ;
+    Local 'CLK_7368 ;
+    Local 'L17446_success ;
+    Local 'L17470_extended_ok ;
+    Local 'C_global_params__ ;
+    Local 'C_board_cell_ ;
+    Local 'C_buff2_cell_ ;
+    Local 'C_buff1_cell_ ;
+    Local 'C_evt_cell_ ;
+    Local 'C_sema_cell_ ;
+    Local 'C_s_port__ ;
+    Local 'L17514_extended_L6158_end_processing1 ;
+    Local 'L17519_Message_Size ;
+    Local 'L17524_SEND_BUFFER_cond ;
+    Local 'L17532_SEND_cond ;
+    Local 'L17548_WAIT_EVENT_cond ;
+    Local 'L17556_present ;
+    Local 'L17574_present ;
+    Local 'L17595_SEND_BUFFER_cond ;
+    Local 'L17603_SEND_cond ;
+    Local 'L17619_Message_Size ;
+    Local 'L17630_extended_L6157_end_processing2 ;
+    Local 'L17635_RECEIVE_BUFFER_cond ;
+    Local 'L17643_outofrange ;
+    Local 'L17661_WAIT_SEMAPHORE_cond ;
+    Local 'L17669_present ;
+    Local 'L17687_Message_Size ;
+    Local 'L17692_present ;
+    Local 'L17702_FF_noaction ;
+    Local 'L17709_present ;
+    Local 'CLK_4887 ;
+    Local 'L17721_present ;
+    Local 'L17744_extended_L6156_end_processing3 ;
+    Local 'L17749_RECEIVE_BUFFER_cond ;
+    Local 'L17757_outofrange ;
+    Local 'L17775_WAIT_SEMAPHORE_cond ;
+    Local 'L17783_present ;
+    Local 'L17801_Message_Size ;
+    Local 'L17806_present ;
+    Local 'L17816_FF_L9489_noaction ;
+    Local 'L17823_DISPLAY_BLACKBOARD_cond ;
+    Local 'L17830_Waiting_Queue ;
+    Local 'CLK_5573 ;
+    Local 'L17846_present ;
+    Local 'CLK_5651 ;
+    Local 'CLK_7493 ;
+    Local 'CLK_7496 ;
+    Local 'CLK_7497 ;
+    Local 'CLK_7527 ;
+    Local 'CLK_7530 ;
+    Local 'CLK_7531 ;
+    Local 'CLK_7561 ;
+    Local 'CLK_7564 ;
+    Local 'CLK_7565 ;
+    Local 'C_CLK_8210 ;
+    Local 'C_CLK_8216 ;
+    Local 'C_CLK_8222 ;
+    Local 'C_Message_Area_ ;
+    Local 'L17928_C_Message_Area_ ;
+    Local 'L17931_C_Message_Area_ ;
+    Local 'C_full ;
+    Local 'C_up ;
+    Local 'C_empty ;
+    Local 'L17946_C_full ;
+    Local 'L17949_C_empty ;
+    Local 'C_positive ;
+    Local 'C_Waiting_Queue ;
+    Local 'C_SIGNAL_SEMAPHORE_ ;
+    Local 'C_Message ;
+    Local 'L17988_C_empty ;
+    Local 'L17991_C_positive ;
+    Local 'L17997_C_Waiting_Queue ;
+    Local 'L18000_C_SIGNAL_SEMAPHORE_ ;
+    Local 'C_ok ;
+    Local 'CLK_3462 ;
+    Local 'L18081_service_call ;
+    Local 'L18087_extended_full ;
+    Local 'L18089_toolongXZX_subexpr ;
+    Local 'L18092_extended_toolongXZX_subexpr ;
+    Local 'L18094_nowaitingprocess ;
+    Local 'L18097_extended_up ;
+    Local 'L18102_extended_FF_up ;
+    Local 'L18105_extended_empty ;
+    Local 'L18107_Message_Size ;
+    Local 'L18110_extended_Message_Size ;
+    Local 'L18113_extended_Message_Size ;
+    Local 'L18116_extended_full ;
+    Local 'L18118_toolongXZX_subexpr ;
+    Local 'L18121_extended_toolongXZX_subexpr ;
+    Local 'L18123_nowaitingprocess ;
+    Local 'CLK_4317 ;
+    Local 'L18133_L7559_service_call ;
+    Local 'L18139_extended_empty ;
+    Local 'L18141_some_message_cell ;
+    Local 'L18144_extended_some_message_cell ;
+    Local 'L18147_extended_positive ;
+    Local 'L18152_extended_FF_positive ;
+    Local 'CLK_4660 ;
+    Local 'CLK_4804 ;
+    Local 'CLK_4946 ;
+    Local 'CLK_4994 ;
+    Local 'L18180_L8723_service_call ;
+    Local 'L18186_extended_empty ;
+    Local 'L18188_some_message_cell ;
+    Local 'L18191_extended_some_message_cell ;
+    Local 'L18194_extended_positive ;
+    Local 'L18199_extended_FF_L9282_positive ;
+    Local 'CLK_5337 ;
+    Local 'CLK_5481 ;
+    Local 'L18228_extended_OK_req ;
+    Local 'C_SEND_cond ;
+    Local 'C_WAIT_cond ;
+    Local 'C_diag_area_ ;
+    Local 'C_READ_BLACKBOARD_ ;
+    Local 'L18281_C_SEND_cond ;
+    Local 'C_enabled ;
+    Local 'L18308_C_WAIT_cond ;
+    Local 'L18317_C_enabled ;
+    Local 'L18332_C_WAIT_cond ;
+    Local 'C_SUSPEND_SELF_ ;
+    Local 'L18413_extended_enabled ;
+    Local 'L18426_SEND_var ;
+    Local 'L18435_extended_SEND_var ;
+    Local 'L18437_aux ;
+    Local 'L18443_extended_SEND_cond ;
+    Local 'L18449_extended_enabled ;
+    Local 'L18454_extended_WAIT_cond ;
+    Local 'L18460_extended_enabled ;
+    Local 'L18465_extended_READ_BLACKBOARD_cond ;
+    Local 'L18471_extended_enabled ;
+    Local 'L18484_SEND_var ;
+    Local 'L18493_extended_SEND_var ;
+    Local 'L18495_aux ;
+    Local 'L18501_extended_SEND_cond ;
+    Local 'L18507_extended_RECEIVE_cond ;
+    Local 'L18513_extended_enabled ;
+    Local 'L18523_RECEIVE_var ;
+    Local 'L18529_extended_RECEIVE_var ;
+    Local 'L18531_mess_cell ;
+    Local 'L18543_extended_mess_cell ;
+    Local 'L18549_extended_enabled ;
+    Local 'L18554_extended_WAIT_cond ;
+    Local 'L18560_extended_RECEIVE_cond ;
+    Local 'L18566_extended_enabled ;
+    Local 'L18576_RECEIVE_var ;
+    Local 'L18582_extended_RECEIVE_var ;
+    Local 'L18584_mess_cell ;
+    Local 'L18596_extended_mess_cell ;
+    Local 'L18602_extended_enabled ;
+    Local 'L18607_extended_WAIT_cond ;
+    Local 'L18619_extended_C_return_code_ ;
+    Local 'C_ret1 ;
+    Local 'L18628_extended_C_ret1 ;
+    Local 'C_WAIT_var ;
+    Local 'L18640_extended_C_return_code_ ;
+    Local 'C_ret2 ;
+    Local 'L18649_extended_C_ret2 ;
+    Local 'L18655_C_READ_BLACKBOARD_ ;
+    Local 'L18667_extended_C_ret3 ;
+    Local 'L18682_extended_C_return_code_ ;
+    Local 'C_ret5 ;
+    Local 'L18691_extended_C_ret5 ;
+    Local 'C_continue ;
+    Local 'C_CONTROL_cond ;
+    Local 'L18706_C_WAIT_var ;
+    Local 'L18715_extended_C_return_code_ ;
+    Local 'L18721_C_ret1 ;
+    Local 'L18724_extended_C_ret1 ;
+    Local 'L18730_C_WAIT_var ;
+    Local 'L18739_extended_C_return_code_ ;
+    Local 'L18745_C_ret1 ;
+    Local 'L18748_extended_C_ret1 ;
+    Local 'C_RECEIVE_var ;
+    Local 'L18757_C_RECEIVE_var ;
+    Local 'C_SEND_var ;
+    Local 'L18763_C_SEND_var ;
+    Local 'C_diagnostic ;
+    Local 'L18775_C_diagnostic ;
+    Local 'L18784_C_diagnostic ;
+    Local 'L18796_C_diagnostic ;
+    Local 'L18823_extended_C_return_code_ ;
+    Local 'L18832_extended_C_ret0 ;
+    Local 'C_L7558_continue ;
+    Local 'L18847_C_CONTROL_cond ;
+    Local 'L18853_extended_C_return_code_ ;
+    Local 'L18862_extended_C_ret0 ;
+    Local 'C_L8722_continue ;
+    Local 'L18877_C_CONTROL_cond ;
+    Local 'L19009_extended_CONTROL_cond ;
+    Local 'L19015_extended_CONTROL_cond ;
+    Local 'L19021_extended_CONTROL_cond ;
+    Local 'pK__I ;
+    Local 'pAPEX_Semaphore_type ;
+    Local 'GLOBAL_SEMAPHORE_MANAGER_CheckID ;
+    Local 'GLOBAL_SEMAPHORE_MANAGER_Update ;
+    Local 'GLOBAL_SEMAPHORE_MANAGER_Record ;
+    Local 'GLOBAL_SEMAPHORE_MANAGER_CheckID_Full ;
+    Local 'GLOBAL_SEMAPHORE_MANAGER_CheckID ;
+    Local 'pAPEX_Event_type ;
+    Local 'GLOBAL_EVENT_MANAGER_CheckID ;
+    Local 'GLOBAL_EVENT_MANAGER_Update ;
+    Local 'GLOBAL_EVENT_MANAGER_Full ;
+    Local 'GLOBAL_EVENT_MANAGER_CheckName ;
+    Local 'GLOBAL_EVENT_MANAGER_CheckID ;
+    Local 'pAPEX_Blackboard_type ;
+    Local 'GLOBAL_BLACKBOARD_MANAGER_CheckName ;
+    Local 'GLOBAL_BLACKBOARD_MANAGER_Full ;
+    Local 'GLOBAL_BLACKBOARD_MANAGER_Record ;
+    Local 'GLOBAL_BLACKBOARD_MANAGER_CheckID ;
+    Local 'GLOBAL_BLACKBOARD_MANAGER_Update ;
+    Local 'pAPEX_Buffer_type ;
+    Local 'GLOBAL_BUFFER_MANAGER_CheckName ;
+    Local 'GLOBAL_BUFFER_MANAGER_Full ;
+    Local 'GLOBAL_BUFFER_MANAGER_Record ;
+    Local 'GLOBAL_BUFFER_MANAGER_Update ;
+    Local 'GLOBAL_BUFFER_MANAGER_CheckID ;
+    Local 'pAPEX_SamplingPort_type ;
+    Local 'GLOBAL_SAMPLINGPORT_MANAGER_CheckID ;
+    Local 'GLOBAL_SAMPLINGPORT_MANAGER_Update ;
+    Local 'GLOBAL_SAMPLINGPORT_MANAGER_Full ;
+    Local 'GLOBAL_SAMPLINGPORT_MANAGER_CheckName ;
+    Local 'GLOBAL_SAMPLINGPORT_MANAGER_CheckCreated ;
+    Local 'GLOBAL_SAMPLINGPORT_MANAGER_Record ;
+    Local 'pMessage_type ;
+    Local 'pProcessStatus_type ;
+    Local 'pProcessAttributes_type ;
+    Local 'GLOBAL_PROCESS_MANAGER_StopCounter ;
+    Local 'GLOBAL_PROCESS_MANAGER_CheckPreemptionStatus ;
+    Local 'GLOBAL_PROCESS_MANAGER_SetState ;
+    Local 'GLOBAL_PROCESS_MANAGER_SchedulingRequest ;
+    Local 'GLOBAL_PROCESS_MANAGER_StartCounter ;
+    Local 'GLOBAL_PROCESS_MANAGER_Recording ;
+    Local 'GLOBAL_PROCESS_MANAGER_RetrieveMessage ;
+    Local 'GLOBAL_PROCESS_MANAGER_StopCounters_many ;
+    Local 'GLOBAL_PROCESS_MANAGER_CopyMessage ;
+    Local 'GLOBAL_PROCESS_MANAGER_SetState_many ;
+    Local 'GLOBAL_PROCESS_MANAGER_GetActive ;
+    Local 'GLOBAL_PROCESS_MANAGER_GetPeriod ;
+    Local 'GLOBAL_PROCESS_MANAGER_UpdateTimeCounters ;
+    Local 'GLOBAL_PROCESS_MANAGER_CheckOperatingMode ;
+    Local 'GLOBAL_PROCESS_MANAGER_SetDeadlineTime ;
+    Local 'GLOBAL_PROCESS_MANAGER_GetTimeCapacity ;
+    Local 'GLOBAL_PROCESS_MANAGER_CheckID ;
+    Local 'GLOBAL_PROCESS_MANAGER_CheckName ;
+    Local 'GLOBAL_PROCESS_MANAGER_GetTime ;
+    Local 'GLOBAL_PROCESS_MANAGER_SetPriority ;
+    Local 'GLOBAL_PROCESS_MANAGER_GetBasicPriority ;
+    Local 'GLOBAL_PROCESS_MANAGER_GetState ;
+    Local 'GLOBAL_PROCESS_MANAGER_SetCreated ;
+    Local 'GLOBAL_PROCESS_MANAGER_SetAttributes ;
+    Local 'GLOBAL_PROCESS_MANAGER_CheckCreated ;
+    'MAX_NUMBER_OF_PROCESSES := 63 ;
+    'i := 0 ;
+    'L7354_i := 0 ;
+    'L7932_i := 0 ;
+    'L9096_i := 0 ;
+    'H := 1 ;
+    'active_partition := 0 ;
+    'V4 := 1 ;
+    'V3 := 1 ;
+    'V2 := 1 ;
+    'timedout := 63 ;
+    'sema := 'init_ProcessID_type ;
+    'evt := 'init_ProcessID_type ;
+    's_port := 'init_ProcessID_type ;
+    'buff2 := 'init_ProcessID_type ;
+    'buff1 := 'init_ProcessID_type ;
+    'board := 'init_ProcessID_type ;
+    'trigger := 1 ;
+    'zblocked := 1 ;
+    'blocked := 1 ;
+    'L6250_CONTROL_cond := 1 ;
+    'rep2 := 'init_Message_type ;
+    'diag_size := 'init_ProcessID_type ;
+    'diag_area := 'initSystemTime_type ;
+    'rep1 := 'initMessage_type ;
+    'L6342_blocked := 1 ;
+    'on_waiting := 1 ;
+    'L6345_SEND_BUFFER_cond := 1 ;
+    'diagnostic := 1 ;
+    'present := 1 ;
+    'outofrange := 1 ;
+    'available := 1 ;
+    'buffer_out := 'initAPEX_Buffer_type ;
+    'buffer_in := 'APEX_Buffer_type ;
+    'nowaitingprocess := 1 ;
+    'mess := 'initMessage_type ;
+    'some_processID := 'initProcessID_type ;
+    'full := 0 ;
+    'enabled := 0 ;
+    'toolong := 0 ;
+    'L6529_toolongXZX_subexpr := 'initProcessID_type ;
+    'aux := 'initMessage_type ;
+    'L6657_SEND_cond := 1 ;
+    'L6717_blocked := 1 ;
+    'L6722_on_waiting := 1 ;
+    'L6723_WAIT_EVENT_cond := 1 ;
+    'L6759_available := 1 ;
+    'L6760_outofrange := 1 ;
+    'event_in := 'initAPEX_Event_type ;
+    'L6762_present_up := 1 ;
+    'L6783_enabled := 1 ;
+    'L6821_diagnostic := 1 ;
+    'L6922_diagnostic := 1 ;
+    'blackboard_in := 'initAPEX_Blackboard_type ;
+    'L6941_present := 1 ;
+    'L6960_enabled := 1 ;
+    'empty := 1 ;
+    'L6998_mess := 'initMessage_type ;
+    'L7083_Message_Size_cell := 'initProcessID_type ;
+    'L7095_Message_Area_cell := 'initSystemTime_type ;
+    'L7114_blocked := 1 ;
+    'L7116_on_waiting := 1 ;
+    'L7117_SEND_BUFFER_cond := 1 ;
+    'L7151_diagnostic := 1 ;
+    'L7152_present := 1 ;
+    'L7153_outofrange := 1 ;
+    'L7154_available := 1 ;
+    'L7168_buffer_out := 'initAPEX_Buffer_type ;
+    'L7169_buffer_in := 'initAPEX_Buffer_type ;
+    'L7189_nowaitingprocess := 1 ;
+    'L7190_mess := 'initMessage_type ;
+    'L7191_some_processID := 'initProcessID_type ;
+    'L7259_full := 1 ;
+    'L7260_enabled := 1 ;
+    'L7261_toolong := 1 ;
+    'L7288_toolongXZX_subexpr := 'initProcessID_type ;
+    'L7311_aux := 'initMessage_type ;
+    'L7416_SEND_cond := 1 ;
+    'L7561_trigger := 1 ;
+    'L7562_zblocked := 1 ;
+    'L7563_blocked := 1 ;
+    'L7591_CONTROL_cond := 1 ;
+    'final_rep := 'initMessage_type ;
+    'L7663_blocked := 0 ;
+    'retrieve := 0 ;
+    'message_2 := 'initMessage_type ;
+    'L7671_RECEIVE_BUFFER_cond := 1 ;
+    'L7700_present := 1 ;
+    'L7706_available := 1 ;
+    'L7710_outofrange := 1 ;
+    'L7711_diagnostic := 1 ;
+    'L7723_buffer_out := 'initAPEX_Buffer_type ;
+    'L7724_buffer_in := 'initAPEX_Buffer_type ;
+    'L7782_nowaitingprocess := 0 ;
+    'some_message := 'initMessage_type ;
+    'L7784_some_processID := 'initProcessID_type ;
+    'L7844_empty := 0 ;
+    'L7845_enabled := 0 ;
+    'L7888_aux := 'initMessage_type ;
+    'L8045_blocked := 1 ;
+    'L8050_on_waiting := 1 ;
+    'L8051_WAIT_SEMAPHORE_cond := 1 ;
+    'L8082_diagnostic := 1 ;
+    'sema_out := 'initAPEX_Semaphore_type ;
+    'L8093_outofrange := 1 ;
+    'L8094_available := 1 ;
+    'sema_in := 'initAPEX_Semaphore_type ;
+    'L8096_present := 0 ;
+    'positive := 0 ;
+    'L8117_enabled := 0 ;
+    'L8300_some_processID := 'initProcessID_type ;
+    'release := 0 ;
+    'L8306_diagnostic := 0 ;
+    'L8308_sema_out := 'initAPEX_Semaphore_type ;
+    'L8311_sema_in := 'initAPEX_Semaphore_type ;
+    'L8312_present := 1 ;
+    'L8325_enabled := 1 ;
+    'event_out := 'initAPEX_Event_type ;
+    'L8443_event_in := 'initAPEX_Event_type ;
+    'L8444_present := 0 ;
+    'L8505_Message_Size_cell := 'initProcessID_type ;
+    'L8513_Message_Area_cell := 'SystemTime_type ;
+    'samplingPort_out := 'initAPEX_SamplingPort_type ;
+    'samplingPort_in := 'initAPEX_SamplingPort_type ;
+    'L8533_mess := 'initMessage_type ;
+    'L8535_present := 0 ;
+    'length_OK := 0 ;
+    'L8725_trigger := 0 ;
+    'L8726_zblocked := 0 ;
+    'L8727_blocked := 0 ;
+    'L8755_CONTROL_cond := 0 ;
+    'diag := 'initMessage_type ;
+    'L8827_blocked := 0 ;
+    'L8829_retrieve := 0 ;
+    'L8830_message_2 := 'initMessage_type ;
+    'L8835_RECEIVE_BUFFER_cond := 1 ;
+    'L8864_present := 1 ;
+    'L8870_available := 1 ;
+    'L8874_outofrange := 1 ;
+    'L8875_diagnostic := 1 ;
+    'L8887_buffer_out := 'initAPEX_Buffer_type ;
+    'L8888_buffer_in := 'initAPEX_Buffer_type ;
+    'L8946_nowaitingprocess := 0 ;
+    'L8947_some_message := 'initMessage_type ;
+    'L8948_some_processID := 'initProcessID_type ;
+    'L9008_empty := 0 ;
+    'L9009_enabled := 0 ;
+    'L9052_aux := 'initMessage_type ;
+    'L9211_blocked := 1 ;
+    'L9216_on_waiting := 1 ;
+    'L9217_WAIT_SEMAPHORE_cond := 1 ;
+    'L9248_diagnostic := 1 ;
+    'L9254_sema_out := 'initAPEX_Semaphore_type ;
+    'L9259_outofrange := 0 ;
+    'L9260_available := 0 ;
+    'L9261_sema_in := 'initAPEX_Semaphore_type ;
+    'L9262_present := 0 ;
+    'L9282_positive := 0 ;
+    'L9283_enabled := 0 ;
+    'L9463_some_processID := 'initProcessID_type ;
+    'L9465_release := 0 ;
+    'L9469_diagnostic := 0 ;
+    'L9471_sema_out := 'initAPEX_Semaphore_type ;
+    'L9474_sema_in := 'initAPEX_Semaphore_type ;
+    'L9475_present := 0 ;
+    'L9488_enabled := 0 ;
+    'L9596_Message_Size_cell := 'initProcessID_type ;
+    'L9604_Message_Area_cell := 'initSystemTime_type ;
+    'blackboard_out := 'initAPEX_Blackboard_type ;
+    'release_all := 0 ;
+    'L9627_diagnostic := 0 ;
+    'process_range := 1 ;
+    'L9632_mess := 'initMessage_type ;
+    'L9634_present := 1 ;
+    'L9635_blackboard_in := 'initAPEX_Blackboard_type ;
+    'L9650_enabled := 1 ;
+    'L9651_toolong := 1 ;
+    'L9776_release_all := 1 ;
+    'L9778_diagnostic := 1 ;
+    'L9780_event_out := 'initAPEX_Event_type ;
+    'L9782_process_range := 1 ;
+    'L9783_event_in := 'initAPEX_Event_type ;
+    'L9784_present := 1 ;
+    'L9797_enabled := 1 ;
+    'recorded := 1 ;
+    'some_blackboardID := 'initProcessID_type ;
+    'op_mode := 'initOperatingMode_type ;
+    'L9893_present := 1 ;
+    'L9894_full := 1 ;
+    'some_bufferID := 'initProcessID_type ;
+    'L9998_recorded := 1 ;
+    'L9999_full := 1 ;
+    'L10000_present := 1 ;
+    'L10001_valid_param := 1 ;
+    'L10003_op_mode := 'initOperatingMode_type ;
+    'L10006_CREATE_BUFFER_var := 'initQueuingDiscipline_type ;
+    'L10126_some_bufferID := 'initProcessID_type ;
+    'L10127_recorded := 0 ;
+    'L10128_full := 0 ;
+    'L10129_present := 0 ;
+    'L10130_valid_param := 0 ;
+    'L10132_op_mode := 'initOperatingMode_type ;
+    'L10135_CREATE_BUFFER_var := 'initQueuingDiscipline_type ;
+    'L10240_recorded := 0 ;
+    'some_eventID := 'initProcessID_type ;
+    'L10247_op_mode := 'initOperatingMode_type ;
+    'L10248_present := 0 ;
+    'L10249_full := 0 ;
+    'some_semaphoreID := 'initProcessID_type ;
+    'L10332_recorded := 0 ;
+    'L10338_valid_param := 0 ;
+    'L10339_op_mode := 'initOperatingMode_type ;
+    'L10340_present := 1 ;
+    'L10341_full := 1 ;
+    'L10380_CREATE_SEMAPHORE_var := 'initQueuingDiscipline_type ;
+    'some_samplingPort := 'initProcessID_type ;
+    'L10465_recorded := 1 ;
+    'exceeded := 1 ;
+    'L10467_present := 1 ;
+    'created := 1 ;
+    'L10472_OK_req := 1 ;
+    'L10473_op_mode := 'initOperatingMode_type ;
+    'L10535_CREATE_SAMPLING_PORT_var := 'initPortDirection_type ;
+    'success := 0 ;
+    'pid1 := 'initProcessID_type ;
+    'pid2 := 'initProcessID_type ;
+    'pid3 := 'initProcessID_type ;
+    'recorded1 := 1 ;
+    'recorded2 := 1 ;
+    'recorded3 := 1 ;
+    'att1 := 'initProcessAttributes_type ;
+    'att2 := 'initProcessAttributes_type ;
+    'att3 := 'initProcessAttributes_type ;
+    'L10711_present := 1 ;
+    'L10712_op_mode := 'initOperatingMode_type ;
+    'timecap_OK := 0 ;
+    'L10714_period_OK := 0 ;
+    'L10717_created := 0 ;
+    'entrypt_OK := 0 ;
+    'L10735_CREATE_PROCESS_var := 'initComm_ComponentName_type ;
+    'L10868_present := 0 ;
+    'L10869_op_mode := 'initOperatingMode_type ;
+    'L10870_timecap_OK := 0 ;
+    'L10871_period_OK := 0 ;
+    'L10874_created := 0 ;
+    'L10875_entrypt_OK := 0 ;
+    'L10892_CREATE_PROCESS_var := 'initComm_ComponentName_type ;
+    'L11025_present := 0 ;
+    'L11026_op_mode := 'initOperatingMode_type ;
+    'L11027_timecap_OK := 0 ;
+    'L11028_period_OK := 0 ;
+    'L11031_created := 0 ;
+    'L11032_entrypt_OK := 0 ;
+    'L11047_CREATE_PROCESS_var := 'initComm_ComponentName_type ;
+    'L11139_status := 'initProcessStatus_type ;
+    'cur_time := 'initSystemTime_type ;
+    'time_capacity := 'initSystemTime_type ;
+    'L11145_diagnostic := 0 ;
+    'L11147_op_mode := 'initOperatingMode_type ;
+    'priority := 'initProcessID_type ;
+    'state := 'initProcessState_type ;
+    'L11153_present := 0 ;
+    'L11194_enabled := 0 ;
+    'L11278_status := 'initProcessStatus_type ;
+    'L11280_cur_time := 'initSystemTime_type  ;
+    'L11281_time_capacity := 'initSystemTime_type ;
+    'L11284_diagnostic := 0 ;
+    'L11286_op_mode := 'initOperatingMode_type ;
+    'L11287_priority := 'initProcessID_type ;
+    'L11291_state := 'initProcessState_type ;
+    'L11292_present := 0 ;
+    'L11333_enabled := 0 ;
+    'L11417_status := 'initProcessStatus_type ;
+    'L11419_cur_time := 'initSystemTime_type ;
+    'L11420_time_capacity := 'initSystemTime_type ;
+    'L11423_diagnostic := 1 ;
+    'L11425_op_mode := 'initOperatingMode_type ;
+    'L11426_priority := 'initProcessID_type ;
+    'L11430_state := 'initProcessState_type ;
+    'L11431_present := 1 ;
+    'L11472_enabled := 1 ;
+    'pid := 'initProcessID_type ;
+    'pstatus := 'initProcessStatus_type ;
+    'ok := 1 ;
+    'L11609_diagnostic := 1 ;
+    'L11616_enabled := 1 ;
+    'L11618_OK_req := 1 ;
+    'L11627_pid := 'initProcessID_type ;
+    'L11628_pstatus := 'initProcessStatus_type ;
+    'L11629_ok := 1 ;
+    'period := 'initSystemTime_type ;
+    'C_UP_DOWN := 1 ;
+    'C_LIN_EXP := 1 ;
+    'PI_0 := 1 ;
+    'NEW_BOUND := 2 ;
+    'V := 10 ;
+    'L11797_DYN_EVERY_var := 1 ;
+    'L11855_NEW_BOUND := 1000 ;
+    'VD := 10 ;
+    'VU := 100 ;
+    'L11881_NEW_BOUND := 1000 ;
+    'L11892_DELTA := 20 ;
+    'L11893_VD := 0 ;
+    'L11894_VU := 100 ;
+    'CODE_CHANGE := 0 ;
+    'NEXTAUTO := 1 ;
+    'C_SW_AUTO := 1 ;
+    'C_STOP := 1 ;
+    'C_TICK := 1 ;
+    'DESCR := 1 ;
+    'CINIT := 0 ;
+    'b_init := 0 ;
+    'X := 1 ;
+    'L12123_V := 1 ;
+    'L12136_V1 := 1 ;
+    'L12171_V1 := 2 ;
+    'ECRAN := 1 ;
+    'X1 := 5 ;
+    'X2 := 6 ;
+    'L12308_X1 := 1 ;
+    'L12310_X2 := 2 ;
+    'L12413_X1 := 1 ;
+    'L12415_X2 := 2 ;
+    'C_aff := 1 ;
+    'L12589_C_aff := 10 ;
+    'L12649_C_aff := 10 ;
+    'L16709_PERIOD_INPUT_var := 0 ;
+    'L16714_C_STOP := 0 ;
+    'C_ZAUTO := 0 ;
+    'C_S_PACE__ := 0 ;
+    'L16810_CREATE_SAMPLING_PORT_var := 0 ;
+    'L16827_extended_recorded := 0 ;
+    'L16961_START_var := 1 ;
+    'L16972_START_var := 1 ;
+    'L16982_START_var := 1 ;
+    'L16993_START_var := 1 ;
+    'L17003_START_var := 1 ;
+    'L17014_START_var := 1 ;
+    'CLK_7071 := 0 ;
+    'CLK_7094 := 0 ;
+    'L17038_extended_L11766_HS_1 := 1 ;
+    'L17043_SET_BOUND_var := 1 ;
+    'L17045_VD := 0 ;
+    'CLK_7145 := 0 ;
+    'CLK_7150 := 0 ;
+    'L17055_extended_CLK_7150 := 1 ;
+    'CLK_7168 := 0 ;
+    'L17065_VD := 1 ;
+    'CLK_7183 := 0 ;
+    'CLK_7188 := 0 ;
+    'L17075_extended_CLK_7188 := 1 ;
+    'C_CREATE_BLACKBOARD_ := 0 ;
+    'C_CREATE_BUFFER_ := 0 ;
+    'L17138_C_CREATE_BUFFER_ := 0 ;
+    'C_CREATE_EVENT_ := 0 ;
+    'C_CREATE_SEMAPHORE_ := 0 ;
+    'C_VU := 0 ;
+    'L17231_C_VU := 0 ;
+    'C_NEW_BOUND := 0 ;
+    'L17246_extended_C_NEW_BOUND := 1 ;
+    'L17252_C_NEW_BOUND := 0 ;
+    'L17258_extended_C_NEW_BOUND := 1 ;
+    'C_b_init := 0 ;
+    'L17387_extended_recorded := 1 ;
+    'L17396_extended_recorded := 1 ;
+    'L17405_extended_recorded := 1 ;
+    'L17414_extended_recorded := 1 ;
+    'L17423_extended_recorded := 1 ;
+    'L17428_ZV := 0 ;
+    'L17431_extended_ZV := 0 ;
+    'CLK_7353 := 0 ;
+    'CLK_7368 := 0 ;
+    'L17446_success := 0 ;
+    'L17470_extended_ok := 0 ;
+    'C_global_params__ := 0 ;
+    'C_board_cell_ := 0 ;
+    'C_buff2_cell_ := 0 ;
+    'C_buff1_cell_ := 0 ;
+    'C_evt_cell_ := 0 ;
+    'C_sema_cell_ := 0 ;
+    'C_s_port__ := 0 ;
+    'L17514_extended_L6158_end_processing1 := 0 ;
+    'L17519_Message_Size := 0 ;
+    'L17524_SEND_BUFFER_cond := 1 ;
+    'L17532_SEND_cond := 1 ;
+    'L17548_WAIT_EVENT_cond := 1 ;
+    'L17556_present := 0 ;
+    'L17574_present := 0 ;
+    'L17595_SEND_BUFFER_cond := 1 ;
+    'L17603_SEND_cond := 1 ;
+    'L17619_Message_Size := 0 ;
+    'L17630_extended_L6157_end_processing2 := 0 ;
+    'L17635_RECEIVE_BUFFER_cond := 1 ;
+    'L17643_outofrange := 0 ;
+    'L17661_WAIT_SEMAPHORE_cond := 1 ;
+    'L17669_present := 0 ;
+    'L17687_Message_Size := 0 ;
+    'L17692_present := 0 ;
+    'L17702_FF_noaction := 0 ;
+    'L17709_present := 0 ;
+    'CLK_4887 := 0 ;
+    'L17721_present := 0 ;
+    'L17744_extended_L6156_end_processing3 := 0 ;
+    'L17749_RECEIVE_BUFFER_cond := 1 ;
+    'L17757_outofrange := 0 ;
+    'L17775_WAIT_SEMAPHORE_cond := 1 ;
+    'L17783_present := 0 ;
+    'L17801_Message_Size := 0 ;
+    'L17806_present := 0 ;
+    'L17816_FF_L9489_noaction := 0 ;
+    'L17823_DISPLAY_BLACKBOARD_cond := 1 ;
+    'L17830_Waiting_Queue := 0 ;
+    'CLK_5573 := 0 ;
+    'L17846_present := 0 ;
+    'CLK_5651 := 0 ;
+    'CLK_7493 := 0 ;
+    'CLK_7496 := 0 ;
+    'CLK_7497 := 0 ;
+    'CLK_7527 := 0 ;
+    'CLK_7530 := 0 ;
+    'CLK_7531 := 0 ;
+    'CLK_7561 := 0 ;
+    'CLK_7564 := 0 ;
+    'CLK_7565 := 0 ;
+    'C_CLK_8210 := 0 ;
+    'C_CLK_8216 := 0 ;
+    'C_CLK_8222 := 0 ;
+    'C_Message_Area_ := 0 ;
+    'L17928_C_Message_Area_ := 0 ;
+    'L17931_C_Message_Area_ := 0 ;
+    'C_full := 0 ;
+    'C_up := 0 ;
+    'C_empty := 0 ;
+    'L17946_C_full := 0 ;
+    'L17949_C_empty := 0 ;
+    'C_positive := 0 ;
+    'C_Waiting_Queue := 0 ;
+    'C_SIGNAL_SEMAPHORE_ := 0 ;
+    'C_Message := 0 ;
+    'L17988_C_empty := 0 ;
+    'L17991_C_positive := 0 ;
+    'L17997_C_Waiting_Queue := 0 ;
+    'L18000_C_SIGNAL_SEMAPHORE_ := 0 ;
+    'C_ok := 0 ;
+    'CLK_3462 := 0 ;
+    'L18081_service_call := 0 ;
+    'L18087_extended_full := 0 ;
+    'L18089_toolongXZX_subexpr := 0 ;
+    'L18092_extended_toolongXZX_subexpr := 0 ;
+    'L18094_nowaitingprocess := 0 ;
+    'L18097_extended_up := 0 ;
+    'L18102_extended_FF_up := 0 ;
+    'L18105_extended_empty := 0 ;
+    'L18107_Message_Size := 0 ;
+    'L18110_extended_Message_Size := 0 ;
+    'L18113_extended_Message_Size := 0 ;
+    'L18116_extended_full := 0 ;
+    'L18118_toolongXZX_subexpr := 0 ;
+    'L18121_extended_toolongXZX_subexpr := 0 ;
+    'L18123_nowaitingprocess := 0 ;
+    'CLK_4317 := 0 ;
+    'L18133_L7559_service_call := 0 ;
+    'L18139_extended_empty := 0 ;
+    'L18141_some_message_cell := 0 ;
+    'L18144_extended_some_message_cell := 0 ;
+    'L18147_extended_positive := 0 ;
+    'L18152_extended_FF_positive := 0 ;
+    'CLK_4660 := 0 ;
+    'CLK_4804 := 0 ;
+    'CLK_4946 := 0 ;
+    'CLK_4994 := 0 ;
+    'L18180_L8723_service_call := 0 ;
+    'L18186_extended_empty := 0 ;
+    'L18188_some_message_cell := 0 ;
+    'L18191_extended_some_message_cell := 0 ;
+    'L18194_extended_positive := 0 ;
+    'L18199_extended_FF_L9282_positive := 0 ;
+    'CLK_5337 := 0 ;
+    'CLK_5481 := 0 ;
+    'L18228_extended_OK_req := 0 ;
+    'C_SEND_cond := 1 ;
+    'C_WAIT_cond := 1 ;
+    'C_diag_area_ := 1 ;
+    'C_READ_BLACKBOARD_ := 0 ;
+    'L18281_C_SEND_cond := 1 ;
+    'C_enabled := 0 ;
+    'L18308_C_WAIT_cond := 1 ;
+    'L18317_C_enabled := 0 ;
+    'L18332_C_WAIT_cond := 1 ;
+    'C_SUSPEND_SELF_ := 0 ;
+    'L18413_extended_enabled := 0 ;
+    'L18426_SEND_var := 0 ;
+    'L18435_extended_SEND_var := 0 ;
+    'L18437_aux := 0 ;
+    'L18443_extended_SEND_cond := 1 ;
+    'L18449_extended_enabled := 0 ;
+    'L18454_extended_WAIT_cond := 1 ;
+    'L18460_extended_enabled := 0 ;
+    'L18465_extended_READ_BLACKBOARD_cond := 1 ;
+    'L18471_extended_enabled := 0 ;
+    'L18484_SEND_var := 0 ;
+    'L18493_extended_SEND_var := 0 ;
+    'L18495_aux := 0 ;
+    'L18501_extended_SEND_cond := 1 ;
+    'L18507_extended_RECEIVE_cond := 1 ;
+    'L18513_extended_enabled := 0 ;
+    'L18523_RECEIVE_var := 0 ;
+    'L18529_extended_RECEIVE_var := 0 ;
+    'L18531_mess_cell := 0 ;
+    'L18543_extended_mess_cell := 0 ;
+    'L18549_extended_enabled := 0 ;
+    'L18554_extended_WAIT_cond := 1 ;
+    'L18560_extended_RECEIVE_cond := 1 ;
+    'L18566_extended_enabled := 0 ;
+    'L18576_RECEIVE_var := 0 ;
+    'L18582_extended_RECEIVE_var := 0 ;
+    'L18584_mess_cell := 0 ;
+    'L18596_extended_mess_cell := 0 ;
+    'L18602_extended_enabled := 0 ;
+    'L18607_extended_WAIT_cond := 1 ;
+    'L18619_extended_C_return_code_ := 0 ;
+    'C_ret1 := 0 ;
+    'L18628_extended_C_ret1 := 0 ;
+    'C_WAIT_var := 0 ;
+    'L18640_extended_C_return_code_ := 0 ;
+    'C_ret2 := 0 ;
+    'L18649_extended_C_ret2 := 0 ;
+    'L18655_C_READ_BLACKBOARD_ := 0 ;
+    'L18667_extended_C_ret3 := 0 ;
+    'L18682_extended_C_return_code_ := 0 ;
+    'C_ret5 := 0 ;
+    'L18691_extended_C_ret5 := 0 ;
+    'C_continue := 0 ;
+    'C_CONTROL_cond := 0 ;
+    'L18706_C_WAIT_var := 0 ;
+    'L18715_extended_C_return_code_ := 0 ;
+    'L18721_C_ret1 := 0 ;
+    'L18724_extended_C_ret1 := 0 ;
+    'L18730_C_WAIT_var := 0 ;
+    'L18739_extended_C_return_code_ := 0 ;
+    'L18745_C_ret1 := 0 ;
+    'L18748_extended_C_ret1 := 0 ;
+    'C_RECEIVE_var := 0 ;
+    'L18757_C_RECEIVE_var := 0 ;
+    'C_SEND_var := 0 ;
+    'L18763_C_SEND_var := 0 ;
+    'C_diagnostic := 0 ;
+    'L18775_C_diagnostic := 0 ;
+    'L18784_C_diagnostic := 0 ;
+    'L18796_C_diagnostic := 0 ;
+    'L18823_extended_C_return_code_ := 0 ;
+    'L18832_extended_C_ret0 := 0 ;
+    'C_L7558_continue := 0 ;
+    'L18847_C_CONTROL_cond := 1 ;
+    'L18853_extended_C_return_code_ := 0 ;
+    'L18862_extended_C_ret0 := 0 ;
+    'C_L8722_continue := 0 ;
+    'L18877_C_CONTROL_cond := 1 ;
+    'L19009_extended_CONTROL_cond := 1 ;
+    'L19015_extended_CONTROL_cond := 1 ;
+    'L19021_extended_CONTROL_cond := 1 ;
+    'pK__I := 100 ;
+    'GLOBAL_SEMAPHORE_MANAGER_CheckID := 'GSEMci1 +. 'pAPEX_Semaphore_type ;
+    'GLOBAL_SEMAPHORE_MANAGER_Update := 'pAPEX_Semaphore_type ;
+    'GLOBAL_SEMAPHORE_MANAGER_Record := 'GSEMr1 +. ('GSEMr2 +. ('GSEMr3 +. ('GSEMr4 +. 'GSEMr5))) ;
+    'GLOBAL_SEMAPHORE_MANAGER_CheckID_Full := 0 ;
+    'GLOBAL_SEMAPHORE_MANAGER_CheckID := 'GSEMci1 +. 'GSEMci2 ;
+    'GLOBAL_EVENT_MANAGER_CheckID := 'GEVMci1 +. 'pAPEX_Event_type ;
+    'GLOBAL_EVENT_MANAGER_Update := 'pAPEX_Event_type ;
+    'GLOBAL_EVENT_MANAGER_Full := 0 ;
+    'GLOBAL_EVENT_MANAGER_CheckName := 'GEVMcn1 +. 'GEVMcn2 ;
+    'GLOBAL_EVENT_MANAGER_CheckID := 'GEVMci1 +. 'GEVMci2 ;
+    'GLOBAL_BLACKBOARD_MANAGER_CheckName := 'GBLMcn1 +. 'GBLMcn2 ;
+    'GLOBAL_BLACKBOARD_MANAGER_Full := 0 ;
+    'GLOBAL_BLACKBOARD_MANAGER_Record := 'GBLMr1 +. ('GBLMr2 +. 'GBLMr3) ;
+    'GLOBAL_BLACKBOARD_MANAGER_CheckID := 'GBLMci1 +. 'pAPEX_Blackboard_type ;
+    'GLOBAL_BLACKBOARD_MANAGER_Update := 'pAPEX_Blackboard_type ;
+    'GLOBAL_BUFFER_MANAGER_CheckName := 'GBUMcn1 +. 'GBUMcn2 ;
+    'GLOBAL_BUFFER_MANAGER_Full := 0 ;
+    'GLOBAL_BUFFER_MANAGER_Record := 'GBUMr1 +. ('GBUMr4 +. ('GBUMr3  +. ('GBUMr4 +. 'GBUMr5))) ;
+    'GLOBAL_BUFFER_MANAGER_Update := 'pAPEX_Buffer_type ;
+    'GLOBAL_BUFFER_MANAGER_CheckID := 'GBUMci1 +. 'pAPEX_Buffer_type ;
+    Local 'pAPEX_SamplingPort_type ;
+    'GLOBAL_SAMPLINGPORT_MANAGER_CheckID := 'GEVMci1 +. 'pAPEX_SamplingPort_type ;
+    'GLOBAL_SAMPLINGPORT_MANAGER_Update := 'pAPEX_SamplingPort_type ;
+    'GLOBAL_SAMPLINGPORT_MANAGER_Full := 0 ;
+    'GLOBAL_SAMPLINGPORT_MANAGER_CheckName := 'GSAMcn1 +. 'GSAMcn2 ;
+    'GLOBAL_SAMPLINGPORT_MANAGER_CheckCreated := 'GEVMcc1 ;
+    'GLOBAL_SAMPLINGPORT_MANAGER_Record := 'GBUMr1 +. ('GBUMr4 +. ('GBUMr3  +. ('GBUMr4 +. 'GBUMr5))) ;
+    'GLOBAL_PROCESS_MANAGER_StopCounter := 'GPMsc1 ;
+    'GLOBAL_PROCESS_MANAGER_CheckPreemptionStatus := 'GPMcps1 ;
+    'GLOBAL_PROCESS_MANAGER_SetState := 'GPMss1 +. 'GPMss2 ;
+    'GLOBAL_PROCESS_MANAGER_SchedulingRequest := 0 ;
+    'GLOBAL_PROCESS_MANAGER_StartCounter := 'GPMsc1 +. 'GPMsc2 ;
+    'GLOBAL_PROCESS_MANAGER_Recording := 'GPM1r1 ;
+    'GLOBAL_PROCESS_MANAGER_RetrieveMessage := 'GPMrm1 ;
+    'GLOBAL_PROCESS_MANAGER_StopCounters_many := 'GPMscm1 ;
+    'GLOBAL_PROCESS_MANAGER_CopyMessage := 'GPMcm1 +. 'pMessage_type ;
+    'GLOBAL_PROCESS_MANAGER_SetState_many := 'GPMssm1 +. 'GPMss2 ;
+    'GLOBAL_PROCESS_MANAGER_GetActive := 'pProcessStatus_type +. 'GPMga2 ;
+    'GLOBAL_PROCESS_MANAGER_GetPeriod := 'GPMgp1 ;
+    'GLOBAL_PROCESS_MANAGER_UpdateTimeCounters := 'GPMutc1 ;
+    'GLOBAL_PROCESS_MANAGER_CheckOperatingMode := 0 ;
+    'GLOBAL_PROCESS_MANAGER_SetDeadlineTime := 'GPMsdt1 +. 'GPMstd2 ;
+    'GLOBAL_PROCESS_MANAGER_GetTimeCapacity := 'GPMgtc1 ;
+    'GLOBAL_PROCESS_MANAGER_CheckID := 'GPMci1 +. 'pProcessStatus_type ;
+    'GLOBAL_PROCESS_MANAGER_CheckName := 'GPMcn1 +. 'iGPMcn2 ;
+    'GLOBAL_PROCESS_MANAGER_GetTime := 0 ;
+    'GLOBAL_PROCESS_MANAGER_SetPriority := 'GPMsp1 +. 'GPMsp2 ;
+    'GLOBAL_PROCESS_MANAGER_GetBasicPriority := 'GPMgbp1 ;
+    'GLOBAL_PROCESS_MANAGER_GetState := 'GPMgs1 ;
+    'GLOBAL_PROCESS_MANAGER_SetCreated := 'GPMsc1 ;
+    'GLOBAL_PROCESS_MANAGER_SetAttributes := 'GPMsa1 +. 'pProcessAttributes_type ;
+    'GLOBAL_PROCESS_MANAGER_CheckCreated := 'GPMcc1 ;
+
+    Call 'VTON_FLIGHT_step_initialize ('empty) ;
+    Call 'VTON_FLIGHT_step ('empty)
+}
+
+'VTON_FLIGHT_initialize (nv)
+{
+    'sema := 0 ;
+    'evt := 0 ;
+    's_port := 0 ;
+    'buff2 := 0 ;
+    'buff1 := 0 ;
+    'board := 0 ;
+    'V2 := 1 ;
+    'zblocked := 'pk_false ;
+    'diag_size := 0 ;
+    'diag_area := 0 ;
+    'L6342_blocked := 'pk_false ;
+    'L6717_blocked := 'pk_false ;
+    'L7083_Message_Size_cell := 0 ;
+    'L7095_Message_Area_cell := 0 ;
+    'L7114_blocked := 'pk_false ;
+    'V3 := 1 ;
+    'L7562_zblocked := 'pk_false ;
+    'L7663_blocked := 'pk_false ;
+    'L8045_blocked := 'pk_false ;
+    'L8505_Message_Size_cell := 0 ;
+    'L8513_Message_Area_cell := 0 ;
+    'V4 := 1 ;
+    'L8726_zblocked := 'pk_false ;
+    'L8827_blocked := 'pk_false ;
+    'L9211_blocked := 'pk_false ;
+    'L9596_Message_Size_cell := 0 ;
+    'L9604_Message_Area_cell := 0 ;
+    'V := 1 ;
+    'L11797_DYN_EVERY_var := 0 ;
+    'NEW_BOUND := 1 ;
+    'NEXTAUTO := 'pk_true ;
+    'DESCR := 0 ;
+    'CINIT := 'pk_true ;
+    'b_init := 'pk_true ;
+    'L12123_V := (((('DELTA +. 'DELTA) +. 'TICK_WIDTH)) *. ('FRONT_NUMBER -. 1)) ;
+    'X := (((('DELTA +. 'DELTA) +. 'TICK_WIDTH)) *. ('TICK_NUMBER -. 1)) ;
+    'ECRAN := 0 ;
+    'rep1Message_Area := 10 ;
+    'rep1Message_Size := 10 ;
+    'final_repMessage_Size := 5 ;
+    'samplingPort_outMessage_Age := 0 ;
+    'diagMessage_Size := 15 ;
+    'L10006_CREATE_BUFFER_var := 'FIFO ;
+    'L10135_CREATE_BUFFER_var := 'FIFO ;
+    'L10380_CREATE_SEMAPHORE_var := 'FIFO ;
+    'L10535_CREATE_SAMPLING_PORT_var := 'SOURCE ;
+    'att1Entry_Point := 1 ;
+    'att1Stack_Size := 1 ;
+    'att1Base_Priority := 3 ;
+    'att1Period := 1 ;
+    'att1Time_Capacity := 1 ;
+    'att1Deadline := 'SOFT ;
+    'att2Entry_Point := 2 ;
+    'att2Stack_Size := 2 ;
+    'att2Base_Priority := 2 ;
+    'att2Period := 1 ;
+    'att2Time_Capacity := 2 ;
+    'att2Deadline := 'SOFT ;
+    'att3Entry_Point := 3 ;
+    'att3Stack_Size := 3 ;
+    'att3Base_Priority := 1 ;
+    'att3Period := 1 ;
+    'att3Time_Capacity := 4 ;
+    'att3Deadline := 'HARD ;
+    Call 'VTON_FLIGHT_step_initialize ('empty) ;
+    '__ret_VTON_FLIGHT_initialize := 'pk_false
+}
+
+'VTON_FLIGHT_step_initialize (nv)
+{
+    'present := 'pk_false ;
+    'L6762_present := 'pk_false ;
+    'L6941_present := 'pk_false ;
+    'L7152_present := 'pk_false ;
+    'L7700_present := 'pk_false ;
+    'L8096_present := 'pk_false ;
+    'release := 'pk_false ;
+    'L8312_present := 'pk_false ;
+    'L8444_present := 'pk_false ;
+    'L8535_present := 'pk_false ;
+    'L8864_present := 'pk_false ;
+    'L9262_present := 'pk_false ;
+    'L9465_release := 'pk_false ;
+    'L9475_present := 'pk_false ;
+    'release_all := 'pk_false ;
+    'L9634_present := 'pk_false ;
+    'L9776_release_all := 'pk_false ;
+    'L9784_present := 'pk_false ;
+    'recorded := 'pk_false ;
+    'L9893_present := 'pk_false ;
+    'L9998_recorded := 'pk_false ;
+    'L10000_present := 'pk_false ;
+    'L10127_recorded := 'pk_false ;
+    'L10129_present := 'pk_false ;
+    'L10240_recorded := 'pk_false ;
+    'L10248_present := 'pk_false ;
+    'L10332_recorded := 'pk_false ;
+    'L10340_present := 'pk_false ;
+    'L10465_recorded := 'pk_false ;
+    'L10467_present := 'pk_false ;
+    'created := 'pk_false ;
+    'L10472_OK_req := 'pk_false ;
+    'success := 'pk_false ;
+    'recorded1 := 'pk_false ;
+    'recorded2 := 'pk_false ;
+    'recorded3 := 'pk_false ;
+    'L10711_present := 'pk_false ;
+    'L10717_created := 'pk_false ;
+    'L10868_present := 'pk_false ;
+    'L10874_created := 'pk_false ;
+    'L11025_present := 'pk_false ;
+    'L11031_created := 'pk_false ;
+    'L11153_present := 'pk_false ;
+    'L11292_present := 'pk_false ;
+    'L11431_present := 'pk_false ;
+    'ok := 'pk_false ;
+    'L11629_ok := 'pk_false ;
+    'C_LIN_EXP := 'pk_false ;
+    'C_STOP := 'pk_false ;
+    'L16810_CREATE_SAMPLING_PORT_var := 'pk_false ;
+    'L16961_START_var := 'pk_false ;
+    'L16972_START_var := 'pk_false ;
+    'L16982_START_var := 'pk_false ;
+    'L16993_START_var := 'pk_false ;
+    'L17003_START_var := 'pk_false ;
+    'L17014_START_var := 'pk_false ;
+    'CLK_7071 := 'pk_false ;
+    'L17043_SET_BOUND_var := 'pk_false ;
+    'C_CREATE_BLACKBOARD_ := 'pk_false ;
+    'C_CREATE_BUFFER_ := 'pk_false ;
+    'L17138_C_CREATE_BUFFER_ := 'pk_false ;
+    'C_CREATE_EVENT_ := 'pk_false ;
+    'C_CREATE_SEMAPHORE_ := 'pk_false ;
+    'C_NEW_BOUND := 'pk_false ;
+    'L17252_C_NEW_BOUND := 'pk_false ;
+    'L17428_ZV := 'pk_false ;
+    'L17446_success := 'pk_false ;
+    'L17532_SEND_cond := 'pk_false ;
+    'L17556_present := 'pk_false ;
+    'L17574_present := 'pk_false ;
+    'L17603_SEND_cond := 'pk_false ;
+    'L17643_outofrange := 'pk_false ;
+    'L17669_present := 'pk_false ;
+    'L17692_present := 'pk_false ;
+    'L17709_present := 'pk_false ;
+    'L17721_present := 'pk_false ;
+    'L17757_outofrange := 'pk_false ;
+    'L17783_present := 'pk_false ;
+    'L17806_present := 'pk_false ;
+    'L17823_DISPLAY_BLACKBOARD_cond := 'pk_false ;
+    'L17846_present := 'pk_false ;
+    'C_SIGNAL_SEMAPHORE_ := 'pk_false ;
+    'L18000_C_SIGNAL_SEMAPHORE_ := 'pk_false ;
+    'L18426_SEND_var := 'pk_false ;
+    'L18484_SEND_var := 'pk_false ;
+    'L18523_RECEIVE_var := 'pk_false ;
+    'L18576_RECEIVE_var := 'pk_false
+}
+
+'VTON_FLIGHT_step (nv)
+{
+    Local 'tmp1 ;
+    Call 'r_VTON_FLIGHT_H ('H) ;
+    'tmp1 := '__res_r_VTON_FLIGHT_H ;
+    If Equal ('tmp1, 0) Then ('pk_false := 1) ;
+    Call 'RAUTO ('empty) ;
+    'C_SW_AUTO := '__res_RAUTO ;
+    Call 'RTICK ('empty) ;
+    'C_TICK := '__res_RTICK ;
+    'C_ZAUTO := Equal ('C_SW_AUTO, 1) Or Equal ('CINIT, 1) ;
+    If Equal ('CINIT, 1)
+    Then
+       (
+        'L9894_full := 'GLOBAL_BLACKBOARD_MANAGER_Full ;
+        'GBLMcn1 := '"board" ;
+        'GBLMcn2 := 'some_blackboardID ;
+        'L9893_present := 'GLOBAL_BLACKBOARD_MANAGER_CheckName ;
+        'op_mode := 'GLOBAL_PROCESS_MANAGER_CheckOperatingMode ;
+        'L10001_valid_param := Equal ('FIFO, 'FIFO) Or Equal ('FIFO, 'PRIORITY) ;
+        'L9999_full := 'GLOBAL_BUFFER_MANAGER_Full ;
+        'GBUMcn1 := '"buffer2" ;
+        'GBUMcn2 := 'some_bufferID ;
+        'L10000_present := 'GLOBAL_BUFFER_MANAGER_CheckName ;
+        'L10003_op_mode := 'GLOBAL_PROCESS_MANAGER_CheckOperatingMode ;
+        'L10130_valid_param := Equal ('FIFO, 'FIFO) Or Equal ('FIFO, 'PRIORITY) ;
+        'L10128_full := 'GLOBAL_BUFFER_MANAGER_Full ;
+        'GBUMcn1 := '"buffer1" ;
+        'iGBUMcn2 := 'L10126_some_bufferID ;
+        'L10129_present := 'GLOBAL_BUFFER_MANAGER_CheckName ;
+        'L10132_op_mode := 'GLOBAL_PROCESS_MANAGER_CheckOperatingMode ;
+        'L10249_full := 'GLOBAL_EVENT_MANAGER_Full ;
+        'GEVMcn1 := '"event" ;
+        'GEVMcn2 := 'some_eventID ;
+        'L10248_present := 'GLOBAL_EVENT_MANAGER_CheckName ;
+        'L10247_op_mode := 'GLOBAL_PROCESS_MANAGER_CheckOperatingMode ;
+        'L10338_valid_param := Equal ('FIFO, 'FIFO) Or Equal ('FIFO, 'PRIORITY) ;
+        'L10341_full := 'GLOBAL_SEMAPHORE_MANAGER_Full ;
+        'GSEMcn1 := '"semaphore" ;
+        'GSEMcn2 := 'some_semaphoreID ;
+        'L10340_present := 'GLOBAL_SEMAPHORE_MANAGER_CheckName ;
+        'L10339_op_mode := 'GLOBAL_PROCESS_MANAGER_CheckOperatingMode ;
+        'exceeded := 'GLOBAL_SAMPLINGPORT_MANAGER_Full ;
+        'GPRre1 := '"position_indicator" ;
+        'recorded1 := 'GLOBAL_PROCESS_MANAGER_Recording ;
+        'GPRre1 := '"fuel_indicator" ;
+        'recorded2 := 'GLOBAL_PROCESS_MANAGER_Recording ;
+        'GPRre1 := '"parameter_refresher" ;
+        'recorded3 := 'GLOBAL_PROCESS_MANAGER_Recording ;
+        Call 'GET_DESCR_PACEMAKER ('empty) ;
+        'DESCR := '__res_GET_DESCR_PACEMAKER ;
+        Call 'GET_PI_PACEMAKER ('empty) ;
+        'PI_0 := '__res_GET_PI_PACEMAKER ;
+        Call 'GET_DISPLAY ('empty) ;
+        'ECRAN := '__res_GET_DISPLAY ;
+        'L16810_CREATE_SAMPLING_PORT_var := 1 -. 'exceeded ;
+        'C_CREATE_BLACKBOARD_ := (Equal ('L9894_full, 0) And Equal ('L9893_present, 0)) And
+                                                             Equal (Equal ('op_mode, 'NORMAL), 0) ;
+        'C_CREATE_BUFFER_ := 'L10001_valid_param And ((Equal ('L9999_full, 0) And Equal ('L10000_present, 0)) And
+                                                                                               (Equal ('L10003_op_mode, 'NORMAL))) ;
+        'L17138_C_CREATE_BUFFER_ := 'L10130_valid_param And ((Equal ('L10128_full, 0) And Equal ('L10129_present, 0)) And
+                                                                                                             (Equal ('L10132_op_mode, 'NORMAL))) ;
+        'C_CREATE_EVENT_ := (Equal ('L10248_present, 0) And Equal ('L10249_full, 0)) And
+                                                (Equal ('L10247_op_mode, 'NORMAL)) ;
+        'C_CREATE_SEMAPHORE_ := (Equal ('L10340_present, 0) And Equal ('L10341_full, 0)) And
+                                                           (Equal ('L10339_op_mode, 'NORMAL) And 'L10338_valid_param);
+        If Equal ('recorded1, 0)
+        Then
+           (
+            Call 'strcpy ('att1Name, '"position_indicator") ;
+            'GPMcn1 := 'att1Name ;
+            'GPMcn2 := 'pid1 ;
+            'L10711_present := 'GLOBAL_PROCESS_MANAGER_CheckName ;
+            If Equal ('L10711_present, 0)
+            Then
+               (
+                'timecap_OK := 'att1Time_Capacity -. 100 ;
+                'L10714_period_OK := 'att1Period -. 100 ;
+                'entrypt_OK := 'att1Entry_Point -. 99999 ;
+                Call 'strcpy ('L10735_CREATE_PROCESS_var, 'att1Name) ;
+                'GPMcc1 := 'L10735_CREATE_PROCESS_var ;
+                'L10717_created := 'GLOBAL_PROCESS_MANAGER_CheckCreated ;
+                'L10712_op_mode := 'GLOBAL_PROCESS_MANAGER_CheckOperatingMode ;
+                'GPMci1 := 'pid1 ;
+                'GPMci2 := 'L11139_status ;
+                'L11153_present := 'GLOBAL_PROCESS_MANAGER_CheckID ;
+                Local 'tmp1 ;
+                'tmp1 := (Equal ('entrypt_OK, 0) And (Equal ('L10714_period_OK, 0) And Equal ('timecap_OK, 1))) ;
+                If ('tmp1 And (Equal ('L10717_created, 0) And Equal ('L10712_op_mode, 'NORMAL)))
+                Then
+                   (
+                    'GPMsa1 := 'pid1 ;
+                    'GPMsa2 := 'att1 ;
+                    'gpm1 := 'GLOBAL_PROCESS_MANAGER_SetAttributes ;
+                    'GPMss1 := 'pid1 ;
+                    'GPMss2 := 'DORMANT ;
+                    'gpm2 := 'GLOBAL_PROCESS_MANAGER_SetState ;
+                    'GPMsc1 := 'pid1 ;
+                    'gpm3 := 'GLOBAL_PROCESS_MANAGER_SetCreated
+                   ) ;
+                If Equal ('L11153_present, 1)
+                Then
+                   (
+                    'GPMgs1 := 'pid1 ;
+                    'state := 'GLOBAL_PROCESS_MANAGERGetState ;
+                    'L16961_START_var := Equal ('state, 'DORMANT) ;
+                    If Equal ('L16961_START_var, 1)
+                    Then
+                       (
+                        'GPMgbp1 := 'pid1 ;
+                        'priority := 'GLOBAL_PROCESS_MANAGER_GetBasicPriority ;
+                        'GPMss1 := 'pid1 ;
+                        'GPMss2 := 'READY ;
+                        'gpm1 := 'GLOBAL_PROCESS_MANAGER_SetState ;
+                        'GPMsp1 := 'pid1 ;
+                        'GPMsp2 := 'priority ;
+                        'gpm1 := 'GLOBAL_PROCESS_MANAGER_SetPriority ;
+                        'L11147_op_mode := 'GLOBAL_PROCESS_MANAGER_CheckOperatingMode ;
+                        'L16972_START_var := Equal ('L11147_op_mode, 'NORMAL) ;
+                        If Equal ('L16972_START_var, 1)
+                        Then
+                           (
+                            'cur_time := 'GLOBAL_PROCESS_MANAGER_GetTime ;
+                            'GPMgtc1 := 'pid1 ;
+                            'time_capacity := 'GLOBAL_PROCESS_MANAGER_GetTimeCapacity ;
+                            Local 'tmp2 ;
+                            'tmp2 := 'time_capacity +. 'cur_time ;
+                            'GPMsdt1 := 'pid1 ;
+                            'GPMsdt2 := 'tmp2 ;
+                            'gpm1 := 'GLOBAL_PROCESS_MANAGER_SetDeadlineTime ;
+                            'GPMcps1 := 'pk_true ;
+                            'L11194_enabled := 'GLOBAL_PROCESS_MANAGER_CheckPreemptionStatus ;
+                            If Equal ('L11194_enabled, 0)
+                            Then
+                               (
+                                 'L11145_diagnostic := 'GLOBAL_PROCESS_MANAGER_SchedulingRequest
+                               )
+                            )
+                        )
+                    )
+                )
+            ) ;
+        If Equal ('recorded2, 1)
+        Then
+           (
+            Call 'strcpy ('att2Name, '"fuel_indicator") ;
+            'GPMcn1 := 'att2Name ;
+            'GPMcn2 := 'pid2 ;
+            'L10868_present := 'GLOBAL_PROCESS_MANAGER_CheckName ;
+            If Equal ('L10868_present, 1)
+            Then   (
+                'L10870_timecap_OK := 'att2Time_Capacity -. 100 ;
+                'L10871_period_OK := 'att2Period -. 100 ;
+                'L10875_entrypt_OK := 'att2Entry_Point -. 99999 ;
+                Call 'strcpy ('L10892_CREATE_PROCESS_var, 'att2Name) ;
+                'GPMcc1 := 'L10892_CREATE_PROCESS_var ;
+                'L10874_created := 'GLOBAL_PROCESS_MANAGER_CheckCreated ;
+                'L10869_op_mode := 'GLOBAL_PROCESS_MANAGER_CheckOperatingMode ;
+                'GPMci1 := 'pid2 ;
+                'GPMci2 := 'L11278_status ;
+                'L11292_present := 'GLOBAL_PROCESS_MANAGER_CheckID ;
+                Local 'tmp3 ;
+                'tmp3 := Equal ('L10875_entrypt_OK, 1) And Equal ('L10871_period_OK, 1) ;
+                If ('tmp3 And (Equal ('L10870_timecap_OK, 1) And
+                       (Equal ('L10874_created, 0) And  Equal ('L10869_op_mode, 'NORMAL))))
+                Then
+                   (
+                    'GPMsa1 := 'pid2 ;
+                    'GPMsa2 := 'att2 ;
+                    'gpm2 := 'GLOBAL_PROCESS_MANAGER_SetAttributes ;
+                    'GPMss1 := 'pid2 ;
+                    'GPMss2 := 'DORMANT ;
+                    'gpm2 := 'GLOBAL_PROCESS_MANAGER_SetState ;
+                    'GPMsc1 := 'pid2 ;
+                    'gpm2 := 'GLOBAL_PROCESS_MANAGER_SetCreated
+                   ) ;
+                If Equal ('L11292_present, 1)
+                Then
+                   (
+                    'GPMgs1 := 'pid2 ;
+                    'L11291_state := 'GLOBAL_PROCESS_MANAGER_GetState ;
+                    'L16982_START_var := Equal ('L11291_state, 'DORMANT) ;
+                    If ('L16982_START_var, 1)
+                    Then
+                       (
+                        'GPMgbp1 := 'pid2 ;
+                        'L11287_priority := 'GLOBAL_PROCESS_MANAGER_GetBasicPriority ;
+                        'GPMss1 := 'pid2 ;
+                        'GPMss2 := 'READY ;
+                        'gpm2 := 'GLOBAL_PROCESS_MANAGER_SetState ;
+                        'GPMsp1 := 'pid2 ;
+                        'GPMsp2 := 'L11287_priority ;
+                        'gpm2 := 'GLOBAL_PROCESS_MANAGER_SetPriority ;
+                        'L11286_op_mode := 'GLOBAL_PROCESS_MANAGER_CheckOperatingMode ;
+                        'L16993_START_var := Equal ('L11286_op_mode, 'NORMAL) ;
+                        If Equal ('L16993_START_var, 1)
+                        Then (
+                            'L11280_cur_time := 'GLOBAL_PROCESS_MANAGER_GetTime ;
+                            'GPMgtc1 := 'pid2 ;
+                            'L11281_time_capacity := 'GLOBAL_PROCESS_MANAGER_GetTimeCapacity ;
+                            'GPMsdt1 := 'pid2 ;
+                            'GPMsdt2 := 'L11281_time_capacity +. 'L11280_cur_time ;
+                            'gpm2 := 'GLOBAL_PROCESS_MANAGER_SetDeadlineTime ;
+                            'GPMcps1 := 'pk_true ;
+                            'L11333_enabled := 'GLOBAL_PROCESS_MANAGER_CheckPreemptionStatus ;
+                            If Equal ('L11333_enabled, 1)
+                            Then
+                               (
+                                 'L11284_diagnostic := 'GLOBAL_PROCESS_MANAGER_SchedulingRequest
+                               )
+                            )
+                        )
+                    )
+                )
+            ) ;
+        If Equal ('recorded3, 1)
+        Then
+           (
+            Call 'strcpy ('att3Name, '"parameter_refresher") ;
+            'GPMcn1 := 'att3Name ;
+            'GPMcn2 := 'pid3 ;
+            'L11025_present := 'GLOBAL_PROCESS_MANAGER_CheckName ;
+            If Equal ('L11025_present, 1)
+            Then
+               (
+                'L11027_timecap_OK := 'att3Time_Capacity -. 100 ;
+                'L11028_period_OK := 'att3Period -. 100 ;
+                'L11032_entrypt_OK := 'att3Entry_Point -. 99999 ;
+                Call 'strcpy ('L11047_CREATE_PROCESS_var, 'att3Name) ;
+                'GPMcc1 := 'L11047_CREATE_PROCESS_var ;
+                'L11031_created := 'GLOBAL_PROCESS_MANAGER_CheckCreated ;
+                'L11026_op_mode := 'GLOBAL_PROCESS_MANAGER_CheckOperatingMode ;
+                'GPMci1 := 'pid3 ;
+                'GPMci1 := 'L11417_status ;
+                'L11431_present := 'GLOBAL_PROCESS_MANAGER_CheckID ;
+                Local 'tmp4 ;
+                'tmp4 := Equal ('L11032_entrypt_OK, 1) And Equal ('L11028_period_OK, 1) ;
+                If (('tmp4 And Equal ('L11027_timecap_OK, 1)) And Equal ('L11031_created, 0)) And
+                      Equal ('L11026_op_mode, 'NORMAL)
+                Then
+                   (
+                    'GPMsa1 := 'pid3 ;
+                    'GPMsa2 := 'att3 ;
+                    'gpm3 := 'GLOBAL_PROCESS_MANAGER_SetAttributes ;
+                    'GPMss1 := 'pid3 ;
+                    'GPMss2 := 'DORMANT ;
+                    'gpm3 := 'GLOBAL_PROCESS_MANAGER_SetState ;
+                    'GPMsc1 := 'pid3 ;
+                    'gpm3 := 'GLOBAL_PROCESS_MANAGER_SetCreated
+                   ) ;
+                If Equal ('L11431_present, 1)
+                Then
+                   (
+                    'GPMgs1 := 'pid3 ;
+                    'L11430_state := 'GLOBAL_PROCESS_MANAGER_GetState ;
+                    'L17003_START_var := Equal ('L11430_state, 'DORMANT) ;
+                    If Equal ('L17003_START_var, 1)
+                    Then
+                       (
+                        'GPMgbp1 := 'pid3 ;
+                        'L11426_priority := 'GLOBAL_PROCESS_MANAGER_GetBasicPriority ;
+                        'GPMss1 := 'pid3 ;
+                        'GPMss2 := 'READY ;
+                        'gpm3 := 'GLOBAL_PROCESS_MANAGER_SetState ;
+                        'GPMsp1 := 'pid3 ;
+                        'GPMsp2 := 'L11426_priority ;
+                        'gpm3 := 'GLOBAL_PROCESS_MANAGER_SetPriority ;
+                        'L11425_op_mode := 'GLOBAL_PROCESS_MANAGER_CheckOperatingMode ;
+                        'L17014_START_var := Equal ('L11425_op_mode, 'NORMAL) ;
+                        If Equal ('L17014_START_var, 1)
+                        Then
+                           (
+                            'L11419_cur_time := 'GLOBAL_PROCESS_MANAGER_GetTime ;
+                            'GPMgtc1 := 'pid3 ;
+                            'L11420_time_capacity := 'GLOBAL_PROCESS_MANAGER_GetTimeCapacity ;
+                            'GPMsdt1 := 'pid3 ;
+                            'GPMsdt2 := 'L11420_time_capacity +. 'L11419_cur_time ;
+                            'gpm3 := 'GLOBAL_PROCESS_MANAGER_SetDeadlineTime ;
+                            'GPMcps1 := 'pk_true ;
+                            'L11472_enabled := 'GLOBAL_PROCESS_MANAGER_CheckPreemptionStatus ;
+                            If Equal ('L11472_enabled, 1)
+                            Then
+                               (
+                                 'L11423_diagnostic := 'GLOBAL_PROCESS_MANAGER_SchedulingRequest
+                               )
+                            )
+                        )
+                    )
+                )
+            ) ;
+        If Equal ('L16810_CREATE_SAMPLING_PORT_var, 1)
+        Then
+           (
+            'GSAMcn1 := '"s_port" ;
+            'GSAMcn2 := 'some_samplingPort ;
+            'L10467_present := 'GLOBAL_SAMPLINGPORT_MANAGER_CheckName ;
+            If Equal ('L10467_present, 1)
+            Then
+               (
+                'GSAMcc1 := '"s_port" ;
+                'created := 'GLOBAL_SAMPLINGPORT_MANAGER_CheckCreated ;
+                'L10473_op_mode := 'GLOBAL_PROCESS_MANAGER_CheckOperatingMode ;
+                'L10472_OK_req := ((Equal ('SOURCE, 'SOURCE) Or Equal ('SOURCE, 'DESTINATION)) And
+                                  (Lt (5,  100) And Equal ('created, 0))) And Equal ('L10473_op_mode, 'NORMAL) ;
+                If Equal ('L10472_OK_req, 1)
+                Then
+                   (
+                    'GSAMr1 := '"s_port" ;
+                    'GSAMr2 := 4 ;
+                    'GSAMr3 := 'L10535_CREATE_SAMPLING_PORT_var ;
+                    'GSAMr4 := 5 ;
+                    'GSAMr5 := 's_port ;
+                    'L10465_recorded := 'GLOBAL_SAMPLINGPORT_MANAGER_Record
+                    )
+                )
+            ) ;
+        If Equal ('C_CREATE_BLACKBOARD_, 1)
+        Then
+           (
+            'GBLMr1 := '"board" ;
+            'GBLMr2 := 50 ;
+            'GBLMr3 := 'board ;
+            'recorded := 'GLOBAL_BLACKBOARD_MANAGER_Record
+           ) ;
+        If Equal ('C_CREATE_BUFFER_, 1)
+        Then
+           (
+            'GBUMr1 := '"buffer2" ;
+            'GBUMr2 := 3 ;
+            'GBUMr3 := 50 ;
+            'GBUMr4 := 'L10006_CREATE_BUFFER_var ;
+            'GBUMr5 := 'buff2 ;
+            'L9998_recorded := 'GLOBAL_BUFFER_MANAGER_Record
+           ) ;
+        If Equal ('L17138_C_CREATE_BUFFER_, 1)
+        Then
+           (
+            'GBUMr1 := '"buffer1" ;
+            'GBUMr2 := 3 ;
+            'GBUMr3 := 50 ;
+            'GBUMr4 := 'L10135_CREATE_BUFFER_var ;
+            'GBUMr5 := 'buff1 ;
+            'L10127_recorded := 'GLOBAL_BUFFER_MANAGER_Record
+           ) ;
+        If Equal ('C_CREATE_EVENT_, 1)
+        Then
+           (
+            'GEVMr1 := '"event" ;
+            'GEVMr2 := 'evt ;
+             'L10240_recorded := 'GLOBAL_EVENT_MANAGER_Record
+           ) ;
+        If Equal ('C_CREATE_SEMAPHORE_, 1)
+        Then
+           (
+            'GSEMr1 := '"semaphore" ;
+            'GSEMr2 := 1 ;
+            'GSEMr3 := 2 ;
+            'GSEMr4 := 'L10380_CREATE_SEMAPHORE_var ;
+            'GSEMr5 := 'sema ;
+            'L10332_recorded := 'GLOBAL_SEMAPHORE_MANAGER_Record
+           )
+        ) ;
+    Call 'RCHANGE ('DESCR) ;
+    'CODE_CHANGE := '__res_RCHANGE ;
+    'L16709_PERIOD_INPUT_var := Equal ('CODE_CHANGE, 'NUL_CODE) ;
+    'C_S_PACE__ := 'L16709_PERIOD_INPUT_var Or 'CINIT ;
+    Local 't1 ;
+    (If Equal ('L10472_OK_req , 1)
+    Then ('t1 := 'L10465_recorded)
+    Else ('t1 := 'pk_false)) ;
+    'L16827_extended_recorded := 't1 ;
+    Local 't2 ;
+    (If Equal ('C_CREATE_BLACKBOARD_, 1)
+    Then 't2 := 'recorded
+    Else 't2 := 'pk_false) ;
+    'L17387_extended_recorded := 't2 ;
+    Local 't3 ;
+    (If Equal ('C_CREATE_BUFFER_, 1)
+    Then 't3 := 'L9998_recorded
+    Else 't3 := 'pk_false) ;
+    'L17396_extended_recorded := 't3 ;
+    Local 't4 ;
+    (If Equal ('L17138_C_CREATE_BUFFER_, 1)
+    Then 't4 := 'L10127_recorded
+    Else 't4 := 'pk_false) ;
+    'L17405_extended_recorded := 't4 ;
+    Local 't5 ;
+    (If Equal ('C_CREATE_EVENT_, 1)
+    Then 't5 := 'L10240_recorded
+    Else 't5 := 'pk_false) ;
+    'L17414_extended_recorded := 't5 ;
+    Local 't6 ;
+    (If Equal ('C_CREATE_SEMAPHORE_, 1)
+    Then 't6 := 'L10332_recorded
+    Else 't6 := 'pk_false) ;
+    'L17423_extended_recorded := 't6 ;
+    If Equal ('L16709_PERIOD_INPUT_var, 1)
+    Then
+       (
+        'C_LIN_EXP := Equal ('CODE_CHANGE, 'LIN_CODE) ;
+        'CLK_7188 := 'pk_false ;
+        Call 'RUPDOWN ('DESCR) ;
+        'C_UP_DOWN := '__res_RUPDOWN ;
+        'L17043_SET_BOUND_var := 1 -. 'C_LIN_EXP ;
+        'CLK_7150 := 'pk_false ;
+        If Equal ('C_LIN_EXP, 1)
+        Then
+           (
+            'L17065_VD := 1 -. 'C_UP_DOWN
+           ) ;
+        If Equal ('L17043_SET_BOUND_var, 1)
+        Then
+           (
+            'L17045_VD := 1 -. 'C_UP_DOWN
+           ) ;
+        If Equal ('C_LIN_EXP, 1)
+        Then
+           (
+            'CLK_7168 := 'NEW_BOUND -. 16 ;
+            'CLK_7183 := 'NEW_BOUND -. 1 ;
+            'C_VU := Equal ('C_UP_DOWN, 1) And Equal ('CLK_7183, 1) ;
+            (If Equal ('CLK_7168, 1)
+            Then 'L11892_DELTA := 'NEW_BOUND /. 16
+            Else 'L11892_DELTA := 1) ;
+            If Equal ('L17065_VD, 1)
+            Then
+               (
+                'L11893_VD := 'NEW_BOUND +. 'L11892_DELTA ;
+                'CLK_7188 := 'L11893_VD
+               ) ;
+            Local 't7 ;
+            (If Equal ('L17065_VD, 1)
+            Then 't7 := 'CLK_7188
+            Else 't7 := 'pk_false) ;
+            'L17075_extended_CLK_7188 := 't7 ;
+            'L17252_C_NEW_BOUND := Equal ('C_VU, 1) Or Equal ('L17075_extended_CLK_7188, 1) ;
+            If Equal ('C_VU, 1)
+            Then
+               (
+                'L11894_VU := 'NEW_BOUND -. 'L11892_DELTA
+               ) ;
+            If Equal ('L17252_C_NEW_BOUND, 1)
+            Then
+               (
+                If Equal ('C_VU, 1)
+                Then 'L11881_NEW_BOUND := 'L11894_VU
+                Else 'L11881_NEW_BOUND := 'L11893_VD
+               )
+            ) ;
+        If Equal ('L17043_SET_BOUND_var, 1)
+        Then
+           (
+            'CLK_7145 := 'NEW_BOUND -. 1 ;
+            'L17231_C_VU := Equal ('C_UP_DOWN, 1) And Equal ('CLK_7145, 1) ;
+            If Equal ('L17045_VD, 1)
+            Then
+               (
+                'VD := 'NEW_BOUND +. 'NEW_BOUND ;
+                'CLK_7150 := 'VD
+               ) ;
+            Local 't8 ;
+            (If Equal ('L17045_VD, 1)
+            Then 't8 := 'CLK_7150
+            Else 't8 := 'pk_false) ;
+            'L17055_extended_CLK_7150 := 't8 ;
+            'C_NEW_BOUND := Equal ('L17231_C_VU, 1) Or Equal ('L17055_extended_CLK_7150, 1) ;
+            If Equal ('L17231_C_VU, 1)
+            Then
+               (
+                'VU := 'NEW_BOUND /. 2
+               ) ;
+            If Equal ('C_NEW_BOUND, 1)
+            Then
+               (
+                If Equal ('L17231_C_VU, 1)
+                Then 'L11855_NEW_BOUND := 'VU
+                Else 'L11855_NEW_BOUND := 'VD
+               )
+            )
+        ) ;
+    Local 't9 ;
+    (If Equal ('L17043_SET_BOUND_var, 1)
+    Then 't9 := 'C_NEW_BOUND
+    Else 't9 := 'pk_false) ;
+    'L17246_extended_C_NEW_BOUND := 't9 ;
+    Local 't10 ;
+    (If Equal ('C_LIN_EXP, 1)
+    Then 't10 := 'L17252_C_NEW_BOUND
+    Else 't10 := 'pk_false) ;
+    'L17258_extended_C_NEW_BOUND := 't10 ;
+    If Equal ('C_ZAUTO, 1)
+    Then
+       (
+        'NEXTAUTO := 1 -. 'NEXTAUTO ;
+        Call 'RESET_PANEL ('NEXTAUTO)
+       ) ;
+    'L16714_C_STOP := 1 -. 'NEXTAUTO ;
+    If Equal ('L16714_C_STOP, 1)
+    Then
+       (
+        Call 'RSTOP ('empty) ;
+        'C_STOP := '__res_RSTOP ;
+        If Equal ('C_STOP, 1)
+        Then
+           (
+            Call 'WSTOP ('pk_true)
+           )
+       ) ;
+    If Equal ('C_S_PACE__, 1)
+    Then
+       (
+        (If Equal ('CINIT, 1)
+        Then 'NEW_BOUND := 'PI_0
+        Else (If Equal ('L17258_extended_C_NEW_BOUND, 1)
+                 Then 'NEW_BOUND := 'L11881_NEW_BOUND
+                 Else (If Equal ('L17246_extended_C_NEW_BOUND, 1)
+                       Then 'NEW_BOUND := 'L11855_NEW_BOUND))) ;
+        Call 'WIWRITE ('DESCR, 'NEW_BOUND) ;
+        'CLK_7071 := 'NEW_BOUND -. 1 ;
+        (If Equal ('CLK_7071, 1)
+        Then 'L11797_DYN_EVERY_var := 0
+        Else 'L11797_DYN_EVERY_var := 'NEW_BOUND -. 1)
+        ) ;
+    If Equal ('NEXTAUTO, 1)
+    Then
+       (
+        'CLK_7094 := 'V +. 'L11797_DYN_EVERY_var ;
+        (If Equal ('CLK_7094, 1)
+        Then 'V := 0
+        Else 'V := 'V +. 1)
+       ) ;
+    Local 't11 ;
+    (If Equal ('NEXTAUTO, 1)
+    Then 't11 := 'V
+    Else 't11 := 'pk_false) ;
+    'L17038_extended_L11766_HS_1 := 't11 ;
+    'C_b_init := Equal ('C_TICK, 1) Or Equal ('L17038_extended_L11766_HS_1, 1) ;
+    If Equal ('C_b_init, 1)
+    Then
+       (
+        'L17428_ZV := 1 -. 'b_init ;
+        If Equal ('L17428_ZV, 1)
+        Then
+           (
+            Call 'GET_ACTIVE_PARTITION ('empty) ;
+            'active_partition := '__res_GET_ACTIVE_PARTITION ;
+            'L12136_V1 := 'L12123_V +. (('DELTA +. 'DELTA) +. 'TICK_WIDTH) ;
+            'L12171_V1 := 'X +. (('DELTA +. 'DELTA) +. 'TICK_WIDTH) ;
+            'CLK_7353 := Gte ('L12136_V1, (((('DELTA +. 'DELTA) +. 'TICK_WIDTH)) *. 'TICK_NUMBER)) ;
+            'CLK_7368 := Gte ('L12171_V1, (((('DELTA +. 'DELTA) +. 'TICK_WIDTH)) *. 'TICK_NUMBER)) ;
+            'L17446_success := 'active_partition +. 1 ;
+            (If Equal ('CLK_7353, 1)
+            Then 'L12123_V := 0
+            Else 'L12123_V := 'L12136_V1) ;
+            (If Equal ('CLK_7368, 1)
+            Then 'X := 0
+            Else 'X := 'L12171_V1) ;
+            If Equal ('L17446_success, 1)
+            Then
+               (
+                'success := 'GLOBAL_PROCESS_MANAGER_SchedulingRequest ;
+                'trigger := 'pk_false ;
+                'GPMutc1 := 'timed_out ;
+                'gpm4 := 'GLOBAL_PROCESS_MANAGER_UpdateTimeCounters ;
+                If Equal ('success, 1)
+                Then
+                   (
+                    'GPMga1 := 'pstatus ;
+                    'GPMga2 := 'ok ;
+                    'pid := 'GLOBAL_PROCESS_MANAGER_GetActive ;
+                    If Equal ('ok, 1)
+                    Then
+                       (
+                        'trigger := 'pid +. 1 ;
+                        'L6250_CONTROL_cond := 'pk_false ;
+                        'empty := 'pk_false ;
+                        'C_empty := 'pk_false ;
+                        'L18107_Message_Size := 'pk_false ;
+                        'C_ret1 := 'pk_false ;
+                        'C_ret2 := 'pk_false ;
+                        'C_ret5 := 'pk_false ;
+                        'L7561_trigger := 'pid +. 2 ;
+                        'L7591_CONTROL_cond := 'pk_false ;
+                        'L18721_C_ret1 := 'pk_false ;
+                        'L8725_trigger := 'pid +. 3 ;
+                        'L8755_CONTROL_cond := 'pk_false ;
+                        'L18745_C_ret1 := 'pk_false ;
+                        If Equal ('trigger, 1)
+                        Then
+                           (
+                            'X1 := 'X +. 'DELTA ;
+                            'X2 := 'X1 +. 'TICK_WIDTH ;
+                            'CLK_3462 := 'V2 +. 5 ;
+                            (If Equal ('zblocked, 1)
+                             Then (If Equal ('CLK_3462, 1)
+                                      Then 'V2 := 0
+                                      Else 'V2 := 'V2 +. 1)) ;
+                            'L17519_Message_Size := Equal ('V2, 0) ;
+                            'L17524_SEND_BUFFER_cond := Equal ('V2, 1) ;
+                            'L17548_WAIT_EVENT_cond := Equal ('V2, 2) ;
+                            'L17574_present := Equal ('V2, 3) ;
+                            'L6960_enabled := 'pk_false ;
+                            'L17595_SEND_BUFFER_cond := Equal ('V2, 5) ;
+                            'L17619_Message_Size := Equal ('V2, 4) ;
+                            'CLK_7493 := Gt ('V2, 'MIN_A) ;
+                            'CLK_7496 := Lt ('V2, 'MAX_A) ;
+                            'CLK_7497 := Equal ('CLK_7496, 0) ;
+                            'C_CLK_8222 := Equal ('CLK_7493, 1) And Equal ('CLK_7496, 1) ;
+                            'L17931_C_Message_Area_ := Equal ('L17595_SEND_BUFFER_cond, 1) Or Equal ('L17619_Message_Size, 1) ;
+                            'L18081_service_call := ((Equal ('V2, 1) Or Equal ('V2, 2)) Or Equal ('V2, 3)) Or Equal ('V2, 5) ;
+                            (If Equal ('C_CLK_8222, 1)
+                            Then 'C_aff := 'V2
+                            Else (If Equal ('CLK_7497, 1)
+                                     Then 'C_aff := 'MAX_A
+                                     Else 'C_aff := 'MIN_A)) ;
+                            If Equal ('L17524_SEND_BUFFER_cond, 1)
+                            Then
+                               (
+                                'on_waiting := 'L6342_blocked ;
+                                'L17532_SEND_cond := 1 -. 'on_waiting ;
+                                'nowaitingprocess := 'pk_false ;
+                                'full := 'pk_false ;
+                                'enabled := 'pk_false ;
+                                'toolong := 'pk_false ;
+                                'L18089_toolongXZX_subexpr := 'pk_false ;
+                                'L18094_nowaitingprocess := 'pk_false ;
+                                If Equal ('L17532_SEND_cond, 1)
+                                Then
+                                   (
+                                    'outofrange := 10 ;
+                                    'available := 10
+                                    )
+                                ) ;
+                            If Equal ('L17548_WAIT_EVENT_cond, 1)
+                            Then
+                               (
+                                'L6722_on_waiting := 'L6717_blocked ;
+                                'L17556_present := 1 -. 'L6722_on_waiting ;
+                                'up := 'pk_false ;
+                                'L6783_enabled := 'pk_false ;
+                                If Equal ('L17556_present, 1)
+                                Then
+                                   (
+                                    'L6759_available := 20 ;
+                                    'L6760_outofrange := 20
+                                   )
+                                ) ;
+                            If Equal ('L17595_SEND_BUFFER_cond, 1)
+                            Then
+                               (
+                                'L7116_on_waiting := 'L7114_blocked ;
+                                'L17603_SEND_cond := 1 -. 'L7116_on_waiting ;
+                                'L7189_nowaitingprocess := 'pk_false ;
+                                'L7259_full := 'pk_false ;
+                                'L7260_enabled := 'pk_false ;
+                                'L7261_toolong := 'pk_false ;
+                                'L18118_toolongXZX_subexpr := 'pk_false ;
+                                'L18123_nowaitingprocess := 'pk_false ;
+                                If Equal ('L17603_SEND_cond, 1)
+                                Then
+                                   (
+                                    'L7153_outofrange := 10 ;
+                                    'L7154_available := 10
+                                   )
+                                )
+                            ) ;
+                        Local 't12 ;
+                        (If Equal ('trigger, 1)
+                        Then 't12 := 'V2 +. 5
+                        Else 't12 := 'pk_false) ;
+                        'L17514_extended_L6158_end_processing1 := 't12 ;
+                        If Equal ('L7561_trigger, 1)
+                        Then
+                           (
+                            'L12308_X1 := 'X +. 'DELTA ;
+                            'L12310_X2 := 'L12308_X1 +. 'TICK_WIDTH ;
+                            'CLK_4317 := Equal ('V3, 5) ;
+                            (If Equal ('L7562_zblocked, 1)
+                            Then (If Equal ('CLK_4317, 1)
+                                     Then 'V3 := 0
+                                     Else 'V3 := 'V3 +. 1)) ;
+                            'L17635_RECEIVE_BUFFER_cond := Equal ('V3, 0) ;
+                            'L7782_nowaitingprocess := 'pk_false ;
+                            'L18531_mess_cell := 'pk_false ;
+                            'L17661_WAIT_SEMAPHORE_cond := Equal ('V3, 1) ;
+                            'L17687_Message_Size := 'V3 -. 2 ;
+                            'L17692_present := 'V3 -. 3 ;
+                            'release := 'pk_false ;
+                            'L17702_FF_noaction := 'pk_false ;
+                            'L17709_present := 'V3 -. 5 ;
+                            'L17721_present := 'V3 -. 4 ;
+                            'length_OK := 'pk_false ;
+                            'C_Message := 'pk_false ;
+                            'CLK_7527 := Gt ('V3, 'MIN_A) ;
+                            'CLK_7530 := Lt ('V3, 'MAX_A) ;
+                            'CLK_7531 := 1 -. 'CLK_7530 ;
+                            'C_CLK_8216 := Equal ('CLK_7527, 1) And Equal ('CLK_7530, 1) ;
+                            'L17928_C_Message_Area_ := Equal ('L17687_Message_Size, 1) Or Equal ('L17721_present, 1) ;
+                            'L18133_L7559_service_call := ((Equal ('V3, 0) Or Equal ('V3, 1)) Or Equal ('V3, 3)) Or
+                                                                                  (Equal ('V3, 4) Or Equal ('V3, 5)) ;
+                            (If Equal ('C_CLK_8216, 1)
+                            Then 'L12589_C_aff := 'V3
+                            Else (If Equal ('CLK_7531, 1)
+                                     Then 'L12589_C_aff := 'MAX_A
+                                     Else 'L12589_C_aff := 'MIN_A)) ;
+                            If Equal ('L17635_RECEIVE_BUFFER_cond, 1)
+                            Then
+                               (
+                                'retrieve := 'L7663_blocked ;
+                                'L17643_outofrange := 1 -. 'retrieve ;
+                                'L7844_empty := 'pk_false ;
+                                'L7845_enabled := 'pk_false ;
+                                'L18141_some_message_cell := 'pk_false ;
+                                If Equal ('L17643_outofrange, 1)
+                                Then
+                                   (
+                                    'L7706_available := 10 ;
+                                    'L7710_outofrange := 10
+                                   ) ;
+                                If Equal ('retrieve, 1)
+                                Then
+                                   (
+                                    'GPMrm1 := 2 ;
+                                    'message_2 := 'GLOBAL_PROCESS_MANAGER_RetrieveMessage
+                                   )
+                                ) ;
+                            If Equal ('L17661_WAIT_SEMAPHORE_cond, 1)
+                            Then
+                               (
+                                'L8050_on_waiting := 'L8045_blocked ;
+                                'L17669_present := 1 -. 'L8050_on_waiting ;
+                                'positive := 'pk_false ;
+                                'L8117_enabled := 'pk_false ;
+                                If Equal ('L17669_present, 1)
+                                Then
+                                   (
+                                    'L8093_outofrange := 20 ;
+                                    'L8094_available := 20
+                                   )
+                                ) ;
+                            If Equal ('L17687_Message_Size, 1)
+                            Then
+                               (
+                                'L8505_Message_Size_cell := 5
+                               )
+                            ) ;
+                        Local 't13 ;
+                        (If Equal ('L7561_trigger, 1)
+                        Then 't13 := 'V3 +. 5
+                        Else 't13 := 'pk_false) ;
+                        'L17630_extended_L6157_end_processing2 := 't13 ;
+                        If Equal ('L8725_trigger, 1)
+                        Then
+                           (
+                            'L12413_X1 := 'X +. 'DELTA ;
+                            'L12415_X2 := 'L12413_X1 +. 'TICK_WIDTH ;
+                            'CLK_4994 := Equal ('V4, 5) ;
+                            (If Equal ('L8726_zblocked, 1)
+                             Then (If Equal ('CLK_4994, 1)
+                                      Then 'V4 := 0
+                                      Else 'V4 := 'V4 +. 1)) ;
+                            'L17749_RECEIVE_BUFFER_cond := Equal ('V4, 0) ;
+                            'L8946_nowaitingprocess := 'pk_false ;
+                            'L18584_mess_cell := 'pk_false ;
+                            'L17775_WAIT_SEMAPHORE_cond := Equal ('V4, 1) ;
+                            'L17801_Message_Size := 'V4 +. 2 ;
+                            'L17806_present := 'V4 +. 3 ;
+                            'L9465_release := 'pk_false ;
+                            'L17816_FF_L9489_noaction := 'pk_false ;
+                            'L17823_DISPLAY_BLACKBOARD_cond := Equal ('V4, 4) ;
+                            'L9651_toolong := 'pk_false ;
+                            'L17846_present := 'V4 +. 5 ;
+                            'CLK_7561 := Gt ('V4, 'MIN_A) ;
+                            'CLK_7564 := Lt ('V4, 'MAX_A) ;
+                            'CLK_7565 := 1 -. 'CLK_7564 ;
+                            'C_CLK_8210 := Equal ('CLK_7561, 1) And Equal ('CLK_7564, 1);
+                            'C_Message_Area_ := Equal ('L17801_Message_Size, 1) Or Equal ('L17823_DISPLAY_BLACKBOARD_cond, 1) ;
+                            'L18180_L8723_service_call := ((Equal ('V4, 0) Or Equal ('V4, 1)) Or Equal ('V4, 3)) Or
+                                                                                  (Equal ('V4, 4) Or Equal ('V4, 5)) ;
+                            (If Equal ('C_CLK_8210, 1)
+                            Then 'L12649_C_aff := 'V4
+                            Else (If ('CLK_7565, 1)
+                                    Then 'L12649_C_aff := 'MAX_A
+                                     Else 'L12649_C_aff := 'MIN_A)) ;
+                            If Equal ('L17749_RECEIVE_BUFFER_cond, 1)
+                            Then
+                               (
+                                'L8829_retrieve := 'L8827_blocked ;
+                                'L17757_outofrange := 1 -. 'L8829_retrieve ;
+                                'L9008_empty := 'pk_false ;
+                                'L9009_enabled := 'pk_false ;
+                                'L18188_some_message_cell := 'pk_false ;
+                                If Equal ('L17757_outofrange, 1)
+                                Then
+                                   (
+                                    'L8870_available := 2 ;
+                                    'L8874_outofrange := 2
+                                   ) ;
+                                If Equal ('L8829_retrieve, 1)
+                                Then
+                                    (
+                                     'GPMrm1 := 3 ;
+                                     'L8830_message_2 := 'GLOBAL_PROCESS_MANAGER_RetrieveMessage
+                                    )
+                                ) ;
+                            If Equal ('L17775_WAIT_SEMAPHORE_cond, 1)
+                            Then
+                               (
+                                'L9216_on_waiting := 'L9211_blocked ;
+                                'L17783_present := 1 -. 'L9216_on_waiting ;
+                                'L9282_positive := 'pk_false ;
+                                'L9283_enabled := 'pk_false ;
+                                If Equal ('L17783_present, 1)
+                                Then
+                                   (
+                                    'L9259_outofrange := 5 ;
+                                    'L9260_available := 5
+                                   )
+                                ) ;
+                            If Equal ('L17801_Message_Size, 1)
+                            Then
+                               (
+                                'L9596_Message_Size_cell := 15
+                               )
+                            ) ;
+                        Local 't15 ;
+                        (If Equal ('L8725_trigger, 1)
+                        Then 't15 := 'V4 +. 5
+                        Else 't15 := 'pk_false) ;
+                        'L17744_extended_L6156_end_processing3 := 't15 ;
+                        'C_ok := (Equal ('L17514_extended_L6158_end_processing1, 1) Or
+                                        Equal ('L17630_extended_L6157_end_processing2, 1)) Or
+                                        Equal ('L17744_extended_L6156_end_processing3, 1) ;
+                        'L11618_OK_req := 'pk_false ;
+                        If Equal ('C_ok, 1)
+                        Then
+                           (
+                            'GPMga1 := 'L11628_status ;
+                            'GPMga2 := 'L11629_ok ;
+                            'L11627_pid := 'GLOBAL_PROCESS_MANAGER_GetActive ;
+                            If Equal ('L11629_ok, 1)
+                            Then
+                               (
+                                'GPMgp1 := 'L11627_pid ;
+                                'period := 'GLOBAL_PROCESS_MANAGER_GetPeriod ;
+                                'GPMcps1 := 'pk_true ;
+                                'L11616_enabled := 'GLOBAL_PROCESS_MANAGER_CheckPreemptionStatus ;
+                                'L11618_OK_req := ((Gt (7, 100) And Equal ('L11627_pid, 0)) Or Equal ('period, 1)) And
+                                                                 Equal ('L11616_enabled, 1) ;
+                                If Equal ('L11618_OK_req, 1)
+                                Then
+                                   (
+                                    'GPMss1 := 'L11627_pid ;
+                                    'GPMss2 := 'WAITING ;
+                                    'L11609_diagnostic := 'GLOBAL_PROCESS_MANAGER_SchedulingRequest
+                                    )
+                                ) ;
+                            Local 't16 ;
+                            (If Equal ('L11629_ok, 1)
+                            Then 't16 := 'L11618_OK_req
+                            Else 't16 := 'ok_false) ;
+                            'L18228_extended_OK_req := 't16 ;
+                            'C_SUSPEND_SELF_ := (Not (Equal (7, 99))) And Equal ('L18228_extended_OK_req, 1) ;
+                            If Equal ('C_SUSPEND_SELF_, 1)
+                            Then
+                               (
+                                'GPMsc1 := 'L11627_pid ;
+                                'GPMsc2 := 7 ;
+                                'gpm5 := 'GLOBAL_PROCESS_MANAGER_StartCounter
+                               )
+                            )
+                        )
+                    )
+                )
+            )
+        ) ;
+    Local 't17 ;
+    (If Equal ('C_b_init, 1)
+    Then 't17 := 'L17428_ZV
+    Else 't17 := 'pk_false) ;
+    'L17431_extended_ZV := 't17 ;
+    Local 't18 ;
+    (If Equal ('success, 1)
+    Then 't18 := 'ok
+    Else 't18 := 'pk_false) ;
+    'L17470_extended_ok := 't18 ;
+    'C_global_params__ := Equal ('CINIT, 1) Or Equal ('L17470_extended_ok, 1) ;
+    'C_board_cell_ := Equal ('L17387_extended_recorded, 1) Or Equal ('L17470_extended_ok, 1) ;
+    'C_buff2_cell_ := Equal ('L17396_extended_recorded, 1) Or Equal ('L17470_extended_ok, 1) ;
+    'C_buff1_cell_ := Equal ('L17405_extended_recorded, 1) Or Equal ('L17470_extended_ok, 1) ;
+    'C_evt_cell_ := Equal ('L17414_extended_recorded, 1) Or Equal ('L17470_extended_ok, 1) ;
+    'C_sema_cell_ := Equal ('L17423_extended_recorded, 1) Or Equal ('L17470_extended_ok, 1) ;
+    'C_s_port__ := Equal ('L16827_extended_recorded, 1) Or Equal ('L17470_extended_ok, 1) ;
+    If Equal ('C_b_init, 1)
+    Then
+       (
+        If Equal ('L17428_ZV, 1)
+        Then
+           (
+            If Equal ('L17446_success, 1)
+            Then
+               (
+                If Equal ('success, 1)
+                Then
+                   (
+                    If Equal ('ok, 1)
+                    Then
+                       (
+                        If Equal ('trigger, 1)
+                        Then
+                            (
+                             If Equal ('L17548_WAIT_EVENT_cond, 1)
+                             Then
+                                (
+                                 If Equal ('L17556_present, 1)
+                                 Then
+                                    (
+                                     'GEVMci1 := 'evt ;
+                                     'GEVMci2 := 'event_in ;
+                                     'L6762_present := 'GLOBAL_EVENT_MANAGER_CheckID ;
+                                     'C_up := Equal ('L6762_present, 1) And Equal ('L6760_outofrange, 1) ;
+                                     If Equal ('C_up, 1)
+                                     Then
+                                        (
+                                         'up := Equal ('event_inEvent_State, 'UP)
+                                        ) ;
+                                    Local 't19 ;
+                                    (If Equal ('C_up, 1)
+                                    Then 't19 := 'up
+                                    Else 't19 := 'pk_false) ;
+                                    'L18097_extended_up := 't19 ;
+                                    Local 't20 ;
+                                    (If Equal ('C_up, 1)
+                                    Then 't20 := 1 -. 'up
+                                    Else 't20 := 'pk_false) ;
+                                    'L18102_extended_FF_up := 't20 ;
+                                    'C_WAIT_cond := Equal ('L6759_available, 1) And Equal ('L18102_extended_FF_up, 1) ;
+                                    If Equal ('C_WAIT_cond, 1)
+                                    Then
+                                        (
+                                         'GPMcps1 := 'pk_true ;
+                                         'L6783_enabled := 'GLOBAL_PROCESS_MANAGER_CheckPreemptionStatus ;
+                                         If Equal ('L6783_enabled, 1)
+                                         Then
+                                        (
+                                        'GPMss1 := 1 ;
+                                        'GPMss2 := 'WAITING ;
+                                        'gpm5 := 'GLOBAL_PROCESS_MANAGERSetState ;
+                                        'event_inWaiting_Queue := 'TRUE ;
+                                        'event_inWaiting_Processes := 'event_inWaiting_Processes +. 1 ;
+                                        'GEVMu1 := 'event_in ;
+                                        'gpm5 := 'GLOBAL_EVENT_MANAGER_Update ;
+                                         'L6821_diagnostic := 'GLOBAL_PROCESS_MANAGER_SchedulingRequest
+                                        )
+                                       ) ;
+                                    Local 't21 ;
+                                    (If Equal ('C_WAIT_cond, 1)
+                                    Then 't21 := 'L6783_enabled
+                                    Else 't21 := 'pk_false) ;
+                                    'L18449_extended_enabled := 't21 ;
+                                    Local 't22 ;
+                                    (If Equal ('C_WAIT_cond, 1)
+                                    Then 't22 := 1 -. 'L6783_enabled
+                                    Else 't22 := 'pk_false) ;
+                                    'L18454_extended_WAIT_cond := 't22 ;
+                                    'C_WAIT_var := (Not (Equal (20, 99))) And Equal ('L18449_extended_enabled, 1) ;
+                                    If Equal ('C_WAIT_var, 1)
+                                    Then
+                                       (
+                                        'GPMsc1 := 1 ;
+                                        'GPMsc1 := 20
+                                       )
+                                    ) ;
+                                Local 't23 ;
+                                (If Equal ('L17556_present, 1)
+                                Then
+                                    (
+                                       Local 'tmp8 ;
+                                       'tmp8 := Equal ('L6759_available, 0) And Equal ('L18102_extended_FF_up, 1) ;
+                                       Local 'tmp9 ;
+                                       'tmp9 := Equal ('L6762_present, 0) And Equal ('L6760_outofrange, 1) ;
+                                       Local 'tmp10 ;
+                                       'tmp10 := Equal ('L18454_extended_WAIT_cond, 1) And Equal ('L18097_extended_up, 1) ;
+                                       't23 := (Equal ('tmp8, 1) Or Equal ('tmp9, 1)) Or Equal ('tmp10, 1)
+                                     )
+                                Else 't23 := 'pk_false) ;
+                                'L18640_extended_C_return_code_ := 't23 ;
+                                'C_ret2 := Equal ('L6722_on_waiting, 1) Or
+                                                  Equal ('L18640_extended_C_return_code_, 1) ;
+                                (If Equal ('C_ret2, 1)
+                                 Then 'L6723_WAIT_EVENT_cond := 'pk_false
+                                 Else 'L6723_WAIT_EVENT_cond := 'pk_true) ;
+                                'L6717_blocked := 'L6723_WAIT_EVENT_cond
+                                ) ;
+                            Local 't24 ;
+                            (If Equal ('L17548_WAIT_EVENT_cond, 1)
+                            Then 't24 := 'C_ret2
+                            Else 't24 := 'pk_false) ;
+                            'L18649_extended_C_ret2 := 't23
+                            ) ;
+                        If Equal ('L7561_trigger, 1)
+                        Then
+                            (
+                            If Equal ('L17709_present, 1)
+                             Then
+                                (
+                                 'GEVMci1 := 'evt ;
+                                 'GEVMci2 := 'L8443_event_in ;
+                                 'L8444_present := 'GLOBAL_EVENT_MANAGER_CheckID ;
+                                 If Equal ('L8444_present, 1)
+                                 Then
+                                    (
+                                    Call 'strcpy ('event_outEvent_Name, 'L8443_event_inEvent_Name) ;
+                                    'event_outWaiting_Processes := 'L8443_event_inWaiting_Processes ;
+                                    'event_outWaiting_Queue := 'L8443_event_inWaiting_Queue ;
+                                    'CLK_4887 := Equal ('L8443_event_inEvent_State, 'UP) ;
+                                    (If Equal ('CLK_4887, 1)
+                                    Then 'event_outEvent_State := 'DOWN
+                                    Else 'event_outEvent_State := 'L8443_event_inEvent_State) ;
+                                    'GEVMu1 := 'event_out ;
+                                    'gpm5 := 'GLOBAL_EVENT_MANAGER_Update
+                                    )
+                                )
+                            ) ;
+                        If Equal ('L8725_trigger, 1)
+                        Then
+                            (
+                            If Equal ('L17846_present, 1)
+                            Then
+                                (
+                                'GEVMci1 := 'evt ;
+                                'GEVMci2 := 'L9783_event_in ;
+                                'L9784_present := 'GLOBAL_EVENT_MANAGER_CheckID ;
+                                If Equal ('L9784_present, 1)
+                                Then
+                                   (
+                                    'L9776_release_all := 'L9783_event_inWaiting_Processes ;
+                                    Call 'strcpy ('L9780_event_outEvent_Name, 'L9783_event_inEvent_Name) ;
+                                    'L9780_event_outWaiting_Processes := 'L9783_event_inWaiting_Processes -. 'L9783_event_inWaiting_Processes ;
+                                    'L9780_event_outWaiting_Queue := 'L9783_event_inWaiting_Queue ;
+                                    'CLK_5651 := Equal ('L9783_event_inEvent_State, 'DOWN) ;
+                                    (If Equal ('CLK_5651, 1)
+                                    Then 'L9780_event_outEvent_State := 'UP
+                                    Else 'L9780_event_outEvent_State := 'L9783_event_inEvent_State) ;
+                                    'GEVMu1 := 'L9780_event_out ;
+                                    'gpm5 := 'GLOBAL_EVENT_MANAGER_Update ;
+                                    If Equal ('L9776_release_all, 1)
+                                    Then
+                                        (
+					        'L9782_process_range := 'L9780_event_outWaiting_Queue ;
+					        'L9780_event_outWaiting_Queue := 'FALSE
+					       ) ;
+                                      'GPMscm1 := 'L9782_process_range ;
+                                      'gpm5 := 'GLOBAL_PROCESS_MANAGER_StopCounters_many ;
+                                      'GPMssm1 := 'L9782_process_range ;
+                                      'GPMssm2 := 'READY ;
+                                      'gpm5 := 'GLOBAL_PROCESS_MANAGER_SetState_many ;
+                                      'GPMcps1 := 'pk_true ;
+                                      'L9797_enabled := 'GLOBAL_PROCESS_MANAGER_CheckPreemptionStatus ;
+                                       If Equal ('L9797_enabled, 1)
+                                       Then
+                                         (
+                                          'L9778_diagnostic := 'GLOBAL_PROCESS_MANAGER_SchedulingRequest
+                                         )
+                                        )
+                                    )
+                                )
+                            ) ;
+                        If Equal ('L7561_trigger, 1)
+                        Then
+                            (
+                              If Equal ('L17687_Message_Size, 1)
+                              Then
+                                (
+                                 'final_repMessage_Area := 3 ;
+                                 'L8513_Message_Area_cell := 'final_repMessage_Area
+                                )
+                            ) ;
+                        If Equal ('L8725_trigger, 1)
+                        Then
+                            (
+                            If Equal ('L17801_Message_Size, 1)
+                            Then
+                                (
+                                'diagMessage_Area := 3 ;
+                                'L9604_Message_Area_cell := 'diagMessage_Area
+                                )
+                            ) ;
+                        If Equal ('trigger, 1)
+                        Then
+                            (
+                            If Equal ('L17574_present, 1)
+                            Then
+                                (
+                                'GBLMci1 := 'board ;
+                                'GBLMci2 := 'blackboard_in ;
+                                'L6941_present := 'GLOBAL_BLACKBOARD_MANAGER_CheckID ;
+                                'C_empty := Equal ('L6941_present, 1) And Lt (2, 100) ;
+                                If Equal ('C_empty, 1)
+                                Then
+                                    (
+                                    'empty := 'blackboard_inEmpty_Indicator ;
+                                    'L18107_Message_Size := 1 -. 'empty ;
+                                    If Equal ('L18107_Message_Size, 1)
+                                    Then
+                                        (
+                                        'L6998_messMessage_Area := 'blackboard_inMessageMessage_Area ;
+                                        'L6998_messMessage_Size := 'blackboard_inMessageMessage_Size ;
+                                        'diag_size := 'L6998_messMessage_Size ;
+                                        'diag_area := 'L6998_messMessage_Area
+                                        )
+                                    ) ;
+                                Local 't25 ;
+                                (If Equal ('C_empty, 1)
+                                Then 't25 := 'empty
+                                Else 't25 := 'pk_false) ;
+                                'L18105_extended_empty := 't25 ;
+                                Local 't26 ;
+                                (If Equal ('C_empty, 1)
+                                Then 't26 := 'L18107_Message_Size
+                                Else 't26 := 'pk_false) ;
+                                'L18110_extended_Message_Size := 't26 ;
+                                'C_READ_BLACKBOARD_ := Gt (2, 0) And Equal ('L18105_extended_empty, 1) ;
+                                If Equal ('C_READ_BLACKBOARD_, 1)
+                                Then
+                                    (
+                                    'GPMcps1 := 'pk_true ;
+                                    'L6960_enabled := 'GLOBAL_PROCESS_MANAGER_CheckPreemptionStatus ;
+                                    If Equal ('L6960_enabled, 1)
+                                    Then
+                                        (
+                                        'GPMss1 := 1 ;
+                                        'GPMss2 := 'WAITING ;
+                                        'gpm5 := 'GLOBAL_PROCESS_MANAGER_SetState ;
+                                        'blackboard_inWaiting_Queue := 'TRUE ;
+                                        'blackboard_inWaiting_Processes := 'blackboard_inWaiting_Processes +. 1 ;
+                                        'GBLMu1 := 'blackboard_in ;
+                                         'gpm5 := 'GLOBAL_BLACKBOARD_MANAGER_Update ;
+                                         'L6922_diagnostic := 'GLOBAL_PROCESS_MANAGER_SchedulingRequest
+                                        )
+                                    ) ;
+                                Local 't27 ;
+                                (If Equal ('C_READ_BLACKBOARD_, 1)
+                                Then 't27 := 'L6960_enabled
+                                Else 't27 := 'pk_false) ;
+                                'L18460_extended_enabled := 't27 ;
+                                Local 't28 ;
+                                (If Equal ('C_READ_BLACKBOARD_, 1)
+                                Then 't28 := 'L6960_enabled
+                                Else 't28 := 'pk_false) ;
+                                'L18465_extended_READ_BLACKBOARD_cond := 't28 ;
+                                'L18655_C_READ_BLACKBOARD_ := Equal (2, 99) And
+                                                              Equal ('L18460_extended_enabled, 1) ;
+                                If Equal ('L18655_C_READ_BLACKBOARD_, 1)
+                                Then
+                                    (
+                                    'GPMsc1 := 1 ;
+                                    'GPMsc1 := 2 ;
+                                    'gpm5 := 'GLOBAL_PROCESS_MANAGER_StartCounter
+                                    )
+                                ) ;
+                            Local 't29 ;
+                            (If Equal ('C_empty, 1)
+                            Then 't29 := 'L18107_Message_Size
+                            Else 't29 := 'pk_false) ;
+                            'L18113_extended_Message_Size := 't29 ;
+                            'C_diag_area_ := Equal ('L17619_Message_Size, 1) Or
+                                                        Equal ('L18113_extended_Message_Size, 1) ;
+                            Local 't30 ;
+                            (If Equal ('L17574_present, 1)
+                            Then
+                                (
+                                  Local 't31 ;
+                                  't31 := Gt (2, 0) And Equal ('L18105_extended_empty, 1) ;
+                                  Local 't32 ;
+                                  't32 := Equal ('L6941_present, 0) Or Gt (2, 100) ;
+                                  't30 := ('t31 Or 't32) Or (Equal ('L18465_extended_READ_BLACKBOARD_cond, 1) Or
+                                                                     Equal ('L18110_extended_Message_Size, 1))
+                                )
+                            Else 't30 := 'pk_false) ;
+                            'L18667_extended_C_ret3 := 't30 ;
+                            If Equal ('L17619_Message_Size, 1)
+                            Then
+                                (
+                                'rep2Message_Size := 'rep1Message_Size +. 'diag_size ;
+                                'rep2Message_Area := 'rep1Message_Area +. 'diag_area ;
+                                'L7083_Message_Size_cell := 'rep2Message_Size ;
+                                'L7095_Message_Area_cell := 'rep2Message_Area
+                                )
+                            ) ;
+                        If Equal ('L8725_trigger, 1)
+                        Then
+                            (
+                            If Equal ('L17823_DISPLAY_BLACKBOARD_cond, 1)
+                            Then
+                                (
+                                'GBLMci1 := 'board ;
+                                'GBLMci2 := 'L9635_blackboard_in ;
+                                'L9634_present := 'GLOBAL_BLACKBOARD_MANAGER_CheckID ;
+                                If Equal ('L9634_present, 1)
+                                Then
+                                    (
+                                    'L9651_toolong := 'L9596_Message_Size_cell -. 'L9635_blackboard_inMessage_Size ;
+                                    'L17830_Waiting_Queue := 1 -. 'L9651_toolong ;
+                                    If Equal ('L17830_Waiting_Queue, 1)
+                                    Then
+                                        (
+                                        'release_all := 'L9635_blackboard_inWaiting_Processes ;
+                                        'L9632_messMessage_Area := 'L9604_Message_Area_cell ;
+                                        'L9632_messMessage_Size := 'L9596_Message_Size_cell ;
+                                        Call 'strcpy ('blackboard_outBlackboard_Name,
+                                                             'L9635_blackboard_inBlackboard_Name) ;
+                                        'blackboard_outMessageMessage_Area := 'L9632_messMessage_Area ;
+                                        'blackboard_outMessageMessage_Size := 'L9632_messMessage_Size ;
+                                        'blackboard_outMessage_Size := 'L9635_blackboard_inMessage_Size ;
+                                        'blackboard_outWaiting_Processes := 'L9635_blackboard_inWaiting_Processes -.
+                                                         'L9635_blackboard_inWaiting_Processes ;
+                                        'blackboard_outWaiting_Queue := 'L9635_blackboard_inWaiting_Queue ;
+                                        'CLK_5573 := 'L9635_blackboard_inEmpty_Indicator ;
+                                        (If Equal ('CLK_5573, 1)
+                                        Then 'blackboard_outEmpty_Indicator := 'pk_false
+                                        Else 'blackboard_outEmpty_Indicator := 'pk_false) ;
+                                        'GBLMu1 := 'blackboard_out ;
+                                        'gpm5 := 'GLOBAL_BLACKBOARD_MANAGER_Update ;
+                                        If Equal ('release_all, 1)
+                                        Then
+					                                   (
+					                                   'process_range := 'blackboard_outWaiting_Queue ;
+                                        'blackboard_outWaiting_Queue := 'FALSE ;
+                                        'GPMscm1 := 'process_range ;
+                                        'gpm5 := 'GLOBAL_PROCESS_MANAGER_StopCounters_many ;
+                                        'GPMssm1 := 'process_range ;
+                                        'GPMssm2 := 'READY ;
+                                        'gpm5 := 'GLOBAL_PROCESS_MANAGER_SetState_many ;
+                                        'GPMcps1 := 'pk_true ;
+                                        'L9650_enabled := 'GLOBAL_PROCESS_MANAGER_CheckPreemptionStatus ;
+                                        If Equal ('L9650_enabled, 1)
+                                        Then
+                                         (
+                                          'L9627_diagnostic := 'GLOBAL_PROCESS_MANAGER_SchedulingRequest
+                                         )
+                                        )
+                                       )
+                                    )
+                                )
+                            ) ;
+                        If Equal ('trigger, 1)
+                        Then
+                            (
+                            If Equal ('L17524_SEND_BUFFER_cond, 1)
+                            Then
+                                (
+                                If Equal ('L17532_SEND_cond, 1)
+                                Then
+                                    (
+                                    'GBUMci1 := 'buff2 ;
+                                    'GBUMci2 := 'buffer_in ;
+                                    'present := 'GLOBAL_BUFFER_MANAGER_CheckID ;
+                                    'C_full := Equal ('present, 1) And Equal ('outofrange, 0) ;
+                                    If Equal ('present, 1)
+                                    Then
+                                        (
+                                        'messMessage_Area := 99999 ;
+                                        'messMessage_Size := 2
+                                        ) ;
+                                    If Equal('C_full, 1)
+                                    Then
+                                        (
+                                        'full := 'buffer_inNb_Message +. 'buffer_inMax_Message ;
+                                        'L18089_toolongXZX_subexpr := 1 -. 'full ;
+                                        If Equal ('L18089_toolongXZX_subexpr, 1)
+                                        Then
+                                        (
+                                        'L6529_toolongXZX_subexpr := 'buffer_inMessage_Size ;
+                                        'toolong := 2 +. 'L6529_toolongXZX_subexpr ;
+                                        'L18094_nowaitingprocess := 1 -. 'toolong ;
+                                        If Equal ('L18094_nowaitingprocess, 1)
+                                        Then
+                                        (
+                                        'nowaitingprocess := 'buffer_inWaitingOnReceive_Processes ;
+                                        'L18426_SEND_var := 1 -. 'nowaitingprocess ;
+                                        If Equal ('nowaitingprocess, 1)
+                                        Then
+                                        (
+                                        Call 'strcpy ('buffer_outBuffer_Name, 'buffer_inBuffer_Name) ;
+                                        'buffer_outMax_Message := 'buffer_inMax_Message ;
+                                        'buffer_outMessage_Size := 'buffer_inMessage_Size ;
+                                        'buffer_outWaitingOnSend_Processes := 'buffer_inWaitingOnSend_Processes ;
+                                        'buffer_outWaitingOnReceive_Processes := 'buffer_inWaitingOnReceive_Processes ;
+                                        'buffer_outQueuing_Discipline := 'buffer_inQueuing_Discipline ;
+                                        'buffer_outWaitingOnSend_Queue := 'buffer_inWaitingOnSend_Queue ;
+                                        'buffer_outWaitingOnReceive_Queue := 'buffer_inWaitingOnReceive_Queue ;
+                                        'L18437_aux := 'buffer_inNb_Message +. 'buffer_inMax_Message ;
+                                        (If Equal ('L18437_aux, 1)
+                                        Then 'buffer_outNb_Message := 'buffer_inNb_Message +. 1
+                                        Else 'buffer_outNb_Message := 'buffer_inNb_Message) ;
+                                        If Equal ('L18437_aux, 1)
+                                        Then
+                                        (
+                                        'aux := 'buffer_inMessage_Range ;
+                                        'aux := 'mess
+                                        ) ;
+                                        (If Equal ('L18437_aux, 1)
+                                        Then
+                                        (
+                                        'buffer_outMessage_RangeMessage_Area := 'auxMessage_Area ;
+                                        'buffer_outMessage_RangeMessage_Size := 'auxMessage_Size
+                                        )
+                                        Else
+                                        (
+                                        'buffer_outMessage_RangeMessage_Area := 'buffer_inMessage_RangeMessage_Area ;
+                                        'buffer_outMessage_RangeMessage_Size := 'buffer_inMessage_RangeMessage_Size
+                                        ))  ;
+                                        'GBUMu1 := 'buffer_out ;
+                                        'gpm5 := 'GLOBAL_BUFFER_MANAGER_Update
+                                        ) ;
+                                        If Equal ('L18426_SEND_var, 1)
+                                        Then
+                                        (
+                                        (If Equal ('buffer_inQueuing_Discipline, 'FIFO)
+                                        Then
+					        (
+					         'pid := 0
+					       )
+					       Else
+					       (
+					          'pid := 1
+					       )) ;
+					      'buffer_inWaitingOnReceive_Processes := 'buffer_inWaitingOnReceive_Processes -. 1 ;
+                                        'GBUMu1 := 'buffer_in ;
+                                        'gpm5 := 'GLOBAL_BUFFER_MANAGER_Update ;
+                                        'GPMcm1 := 'mess ;
+                                        'GPMcm2 := 'some_processID ;
+                                        'gpm5 := 'GLOBAL_PROCESS_MANAGER_CopyMessage ;
+                                        'GPMsc1 := 'some_processID ;
+                                        'gpm5 := 'GLOBAL_PROCESS_MANAGER_StopCounter ;
+                                        'GPMss1 := 'some_processID ;
+                                        'GPMss2 := 'READY ;
+                                        'gpm5 := 'GLOBAL_PROCESS_MANAGER_SetState
+                                        )
+                                        )
+                                       )
+                                     ) ;
+                                    (If Equal ('C_full, 1)
+                                    Then 'L18087_extended_full := 'full
+                                    Else 'L18087_extended_full := 'pk_false) ;
+                                    (If Equal ('C_full, 1)
+                                    Then 'L18092_extended_toolongXZX_subexpr := 'L18089_toolongXZX_subexpr
+                                    Else 'L18092_extended_toolongXZX_subexpr := 'pk_false) ;
+                                    'C_SEND_cond := Equal ('available, 1) And Equal ('L18087_extended_full, 1) ;
+                                    (If Equal ('L18094_nowaitingprocess, 1)
+                                    Then 'L18435_extended_SEND_var := 'L18426_SEND_var
+                                    Else 'L18435_extended_SEND_var :=  'pk_false) ;
+                                    (If Equal ('L18092_extended_toolongXZX_subexpr, 1)
+                                    Then 'L6657_SEND_cond := 'toolong
+                                    Else 'L6657_SEND_cond := Equal ('present, 0) Or Equal ('outofrange, 1)) ;
+                                    If Equal ('C_SEND_cond, 1)
+                                    Then
+                                        (
+                                        'GPMcps1 := 'pk_true ;
+                                        'enabled := 'GLOBAL_PROCESS_MANAGER_CheckPreemptionStatus ;
+                                        If Equal ('enabled, 1)
+                                        Then
+                                        (
+                                        'GPMss1 := 1 ;
+                                        'GPMss2 := 'WAITING ;
+                                        'Ggpm5 := 'GLOBAL_PROCESS_MANAGER_SetState ;
+                                        (If (Equal ('buffer_inQueuing_Discipline, 1) Or Equal ('FIFO, 0))
+                                        Then
+					  (
+					   'pid := 0
+					  )
+					Else
+					  (
+					    'pid := 1
+					  )) ;
+					'buffer_inWaitingOnSend_Processes := 'buffer_inWaitingOnSend_Processes +. 1 ;
+                                 'GBUMu1 := 'buffer_in ;
+                                 'Ggpm5 := 'GLOBAL_BUFFER_MANAGER_Update
+                                        )
+                                      ) ;
+                                    (If Equal ('C_SEND_cond, 1)
+                                    Then 'L18413_extended_enabled := 'enabled
+                                    Else 'L18413_extended_enabled := 'pk_false) ;
+                                    (If Equal ('C_SEND_cond, 1)
+                                    Then 'L18443_extended_SEND_cond := 1 -. 'enabled
+                                    Else 'L18443_extended_SEND_cond := 'pk_false) ;
+                                    'L18763_C_SEND_var := Equal (10, 99) And Equal ('L18413_extended_enabled, 1) ;
+                                    'C_diagnostic := Equal ('L18413_extended_enabled, 1) Or
+                                                                 Equal ('L18435_extended_SEND_var, 1) ;
+                                    If Equal ('L18763_C_SEND_var, 1)
+                                    Then
+                                        (
+                                        'GPMsc1 := 1 ;
+                                        'GPMsc2 := 10 ;
+                                        'gpm6 := 'GLOBAL_PROCESS_MANAGER_StartCounter
+                                        ) ;
+                                    If Equal ('C_diagnostic, 1)
+                                    Then
+                                        (
+                                         'diagnostic := 'GLOBAL_PROCESS_MANAGER_SchedulingRequest
+                                        )
+                                    ) ;
+                                (If Equal ('L17532_SEND_cond, 1)
+                                Then
+                                    ( Local 't33 ;
+                                      't33 := Equal ('L6657_SEND_cond, 1) Or
+                                                  (Equal ('available, 0) And Equal ('L18087_extended_full, 1)) ;
+                                      'L18619_extended_C_return_code_ := Equal ('t33, 1) Or
+                                                   (Equal ('L18443_extended_SEND_cond, 1) And
+                                                    Equal ('L18092_extended_toolongXZX_subexpr, 1))
+                                     )
+                                Else 'L18619_extended_C_return_code_ := 'pk_false) ;
+                                'C_ret1 := Equal ('on_waiting, 1) Or Equal ('L18619_extended_C_return_code_, 1) ;
+                                (If Equal ('C_ret1, 1)
+                                 Then 'L6345_SEND_BUFFER_cond := 'pk_false
+                                 Else 'L6345_SEND_BUFFER_cond := 'pk_true) ;
+                                'L6342_blocked := 'L6345_SEND_BUFFER_cond
+                                ) ;
+                            (If Equal ('L17524_SEND_BUFFER_cond, 1)
+                            Then 'L18628_extended_C_ret1 := 'C_ret1
+                            Else 'L18628_extended_C_ret1 := 'pk_false)
+                            ) ;
+                        If Equal ('L8725_trigger, 1)
+                        Then
+                            (
+                            If Equal ('L17749_RECEIVE_BUFFER_cond, 1)
+                            Then
+                                (
+                                If Equal ('L17757_outofrange, 1)
+                                Then
+                                    (
+                                    'GPMci1 := 'buff2 ;
+                                    'GPMci2 := 'L8888_buffer_in ;
+                                    'L8864_present := 'GLOBAL_BUFFER_MANAGER_CheckID ;
+                                    'L17988_C_empty := Equal ('L8864_present, 1) And Equal ('L8874_outofrange, 0) ;
+                                    If Equal ('L17988_C_empty, 1)
+                                    Then
+                                        (
+                                        'L9008_empty := 'L8888_buffer_inNb_Message ;
+                                        'L18188_some_message_cell := 1 -. 'L9008_empty ;
+                                         If Equal ('L18188_some_message_cell, 1)
+                                         Then
+                                        (
+                                        'L8946_nowaitingprocess := 'L8888_buffer_inWaitingOnSend_Processes ;
+                                        'L18576_RECEIVE_var := 1 -. 'L8946_nowaitingprocess ;
+                                        If Equal ('L8946_nowaitingprocess, 1)
+                                        Then
+                                        (
+                                        Call 'strcpy ('L8887_buffer_outBuffer_Name, 'L8888_buffer_inBuffer_Name) ;
+                                        'L8887_buffer_outMax_Message := 'L8888_buffer_inMax_Message ;
+                                        'L8887_buffer_outMessage_Size := 'L8888_buffer_inMessage_Size ;
+                                        'L8887_buffer_outWaitingOnSend_Processes := 'L8888_buffer_inWaitingOnSend_Processes ;
+                                        'L8887_buffer_outWaitingOnReceive_Processes := 'L8888_buffer_inWaitingOnReceive_Processes ;
+                                        'L8887_buffer_outQueuing_Discipline := 'L8888_buffer_inQueuing_Discipline ;
+                                        'L8887_buffer_outWaitingOnSend_Queue := 'L8888_buffer_inWaitingOnSend_Queue ;
+                                        'L8887_buffer_outWaitingOnReceive_Queue := 'L8888_buffer_inWaitingOnReceive_Queue ;
+                                        'L18584_mess_cell := 'L8888_buffer_inNb_Message ;
+                                        (If Equal ('L18584_mess_cell, 1)
+                                         Then 'L8887_buffer_outNb_Message := 'L8888_buffer_inNb_Message -. 1
+                                         Else 'L8887_buffer_outNb_Message := 'L8888_buffer_inNb_Message)
+                                        ) ;
+                                        If Equal ('L18576_RECEIVE_var, 1)
+                                        Then
+                                        (
+                                        (If Equal ('L8888_buffer_inQueuing_Discipline, 'FIFO)
+                                        Then
+					         (
+					           'pid := 0
+					         )
+					       Else
+					         (
+					           'pid := 1
+					         )) ;
+					       'L8888_buffer_inWaitingOnSend_Processes := 'L8888_buffer_inWaitingOnSend_Processes -. 1 ;
+                                        'GBUMu1 := 'L8888_buffer_in ;
+                                        'gpm6 := 'GLOBAL_BUFFER_MANAGER_Update ;
+                                        'GPMsc1 := 'L8948_some_processID ;
+                                        'gpm6 := 'GLOBAL_PROCESS_MANAGER_StopCounter ;
+                                        'GPMss1 := 'L8948_some_processID ;
+                                        'GPMss2 := 'READY ;
+                                        'gpm6 := 'GLOBAL_PROCESS_MANAGER_SetState
+                                        ) ;
+                                        If Equal ('L8946_nowaitingprocess, 1)
+                                        Then
+                                        (
+                                        If Equal ('L18584_mess_cell, 1)
+                                        Then
+                                        (
+                                        'L9052_aux := 'L8888_buffer_inMessage_Range ;
+                                        'L9052_aux := 'L8947_some_message
+                                        ) ;
+                                        (If Equal ('L18584_mess_cell, 1)
+                                        Then
+                                        (
+                                        'L8887_buffer_outMessage_RangeMessage_Area := 'L9052_auxMessage_Area ;
+                                        'L8887_buffer_outMessage_RangeMessage_Size := 'L9052_auxMessage_Size
+                                        )
+                                        Else
+                                        (
+                                        'L8887_buffer_outMessage_RangeMessage_Area := 'L8888_buffer_inMessage_RangeMessage_Area ;
+                                        'L8887_buffer_outMessage_RangeMessage_Size := 'L8888_buffer_inMessage_RangeMessage_Size
+                                        )) ;
+                                        'GBUMu1 := 'L8887_buffer_out ;
+                                        'gpm6 := 'GLOBAL_BUFFER_MANAGER_Update
+                                        )
+                                       )
+                                      ) ;
+                                    (If Equal ('L17988_C_empty, 1)
+                                    Then 'L18186_extended_empty := 'L9008_empty
+                                    Else 'L18186_extended_empty := 'pk_false) ;
+                                    (If Equal ('L17988_C_empty, 1)
+                                    Then 'L18191_extended_some_message_cell := 'L18188_some_message_cell
+                                    Else 'L18191_extended_some_message_cell := 'pk_false) ;
+                                    'L18317_C_enabled := Equal ('L8870_available, 1) And Equal ('L18186_extended_empty, 1) ;
+                                    (If Equal ('L18188_some_message_cell, 1)
+                                    Then 'L18582_extended_RECEIVE_var := 'L18576_RECEIVE_var
+                                    Else 'L18582_extended_RECEIVE_var := 'pk_false) ;
+                                    If Equal ('L18317_C_enabled, 1)
+                                    Then
+                                        (
+                                        'GPMcps1 := 'pk_true ;
+                                        'L9009_enabled := 'GLOBAL_PROCESS_MANAGER_CheckPreemptionStatus ;
+                                        If Equal ('L9009_enabled, 1)
+                                        Then
+                                        (
+                                        'GPMss1 := 3 ;
+                                        'GPMss2 := 'WAITING ;
+                                        'gpm6 := 'GLOBAL_PROCESS_MANAGER_SetState ;
+                                        (If Equal ('L8888_buffer_inQueuing_Discipline, 'FIFO)
+                                        Then
+					          (
+					            'pid := 0
+					          )
+					       Else
+					          (
+					            'pid := 1
+					           )) ;
+					   'L8888_buffer_inWaitingOnReceive_Processes := 'L8888_buffer_inWaitingOnReceive_Processes +. 1 ;
+                                    'GBUMu1 := 'L8888_buffer_in ;
+                                    'gpm6 := 'GLOBAL_BUFFER_MANAGER_Update
+                                        )
+                                      ) ;
+                                    (If Equal ('L18317_C_enabled, 1)
+                                    Then 'L18560_extended_RECEIVE_cond := 1 -. 'L9009_enabled
+                                    Else 'L18560_extended_RECEIVE_cond := 'pk_false) ;
+                                    (If Equal ('L18317_C_enabled, 1)
+                                    Then 'L18566_extended_enabled := 'L9009_enabled
+                                    Else 'L18566_extended_enabled := 'pk_true) ;
+                                    'C_RECEIVE_var := Equal (2, 99) And Equal ('L18566_extended_enabled, 1) ;
+                                    'L18796_C_diagnostic := Equal ('L18566_extended_enabled, 1) Or
+                                                                               Equal ('L18582_extended_RECEIVE_var, 1) ;
+                                    If Equal ('C_RECEIVE_var, 1)
+                                    Then
+                                        (
+                                        'GPMsc1 := 3 ;
+                                        'GPMsc2 := 2 ;
+                                        'gpm6 := 'GLOBAL_PROCESS_MANAGER_StartCounter
+                                        ) ;
+                                    If Equal ('L18796_C_diagnostic, 1)
+                                    Then
+                                        (
+                                         'L8875_diagnostic := 'GLOBAL_PROCESS_MANAGER_SchedulingRequest
+                                        )
+                                    ) ;
+                                (If Equal ('L8946_nowaitingprocess, 1)
+                                Then 'L18596_extended_mess_cell := 'L18584_mess_cell
+                                Else 'L18596_extended_mess_cell := 'pk_false) ;
+                                (If Equal ('L17757_outofrange, 1)
+                                Then
+                                   (
+                                      Local 't34 ;
+                                      't34 := Equal ('L8870_available, 0) And Equal ('L18186_extended_empty, 1) ;
+                                      Local 't35 ;
+                                      't35 := Equal ('L8864_present, 0) Or Equal ('L8874_outofrange, 1) ;
+                                      'L18853_extended_C_return_code_ := Equal ('t34, 't35) Or (Equal ('L18560_extended_RECEIVE_cond, 1) Or
+                                                         Equal ('L18191_extended_some_message_cell, 1))
+                                    )
+                                Else 'L18853_extended_C_return_code_ := 'pk_false) ;
+                                (If Equal ('L18596_extended_mess_cell, 1)
+                                Then 'L8835_RECEIVE_BUFFER_cond := 'pk_false
+                                Else 'L8835_RECEIVE_BUFFER_cond := 'pk_true) ;
+                                (If Equal ('L8829_retrieve, 1)
+                                Then 'L8827_blocked := 'pk_false
+                                Else
+                                        (If Equal ('L8835_RECEIVE_BUFFER_cond, 1)
+                                        Then 'L8827_blocked := 'pk_true
+                                        Else 'L8827_blocked := 'pk_false)
+                                )) ;
+                            (If Equal ('L17749_RECEIVE_BUFFER_cond, 1)
+                            Then 'L18862_extended_C_ret0 := Equal ('L8829_retrieve, 1) Or Equal ('L18853_extended_C_return_code_, 1)
+                            Else 'L18862_extended_C_ret0 := 'pk_false)
+                            ) ;
+                        If Equal ('trigger, 1)
+                        Then
+                            (
+                            If Equal ('L17595_SEND_BUFFER_cond, 1)
+                            Then
+                                (
+                                If Equal ('L17603_SEND_cond, 1)
+                                Then
+                                    (
+                                   'GBUMci1 := 'buff1 ;
+                                   'GBUMci2 := 'L7169_buffer_in ;
+                                    'L7152_present := 'GLOBAL_BUFFER_MANAGER_CheckID ;
+                                    'L17946_C_full := Equal ('L7152_present, 1) And Equal ('L7153_outofrange, 0) ;
+                                    If Equal ('L7152_present, 1)
+                                    Then
+                                        (
+                                        'L7190_messMessage_Area := 'L7095_Message_Area_cell ;
+                                        'L7190_messMessage_Size := 'L7083_Message_Size_cell
+                                        ) ;
+                                    If Equal ('L17946_C_full, 1)
+                                    Then
+                                        (
+                                        'L7259_full := 'L7169_buffer_inNb_Message +. 'L7169_buffer_inMax_Message ;
+                                        'L18118_toolongXZX_subexpr := 1 -. 'L7259_full ;
+                                        If Equal ('L18118_toolongXZX_subexpr, 1)
+                                        Then
+                                        (
+                                        'L7288_toolongXZX_subexpr := 'L7169_buffer_inMessage_Size ;
+                                        'L7261_toolong := 'L7083_Message_Size_cell +. 'L7288_toolongXZX_subexpr ;
+                                        'L18123_nowaitingprocess := 1 -. 'L7261_toolong ;
+                                        If Equal ('L18123_nowaitingprocess, 1)
+                                        Then
+                                        (
+                                        'L7189_nowaitingprocess := 'L7169_buffer_inWaitingOnReceive_Processes ;
+                                        'L18484_SEND_var := 1 -. 'L7189_nowaitingprocess ;
+                                        If Equal ('L7189_nowaitingprocess, 1)
+                                        Then
+                                        (
+                                        Call 'strcpy ('L7168_buffer_outBuffer_Name, 'L7169_buffer_inBuffer_Name) ;
+                                        'L7168_buffer_outMax_Message := 'L7169_buffer_inMax_Message ;
+                                        'L7168_buffer_outMessage_Size := 'L7169_buffer_inMessage_Size ;
+                                        'L7168_buffer_outWaitingOnSend_Processes := 'L7169_buffer_inWaitingOnSend_Processes ;
+                                        'L7168_buffer_outWaitingOnReceive_Processes := 'L7169_buffer_inWaitingOnReceive_Processes ;
+                                        'L7168_buffer_outQueuing_Discipline := 'L7169_buffer_inQueuing_Discipline ;
+                                        'L7168_buffer_outWaitingOnSend_Queue := 'L7169_buffer_inWaitingOnSend_Queue ;
+                                        'L7168_buffer_outWaitingOnReceive_Queue := 'L7169_buffer_inWaitingOnReceive_Queue ;
+                                        'L18495_aux := 'L7169_buffer_inNb_Message +. 'L7169_buffer_inMax_Message ;
+                                        (If Equal ('L18495_aux, 1)
+                                        Then
+                                             'L7168_buffer_outNb_Message := 'L7169_buffer_inNb_Message +. 1
+                                        Else
+                                             'L7168_buffer_outNb_Message := 'L7169_buffer_inNb_Message) ;
+                                        If Equal ('L18495_aux, 1)
+                                        Then
+                                        (
+                                        'L7311_aux := 'L7169_buffer_inMessage_Range ;
+                                        'L7311_aux := 'L7190_mess
+                                        ) ;
+                                        (If Equal ('L18495_aux, 1)
+                                        Then
+                                        (
+                                        'L7168_buffer_outMessage_RangeMessage_Area := 'L7311_auxMessage_Area ;
+                                        'L7168_buffer_outMessage_RangeMessage_Size := 'L7311_auxMessage_Size
+                                        )
+                                        Else
+                                        (
+                                        'L7168_buffer_outMessage_RangeMessage_Area := 'L7169_buffer_inMessage_RangeMessage_Area ;
+                                        'L7168_buffer_outMessage_RangeMessage_Size := 'L7169_buffer_inMessage_RangeMessage_Size
+                                        )) ;
+                                        'GBUMu1 := 'L7168_buffer_out p ;
+                                        'gpm7 := 'GLOBAL_BUFFER_MANAGER_Update
+                                        ) ;
+                                        If Equal ('L18484_SEND_var, 1)
+                                        Then
+                                        (
+                                        (If Equal ('L7169_buffer_inQueuing_Discipline, 'FIFO)
+                                        Then
+					         (
+					           'pid := 0
+					         )
+					      Else
+					        (
+					           'pid := 1
+					        )) ;
+					       'L7169_buffer_inWaitingOnReceive_Processes := 'L7169_buffer_inWaitingOnReceive_Processes -. 1 ;
+                                        'GBUMu1 := 'L7169_buffer_in ;
+                                        'gpm7 := 'GLOBAL_BUFFER_MANAGER_Update ;
+                                        'GPMcm1 := 'L7190_mess ;
+                                        'GPMcm2 := 'L7191_some_processID ;
+                                        'gpm7 := 'GLOBAL_PROCESS_MANAGER_CopyMessage ;
+                                        'GPMsc1 := 'L7191_some_processID ;
+                                        'gpm7 := 'GLOBAL_PROCESS_MANAGER_StopCounter ;
+                                        'GPMss1 := 'L7191_some_processID ;
+                                        'GPMss2 := 'READY ;
+                                        'gpm7 := 'GLOBAL_PROCESS_MANAGER_SetState
+                                        )
+                                       )
+                                      )
+                                    ) ;
+                                    (If Equal ('L17946_C_full, 1)
+                                    Then
+                                       'L18116_extended_full := 'L7259_full
+                                    Else
+                                       'L18116_extended_full := 'pk_false) ;
+                                    (If Equal ('L17946_C_full, 1)
+                                    Then
+                                        'L18121_extended_toolongXZX_subexpr := 'L18118_toolongXZX_subexpr
+                                    Else
+                                        'L18121_extended_toolongXZX_subexpr := 'pk_false) ;
+                                    'L18281_C_SEND_cond := Equal ('L7154_available, 1) And Equal ('L18116_extended_full, 1) ;
+                                    (If Equal ('L18123_nowaitingprocess, 1)
+                                    Then
+                                       'L18493_extended_SEND_var := 'L18484_SEND_var
+                                    Else
+                                        'L18493_extended_SEND_var := 'pk_false) ;
+                                    (If Equal ('L18121_extended_toolongXZX_subexpr, 1)
+                                    Then
+                                         'L7416_SEND_cond := 'L7261_toolong
+                                    Else
+                                         'L7416_SEND_cond := Equal ('L7152_present, 0) Or Equal ('L7153_outofrange, 1)) ;
+                                    If Equal ('L18281_C_SEND_cond, 1)
+                                    Then
+                                        (
+                                        'GPMcps1 := 'pk_true ;
+                                        'L7260_enabled := 'GLOBAL_PROCESS_MANAGER_CheckPreemptionStatus ;
+                                        If Equal ('L7260_enabled, 1)
+                                        Then
+                                        (
+                                        'GPMss1 := 1 ;
+                                        'GPMss2 := 'WAITING ;
+                                        'gpm7 := 'GLOBAL_PROCESS_MANAGER_SetState ;
+                                        (If Equal ('L7169_buffer_inQueuing_Discipline,  'FIFO)
+                                       Then
+					         (
+					           'pid := 1
+					         )
+					       Else
+					          (
+					            'pid := 0
+					          )) ;
+                                       'L7169_buffer_inWaitingOnSend_Processes := 'L7169_buffer_inWaitingOnSend_Processes +. 1 ;
+                                       'GBUMu1 := 'L7169_buffer_in ;
+                                       'gpm7 := 'GLOBAL_BUFFER_MANAGER_Update
+                                       )
+                                    ) ;
+                                    (If Equal ('L18281_C_SEND_cond, 1)
+                                    Then
+                                       'L18471_extended_enabled := 'L7260_enabled
+                                    Else
+                                        'L18471_extended_enabled := 'pk_false) ;
+                                    (If Equal ('L18281_C_SEND_cond, 1)
+                                    Then
+                                       'L18501_extended_SEND_cond := 1 -. 'L7260_enabled
+                                    Else
+                                       'L18501_extended_SEND_cond := 'pk_false) ;
+                                    'C_SEND_var := Equal (10, 99) And Equal ('L18471_extended_enabled, 1) ;
+                                    'L18775_C_diagnostic := Equal ('L18471_extended_enabled, 1) Or
+                                                                              Equal ('L18493_extended_SEND_var, 1) ;
+                                    If Equal ('C_SEND_var, 1)
+                                    Then
+                                        (
+                                        'GPMsc1 := 1 ;
+                                        'GPMsc2 := 10 ;
+                                        'gpm7 := 'GLOBAL_PROCESS_MANAGER_StartCounter
+                                        ) ;
+                                    If Equal ('L18775_C_diagnostic, 1)
+                                    Then
+                                        (
+                                         'L7151_diagnostic := 'GLOBAL_PROCESS_MANAGER_SchedulingRequest
+                                        )
+                                    ) ;
+                                (If Equal ('L17603_SEND_cond, 1)
+                                Then
+                                   (
+                                     Local 't36 ;
+                                     't36 := Equal ('L7416_SEND_cond, 1) Or
+                                                 (Equal ('L7154_available, 0) And Equal ('L18116_extended_full, 1)) ;
+                                     'L18682_extended_C_return_code_ :=  Equal ('t36, 1) Or (Equal ('L18501_extended_SEND_cond, 0) Or
+                                                                       Equal ('L18121_extended_toolongXZX_subexpr, 1))
+                                   )
+                                Else
+                                       'L18682_extended_C_return_code_ := 'pk_false) ;
+                                'C_ret5 := Equal ('L7116_on_waiting, 1) Or Equal ('L18682_extended_C_return_code_, 1) ;
+                                (If Equal ('C_ret5, 1)
+                                Then 'L7117_SEND_BUFFER_cond := 'pk_false
+                                Else 'L7117_SEND_BUFFER_cond := 'pk_true) ;
+                                'L7114_blocked := 'L7117_SEND_BUFFER_cond
+                                ) ;
+                            (If Equal ('L17595_SEND_BUFFER_cond, 1)
+                            Then 'L18691_extended_C_ret5 := 'C_ret5
+                            Else 'L18691_extended_C_ret5 := 'pk_false) ;
+                            'C_continue := Equal ('L18649_extended_C_ret2, 'L18628_extended_C_ret1) Or
+                                                     Equal ('L18667_extended_C_ret3, 'L18691_extended_C_ret5) ;
+                            'C_CONTROL_cond := Equal ('C_continue, 1) Or Equal ('L18081_service_call, 1) ;
+                            If Equal ('C_CONTROL_cond, 1)
+                            Then
+                                (
+                                (If Equal ('C_continue, 1)
+                                 Then 'L6250_CONTROL_cond := 'pk_false
+                                 Else 'L6250_CONTROL_cond := 'pk_true )
+                                ) ;
+                            (If Equal ('C_CONTROL_cond, 1)
+                            Then 'L19009_extended_CONTROL_cond := 'L6250_CONTROL_cond
+                            Else 'L19009_extended_CONTROL_cond := 'pk_false) ;
+                            (If Equal ('L19009_extended_CONTROL_cond, 1)
+                            Then 'blocked := 'pk_true
+                             Else
+                                (
+                                  If Equal ('L18081_service_call, 1)
+                                  Then 'blocked := 'pk_false
+                                  Else 'blocked := 'zblocked
+                                )
+                            ) ;
+                        If Equal ('L7561_trigger, 1)
+                        Then
+                            (
+                            If Equal ('L17635_RECEIVE_BUFFER_cond, 1)
+                            Then
+                                (
+                                If Equal ('L17643_outofrange, 1)
+                                Then
+                                    (
+                                    'GBUMci1 := 'buff1 ;
+                                    'GBUMci1 := 'L7724_buffer_in ;
+                                    'L7700_present := 'GLOBAL_BUFFER_MANAGER_CheckID ;
+                                    'L17949_C_empty := Equal ('L7700_present, 1) And Equal ('L7710_outofrange, 0) ;
+                                    If Equal ('L17949_C_empty, 1)
+                                    Then
+                                        (
+                                        'L7844_empty := 'L7724_buffer_inNb_Message ;
+                                        'L18141_some_message_cell := 1 -. 'L7844_empty ;
+                                        If Equal ('L18141_some_message_cell, 1)
+                                       Then
+                                        (
+                                        'L7782_nowaitingprocess := 'L7724_buffer_inWaitingOnSend_Processes ;
+                                        'L18523_RECEIVE_var := 1 -. 'L7782_nowaitingprocess ;
+                                        If Equal ('L7782_nowaitingprocess, 1)
+                                        Then
+                                        (
+                                        Call 'strcpy ('L7723_buffer_outBuffer_Name, 'L7724_buffer_inBuffer_Name) ;
+                                        'L7723_buffer_outMax_Message := 'L7724_buffer_inMax_Message ;
+                                        'L7723_buffer_outMessage_Size := 'L7724_buffer_inMessage_Size ;
+                                        'L7723_buffer_outWaitingOnSend_Processes := 'L7724_buffer_inWaitingOnSend_Processes ;
+                                        'L7723_buffer_outWaitingOnReceive_Processes := 'L7724_buffer_inWaitingOnReceive_Processes ;
+                                        'L7723_buffer_outQueuing_Discipline := 'L7724_buffer_inQueuing_Discipline ;
+                                        'L7723_buffer_outWaitingOnSend_Queue := 'L7724_buffer_inWaitingOnSend_Queue ;
+                                        'L7723_buffer_outWaitingOnReceive_Queue := 'L7724_buffer_inWaitingOnReceive_Queue ;
+                                        'L18531_mess_cell := 'L7724_buffer_inNb_Message ;
+                                        (If Equal ('L18531_mess_cell, 1)
+                                        Then 'L7723_buffer_outNb_Message := 'L7724_buffer_inNb_Message -. 1
+                                        Else 'L7723_buffer_outNb_Message := 'L7724_buffer_inNb_Message )
+                                        ) ;
+                                        If Equal ('L18523_RECEIVE_var, 1)
+                                        Then
+                                        (
+                                        (If Equal ('L7724_buffer_inQueuing_Discipline, 'FIFO)
+                                        Then
+					          (
+					            'pid := 1
+					          )
+					       Else
+					         (
+					           'pid := 0
+					         )) ;
+					       'L7724_buffer_inWaitingOnSend_Processes := 'L7724_buffer_inWaitingOnSend_Processes -. 1 ;
+                                        'GBUMu1 := 'L7724_buffer_in ;
+                                        'gpm7 := 'GLOBAL_BUFFER_MANAGER_Update ;
+                                        'GPMsc1 := 'L7784_some_processID ;
+                                        'gpm7 := 'GLOBAL_PROCESS_MANAGER_StopCounter ;
+                                        'GPMss1 := 'L7784_some_processID ;
+                                        'GPMss2 := 'READY ;
+                                        'gpm7 := 'GLOBAL_PROCESS_MANAGER_SetState
+                                        ) ;
+                                        If Equal('L7782_nowaitingprocess, 1)
+                                        Then
+                                        (
+                                        If Equal ('L18531_mess_cell, 1)
+                                        Then
+                                        (
+                                          'L7888_aux := 'L7724_buffer_inMessage_Range ;
+                                          'L7888_aux := 'some_message
+                                        ) ;
+                                        (If Equal ('L18531_mess_cell, 1)
+                                        Then
+                                        (
+                                        'L7723_buffer_outMessage_RangeMessage_Area := 'L7888_auxMessage_Area ;
+                                        'L7723_buffer_outMessage_RangeMessage_Size := 'L7888_auxMessage_Size
+                                        )
+                                        Else
+                                        (
+                                          'L7723_buffer_outMessage_RangeMessage_Area := 'L7724_buffer_inMessage_RangeMessage_Area ;
+                                          'L7723_buffer_outMessage_RangeMessage_Size := 'L7724_buffer_inMessage_RangeMessage_Size
+                                        ) ) ;
+                                        'GBUMu1 := 'L7723_buffer_out ;
+                                        'gpm7 := 'GLOBAL_BUFFER_MANAGER_Update
+                                        )
+                                      )
+                                    ) ;
+                                    (If Equal ('L17949_C_empty, 1)
+                                    Then 'L18139_extended_empty := 'L7844_empty
+                                    Else 'L18139_extended_empty := 'pk_false) ;
+                                    (If Equal ('L17949_C_empty, 1)
+                                    Then
+                                        'L18144_extended_some_message_cell := 'L18141_some_message_cell
+                                    Else
+                                        'L18144_extended_some_message_cell := 'pk_false) ;
+                                    'C_enabled := Equal ('L7706_available, 1) And Equal ('L18139_extended_empty, 1) ;
+                                    (If Equal ('L18141_some_message_cell, 1)
+                                    Then
+                                       'L18529_extended_RECEIVE_var := 'L18523_RECEIVE_var
+                                    Else
+                                       'L18529_extended_RECEIVE_var := 'pk_false) ;
+                                    If Equal ('C_enabled, 1)
+                                    Then
+                                        (
+                                        'GPMcps1 := 'pk_true ;
+                                        'L7845_enabled := 'GLOBAL_PROCESS_MANAGER_CheckPreemptionStatus ;
+                                        If Equal ('L7845_enabled, 1)
+                                        Then
+                                        (
+                                        'GPMss1 := 2 ;
+                                        'GPMss2 := 'WAITING ;
+                                        'gpm7 := 'GLOBAL_PROCESS_MANAGER_SetState ;
+                                        (If Equal ('L7724_buffer_inQueuing_Discipline, 'FIFO)
+                                        Then
+					          (
+					            'pid := 0
+					          )
+					       Else
+					         (
+                                             'pid := 1
+					         )) ;
+					      'L7724_buffer_inWaitingOnReceive_Processes := 'L7724_buffer_inWaitingOnReceive_Processes +. 1 ;
+                                       'GBUMu1 := 'L7724_buffer_in ;
+                                       'gpm7 := 'GLOBAL_BUFFER_MANAGER_Update
+                                       )
+                                    ) ;
+                                    (If Equal ('C_enabled, 1)
+                                    Then
+                                        'L18507_extended_RECEIVE_cond := 1 -. 'L7845_enabled
+                                    Else
+                                        'L18507_extended_RECEIVE_cond := 'pk_false) ;
+                                    (If Equal ('C_enabled, 1)
+                                    Then
+                                        'L18513_extended_enabled := 'L7845_enabled
+                                    Else
+                                        'L18513_extended_enabled := 'pk_false) ;
+                                    'L18757_C_RECEIVE_var := Equal (10, 99) And Equal ('L18513_extended_enabled, 1) ;
+                                    'L18784_C_diagnostic := Equal ('L18513_extended_enabled, 1) Or Equal ('L18529_extended_RECEIVE_var, 1) ;
+                                    If Equal ('L18757_C_RECEIVE_var, 1)
+                                    Then
+                                        (
+                                       'GPMsc1 := 2 ;
+                                       'GPMsc2 := 10 ;
+                                        'gpm7 := 'GLOBAL_PROCESS_MANAGER_StartCounter
+                                        ) ;
+                                    If Equal ('L18784_C_diagnostic, 1)
+                                    Then
+                                        (
+                                          'L7711_diagnostic := 'GLOBAL_PROCESS_MANAGER_SchedulingRequest
+                                        )
+                                    ) ;
+                                (If Equal ('L7782_nowaitingprocess, 1)
+                                Then
+                                    'L18543_extended_mess_cell := 'L18531_mess_cell
+                                Else
+                                    'L18543_extended_mess_cell := 'pk_false) ;
+                               (If Equal ('L17643_outofrange, 1)
+                               Then
+                                   (
+                                     Local 't37 ;
+                                     't37 := Equal ('L7706_available, 0) And Equal ('L18139_extended_empty, 1) ;
+                                     Local 't38 ;
+                                     't38 := Equal ('L7700_present, 0) Or Equal ('L7710_outofrange, 1) ;
+                                     Local 't39 ;
+                                     't39 := Equal ('L18507_extended_RECEIVE_cond, 1) Or
+                                                 Equal ('L18144_extended_some_message_cell, 1) ;
+                                     'L18823_extended_C_return_code_ := Equal ('t37, 1) Or (Equal ('t38, 1) Or Equal ('t39, 1))
+                                   )
+                               Else
+                                     'L18823_extended_C_return_code_ := 'pk_false) ;
+                                (If Equal ('L18543_extended_mess_cell, 1)
+                                Then 'L7671_RECEIVE_BUFFER_cond := 'pk_false
+                                Else 'L7671_RECEIVE_BUFFER_cond := 'pk_true) ;
+                                (If Equal ('retrieve, 1)
+                                Then 'L7663_blocked := 'pk_false
+                                Else
+                                   (If Equal ('L7671_RECEIVE_BUFFER_cond, 1)
+                                    Then 'L7663_blocked := 'pk_true
+                                    Else 'L7663_blocked := 'pk_false)
+                                ) ;
+                            (If Equal ('L17635_RECEIVE_BUFFER_cond, 1)
+                            Then
+                                'L18832_extended_C_ret0 := Equal ('retrieve, 1) Or Equal ('L18823_extended_C_return_code_, 1)
+                            Else
+                                'L18832_extended_C_ret0 := 'pk_false) ;
+                            If Equal ('L17661_WAIT_SEMAPHORE_cond, 1)
+                           Then
+                                (
+                                If Equal ('L17669_present, 1)
+                                Then
+                                    (
+                                    'GSEMci1 := 'sema ;
+                                    'GSEMci2 := 'sema_in ;
+                                    'L8096_present := 'GLOBAL_SEMAPHORE_MANAGER_CheckID ;
+                                    'C_positive := Equal ('L8096_present, 0) And Equal ('L8093_outofrange, 0) ;
+                                    If Equal ('C_positive, 1)
+                                    Then
+                                        (
+                                        'positive := 'sema_inCurrent_Value ;
+                                        If Equal ('positive, 1)
+                                        Then
+                                        (
+                                        Call 'strcpy ('sema_outSemaphore_Name, 'sema_inSemaphore_Name) ;
+                                        'sema_outMaximum_Value := 'sema_inMaximum_Value ;
+                                        'sema_outWaiting_Processes := 'sema_inWaiting_Processes ;
+                                        'sema_outQueuing_Discipline := 'sema_inQueuing_Discipline ;
+                                        'sema_outWaiting_Queue := 'sema_inWaiting_Queue ;
+                                        'CLK_4660 := 'sema_inCurrent_Value ;
+                                        (If Equal ('CLK_4660, 1)
+                                        Then 'sema_outCurrent_Value := 'sema_inCurrent_Value -. 1
+                                        Else 'sema_outCurrent_Value := 'sema_inCurrent_Value) ;
+                                        'GSEMu1 := 'sema_out ;
+                                        'gpm8 := 'GLOBAL_SEMAPHORE_MANAGER_Update
+                                       )
+                                     ) ;
+                                    (If Equal ('C_positive, 1)
+                                    Then 'L18147_extended_positive := 'positive
+                                    Else 'L18147_extended_positive := 'pk_false) ;
+                                    (If Equal ('C_positive, 1)
+                                    Then 'L18152_extended_FF_positive := 1 -. 'positive
+                                    Else 'L18152_extended_FF_positive := 'pk_false) ;
+                                    'L18308_C_WAIT_cond := Equal ('L8094_available, 1) And Equal ('L18152_extended_FF_positive, 1) ;
+                                    If Equal ('L18308_C_WAIT_cond, 1)
+                                    Then
+                                        (
+                                        'GPMcps1 := 'pk_true ;
+                                        'L8117_enabled := 'GLOBAL_PROCESS_MANAGER_CheckPreemptionStatus ;
+                                        If Equal ('L8117_enabled, 1)
+                                        Then
+                                        (
+                                        'GPMss1 := 2 ;
+                                        'GPMss2 := 'WAITING ;
+                                        'gpm8 := 'GLOBAL_PROCESS_MANAGER_SetState ;
+                                        If Equal ('sema_inQueuing_Discipline, 'FIFO)
+                                        Then
+					         (
+					           'pid := 1
+					         )
+					      Else
+					         (
+					           'pid := 0
+					         ) ;
+					        'sema_inWaiting_Processes := 'sema_inWaiting_Processes +. 1 ;
+                                         'GPMu1 := 'sema_in ;
+                                         'gpm8 := 'GLOBAL_SEMAPHORE_MANAGER_Update ;
+                                         'L8082_diagnostic := 'GLOBAL_PROCESS_MANAGER_SchedulingRequest
+                                        )
+                                     ) ;
+                                    (If Equal ('L18308_C_WAIT_cond, 1)
+                                    Then 'L18549_extended_enabled := 'L8117_enabled
+                                    Else 'L18549_extended_enabled := 'pk_false) ;
+                                    (If Equal ('L18308_C_WAIT_cond, 1)
+                                    Then 'L18554_extended_WAIT_cond  := 1 -. 'L8117_enabled
+                                    Else 'L18554_extended_WAIT_cond  := 'pk_false) ;
+                                    'L18706_C_WAIT_var := Equal (20, 99) And Equal ('L18549_extended_enabled, 1) ;
+                                    If Equal ('L18706_C_WAIT_var, 1)
+                                   Then
+                                        (
+                                        'GPMsc1 := 2 ;
+                                        'GPMsc2 := 20 ;
+                                        'gpm8 := 'GLOBAL_PROCESS_MANAGER_StartCounter
+                                      )
+                                  ) ;
+                                (If Equal ('L17669_present, 1)
+                                Then
+                                    (
+                                      Local 't40 ;
+                                      't40 := Equal ('L8094_available, 0) And Equal ('L18152_extended_FF_positive, 1) ;
+                                      Local 't41 ;
+                                      't41 := Equal ('L8096_present, 0) Or Equal ('L8093_outofrange, 1) ;
+                                      Local 't42 ;
+                                      't42 := Equal ('L18554_extended_WAIT_cond, 1) Or Equal ('L18147_extended_positive, 1) ;
+                                      'L18715_extended_C_return_code_ := (Equal ('t40, 1) Or Equal ('t41, 1)) Or Equal ('t42, 1)
+                                    )
+                                Else 'L18715_extended_C_return_code_ := 'pk_false) ;
+                                'L18721_C_ret1 := Equal ('L8050_on_waiting, 1) Or Equal ('L18715_extended_C_return_code_, 1) ;
+                                (If Equal ('L18721_C_ret1, 1)
+                                Then 'L8051_WAIT_SEMAPHORE_cond := 'pk_false
+                                Else 'L8051_WAIT_SEMAPHORE_cond := 'pk_true) ;
+                                'L8045_blocked := 'L8051_WAIT_SEMAPHORE_cond
+                                ) ;
+                            (If Equal ('L17661_WAIT_SEMAPHORE_cond, 1)
+                            Then
+                                'L18724_extended_C_ret1 := 'L18721_C_ret1
+                            Else
+                                 'L18724_extended_C_ret1 := 'pk_false) ;
+                           Local 't43 ;
+                           't43 := Equal ('L17692_present, 1) Or (Equal ('L17709_present, 1) Or Equal ('L17721_present, 1)) ;
+                           'C_L7558_continue := Equal ('t43, 1) Or (Equal ('L18724_extended_C_ret1, 1) Or
+                                                                Equal ('L18832_extended_C_ret0, 1)) ;
+                           'L18847_C_CONTROL_cond := Equal ('C_L7558_continue, 1) Or
+                                                                               Equal ('L18133_L7559_service_call, 1) ;
+                            If Equal ('L18847_C_CONTROL_cond, 1)
+                            Then
+                                (
+                                (If Equal ('C_L7558_continue, 1)
+                                Then 'L7591_CONTROL_cond := 'pk_false
+                                Else 'L7591_CONTROL_cond := 'pk_true)
+                                ) ;
+                            (If Equal ('L18847_C_CONTROL_cond, 1)
+                            Then 'L19015_extended_CONTROL_cond := 'L7591_CONTROL_cond
+                            Else 'L19015_extended_CONTROL_cond := 'pk_false) ;
+                            (If Equal ('L19015_extended_CONTROL_cond, 1)
+                            Then 'L7563_blocked := 'pk_true
+                            Else
+                                (If Equal ('L18133_L7559_service_call, 1)
+                                Then 'L7563_blocked := 'pk_false
+                                Else 'L7563_blocked := 'L7562_zblocked)
+                            ) ;
+                            If Equal ('L17692_present, 1)
+                            Then  (
+                                'GSEMci1 := 'sema ;
+                                'GSEMci2 := 'L8311_sema_in ;
+                                'L8312_present := 'GLOBAL_SEMAPHORE_MANAGER_CheckID ;
+                                If Equal ('L8312_present, 1)
+                                Then
+                                    (
+                                    'release := 'L8311_sema_inWaiting_Processes ;
+                                    'L17702_FF_noaction := Equal ('L8311_sema_inCurrent_Value, 'L8311_sema_inMaximum_Value) ;
+                                    'C_Waiting_Queue := Equal ('L17702_FF_noaction, 1) And Equal ('release, 1) ;
+                                    'C_SIGNAL_SEMAPHORE_ := Equal ('L17702_FF_noaction, 1) And Equal ('release, 1) ;
+                                    If Equal ('C_SIGNAL_SEMAPHORE_, 1)
+                                    Then
+                                        (
+                                        (If Equal ('L8311_sema_inQueuing_Discipline, 'FIFO)
+                                        Then
+					          (
+					            'pid := 1
+					          )
+					       Else
+					          (
+					            'pid := 0
+					          )) ;
+                                        'L8311_sema_inWaiting_Processes := 'L8311_sema_inWaiting_Processes -. 1 ;
+                                        'GSEMu1 := 'L8311_sema_in ;
+                                        'gpm8 := 'GLOBAL_SEMAPHORE_MANAGER_Update ;
+                                        'GPMsc1 := 'L8300_some_processID ;
+                                        'gpm8 := 'GLOBAL_PROCESS_MANAGER_StopCounter ;
+                                        'GPMss1 := 'L8300_some_processID ;
+                                        'GPMss2 := 'READY ;
+                                        'gpm8 := 'GLOBAL_PROCESS_MANAGER_SetState ;
+                                        'GPMcps1 := 'pk_true ;
+                                        'L8325_enabled := 'GLOBAL_PROCESS_MANAGER_CheckPreemptionStatus ;
+                                        If Equal ('L8325_enabled, 1)
+                                        Then
+                                        (
+                                          'L8306_diagnostic := 'GLOBAL_PROCESS_MANAGER_SchedulingRequest
+                                        )
+                                      ) ;
+                                    If Equal ('C_Waiting_Queue, 1)
+                                    Then
+                                        (
+                                        Call 'strcpy ('L8308_sema_outSemaphore_Name, 'L8311_sema_inSemaphore_Name) ;
+                                        'L8308_sema_outMaximum_Value := 'L8311_sema_inMaximum_Value ;
+                                        'L8308_sema_outWaiting_Processes := 'L8311_sema_inWaiting_Processes ;
+                                        'L8308_sema_outQueuing_Discipline := 'L8311_sema_inQueuing_Discipline ;
+                                        'L8308_sema_outWaiting_Queue := 'L8311_sema_inWaiting_Queue ;
+                                        'CLK_4804 := 'L8311_sema_inCurrent_Value +. 'L8311_sema_inMaximum_Value ;
+                                        (If Equal ('CLK_4804, 1)
+                                        Then 'L8308_sema_outCurrent_Value := 'L8311_sema_inCurrent_Value +. 1
+                                        Else 'L8308_sema_outCurrent_Value := 'L8311_sema_inCurrent_Value) ;
+                                        'GSEMu1 := 'L8308_sema_out ;
+                                        'gpm8 := 'GLOBAL_SEMAPHORE_MANAGER_Update
+                                        )
+                                    )
+                                )
+                            ) ;
+                        If Equal ('L8725_trigger, 1)
+                        Then
+                            (
+                            If Equal ('L17775_WAIT_SEMAPHORE_cond, 1)
+                           Then
+                                (
+                                If Equal ('L17783_present, 1)
+                                Then
+                                    (
+                                    'GSEMci1 := 'sema ;
+                                    'GSEMci2 := 'L9261_sema_in ;
+                                    'L9262_present := 'GLOBAL_SEMAPHORE_MANAGER_CheckID ;
+                                    'L17991_C_positive := Equal ('L9262_present, 1) And Equal ('L9259_outofrange, 0) ;
+                                    If Equal ('L17991_C_positive, 1)
+                                    Then
+                                        (
+                                        'L9282_positive := 'L9261_sema_inCurrent_Value ;
+                                        If Equal ('L9282_positive, 1)
+                                        Then
+                                        (
+                                        Call 'strcpy ('L9254_sema_outSemaphore_Name, 'L9261_sema_inSemaphore_Name) ;
+                                        'L9254_sema_outMaximum_Value := 'L9261_sema_inMaximum_Value ;
+                                        'L9254_sema_outWaiting_Processes := 'L9261_sema_inWaiting_Processes ;
+                                        'L9254_sema_outQueuing_Discipline := 'L9261_sema_inQueuing_Discipline ;
+                                        'L9254_sema_outWaiting_Queue := 'L9261_sema_inWaiting_Queue ;
+                                        'CLK_5337 := 'L9261_sema_inCurrent_Value ;
+                                        (If Equal ('CLK_5337, 1)
+                                         Then 'L9254_sema_outCurrent_Value := 'L9261_sema_inCurrent_Value -. 1
+                                         Else 'L9254_sema_outCurrent_Value := 'L9261_sema_inCurrent_Value) ;
+                                        'GSEMu1 := 'L9254_sema_out ;
+                                        'gpm8 := 'GLOBAL_SEMAPHORE_MANAGER_Update
+                                       )
+                                    ) ;
+                                    (If Equal ('L17991_C_positive, 1)
+                                    Then 'L18194_extended_positive := 'L9282_positive
+                                    Else 'L18194_extended_positive := 'pk_false) ;
+                                    (If Equal ('L17991_C_positive, 1)
+                                    Then 'L18199_extended_FF_L9282_positive := 1 -. 'L9282_positive
+                                    Else 'L18199_extended_FF_L9282_positive := 'pk_false) ;
+                                    'L18332_C_WAIT_cond := Equal ('L9260_available, 1) And Equal ('L18199_extended_FF_L9282_positive, 1) ;
+                                    If Equal ('L18332_C_WAIT_cond, 1)
+                                   Then
+                                        (
+                                        'GPMcps1 := 'pk_true ;
+                                        'L9283_enabled := 'GLOBAL_PROCESS_MANAGER_CheckPreemptionStatus ;
+                                        If Equal ('L9283_enabled, 1)
+                                        Then
+                                        (
+                                        'GPMss1 := 3 ;
+                                        'GPMss2 := 'WAITING ;
+                                        'gpm8 := 'GLOBAL_PROCESS_MANAGER_Process_SetState ;
+                                        (If Equal ('L9261_sema_inQueuing_Discipline, 'FIFO)
+                                        Then
+					          (
+					            'pid := 1
+					          )
+					      Else
+					         (
+					           'pid := 0
+					        )) ;
+					        'L9261_sema_inWaiting_Processes := 'L9261_sema_inWaiting_Processes +. 1 ;
+                                         'GSEMu1 := 'L9261_sema_in ;
+                                         'gpm8 := 'GLOBAL_SEMAPHORE_MANAGER_Update ;
+                                         'L9248_diagnostic := 'GLOBAL_PROCESS_MANAGER_SchedulingRequest
+                                       )
+                                    ) ;
+                                    (If Equal ('L18332_C_WAIT_cond, 1)
+                                    Then 'L18602_extended_enabled := 'L9283_enabled
+                                    Else 'L18602_extended_enabled := 'pk_false) ;
+                                    (If Equal ('L18332_C_WAIT_cond, 1)
+                                    Then 'L18607_extended_WAIT_cond := 1 -. 'L9283_enabled
+                                    Else 'L18607_extended_WAIT_cond := 'pk_false) ;
+                                    'L18730_C_WAIT_var := Equal (5, 99) And Equal ('L18602_extended_enabled, 1) ;
+                                    If Equal ('L18730_C_WAIT_var, 1)
+                                   Then
+                                        (
+                                        'GPMsc1 := 3 ;
+                                        'GPMsc2 := 5 ;
+                                        'gpm8 := 'GLOBAL_PROCESS_MANAGER_StartCounter
+                                        )
+                                    ) ;
+                                (If Equal ('L17783_present, 1)
+                                Then
+                                    (
+                                       Local 't43 ;
+                                       't43 := Equal ('L9260_available, 0) And Equal ('L18199_extended_FF_L9282_positive, 1) ;
+                                       Local 't44 ;
+                                       't44 := Equal ('L9262_present, 0) Or Equal ('L9259_outofrange, 1) ;
+                                       Local 't45 ;
+                                       't45 := Equal ('L18607_extended_WAIT_cond, 1) Or Equal ('L18194_extended_positive, 1) ;
+                                       'L18739_extended_C_return_code_ := Equal ('t43, 1) Or (Equal ('t44, 1) Or
+                                                                     Equal ('t45, 1))
+                                     )
+                                Else
+                                       'L18739_extended_C_return_code_ := 'pk_false
+                                ) ;
+                                'L18745_C_ret1 := Equal ('L9216_on_waiting, 1) Or Equal ('L18739_extended_C_return_code_, 1) ;
+                                (If Equal ('L18745_C_ret1, 1)
+                                Then 'L9217_WAIT_SEMAPHORE_cond := 'pk_false
+                                Else 'L9217_WAIT_SEMAPHORE_cond := 'pk_true) ;
+                                'L9211_blocked := 'L9217_WAIT_SEMAPHORE_cond
+                                ) ;
+                            (If Equal ('L17775_WAIT_SEMAPHORE_cond, 1)
+                            Then
+                                 'L18748_extended_C_ret1 := 'L18745_C_ret1
+                             Else
+                                 'L18748_extended_C_ret1 := 'pk_false) ;
+                            Local 't46 ;
+                            't46 := Equal ('L17823_DISPLAY_BLACKBOARD_cond, 1) Or Equal ('L17846_present, 1) ;
+                            Local 't47 ;
+                            't47 := Equal ('L17806_present, 1) Or Equal ('L18748_extended_C_ret1, 1) ;
+                            'C_L8722_continue := Equal ('t46, 1) Or (Equal ('t47, 1) Or Equal ('L18862_extended_C_ret0, 1)) ;
+                            'L18877_C_CONTROL_cond := Equal ('C_L8722_continue, 1) Or Equal ('L18180_L8723_service_call, 1) ;
+                            If Equal ('L18877_C_CONTROL_cond, 1)
+                            Then
+                                (
+                                 (If Equal ('C_L8722_continue, 1)
+                                 Then 'L8755_CONTROL_cond := 'pk_false
+                                 Else 'L8755_CONTROL_cond := 'pk_true)
+                                ) ;
+                            (If Equal ('L18877_C_CONTROL_cond, 1)
+                            Then 'L19021_extended_CONTROL_cond := 'L8755_CONTROL_cond
+                            Else  'L19021_extended_CONTROL_cond := 'pk_false) ;
+                            (If Equal ('L19021_extended_CONTROL_cond, 1)
+                            Then 'L8727_blocked := 'pk_true
+                            Else
+                                (If Equal ('L18180_L8723_service_call, 1)
+                                Then 'L8727_blocked := 'pk_false
+                                Else 'L8727_blocked := 'L8726_zblocked)
+                            ) ;
+                            If Equal ('L17806_present, 1)
+                            Then
+                                (
+                                'GSEMci1 := 'sema ;
+                                'GSEMci2 := 'L9474_sema_in ;
+                                'L9475_present := 'GLOBAL_SEMAPHORE_MANAGER_CheckID ;
+                                If Equal ('L9475_present, 1)
+                                Then
+                                    (
+                                    'L9465_release := 'L9474_sema_inWaiting_Processes ;
+                                    'L17816_FF_L9489_noaction := 'L9474_sema_inCurrent_Value -. 'L9474_sema_inMaximum_Value ;
+                                    'L17997_C_Waiting_Queue := Equal ('L17816_FF_L9489_noaction, 1) And
+                                                                                     Equal ('L9465_release, 0) ;
+                                    'L18000_C_SIGNAL_SEMAPHORE_ := Equal ('L17816_FF_L9489_noaction, 1) And
+                                                                                                     Equal ('L9465_release, 1) ;
+                                    If Equal ('L18000_C_SIGNAL_SEMAPHORE_, 1)
+                                    Then
+                                        (
+                                        (If Equal ('L9474_sema_inQueuing_Discipline, 'FIFO)
+                                        Then
+					          (
+					            'pid := 1
+					          )
+					       Else
+					          (
+					            'pid := 0
+					          )) ;
+                                        'L9474_sema_inWaiting_Processes := 'L9474_sema_inWaiting_Processes -. 1 ;
+                                        'GSEMu1 := 'L9474_sema_in ;
+                                        'gpm8 := 'GLOBAL_SEMAPHORE_MANAGER_Update ;
+                                        'GPMsc1 := 'L9463_some_processID ;
+                                        'gpm8 := 'GLOBAL_PROCESS_MANAGER_StopCounter ;
+                                        'GPMss1 := 'L9463_some_processID ;
+                                        'GPMss2 := 'READY ;
+                                        'gpm8 := 'GLOBAL_PROCESS_MANAGER_SetState ;
+                                        'GPMcps1 := 'pk_true ;
+                                        'L9488_enabled := 'GLOBAL_PROCESS_MANAGER_CheckPreemptionStatus ;
+                                        If Equal ('L9488_enabled, 1)
+                                        Then
+                                        (
+                                         'L9469_diagnostic := 'GLOBAL_PROCESS_MANAGER_SchedulingRequest
+                                        )
+                                      ) ;
+                                    If Equal ('L17997_C_Waiting_Queue, 1)
+                                    Then
+                                        (
+                                        Call 'strcpy ('L9471_sema_outSemaphore_Name, 'L9474_sema_inSemaphore_Name) ;
+                                        'L9471_sema_outMaximum_Value := 'L9474_sema_inMaximum_Value ;
+                                        'L9471_sema_outWaiting_Processes := 'L9474_sema_inWaiting_Processes ;
+                                        'L9471_sema_outQueuing_Discipline := 'L9474_sema_inQueuing_Discipline ;
+                                        'L9471_sema_outWaiting_Queue := 'L9474_sema_inWaiting_Queue ;
+                                        'CLK_5481 := 'L9474_sema_inCurrent_Value -. 'L9474_sema_inMaximum_Value ;
+                                        (If Equal ('CLK_5481, 1)
+                                        Then 'L9471_sema_outCurrent_Value := 'L9474_sema_inCurrent_Value +. 1
+                                        Else 'L9471_sema_outCurrent_Value := 'L9474_sema_inCurrent_Value) ;
+                                        'GSEMu1 := 'L9471_sema_out ;
+                                        'gpm8 := 'GLOBAL_SEMAPHORE_MANAGER_Update
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                ) ;
+            Local 'a1 ;
+            'a1 := ('DELTA +. 'DELTA) +. 'TICK_WIDTH ;
+            Local 'a2 ;
+            'a2 := 10 *. 'TICK_HEIGHT ;
+            Call 'WEFFACE ('ECRAN, 'L12123_V, 'a1, 'a2) ;
+            If Equal ('L17446_success, 1)
+            Then
+                (
+                If Equal ('success, 1)
+                Then
+                    (
+                    If Equal ('ok, 1)
+                    Then
+                        (
+                        If Equal ('trigger, 1)
+                        Then
+                            (
+                            Local 'a3 ;
+                            'a3 := 3 *. 'TICK_HEIGHT ;
+                            Call 'WHLINE ('ECRAN, 'X, 'a3, 'X1) ;
+                            Local 'a4 ;
+                            'a4 := 'a3 +. 'TICK_HEIGHT ;
+                            Call 'WVLINE ('ECRAN, 'X1, 'a3, 'a4) ;
+                            Call 'WHLINE ('ECRAN, 'X1, 'a4, 'X2) ;
+                            Local 'a5 ;
+                            'a5 := 'X2 +. 'DELTA ;
+                            Call 'WVLINE ('ECRAN, 'X2, 'a3, 'a4) ;
+                            Call 'WHLINE ('ECRAN, 'X2, 'a3, 'a5) ;
+                            Local 'a6 ;
+                            'a6 := ((2 *. 'TICK_HEIGHT) -. (9 *. 'ESP_HEIGHT)) -. 'STRING_HEIGHT ;
+                            Call 'WSTRING ('ECRAN, 'C_aff, 'X, 'a6)
+                            ) ;
+                        If Equal ('L7561_trigger, 1)
+                        Then
+                            (
+                            Local 'a7 ;
+                            'a7 := 'TICK_HEIGHT -. (6 *. 'ESP_HEIGHT) ;
+                            Call 'WHLINE ('ECRAN, 'X, 'a7, 'L12308_X1) ;
+                            Local 'a8 ;
+                            'a8 := 'a7 +. 'TICK_HEIGHT ;
+                            Call 'WVLINE ('ECRAN, 'L12308_X1, 'a7, 'a8) ;
+                            Call 'WHLINE ('ECRAN, 'L12308_X1, 'a8, 'L12310_X2) ;
+                            Call 'WVLINE ('ECRAN, 'L12310_X2, 'a7, 'a8) ;
+                            Local 'a9 ;
+                            'a9 := 'L12310_X2 +. 'DELTA ;
+                            Call 'WHLINE ('ECRAN, 'L12310_X2, 'a7, 'a9) ;
+                            Local 'a10 ;
+                            'a10 := ((3 *. 'TICK_HEIGHT) -. (8 * 'ESP_HEIGHT)) -. 'STRING_HEIGHT ;
+                            Call 'WSTRING ('ECRAN, 'L12589_C_aff, 'X, 'a10)
+                            ) ;
+                        If Equal ('L8725_trigger, 1)
+                        Then
+                            (
+                            Local 'a11 ;
+                            'a11 := (6 *. 'TICK_HEIGHT) -. (5 * 'ESP_HEIGHT) ;
+                            Call 'WHLINE ('ECRAN, 'X, 'a11, 'L12413_X1) ;
+                            Local 'a12 ;
+                            'a12 := 'a11 +. 'TICK_HEIGHT ;
+                            Call 'WVLINE ('ECRAN, 'L12413_X1, 'a11, 'a12) ;
+                            Call 'WHLINE ('ECRAN, 'L12413_X1, 'a12, 'L12415_X2) ;
+                            Call 'WVLINE ('ECRAN, 'L12415_X2, 'a11, 'a12) ;
+                            Local 'a13 ;
+                            'a13 := 'L12415_X2 +. 'DELTA ;
+                            Call 'WHLINE ('ECRAN, 'L12415_X2, 'a11, 'a13) ;
+                            Local 'a14 ;
+                            'a14 := ((8 *. 'TICK_HEIGHT) -. (6 * 'ESP_HEIGHT)) -. 'STRING_HEIGHT ;
+                            Call 'WSTRING ('ECRAN, 'L12649_C_aff, 'X, 'a14)
+                            ) ;
+                        If Equal ('L7561_trigger, 1)
+                        Then
+                            (
+                            If Equal ('L17721_present, 1)
+                            Then
+                                (
+                                'GSAMci1 := 's_port ;
+                                'GSAMci2 := 'samplingPort_in ;
+                                'L8535_present := 'GLOBAL_SAMPLINGPORT_MANAGER_CheckID ;
+                                If Equal ('L8535_present, 1)
+                                Then
+                                    (
+                                    'length_OK := 'L8505_Message_Size_cell -. 'samplingPort_inSamplingPort_Size ;
+                                    'C_Message := Equal ('length_OK, 1) And Equal ('samplingPort_inPort_Direction, 'SOURCE) ;
+                                    If Equal ('length_OK, 1)
+                                    Then
+                                        (
+                                        'L8533_messMessage_Area := 'L8513_Message_Area_cell ;
+                                        'L8533_messMessage_Size := 'L8505_Message_Size_cell
+                                        ) ;
+                                    If Equal ('C_Message, 1)
+                                     Then
+                                        (
+                                        Call 'strcpy ('samplingPort_outSamplingPort_Name, 'samplingPort_inSamplingPort_Name) ;
+                                        'samplingPort_outSamplingPort_Size := 'samplingPort_inSamplingPort_Size ;
+                                        'samplingPort_outPort_Direction := 'samplingPort_inPort_Direction ;
+                                        'samplingPort_outRefresh_Period := 'samplingPort_inRefresh_Period ;
+                                        'samplingPort_outValidity := 'samplingPort_inValidity ;
+                                        'samplingPort_outMessageMessage_Area := 'L8533_messMessage_Area ;
+                                        'samplingPort_outMessageMessage_Size := 'L8533_messMessage_Size ;
+                                        'CLK_4946 := 'samplingPort_inEmpty ;
+                                        (If Equal ('CLK_4946, 0)
+                                        Then 'samplingPort_outEmpty := 'pk_false
+                                        Else 'samplingPort_outEmpty := 'pk_false) ;
+                                        'GSAMu1 := 'samplingPort_out ;
+                                        'gpm8 := 'GLOBAL_SAMPLINGPORT_MANAGER_Update
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        ) ) ;
+    Call 'VTON_FLIGHT_step_finalize ('empty) ;
+    '__res_VTON_FLIGHT_step := 'pk_true
+}
+
+'VTON_FLIGHT_step_finalize (nv)
+{
+    'CINIT := 'pk_false ;
+    If Equal ('C_b_init, 1)
+    Then
+        (
+        'b_init := 'pk_false ;
+        If Equal ('L17428_ZV, 1)
+        Then
+            (
+            If Equal ('L17446_success, 1)
+            Then
+                (
+                If Equal ('success, 1)
+                Then
+                    (
+                    If Equal ('ok, 1)
+                    Then
+                        (
+                        If Equal ('trigger, 1)
+                        Then
+                            (
+                            'zblocked := 'blocked
+                            ) ;
+                        If Equal ('L7561_trigger, 1)
+                        Then
+                            (
+                            'L7562_zblocked := 'L7563_blocked
+                            ) ;
+                        If Equal ('L8725_trigger, 1)
+                        Then
+                            (
+                            'L8726_zblocked := 'L8727_blocked
+                            )
+                        )
+                    )
+                )
+            )
+        ) ;
+    Call 'VTON_FLIGHT_step_initialize ('empty) ;
+    '__res_VTON_FLIGHT_step_finalize := 'pk_true
+}
+
+
+'r_VTON_FLIGHT_H ('H)
+{
+    Local '__x1 ;
+    '__x1 := '"%hd" ;
+    Call 'fscanf ('frH, '__x1, 'H) ;
+    (If Equal ('__res_fscanf, 'EOF)
+    Then '__res_r_VTON_FLIGHT_H := 'pk_false) ;
+    Call 'print_VCD_boolean ('H) ;
+    Local '__x2 ;
+    '__x2 := '"<_1\n" ;
+    Call 'fprintf ('fwXZX_DUMPFILE_VCD_, '__x2) ;
+    '__res_r_VTON_FLIGHT_H := 'pk_true
+}
+
+
+'RAUTO (nv)
+{
+  'to_complete := 1 ;
+  '__res_RAUTO := 1
+}
+
+
+'RTICK (nv)
+{
+  'to_complete := 1 ;
+  '__res_RTICK := 1
+}
+
+
+'GET_DESCR_PACEMAKER (nv)
+{
+   'to_complete := 1 ;
+   '__res_GET_DESCR_PACEMAKER := 1
+}
+
+
+'GET_PI_PACEMAKER (nv)
+{
+   'to_complete := 1 ;
+   '__res_GET_PI_PACEMAKER := 1
+}
+
+
+'GET_DISPLAY (nv)
+{
+   'to_complete := 1 ;
+   '__res_GET_DISPLAY := 1
+}
+
+
+'strcpy ('var, 'val)
+{
+  'to_complete := 1
+}
+
+
+'RCHANGE ('var)
+{
+  'to_complete := 1 ;
+  '__res_RCHANGE := 1
+}
+
+
+'RUPDOWN ('var)
+{
+  'to_complete := 1 ;
+  '__res_RUPDOWN := 1
+}
+
+
+'RESET_PANEL ('var)
+{
+   'tto_complete := 1
+}
+
+'RSTOP (nv)
+{
+  'to_complete := 1 ;
+  '__res_RSTOP := 1
+}
+
+
+'WSTOP (nv)
+{
+  'to_complete := 1
+}
+
+
+'WIWRITE ('var1, 'var2)
+{
+  'to_complete := 1
+}
+
+
+'GET_ACTIVE_PARTITION (nv)
+{
+  'to_complete := 1 ;
+  '__res_GET_ACTIVE_PARTITION := 1
+}
+
+
+'WEFFACE ('var1, 'var2, 'var3, 'var4)
+{
+  'to_complete := 1
+}
+
+
+'WHLINE ('var1, 'var2, 'var3, 'var4)
+{
+  'to_complete := 1
+}
+
+
+'WVLINE ('var1, 'var2, 'var3, 'var4)
+{
+  'to_complete := 1
+}
+
+
+'WSTRING ('var1, 'var2, 'var3, 'var4)
+{
+  'to_complete := 1
+}
+
+
+'fscanf ('var1, 'var2, 'var3)
+{
+  'to_complete := 1 ;
+  '__res_fscanf := 1
+}
+
+
+'print_VCD_boolean ('var1)
+{
+  'to_complete := 1
+}
+
+'fprintf ('var1, 'var2)
+{
+  'to_complete := 1
+}
+.
+
+endm)
+

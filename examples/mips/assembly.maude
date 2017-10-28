@@ -8,10 +8,10 @@ load ../../slicing.prj
   op reg : Nat -> RegId [ctor] .
   ops R1 R2 R3 R4 R5 R6 R7 R8 : -> RegId [ctor] .
   ops v0 v1 v2 v3 v4 v5 v6 v7 v8 : -> RegId [ctor] .
-  ops a0 a1 a2 a3 a4 a5 a6 a7 a8 : -> RegId [ctor] .
+  ops a0 a1 a2 a3 a4 a5 a6 a7 a8 at : -> RegId [ctor] .
   ops s0 s1 s2 s3 s4 s5 s6 s7 s8 : -> RegId [ctor] .
   ops t0 t1 t2 t3 t4 t5 t6 t7 t8 : -> RegId [ctor] .
-  ops $f0 $f1 $f2 $f3 $f4 $f5 $f6 $f7 $f8 : -> RegId [ctor] .
+  ops $f0 $f1 $f2 $f3 $f4 $f5 $f6 $f7 $f8 $f9 $f10 $31 : -> RegId [ctor] .
   ops zero gp ra sp $fcc0 : -> RegId [ctor] .
   ops hi lo acc : -> RegId [ctor] .
 
@@ -65,6 +65,8 @@ endfm)
   op subi_`,_`,_ : RegId RegId Int -> BasicIns [ctor prec 15 format(!r o o o o o o)] .
   *** mul R1, R2, R3 : R1 <- R2 * R3
   op mul_`,_`,_ : RegId RegId RegId -> BasicIns [ctor prec 15 format(!r o o o o o o)] .
+  *** mul R1, R2 : R1 <- R1 * R2
+  op mul_`,_ : RegId RegId -> BasicIns [ctor prec 15 format(!r o o o o)] .
   *** multu R1, R2 : acc <- R1 * R2
   op multu_`,_ : RegId RegId -> BasicIns [ctor prec 15 format(!r o o o o)] .
   *** muli R1, R2, I : R1 <- R2 * I
@@ -103,7 +105,9 @@ endfm)
   op beqz_`,_ : RegId Imm -> BasicIns [ctor prec 15 format(!r o o o o)] .
   *** bgtz R, N : PC <- N if R == 0
   op bgtz_`,_ : RegId Imm -> BasicIns [ctor prec 15 format(!r o o o o)] .
-  *** blez R, N : PC <- N if R == 0
+  *** bgez R, N : PC <- N if R == 0
+  op bgez_`,_ : RegId Imm -> BasicIns [ctor prec 15 format(!r o o o o)] .
+  *** blez R, N : PC <- N if R >= 0
   op blez_`,_ : RegId Imm -> BasicIns [ctor prec 15 format(!r o o o o)] .
   *** bnez R, N : PC <-  N if R == 0
   op bnez_`,_ : RegId Imm -> BasicIns [ctor prec 15 format(!r o o o o)] .
@@ -118,6 +122,10 @@ endfm)
   op sh_`,_`(_`) : RegId Int RegId -> BasicIns [ctor prec 15 format(!r o o o o o o o)] .
   *** sw R1, N(R2) : mem[R2 + N] <- R1 (32 bits)
   op sw_`,_`(_`) : RegId Int RegId -> BasicIns [ctor prec 15 format(!r o o o o o o o)] .
+  *** swr R1, N(R2) : mem[R2 + N] <- R1 (right)
+  op swr_`,_`(_`) : RegId Int RegId -> BasicIns [ctor prec 15 format(!r o o o o o o o)] .
+  *** swl R1, N(R2) : mem[R2 + N] <- R1 (left)
+  op swl_`,_`(_`) : RegId Int RegId -> BasicIns [ctor prec 15 format(!r o o o o o o o)] .
   *** li R, I : R <- I (32 bits)
   op li_`,_ : RegId Int -> BasicIns [ctor prec 15 format(!r o o o o)] .
   *** lui R, I : R <- I (16 bits)
@@ -172,6 +180,12 @@ endfm)
   op c.lt.s_`,_ : RegId RegId -> BasicIns [ctor prec 15 format(!r o o o o)] .
   *** c.lt.d R1, R2 : R1 <- R2 (format translation)
   op c.lt.d_`,_ : RegId RegId -> BasicIns [ctor prec 15 format(!r o o o o)] .
+  *** c.eq.s R1, R2 : R1 <- R2 (format translation)
+  op c.eq.s_`,_ : RegId RegId -> BasicIns [ctor prec 15 format(!r o o o o)] .
+  *** cvt.w.s R1, R2 : R1 <- R2 (format translation)
+  op cvt.w.s_`,_ : RegId RegId -> BasicIns [ctor prec 15 format(!r o o o o)] .
+  *** nopcvt.d.s R1, R2 : R1 <- R2 (format translation)
+  op nopcvt.d.s_`,_ : RegId RegId -> BasicIns [ctor prec 15 format(!r o o o o)] .
   *** trunc.w.d R1, R2 : R1 <- R2 (format translation)
   op trunc.w.d_`,_ : RegId RegId -> BasicIns [ctor prec 15 format(!r o o o o)] .
   *** trunc.w.s R1, R2 : R1 <- R2 (format translation)
@@ -180,12 +194,16 @@ endfm)
   op mfc1_`,_ : RegId RegId -> BasicIns [ctor prec 15 format(!r o o o o)] .
   *** mtc1 R1, R2 : R1 <- R2 (format translation)
   op mtc1_`,_ : RegId RegId -> BasicIns [ctor prec 15 format(!r o o o o)] .
+  *** ctc1 R1, R2 : R1 <- R2 (format translation)
+  op ctc1_`,_ : RegId RegId -> BasicIns [ctor prec 15 format(!r o o o o)] .
+  *** cfc1 R1, R2 : R1 <- R2 (format translation)
+  op cfc1_`,_ : RegId RegId -> BasicIns [ctor prec 15 format(!r o o o o)] .
   *** bc1f N : PC <- N
   op bc1f_ : Imm -> BasicIns [ctor prec 15 format(!r o o)] .
   *** mfhi R : R <- HI
-  op mfhi_ : RegId -> BasicIns [ctor prec 15 format(!r o o)] .
+  op mfhi_ : RegId -> BasicIns [ctor prec 12 format(!r o o)] .
   *** mflo R : R <- LO
-  op mflo_ : RegId -> BasicIns [ctor prec 15 format(!r o o)] .
+  op mflo_ : RegId -> BasicIns [ctor prec 12 format(!r o o)] .
 
   op __ : Qid BasicIns -> LabelIns [ctor prec 20 format(!b o o)] .
 
@@ -298,6 +316,13 @@ endfm)
    if (subi RI, RI', I) := getIns(IIL, PC) /\
       I' := RS [RI'] /\
       RS' := update(RI, I' - I, RS) .
+
+  crl [mul] : [IIL | RS | M | PC]
+   =>         [IIL | RS' | M | PC + 1]
+   if (mul RI, RI') := getIns(IIL, PC) /\
+      I := RS [RI] /\
+      I' := RS [RI'] /\
+      RS' := update(RI, I * I', RS) .
 
   crl [mul] : [IIL | RS | M | PC]
    =>         [IIL | RS' | M | PC + 1]
@@ -471,6 +496,15 @@ endfm)
              else PC + 1
              fi .
 
+  crl [bgez] : [IIL | RS | M | PC]
+   =>          [IIL | RS | M | PC']
+   if (bgez RI, N) := getIns(IIL, PC) /\
+      I := RS [RI] /\
+      PC' := if I >= 0
+             then N
+             else PC + 1
+             fi .
+
   crl [blez] : [IIL | RS | M | PC]
    =>          [IIL | RS | M | PC']
    if (blez RI, N) := getIns(IIL, PC) /\
@@ -512,6 +546,20 @@ endfm)
   crl [sw] : [IIL | RS | M | PC]
    =>        [IIL | RS | M' | PC + 1]
    if (sw RI, N(RI')) := getIns(IIL, PC) /\
+      I := RS [RI] /\
+      N' := RS [RI'] /\
+      M' := set(M, N + N', I) .
+
+  crl [swl] : [IIL | RS | M | PC]
+   =>        [IIL | RS | M' | PC + 1]
+   if (swl RI, N(RI')) := getIns(IIL, PC) /\
+      I := RS [RI] /\
+      N' := RS [RI'] /\
+      M' := set(M, N + N', I) .
+
+  crl [swr] : [IIL | RS | M | PC]
+   =>        [IIL | RS | M' | PC + 1]
+   if (swr RI, N(RI')) := getIns(IIL, PC) /\
       I := RS [RI] /\
       N' := RS [RI'] /\
       M' := set(M, N + N', I) .
@@ -657,6 +705,24 @@ endfm)
       I := RS [RI'] /\
       RS' := update(RI, I, RS) .
 
+  crl [c.eq.s] : [IIL | RS | M | PC]
+   =>         [IIL | RS' | M | PC + 1]
+   if (c.eq.s RI, RI') := getIns(IIL, PC) /\
+      I := RS [RI'] /\
+      RS' := update(RI, I, RS) .
+
+  crl [cvt.w.s] : [IIL | RS | M | PC]
+   =>         [IIL | RS' | M | PC + 1]
+   if (cvt.w.s RI, RI') := getIns(IIL, PC) /\
+      I := RS [RI'] /\
+      RS' := update(RI, I, RS) .
+
+  crl [nopcvt.d.s] : [IIL | RS | M | PC]
+   =>         [IIL | RS' | M | PC + 1]
+   if (nopcvt.d.s RI, RI') := getIns(IIL, PC) /\
+      I := RS [RI'] /\
+      RS' := update(RI, I, RS) .
+
   crl [trunc.w.d] : [IIL | RS | M | PC]
    =>         [IIL | RS' | M | PC + 1]
    if (trunc.w.d RI, RI') := getIns(IIL, PC) /\
@@ -678,6 +744,18 @@ endfm)
   crl [mtc1] : [IIL | RS | M | PC]
    =>         [IIL | RS' | M | PC + 1]
    if (mtc1 RI, RI') := getIns(IIL, PC) /\
+      I := RS [RI'] /\
+      RS' := update(RI, I, RS) .
+
+  crl [ctc1] : [IIL | RS | M | PC]
+   =>         [IIL | RS' | M | PC + 1]
+   if (ctc1 RI, RI') := getIns(IIL, PC) /\
+      I := RS [RI'] /\
+      RS' := update(RI, I, RS) .
+
+  crl [cfc1] : [IIL | RS | M | PC]
+   =>         [IIL | RS' | M | PC + 1]
+   if (cfc1 RI, RI') := getIns(IIL, PC) /\
       I := RS [RI'] /\
       RS' := update(RI, I, RS) .
 

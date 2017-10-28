@@ -1,0 +1,10561 @@
+load assembly.maude
+
+(mod TEST is
+  pr SEMANTICS .
+
+  op main : -> InsList .
+  eq main =
+   'main
+  addiu	sp,sp,32
+  sw	ra,28(sp)
+  sw	s8,24(sp)
+  move	s8,sp
+  jal	 'VTON_FLIGHT_OpenIO
+  nop
+  jal	 'VTON_FLIGHT_initialize
+  nop
+  sh	v0,16(s8)
+  j	 'main_48
+  nop
+'main_2c jal	 'VTON_FLIGHT_stepIO_begin
+  nop
+  jal	 'VTON_FLIGHT_step
+  nop
+  sh	v0,16(s8)
+  jal	 'VTON_FLIGHT_stepIO_end
+  nop
+'main_48 lh	v0,16(s8)
+  nop
+  bnez	v0, 'main_2c
+  nop
+  jal	 'VTON_FLIGHT_CloseIO
+  nop
+  move	sp,s8
+  lw	ra,28(sp)
+  lw	s8,24(sp)
+  addiu	sp,sp,32
+  jr	ra
+  nop
+
+
+ 'VTON_FLIGHT_initialize
+  addiu	sp,sp,24
+  sw	ra,20(sp)
+  sw	s8,16(sp)
+  move	s8,sp
+  sw	zero, 32616(gp)
+  sw	zero, 32612(gp)
+  sw	zero, 32608(gp)
+  sw	zero, 32604(gp)
+  sw	zero, 32600(gp)
+  sw	zero, 32596(gp)
+  li	v0, 1
+  sw	v0, 32620(gp)
+  sh	zero, 32590(gp)
+  sw	zero, 32576(gp)
+  sw	zero, 32572(gp)
+  sh	zero, 32560(gp)
+  sh	zero, 32518(gp)
+  sw	zero, 32484(gp)
+  sw	zero, 32480(gp)
+  sh	zero, 32476(gp)
+  li	v0, 1
+  sw	v0, 32624(gp)
+  sh	zero, 32432(gp)
+  sh	zero, 32416(gp)
+  sh	zero, 32376(gp)
+  sw	zero, 32340(gp)
+  sw	zero, 32336(gp)
+  li	v0, 1
+  sw	v0, 32628(gp)
+  sh	zero, 32318(gp)
+  sh	zero, 32304(gp)
+  sh	zero, 32264(gp)
+  sw	zero, 32232(gp)
+  sw	zero, 32228(gp)
+  li	v0,1
+  sw	v0, 31884(gp)
+  sw	zero, 31880(gp)
+  li	v0,1
+  sw	v0, 31888(gp)
+  li	v0,1
+  sh	v0, 31844(gp)
+  sw	zero, 31836(gp)
+  li	v0,1
+  sh	v0, 31832(gp)
+  li	v0,1
+  sh	v0, 31830(gp)
+  lw	v1, 32676(gp)
+  lw	v0, 32676(gp)
+  nop
+  addu	v1,v1,v0
+  lw	v0, 32672(gp)
+  nop
+  addu	v1,v1,v0
+  lw	v0, 32684(gp)
+  nop
+  addiu	v0,v0, 1
+  mul	v1,v0
+  mflo	v0
+  sw	v0, 31824(gp)
+  lw	v1, 32676(gp)
+  lw	v0, 32676(gp)
+  nop
+  addu	v1,v1,v0
+  lw	v0, 32672(gp)
+  nop
+  addu	v1,v1,v0
+  lw	v0, 32688(gp)
+  nop
+  addiu	v0,v0, 1
+  mul	v1,v0
+  mflo	v0
+  sw	v0, 31828(gp)
+  sw	zero, 31812(gp)
+  lw	v0, 32752(gp)
+  nop
+  sw	v0, 32568(gp)
+  li	v0,10
+  sw	v0, 32564(gp)
+  li	v0,5
+  sw	v0, 32420(gp)
+  lui	v0,74
+  addiu	v0,v0, 17848
+  sw	zero,20(v0)
+  li	v0,15
+  sw	v0, 32308(gp)
+  sw	zero, 32168(gp)
+  sw	zero, 32148(gp)
+  sw	zero, 32112(gp)
+  sw	zero, 32088(gp)
+  lui	v0,77
+  addiu	v0,v0, 16776
+  lw	v1, 32748(gp)
+  nop
+  sw	v1,4(v0)
+  lui	v0,77
+  addiu	v0,v0, 16776
+  li	v1,1
+  sw	v1,8(v0)
+  lui	v0,77
+  addiu	v0,v0, 16776
+  li	v1,3
+  sw	v1,12(v0)
+  lui	v0,77
+  addiu	v0,v0, 16776
+  lw	v1, 32744(gp)
+  nop
+  sw	v1,16(v0)
+  lui	v0,77
+  addiu	v0,v0, 16776
+  lw	v1, 32740(gp)
+  nop
+  sw	v1,20(v0)
+  lui	v0,77
+  addiu	v0,v0, 16776
+  sw	zero,24(v0)
+  lui	v0,77
+  addiu	v0,v0, 16748
+  lw	v1, 32736(gp)
+  nop
+  sw	v1,4(v0)
+  lui	v0,77
+  addiu	v0,v0, 16748
+  li	v1,2
+  sw	v1,8(v0)
+  lui	v0,77
+  addiu	v0,v0, 16748
+  li	v1,2
+  sw	v1,12(v0)
+  lui	v0,77
+  addiu	v0,v0, 16748
+  lw	v1, 32744(gp)
+  nop
+  sw	v1,16(v0)
+  lui	v0,77
+  addiu	v0,v0, 16748
+  lw	v1, 32732(gp)
+  nop
+  sw	v1,20(v0)
+  lui	v0,77
+  addiu	v0,v0, 16748
+  sw	zero,24(v0)
+  lui	v0,77
+  addiu	v0,v0, 16720
+  lw	v1, 32728(gp)
+  nop
+  sw	v1,4(v0)
+  lui	v0,77
+  addiu	v0,v0, 16720
+  li	v1,3
+  sw	v1,8(v0)
+  lui	v0,77
+  addiu	v0,v0, 16720
+  li	v1,1
+  sw	v1,12(v0)
+  lui	v0,77
+  addiu	v0,v0, 16720
+  lw	v1, 32744(gp)
+  nop
+  sw	v1,16(v0)
+  lui	v0,77
+  addiu	v0,v0, 16720
+  lw	v1, 32724(gp)
+  nop
+  sw	v1,20(v0)
+  lui	v0,77
+  addiu	v0,v0, 16720
+  li	v1,1
+  sw	v1,24(v0)
+  jal	'VTON_FLIGHT_step_initialize
+  nop
+  li	v0,1
+  move	sp,s8
+  lw	ra,20(sp)
+  lw	s8,16(sp)
+  addiu	sp,sp,24
+  jr	ra
+  nop
+
+
+'VTON_FLIGHT_step_initialize
+  addiu	sp,sp, 8
+  sw	s8,4(sp)
+  move	s8,sp
+  sh	zero, 32552(gp)
+  sh	zero, 32508(gp)
+  sh	zero, 32498(gp)
+  sh	zero, 32468(gp)
+  sh	zero, 32402(gp)
+  sh	zero, 32364(gp)
+  sh	zero, 32352(gp)
+  sh	zero, 32348(gp)
+  sh	zero, 32344(gp)
+  sh	zero, 32324(gp)
+  sh	zero, 32290(gp)
+  sh	zero, 32252(gp)
+  sh	zero, 32240(gp)
+  sh	zero, 32236(gp)
+  sh	zero, 32224(gp)
+  sh	zero, 32212(gp)
+  sh	zero, 32206(gp)
+  sh	zero, 32202(gp)
+  sh	zero, 32198(gp)
+  sh	zero, 32188(gp)
+  sh	zero, 32180(gp)
+  sh	zero, 32176(gp)
+  sh	zero, 32160(gp)
+  sh	zero, 32156(gp)
+  sh	zero, 32144(gp)
+  sh	zero, 32132(gp)
+  sh	zero, 32124(gp)
+  sh	zero, 32116(gp)
+  sh	zero, 32104(gp)
+  sh	zero, 32100(gp)
+  sh	zero, 32098(gp)
+  sh	zero, 32096(gp)
+  sh	zero, 32084(gp)
+  sh	zero, 32068(gp)
+  sh	zero, 32066(gp)
+  sh	zero, 32064(gp)
+  sh	zero, 32062(gp)
+  sh	zero, 32052(gp)
+  sh	zero, 32044(gp)
+  sh	zero, 32032(gp)
+  sh	zero, 32024(gp)
+  sh	zero, 32012(gp)
+  sh	zero, 31980(gp)
+  sh	zero, 31952(gp)
+  sh	zero, 31924(gp)
+  sh	zero, 31916(gp)
+  sh	zero, 31904(gp)
+  sh	zero, 31894(gp)
+  sh	zero, 31840(gp)
+  sh	zero, 31764(gp)
+  sh	zero, 31760(gp)
+  sh	zero, 31758(gp)
+  sh	zero, 31756(gp)
+  sh	zero, 31754(gp)
+  sh	zero, 31752(gp)
+  sh	zero, 31750(gp)
+  sh	zero, 31748(gp)
+  sh	zero, 31742(gp)
+  sh	zero, 31722(gp)
+  sh	zero, 31720(gp)
+  sh	zero, 31718(gp)
+  sh	zero, 31716(gp)
+  sh	zero, 31714(gp)
+  sh	zero, 31708(gp)
+  sh	zero, 31704(gp)
+  sh	zero, 31688(gp)
+  sh	zero, 31680(gp)
+  sh	zero, 31656(gp)
+  sh	zero, 31652(gp)
+  sh	zero, 31650(gp)
+  sh	zero, 31646(gp)
+  sh	zero, 31638(gp)
+  sh	zero, 31634(gp)
+  sh	zero, 31630(gp)
+  sh	zero, 31626(gp)
+  sh	zero, 31622(gp)
+  sh	zero, 31616(gp)
+  sh	zero, 31612(gp)
+  sh	zero, 31608(gp)
+  sh	zero, 31604(gp)
+  sh	zero, 31598(gp)
+  sh	zero, 31550(gp)
+  sh	zero, 31540(gp)
+  sh	zero, 31442(gp)
+  sh	zero, 31424(gp)
+  sh	zero, 31412(gp)
+  sh	zero, 31396(gp)
+  move	sp,s8
+  lw	s8,4(sp)
+  addiu	sp,sp,8
+  jr	ra
+  nop
+
+
+'VTON_FLIGHT_step
+  addiu	sp,sp, 32752
+  sw	ra,32748(sp)
+  sw	s8,32744(sp)
+  li	v1,32848
+  subu	sp,sp,v1
+  move	s8,sp
+  addiu	a0,gp, 32636
+  jal	 'r_VTON_FLIGHT_H
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_38
+  nop
+  move	v0,zero
+  j	 'VTON_FLIGHT_step_0x9918
+  nop
+ 'VTON_FLIGHT_step_38 jal	 'RAUTO
+  nop
+  sh	v0, 31842(gp)
+  jal	 'RTICK
+  nop
+  sh	v0, 31838(gp)
+  lh	v0, 31842(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x70
+  nop
+  lh	v0, 31832(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x7c
+  nop
+ 'VTON_FLIGHT_step_0x70 li	v0,1
+  j	 'VTON_FLIGHT_step_0x80
+  nop
+ 'VTON_FLIGHT_step_0x7c move	v0,zero
+ 'VTON_FLIGHT_step_0x80 sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31768(gp)
+  lh	v0, 31832(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_1968
+  nop
+  lw	v0, 31208(gp)
+  nop
+  lw	v0,4(v0)
+  nop
+  jr	v0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32186(gp)
+  lw	v0, 31208(gp)
+  nop
+  lw	v0,0(v0)
+  lui	v1,65
+  addiu	a0,v1, 22920
+  lw	v1, 32196(gp)
+  nop
+  move	a1,v1
+  jr	v0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32188(gp)
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,52(v0)
+  nop
+  jr	v0
+  nop
+  sw	v0, 32192(gp)
+  li	v0,1
+  sh	v0, 32174(gp)
+  lw	v0, 31216(gp)
+  nop
+  lw	v0,4(v0)
+  nop
+  jr	v0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32178(gp)
+  lw	v0, 31216(gp)
+  nop
+  lw	v0,0(v0)
+  lui	v1,65
+  addiu	a0,v1, 22912
+  lw	v1, 32184(gp)
+  nop
+  move	a1,v1
+  jr	v0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32176(gp)
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,52(v0)
+  nop
+  jr	v0
+  nop
+  sw	v0, 32172(gp)
+  li	v0,1
+  sh	v0, 32154(gp)
+  lw	v0, 31216(gp)
+  nop
+  lw	v0,4(v0)
+  nop
+  jr	v0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32158(gp)
+  lw	v0, 31216(gp)
+  nop
+  lw	v0,0(v0)
+  lui	v1,65
+  addiu	a0,v1, 22904
+  lw	v1, 32164(gp)
+  nop
+  move	a1,v1
+  jr	v0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32156(gp)
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,52(v0)
+  nop
+  jr	v0
+  nop
+  sw	v0, 32152(gp)
+  lw	v0, 31220(gp)
+  nop
+  lw	v0,8(v0)
+  nop
+  jr	v0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32130(gp)
+  lw	v0, 31220(gp)
+  nop
+  lw	v0,12(v0)
+  lw	v1, 32140(gp)
+  lui	a0,65
+  addiu	a0,a0, 22896
+  move	a1,v1
+  jr	v0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32132(gp)
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,52(v0)
+  nop
+  jr	v0
+  nop
+  sw	v0, 32136(gp)
+  li	v0,1
+  sh	v0, 32122(gp)
+  lw	v0, 31204(gp)
+  nop
+  lw	v0,12(v0)
+  nop
+  jr	v0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32114(gp)
+  lw	v0, 31204(gp)
+  nop
+  lw	v0,16(v0)
+  lw	v1, 32128(gp)
+  lui	a0,65
+  addiu	a0,a0, 22888
+  move	a1,v1
+  jr	v0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32116(gp)
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,52(v0)
+  nop
+  jr	v0
+  nop
+  sw	v0, 32120(gp)
+  lw	v0, 31212(gp)
+  nop
+  lw	v0,8(v0)
+  nop
+  jr	v0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32102(gp)
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,20(v0)
+  lui	v1,65
+  addiu	a0,v1, 22876
+  jr	v0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32068(gp)
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,20(v0)
+  lui	v1,65
+  addiu	a0,v1, 22856
+  jr	v0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32066(gp)
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,20(v0)
+  lui	v1,65
+  addiu	a0,v1, 22840
+  jr	v0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32064(gp)
+  jal	 'GET_DESCR_PACEMAKER
+  nop
+  sw	v0, 31836(gp)
+  jal	 'GET_PI_PACEMAKER
+  nop
+  sw	v0, 31892(gp)
+  jal	 'GET_DISPLAY
+  nop
+  sw	v0, 31812(gp)
+  lh	v0, 32102(gp)
+  nop
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31764(gp)
+  lh	v0, 32186(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_408
+  nop
+  lh	v0, 32188(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_408
+  nop
+  lw	v1, 32192(gp)
+  li	v0,3
+  beq	v1,v0, 'VTON_FLIGHT_step_408
+  nop
+  li	v0,1
+  nop
+ 'VTON_FLIGHT_step_408 move	v0,zero
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31722(gp)
+  lh	v0, 32174(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_464
+  nop
+  lh	v0, 32178(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_464
+  nop
+  lh	v0, 32176(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_464
+  nop
+  lw	v1, 32172(gp)
+  li	v0,3
+  beq	v1,v0, 'VTON_FLIGHT_step_464
+  nop
+  li	v0,1
+  j	 'VTON_FLIGHT_step_468
+  nop
+ 'VTON_FLIGHT_step_464 move	v0,zero
+ 'VTON_FLIGHT_step_468 sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31720(gp)
+  lh	v0, 32154(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_4c0
+  nop
+  lh	v0, 32158(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_4c0
+  nop
+  lh	v0, 32156(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_4c0
+  nop
+  lw	v1, 32152(gp)
+  li	v0,3
+  beq	v1,v0, 'VTON_FLIGHT_step_4c0
+  nop
+  li	v0,1
+  j	 'VTON_FLIGHT_step_4c4
+  nop
+ 'VTON_FLIGHT_step_4c0 move	v0,zero
+ 'VTON_FLIGHT_step_4c4 sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31718(gp)
+  lh	v0, 32132(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_50c
+  nop
+  lh	v0, 32130(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_50c
+  nop
+  lw	v1, 32136(gp)
+  li	v0,3
+  beq	v1,v0, 'VTON_FLIGHT_step_50c
+  nop
+  li	v0,1
+  j	 'VTON_FLIGHT_step_510
+  nop
+ 'VTON_FLIGHT_step_50c move	v0,zero
+ 'VTON_FLIGHT_step_510 sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31716(gp)
+  lh	v0, 32116(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_568
+  nop
+  lh	v0, 32114(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_568
+  nop
+  lw	v1, 32120(gp)
+  li	v0,3
+  beq	v1,v0, 'VTON_FLIGHT_step_568
+  nop
+  lh	v0, 32122(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_568
+  nop
+  li	v0,1
+  j	 'VTON_FLIGHT_step_56c
+  nop
+ 'VTON_FLIGHT_step_568 move	v0,zero
+ 'VTON_FLIGHT_step_56c sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31714(gp)
+  lh	v0, 32068(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0xb48
+  nop
+  lui	v0,77
+  lw	v0, 16776(v0)
+  lui	v1,65
+  lw	a3, 22876(v1)
+  addiu	a0,v1, 22876
+  lw	a2,4(a0)
+  addiu	a0,v1, 22876
+  lw	a1,8(a0)
+  addiu	a0,v1, 22876
+  lw	a0,12(a0)
+  swl	a3,3(v0)
+  swr	a3,0(v0)
+  swl	a2,7(v0)
+  swr	a2,4(v0)
+  swl	a1,11(v0)
+  swr	a1,8(v0)
+  swl	a0,15(v0)
+  swr	a0,12(v0)
+  addiu	v1,v1, 22876
+  lbu	a0,16(v1)
+  nop
+  sb	a0,16(v0)
+  lbu	a0,17(v1)
+  nop
+  sb	a0,17(v0)
+  lbu	v1,18(v1)
+  nop
+  sb	v1,18(v0)
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,68(v0)
+  lui	v1,77
+  lw	v1, 16776(v1)
+  nop
+  move	a0,v1
+  lw	v1, 32080(gp)
+  nop
+  move	a1,v1
+  jr	v0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32062(gp)
+  lh	v0, 32062(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0xb48
+  nop
+  lui	v0,77
+  addiu	v0,v0, 16776
+  lw	a0,20(v0)
+  li	v0,1
+  lw	v1, 32720(gp)
+  mtc1	a0,$f0
+  mtc1	v1,$f2
+  nop
+  c.le.s	$f0,$f2
+  nop
+  bc1t	 'VTON_FLIGHT_step_0x678
+  nop
+  move	v0,zero
+ 'VTON_FLIGHT_step_0x678 andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32056(gp)
+  lui	v0,77
+  addiu	v0,v0, 16776
+  lw	a0,16(v0)
+  li	v0,1
+  lw	v1, 32720(gp)
+  mtc1	a0,$f0
+  mtc1	v1,$f2
+  nop
+  c.le.s	$f0,$f2
+  nop
+  bc1t	 'VTON_FLIGHT_step_0x6bc
+  nop
+  move	v0,zero
+ 'VTON_FLIGHT_step_0x6bc andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32054(gp)
+  lui	v0,77
+  addiu	v0,v0, 16776
+  lw	v0,4(v0)
+  nop
+  mtc1	v0,$f0
+  nop
+  cvt.d.s	$f0,$f0
+  mfc1	a0,$f0
+  mfc1	a1,$f1
+  li	a2,1
+  lw	v0, 32712(gp)
+  lw	v1, 32708(gp)
+  mtc1	a0,$f2
+  nop
+  mtc1	a1,$f3
+  mtc1	v0,$f0
+  nop
+  mtc1	v1,$f1
+  nop
+  c.le.d	$f2,$f0
+  nop
+  bc1t	 'VTON_FLIGHT_step_0x72c
+  nop
+  move	a2,zero
+ 'VTON_FLIGHT_step_0x72c andi	v0,a2,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32050(gp)
+  lw	v1, 32048(gp)
+  lui	v0,77
+  lw	v0, 16776(v0)
+  move	a0,v1
+  move	a1,v0
+  jal	 'strcpy
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,96(v0)
+  lw	v1, 32048(gp)
+  nop
+  move	a0,v1
+  jr	v0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32052(gp)
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,52(v0)
+  nop
+  jr	v0
+  nop
+  sw	v0, 32060(gp)
+  lw	v0, 31200(gp)
+  nop
+  lw	t0,64(v0)
+  lw	a0, 32080(gp)
+  lui	v1,77
+  addiu	v0,v1, 16692
+  lw	t3,12(v0)
+  lw	t2,16(v0)
+  lw	t1,20(v0)
+  lw	a3,24(v0)
+  lw	a2,28(v0)
+  lw	a1,32(v0)
+  lw	v0,36(v0)
+  sw	t3,16(sp)
+  sw	t2,20(sp)
+  sw	t1,24(sp)
+  sw	a3,28(sp)
+  sw	a2,32(sp)
+  sw	a1,36(sp)
+  sw	v0,40(sp)
+  lw	a1, 16692(v1)
+  addiu	v0,v1, 16692
+  lw	a2,4(v0)
+  addiu	v0,v1, 16692
+  lw	a3,8(v0)
+  jr	t0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31980(gp)
+  lh	v0, 32050(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x900
+  nop
+  lh	v0, 32054(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x900
+  nop
+  lh	v0, 32056(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x900
+  nop
+  lh	v0, 32052(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x900
+  nop
+  lw	v1, 32060(gp)
+  li	v0,3
+  beq	v1,v0, 'VTON_FLIGHT_step_0x900
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	t0,92(v0)
+  lw	a0, 32080(gp)
+  lui	v0,77
+  addiu	v1,v0, 16776
+  lw	a3,12(v1)
+  lw	a2,16(v1)
+  lw	a1,20(v1)
+  lw	v1,24(v1)
+  sw	a3,16(sp)
+  sw	a2,20(sp)
+  sw	a1,24(sp)
+  sw	v1,28(sp)
+  lw	a1, 16776(v0)
+  addiu	v1,v0, 16776
+  lw	a2,4(v1)
+  addiu	v0,v0, 16776
+  lw	a3,8(v0)
+  jr	t0
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,8(v0)
+  lw	v1, 32080(gp)
+  nop
+  move	a0,v1
+  move	a1,zero
+  jr	v0
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,88(v0)
+  lw	v1, 32080(gp)
+  nop
+  move	a0,v1
+  jr	v0
+  nop
+ 'VTON_FLIGHT_step_0x900 lh	v0, 31980(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0xb48
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,84(v0)
+  lw	v1, 32080(gp)
+  nop
+  move	a0,v1
+  jr	v0
+  nop
+  sw	v0, 31984(gp)
+  lw	v0, 31984(gp)
+  nop
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31760(gp)
+  lh	v0, 31760(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0xb48
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,80(v0)
+  lw	v1, 32080(gp)
+  nop
+  move	a0,v1
+  jr	v0
+  nop
+  sw	v0, 31988(gp)
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,8(v0)
+  lw	v1, 32080(gp)
+  nop
+  move	a0,v1
+  li	a1,1
+  jr	v0
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,76(v0)
+  lw	a0, 32080(gp)
+  lw	v1, 31988(gp)
+  nop
+  move	a1,v1
+  jr	v0
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,52(v0)
+  nop
+  jr	v0
+  nop
+  sw	v0, 31992(gp)
+  lw	v0, 31992(gp)
+  nop
+  xori	v0,v0,3
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31758(gp)
+  lh	v0, 31758(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0xb48
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,72(v0)
+  nop
+  jr	v0
+  nop
+  mtc1	v0,$f2
+  nop
+  cvt.s.w	$f2,$f2
+  mfc1	v0,$f2
+  nop
+  sw	v0, 32004(gp)
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,60(v0)
+  lw	v1, 32080(gp)
+  nop
+  move	a0,v1
+  jr	v0
+  nop
+  mtc1	v0,$f0
+  nop
+  cvt.s.w	$f0,$f0
+  mfc1	v0,$f0
+  nop
+  sw	v0, 32000(gp)
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,56(v0)
+  lw	v1, 32080(gp)
+  lw	a1, 32000(gp)
+  lw	a0, 32004(gp)
+  mtc1	a1,$f2
+  mtc1	a0,$f0
+  nop
+  add	$f2,$f2,$f0
+  mfc1	a0,$f2
+  nop
+  mtc1	a0,$f0
+  nop
+  cfc1	a2,$31
+  cfc1	a2,$31
+  nop
+  ori	at,a2,3
+  xori	at,at,2
+  ctc1	at,$31
+  nop
+  cvt.w.s	$f0,$f0
+  ctc1	a2,$31
+  nop
+  mfc1	a1,$f0
+  move	a0,v1
+  jr	v0
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,4(v0)
+  li	a0,1
+  jr	v0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31978(gp)
+  lh	v0, 31978(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0xb48
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,12(v0)
+  nop
+  jr	v0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31996(gp)
+ 'VTON_FLIGHT_step_0xb48 lh	v0, 32066(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_1108
+  nop
+  lui	v0,77
+  lw	v0, 16748(v0)
+  lui	v1,65
+  lw	a2, 22856(v1)
+  addiu	a0,v1, 22856
+  lw	a1,4(a0)
+  addiu	a0,v1, 22856
+  lw	a0,8(a0)
+  swl	a2,3(v0)
+  swr	a2,0(v0)
+  swl	a1,7(v0)
+  swr	a1,4(v0)
+  swl	a0,11(v0)
+  swr	a0,8(v0)
+  addiu	v1,v1, 22856
+  lbu	a0,12(v1)
+  nop
+  sb	a0,12(v0)
+  lbu	a0,13(v1)
+  nop
+  sb	a0,13(v0)
+  lbu	v1,14(v1)
+  nop
+  sb	v1,14(v0)
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,68(v0)
+  lui	v1,77
+  lw	v1, 16748(v1)
+  nop
+  move	a0,v1
+  lw	v1, 32076(gp)
+  nop
+  move	a1,v1
+  jr	v0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32044(gp)
+  lh	v0, 32044(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_1108
+  nop
+  lui	v0,77
+  addiu	v0,v0, 16748
+  lw	a0,20(v0)
+  li	v0,1
+  lw	v1, 32720(gp)
+  mtc1	a0,$f2
+  mtc1	v1,$f0
+  nop
+  c.le.s	$f2,$f0
+  nop
+  bc1t	 'VTON_FLIGHT_step_0xc38
+  nop
+  move	v0,zero
+ 'VTON_FLIGHT_step_0xc38 andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32036(gp)
+  lui	v0,77
+  addiu	v0,v0, 16748
+  lw	a0,16(v0)
+  li	v0,1
+  lw	v1, 32720(gp)
+  mtc1	a0,$f2
+  mtc1	v1,$f0
+  nop
+  c.le.s	$f2,$f0
+  nop
+  bc1t	 'VTON_FLIGHT_step_0xc7c
+  nop
+  move	v0,zero
+ 'VTON_FLIGHT_step_0xc7c andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32034(gp)
+  lui	v0,77
+  addiu	v0,v0, 16748
+  lw	v0,4(v0)
+  nop
+  mtc1	v0,$f2
+  nop
+  cvt.d.s	$f2,$f2
+  mfc1	a0,$f2
+  mfc1	a1,$f3
+  li	a2,1
+  lw	v0, 32712(gp)
+  lw	v1, 32708(gp)
+  mtc1	a0,$f0
+  nop
+  mtc1	a1,$f1
+  mtc1	v0,$f2
+  nop
+  mtc1	v1,$f3
+  nop
+  c.le.d	$f0,$f2
+  nop
+  bc1t	 'VTON_FLIGHT_step_0xcec
+  nop
+  move	a2,zero
+ 'VTON_FLIGHT_step_0xcec andi	v0,a2,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32030(gp)
+  lw	v1, 32028(gp)
+  lui	v0,77
+  lw	v0, 16748(v0)
+  move	a0,v1
+  move	a1,v0
+  jal	 'strcpy
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,96(v0)
+  lw	v1, 32028(gp)
+  nop
+  move	a0,v1
+  jr	v0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32032(gp)
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,52(v0)
+  nop
+  jr	v0
+  nop
+  sw	v0, 32040(gp)
+  lw	v0, 31200(gp)
+  nop
+  lw	t0,64(v0)
+  lw	a0, 32076(gp)
+  lui	v1,77
+  addiu	v0,v1, 16652
+  lw	t3,12(v0)
+  lw	t2,16(v0)
+  lw	t1,20(v0)
+  lw	a3,24(v0)
+  lw	a2,28(v0)
+  lw	a1,32(v0)
+  lw	v0,36(v0)
+  sw	t3,16(sp)
+  sw	t2,20(sp)
+  sw	t1,24(sp)
+  sw	a3,28(sp)
+  sw	a2,32(sp)
+  sw	a1,36(sp)
+  sw	v0,40(sp)
+  lw	a1, 16652(v1)
+  addiu	v0,v1, 16652
+  lw	a2,4(v0)
+  addiu	v0,v1, 16652
+  lw	a3,8(v0)
+  jr	t0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31952(gp)
+  lh	v0, 32030(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0xec0
+  nop
+  lh	v0, 32034(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0xec0
+  nop
+  lh	v0, 32036(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0xec0
+  nop
+  lh	v0, 32032(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0xec0
+  nop
+  lw	v1, 32040(gp)
+  li	v0,3
+  beq	v1,v0, 'VTON_FLIGHT_step_0xec0
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	t0,92(v0)
+  lw	a0, 32076(gp)
+  lui	v0,77
+  addiu	v1,v0, 16748
+  lw	a3,12(v1)
+  lw	a2,16(v1)
+  lw	a1,20(v1)
+  lw	v1,24(v1)
+  sw	a3,16(sp)
+  sw	a2,20(sp)
+  sw	a1,24(sp)
+  sw	v1,28(sp)
+  lw	a1, 16748(v0)
+  addiu	v1,v0, 16748
+  lw	a2,4(v1)
+  addiu	v0,v0, 16748
+  lw	a3,8(v0)
+  jr	t0
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,8(v0)
+  lw	v1, 32076(gp)
+  nop
+  move	a0,v1
+  move	a1,zero
+  jr	v0
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,88(v0)
+  lw	v1, 32076(gp)
+  nop
+  move	a0,v1
+  jr	v0
+  nop
+ 'VTON_FLIGHT_step_0xec0 lh	v0, 31952(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_1108
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,84(v0)
+  lw	v1, 32076(gp)
+  nop
+  move	a0,v1
+  jr	v0
+  nop
+  sw	v0, 31956(gp)
+  lw	v0, 31956(gp)
+  nop
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31756(gp)
+  lh	v0, 31756(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_1108
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,80(v0)
+  lw	v1, 32076(gp)
+  nop
+  move	a0,v1
+  jr	v0
+  nop
+  sw	v0, 31960(gp)
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,8(v0)
+  lw	v1, 32076(gp)
+  nop
+  move	a0,v1
+  li	a1,1
+  jr	v0
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,76(v0)
+  lw	a0, 32076(gp)
+  lw	v1, 31960(gp)
+  nop
+  move	a1,v1
+  jr	v0
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,52(v0)
+  nop
+  jr	v0
+  nop
+  sw	v0, 31964(gp)
+  lw	v0, 31964(gp)
+  nop
+  xori	v0,v0,3
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31754(gp)
+  lh	v0, 31754(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_1108
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,72(v0)
+  nop
+  jr	v0
+  nop
+  mtc1	v0,$f0
+  nop
+  cvt.s.w	$f0,$f0
+  mfc1	v0,$f0
+  nop
+  sw	v0, 31976(gp)
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,60(v0)
+  lw	v1, 32076(gp)
+  nop
+  move	a0,v1
+  jr	v0
+  nop
+  mtc1	v0,$f2
+  nop
+  cvt.s.w	$f2,$f2
+  mfc1	v0,$f2
+  nop
+  sw	v0, 31972(gp)
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,56(v0)
+  lw	v1, 32076(gp)
+  lw	a1, 31972(gp)
+  lw	a0, 31976(gp)
+  mtc1	a1,$f0
+  mtc1	a0,$f2
+  nop
+  add	$f0,$f0,$f2
+  mfc1	a0,$f0
+  nop
+  mtc1	a0,$f0
+  nop
+  cfc1	a2,$31
+  cfc1	a2,$31
+  nop
+  ori	at,a2,3
+  xori	at,at,2
+  ctc1	at,$31
+  nop
+  cvt.w.s	$f0,$f0
+  ctc1	a2,$31
+  nop
+  mfc1	a1,$f0
+  move	a0,v1
+  jr	v0
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,4(v0)
+  li	a0,1
+  jr	v0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31950(gp)
+  lh	v0, 31950(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_1108
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,12(v0)
+  nop
+  jr	v0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31968(gp)
+ 'VTON_FLIGHT_step_1108 lh	v0, 32064(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_16c0
+  nop
+  lui	v0,77
+  lw	v0, 16720(v0)
+  lui	v1,65
+  lw	a3, 22840(v1)
+  addiu	a0,v1, 22840
+  lw	a2,4(a0)
+  addiu	a0,v1, 22840
+  lw	a1,8(a0)
+  addiu	a0,v1, 22840
+  lw	a0,12(a0)
+  addiu	v1,v1, 22840
+  lw	v1,16(v1)
+  swl	a3,3(v0)
+  swr	a3,0(v0)
+  swl	a2,7(v0)
+  swr	a2,4(v0)
+  swl	a1,11(v0)
+  swr	a1,8(v0)
+  swl	a0,15(v0)
+  swr	a0,12(v0)
+  swl	v1,19(v0)
+  swr	v1,16(v0)
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,68(v0)
+  lui	v1,77
+  lw	v1, 16720(v1)
+  nop
+  move	a0,v1
+  lw	v1, 32072(gp)
+  nop
+  move	a1,v1
+  jr	v0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32024(gp)
+  lh	v0, 32024(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_16c0
+  nop
+  lui	v0,77
+  addiu	v0,v0, 16720
+  lw	a0,20(v0)
+  li	v0,1
+  lw	v1, 32720(gp)
+  mtc1	a0,$f2
+  mtc1	v1,$f0
+  nop
+  c.le.s	$f2,$f0
+  nop
+  bc1t	 'VTON_FLIGHT_step_11f0
+  nop
+  move	v0,zero
+ 'VTON_FLIGHT_step_11f0 andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32016(gp)
+  lui	v0,77
+  addiu	v0,v0, 16720
+  lw	a0,16(v0)
+  li	v0,1
+  lw	v1, 32720(gp)
+  mtc1	a0,$f2
+  mtc1	v1,$f0
+  nop
+  c.le.s	$f2,$f0
+  nop
+  bc1t	 'VTON_FLIGHT_step_1234
+  nop
+  move	v0,zero
+ 'VTON_FLIGHT_step_1234 andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32014(gp)
+  lui	v0,77
+  addiu	v0,v0, 16720
+  lw	v0,4(v0)
+  nop
+  mtc1	v0,$f2
+  nopcvt.d.s	$f2,$f2
+  mfc1	a0,$f2
+  mfc1	a1,$f3
+  li	a2,1
+  lw	v0, 32712(gp)
+  lw	v1, 32708(gp)
+  mtc1	a0,$f0
+  nop
+  mtc1	a1,$f1
+  mtc1	v0,$f2
+  nop
+  mtc1	v1,$f3
+  nop
+  c.le.d	$f0,$f2
+  nop
+  bc1t	 'VTON_FLIGHT_step_12a4
+  nop
+  move	a2,zero
+ 'VTON_FLIGHT_step_12a4 andi	v0,a2,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32010(gp)
+  lw	v1, 32008(gp)
+  lui	v0,77
+  lw	v0, 16720(v0)
+  move	a0,v1
+  move	a1,v0
+  jal	 'strcpy
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,96(v0)
+  lw	v1, 32008(gp)
+  nop
+  move	a0,v1
+  jr	v0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32012(gp)
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,52(v0)
+  nop
+  jr	v0
+  nop
+  sw	v0, 32020(gp)
+  lw	v0, 31200(gp)
+  nop
+  lw	t0,64(v0)
+  lw	a0, 32072(gp)
+  lui	v1,77
+  addiu	v0,v1, 16612
+  lw	t3,12(v0)
+  lw	t2,16(v0)
+  lw	t1,20(v0)
+  lw	a3,24(v0)
+  lw	a2,28(v0)
+  lw	a1,32(v0)
+  lw	v0,36(v0)
+  sw	t3,16(sp)
+  sw	t2,20(sp)
+  sw	t1,24(sp)
+  sw	a3,28(sp)
+  sw	a2,32(sp)
+  sw	a1,36(sp)
+  sw	v0,40(sp)
+  lw	a1, 16612(v1)
+  addiu	v0,v1, 16612
+  lw	a2,4(v0)
+  addiu	v0,v1, 16612
+  lw	a3,8(v0)
+  jr	t0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31924(gp)
+  lh	v0, 32010(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_1478
+  nop
+  lh	v0, 32014(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_1478
+  nop
+  lh	v0, 32016(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_1478
+  nop
+  lh	v0, 32012(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_1478
+  nop
+  lw	v1, 32020(gp)
+  li	v0,3
+  beq	v1,v0, 'VTON_FLIGHT_step_1478
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	t0,92(v0)
+  lw	a0, 32072(gp)
+  lui	v0,77
+  addiu	v1,v0, 16720
+  lw	a3,12(v1)
+  lw	a2,16(v1)
+  lw	a1,20(v1)
+  lw	v1,24(v1)
+  sw	a3,16(sp)
+  sw	a2,20(sp)
+  sw	a1,24(sp)
+  sw	v1,28(sp)
+  lw	a1, 16720(v0)
+  addiu	v1,v0, 16720
+  lw	a2,4(v1)
+  addiu	v0,v0, 16720
+  lw	a3,8(v0)
+  jr	t0
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,8(v0)
+  lw	v1, 32072(gp)
+  nop
+  move	a0,v1
+  move	a1,zero
+  jr	v0
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,88(v0)
+  lw	v1, 32072(gp)
+  nop
+  move	a0,v1
+  jr	v0
+  nop
+ 'VTON_FLIGHT_step_1478 lh	v0, 31924(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_16c0
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,84(v0)
+  lw	v1, 32072(gp)
+  nop
+  move	a0,v1
+  jr	v0
+  nop
+  sw	v0, 31928(gp)
+  lw	v0, 31928(gp)
+  nop
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31752(gp)
+  lh	v0, 31752(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_16c0
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,80(v0)
+  lw	v1, 32072(gp)
+  nop
+  move	a0,v1
+  jr	v0
+  nop
+  sw	v0, 31932(gp)
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,8(v0)
+  lw	v1, 32072(gp)
+  nop
+  move	a0,v1
+  li	a1,1
+  jr	v0
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,76(v0)
+  lw	a0, 32072(gp)
+  lw	v1, 31932(gp)
+  nop
+  move	a1,v1
+  jr	v0
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,52(v0)
+  nop
+  jr	v0
+  nop
+  sw	v0, 31936(gp)
+  lw	v0, 31936(gp)
+  nop
+  xori	v0,v0,3
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31750(gp)
+  lh	v0, 31750(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_16c0
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,72(v0)
+  nop
+  jr	v0
+  nop
+  mtc1	v0,$f0
+  nop
+  cvt.s.w	$f0,$f0
+  mfc1	v0,$f0
+  nop
+  sw	v0, 31948(gp)
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,60(v0)
+  lw	v1, 32072(gp)
+  nop
+  move	a0,v1
+  jr	v0
+  nop
+  mtc1	v0,$f2
+  nop
+  cvt.s.w	$f2,$f2
+  mfc1	v0,$f2
+  nop
+  sw	v0, 31944(gp)
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,56(v0)
+  lw	v1, 32072(gp)
+  lw	a1, 31944(gp)
+  lw	a0, 31948(gp)
+  mtc1	a1,$f0
+  mtc1	a0,$f2
+  nop
+  add	$f0,$f0,$f2
+  mfc1	a0,$f0
+  nop
+  mtc1	a0,$f0
+  nop
+  cfc1	a2,$31
+  cfc1	a2,$31
+  nop
+  ori	at,a2,3
+  xori	at,at,2
+  ctc1	at,$31
+  nop
+  cvt.w.s	$f0,$f0
+  ctc1	a2,$31
+  nop
+  mfc1	a1,$f0
+  move	a0,v1
+  jr	v0
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,4(v0)
+  li	a0,1
+  jr	v0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31922(gp)
+  lh	v0, 31922(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_16c0
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,12(v0)
+  nop
+  jr	v0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31940(gp)
+ 'VTON_FLIGHT_step_16c0 lh	v0, 31764(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_17e8
+  nop
+  lw	v0, 31212(gp)
+  nop
+  lw	v0,12(v0)
+  lw	v1, 32108(gp)
+  lui	a0,65
+  addiu	a0,a0, 22820
+  move	a1,v1
+  jr	v0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32100(gp)
+  lh	v0, 32100(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_17e8
+  nop
+  lw	v0, 31212(gp)
+  nop
+  lw	v0,16(v0)
+  lui	v1,65
+  addiu	a0,v1, 22820
+  jr	v0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32098(gp)
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,52(v0)
+  nop
+  jr	v0
+  nop
+  sw	v0, 32092(gp)
+  lh	v0, 32098(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_1780
+  nop
+  lw	v1, 32092(gp)
+  li	v0,3
+  beq	v1,v0, 'VTON_FLIGHT_step_1780
+  nop
+  li	v0,1
+  j	 'VTON_FLIGHT_step_1784
+  nop
+ 'VTON_FLIGHT_step_1780 move	v0,zero
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32096(gp)
+  lh	v0, 32096(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_17e8
+  nop
+  lw	v0, 31212(gp)
+  nop
+  lw	v0,20(v0)
+  lw	v1, 32088(gp)
+  nop
+  move	a2,v1
+  lw	a0, 32608(gp)
+  lw	v1, 32704(gp)
+  sw	a0,16(sp)
+  lui	a0,65
+  addiu	a0,a0, 22820
+  li	a1,4
+  move	a3,v1
+  jr	v0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32104(gp)
+ 'VTON_FLIGHT_step_17e8 lh	v0, 31722(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_182c
+  nop
+  lw	v0, 31208(gp)
+  nop
+  lw	v0,8(v0)
+  lui	v1,65
+  addiu	a0,v1, 22920
+  lw	v1, 32596(gp)
+  li	a1,50
+  move	a2,v1
+  jr	v0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32198(gp)
+ 'VTON_FLIGHT_step_182c lh	v0, 31720(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_1880
+  nop
+  lw	v0, 31216(gp)
+  nop
+  lw	v0,8(v0)
+  lui	v1,65
+  addiu	a0,v1, 22912
+  lw	v1, 32168(gp)
+  lw	a1, 32604(gp)
+  nop
+  sw	a1,16(sp)
+  li	a1,3
+  li	a2,50
+  move	a3,v1
+  jr	v0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32180(gp)
+ 'VTON_FLIGHT_step_1880 lh	v0, 31718(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_1880
+  nop
+  lw	v0, 31216(gp)
+  nop
+  lw	v0,8(v0)
+  lui	v1,65
+  addiu	a0,v1, 22904
+  lw	v1, 32148(gp)
+  lw	a1, 32600(gp)
+  nop
+  sw	a1,16(sp)
+  li	a1,3
+  li	a2,50
+  move	a3,v1
+  jr	v0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32160(gp)
+  lh	v0, 31716(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_1914
+  nop
+  lw	v0, 31220(gp)
+  nop
+  lw	v0,16(v0)
+  lw	v1, 32612(gp)
+  lui	a0,65
+  addiu	a0,a0, 22896
+  move	a1,v1
+  jr	v0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32144(gp)
+ 'VTON_FLIGHT_step_1914 lh	v0, 31714(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_1968
+  nop
+  lw	v0, 31204(gp)
+  nop
+  lw	v0,8(v0)
+  lw	v1, 32112(gp)
+  lw	a0, 32616(gp)
+  nop
+  sw	a0,16(sp)
+  lui	a0,65
+  addiu	a0,a0, 22888
+  li	a1,1
+  li	a2,2
+  move	a3,v1
+  jr	v0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32124(gp)
+ 'VTON_FLIGHT_step_1968 lw	v0, 31836(gp)
+  nop
+  move	a0,v0
+  jal	 'RCHANGE
+  nop
+  sw	v0, 31848(gp)
+  lw	v0, 31848(gp)
+  nop
+  sltu	v0,zero,v0
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31772(gp)
+  lh	v0, 31772(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_19bc
+  nop
+  lh	v0, 31832(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_19c8
+  nop
+ 'VTON_FLIGHT_step_19bc li	v0,1
+  j	 'VTON_FLIGHT_step_19cc
+  nop
+  move	v0,zero
+ 'VTON_FLIGHT_step_19cc sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31766(gp)
+  lh	v0, 32096(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_19f4
+  nop
+  lh	v0, 32104(gp)
+  j	 'VTON_FLIGHT_step_19f8
+  nop
+ 'VTON_FLIGHT_step_19f4 move	v0,zero
+ 'VTON_FLIGHT_step_19f8 sh	v0, 31762(gp)
+  lh	v0, 31722(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_1a18
+  nop
+  lh	v0, 32198(gp)
+  j	 'VTON_FLIGHT_step_1a1c
+  nop
+ 'VTON_FLIGHT_step_1a18 move	v0,zero
+ 'VTON_FLIGHT_step_1a1c sh	v0, 31698(gp)
+  lh	v0, 31720(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_1a3c
+  nop
+  lh	v0, 32180(gp)
+  j	 'VTON_FLIGHT_step_1a40
+  nop
+ 'VTON_FLIGHT_step_1a3c move	v0,zero
+ 'VTON_FLIGHT_step_1a40 sh	v0, 31696(gp)
+  lh	v0, 31718(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_1a60
+  nop
+  lh	v0, 32160(gp)
+  j	 'VTON_FLIGHT_step_1a64
+  nop
+ 'VTON_FLIGHT_step_1a60 move	v0,zero
+ 'VTON_FLIGHT_step_1a64 sh	v0, 31694(gp)
+  lh	v0, 31716(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_1a84
+  nop
+  lh	v0, 32144(gp)
+  j	 'VTON_FLIGHT_step_1a88
+  nop
+ 'VTON_FLIGHT_step_1a84 move	v0,zero
+ 'VTON_FLIGHT_step_1a88 sh	v0, 31692(gp)
+  lh	v0, 31714(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_1aa8
+  nop
+  lh	v0, 32124(gp)
+  j	 'VTON_FLIGHT_step_1aac
+  nop
+ 'VTON_FLIGHT_step_1aa8 move	v0,zero
+ 'VTON_FLIGHT_step_1aac sh	v0, 31690(gp)
+  lh	v0, 31772(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_1eb0
+  nop
+  lw	v0, 31848(gp)
+  nop
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31894(gp)
+  sh	zero, 31726(gp)
+  lw	v0, 31836(gp)
+  nop
+  move	a0,v0
+  jal	 'RUPDOWN
+  nop
+  sh	v0, 31896(gp)
+  lh	v0, 31894(gp)
+  nop
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31742(gp)
+  sh	zero, 31736(gp)
+  lh	v0, 31894(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_1b44
+  nop
+  lh	v0, 31896(gp)
+  nop
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31730(gp)
+ 'VTON_FLIGHT_step_1b44 lh	v0, 31742(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_1b70
+  nop
+  lh	v0, 31896(gp)
+  nop
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31740(gp)
+ 'VTON_FLIGHT_step_1b70 lh	v0, 31894(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_1d3c
+  nop
+  lw	v0, 31888(gp)
+  nop
+  slti	v0,v0,16
+  xori	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31732(gp)
+  lw	v0, 31888(gp)
+  nop
+  slti	v0,v0,2
+  xori	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31728(gp)
+  lh	v0, 31896(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_1bec
+  nop
+  lh	v0, 31728(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_1bec
+  nop
+  li	v0,1
+  j	 'VTON_FLIGHT_step_1bf0
+  nop
+ 'VTON_FLIGHT_step_1bec move	v0,zero
+ 'VTON_FLIGHT_step_1bf0 sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31712(gp)
+  lh	v0, 31732(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_1c30
+  nop
+  lw	v0, 31888(gp)
+  nop
+  bgez	v0, 'VTON_FLIGHT_step_1c20
+  nop
+  addiu	v0,v0,15
+ 'VTON_FLIGHT_step_1c20 sra	v0,v0,4
+  sw	v0, 31860(gp)
+  j	 'VTON_FLIGHT_step_1c38
+  nop
+ 'VTON_FLIGHT_step_1c30 li	v0,1
+  sw	v0, 31860(gp)
+ 'VTON_FLIGHT_step_1c38 lh	v0, 31730(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_1c78
+  nop
+  lw	v1, 31888(gp)
+  lw	v0, 31860(gp)
+  nop
+  addu	v0,v1,v0
+  sw	v0, 31856(gp)
+  lw	v0, 31856(gp)
+  nop
+  slt	v0,zero,v0
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31726(gp)
+ 'VTON_FLIGHT_step_1c78 lh	v0, 31730(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_1c94
+  nop
+  lh	v0, 31726(gp)
+  j	 'VTON_FLIGHT_step_1c98
+  nop
+ 'VTON_FLIGHT_step_1c94 move	v0,zero
+ 'VTON_FLIGHT_step_1c98 sh	v0, 31724(gp)
+  lh	v0, 31712(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_1cbc
+  nop
+  lh	v0, 31724(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_1cc8
+  nop
+ 'VTON_FLIGHT_step_1cbc li	v0,1
+  j	 'VTON_FLIGHT_step_1ccc
+  nop
+ 'VTON_FLIGHT_step_1cc8 move	v0,zero
+ 'VTON_FLIGHT_step_1ccc sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31704(gp)
+  lh	v0, 31712(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_1cfc
+  nop
+  lw	v1, 31888(gp)
+  lw	v0, 31860(gp)
+  nop
+  subu	v0,v1,v0
+  sw	v0, 31852(gp)
+ 'VTON_FLIGHT_step_1cfc lh	v0, 31704(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_1d3c
+  nop
+  lh	v0, 31712(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_1d30
+  nop
+  lw	v0, 31852(gp)
+  nop
+  sw	v0, 31864(gp)
+  j	 'VTON_FLIGHT_step_1d3c
+  nop
+ 'VTON_FLIGHT_step_1d30 lw	v0, 31856(gp)
+  nop
+  sw	v0, 31864(gp)
+ 'VTON_FLIGHT_step_1d3c lh	v0, 31742(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_1eb0
+  nop
+  lw	v0, 31888(gp)
+  nop
+  slti	v0,v0,2
+  xori	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31738(gp)
+  lh	v0, 31896(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_1d98
+  nop
+  lh	v0, 31738(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_1d98
+  nop
+  li	v0,1
+  j	 'VTON_FLIGHT_step_1d9c
+  nop
+ 'VTON_FLIGHT_step_1d98 move	v0,zero
+ 'VTON_FLIGHT_step_1d9c sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31710(gp)
+  lh	v0, 31740(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_1de8
+  nop
+  lw	v1, 31888(gp)
+  lw	v0, 31888(gp)
+  nop
+  addu	v0,v1,v0
+  sw	v0, 31872(gp)
+  lw	v0, 31872(gp)
+  nop
+  slt	v0,zero,v0
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31736(gp)
+ 'VTON_FLIGHT_step_1de8 lh	v0, 31740(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_1e04
+  nop
+  lh	v0, 31736(gp)
+  j	 'VTON_FLIGHT_step_1e08
+  nop
+ 'VTON_FLIGHT_step_1e04 move	v0,zero
+ 'VTON_FLIGHT_step_1e08 sh	v0, 31734(gp)
+  lh	v0, 31710(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_1e2c
+  nop
+  lh	v0, 31734(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_1e38
+  nop
+ 'VTON_FLIGHT_step_1e2c li	v0,1
+  j	'VTON_FLIGHT_step_1e3c
+  nop
+ 'VTON_FLIGHT_step_1e38 move	v0,zero
+ 'VTON_FLIGHT_step_1e3c sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31708(gp)
+  lh	v0, 31710(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_1e70
+  nop
+  lw	v0, 31888(gp)
+  nop
+  srl	v1,v0,31
+  addu	v0,v1,v0
+  sra	v0,v0,1
+  sw	v0, 31868(gp)
+ 'VTON_FLIGHT_step_1e70 lh	v0, 31708(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_1eb0
+  nop
+  lh	v0, 31710(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_1ea4
+  nop
+  lw	v0, 31868(gp)
+  nop
+  sw	v0, 31876(gp)
+  j	 'VTON_FLIGHT_step_1eb0
+  nop
+ 'VTON_FLIGHT_step_1ea4 lw	v0, 31872(gp)
+  nop
+  sw	v0, 31876(gp)
+ 'VTON_FLIGHT_step_1eb0 lh	v0, 31742(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_1ecc
+  nop
+  lh	v0, 31708(gp)
+  j	 'VTON_FLIGHT_step_1ed0
+  nop
+ 'VTON_FLIGHT_step_1ecc move	v0,zero
+ 'VTON_FLIGHT_step_1ed0 sh	v0, 31706(gp)
+  lh	v0, 31894(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_1ef0
+  nop
+  lh	v0, 31704(gp)
+  j	 'VTON_FLIGHT_step_1ef4
+  nop
+ 'VTON_FLIGHT_step_1ef0 move	v0,zero
+ 'VTON_FLIGHT_step_1ef4 sh	v0, 31702(gp)
+  lh	v0, 31768(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_1f38
+  nop
+  lh	v0, 31844(gp)
+  nop
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31844(gp)
+  lh	v0, 31844(gp)
+  nop
+  move	a0,v0
+  jal	 'RESET_PANEL
+  nop
+ 'VTON_FLIGHT_step_1f38 lh	v0, 31844(gp)
+  nop
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31770(gp)
+  lh	v0, 31770(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_1f8c
+  nop
+  jal	 'RSTOP
+  nop
+  sh	v0, 31840(gp)
+  lh	v0, 31840(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_1f8c
+  nop
+  li	a0,1
+  jal	 'WSTOP
+  nop
+ 'VTON_FLIGHT_step_1f8c lh	v0, 31766(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_2060
+  nop
+  lh	v0, 31832(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_1fc0
+  nop
+  lw	v0, 31892(gp)
+  nop
+  sw	v0, 31888(gp)
+  j	 'VTON_FLIGHT_step_2000
+  nop
+ 'VTON_FLIGHT_step_1fc0 lh	v0, 31702(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_1fc0
+  nop
+  lw	v0, 31864(gp)
+  nop
+  sw	v0, 31888(gp)
+  j	 'VTON_FLIGHT_step_2000
+  nop
+  lh	v0, 31706(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_2000
+  nop
+  lw	v0, 31876(gp)
+  nop
+  sw	v0, 31888(gp)
+ 'VTON_FLIGHT_step_2000 lw	v1, 31836(gp)
+  lw	v0, 31888(gp)
+  move	a0,v1
+  move	a1,v0
+  jal	 'WIWRITE
+  nop
+  lw	v0, 31888(gp)
+  nop
+  slti	v0,v0,2
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31748(gp)
+  lh	v0, 31748(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_2050
+  nop
+  sw	zero, 31880(gp)
+  j	 'VTON_FLIGHT_step_2060
+  nop
+ 'VTON_FLIGHT_step_2050 lw	v0, 31888(gp)
+  nop
+  addiu	v0,v0, 1
+  sw	v0, 31880(gp)
+ 'VTON_FLIGHT_step_2060 lh	v0, 31844(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_20c0
+  nop
+  lw	v1, 31884(gp)
+  lw	v0, 31880(gp)
+  nop
+  slt	v0,v1,v0
+  xori	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31746(gp)
+  lh	v0, 31746(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_20b0
+  nop
+  sw	zero, 31884(gp)
+  j 'VTON_FLIGHT_step_20b0
+  nop
+ 'VTON_FLIGHT_step_20b0 lw	v0, 31884(gp)
+  nop
+  addiu	v0,v0,1
+  sw	v0, 31884(gp)
+ 'VTON_FLIGHT_step_20c0 lh	v0, 31844(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_20ec
+  nop
+  lw	v0, 31884(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_20ec
+  nop
+  li	v0,1
+  j	 'VTON_FLIGHT_step_20f0
+  nop
+ 'VTON_FLIGHT_step_20ec move	v0,zero
+ 'VTON_FLIGHT_step_20f0 sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31744(gp)
+  lh	v0, 31838(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_211c
+  nop
+  lh	v0, 31744(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_2128
+  nop
+ 'VTON_FLIGHT_step_211c li	v0,1
+  j 'VTON_FLIGHT_step_212c
+  nop
+ 'VTON_FLIGHT_step_2128 move	v0,zero
+ 'VTON_FLIGHT_step_212c sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31700(gp)
+  lh	v0, 31700(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_33d8
+  nop
+  lh	v0, 31830(gp)
+  nop
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31688(gp)
+  lh	v0, 31688(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_33d8
+  nop
+  jal	 'GET_ACTIVE_PARTITION
+  nop
+  sw	v0, 32632(gp)
+  lw	v1, 32676(gp)
+  lw	v0, 32676(gp)
+  nop
+  addu	v1,v1,v0
+  lw	v0, 32672(gp)
+  nop
+  addu	v1,v1,v0
+  lw	v0, 31824(gp)
+  nop
+  addu	v0,v1,v0
+  sw	v0, 31820(gp)
+  lw	v1, 32676(gp)
+  lw	v0, 32676(gp)
+  nop
+  addu	v1,v1,v0
+  lw	v0, 32672(gp)
+  nop
+  addu	v1,v1,v0
+  lw	v0, 31828(gp)
+  nop
+  addu	v0,v1,v0
+  sw	v0, 31816(gp)
+  lw	v1, 32676(gp)
+  lw	v0, 32676(gp)
+  nop
+  addu	v1,v1,v0
+  lw	v0, 32672(gp)
+  nop
+  addu	v1,v1,v0
+  lw	v0, 32688(gp)
+  nop
+  mul	v1,v0
+  mflo	v1
+  lw	v0, 31820(gp)
+  nop
+  slt	v0,v0,v1
+  xori	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31684(gp)
+  lw	v1, 32676(gp)
+  lw	v0, 32676(gp)
+  nop
+  addu	v1,v1,v0
+  lw	v0, 32672(gp)
+  nop
+  addu	v1,v1,v0
+  lw	v0, 32688(gp)
+  nop
+  mul	v1,v0
+  mflo	v1
+  lw	v0, 31816(gp)
+  nop
+  slt	v0,v0,v1
+  xori	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31682(gp)
+  lw	v0, 32632(gp)
+  nop
+  xori	v0,v0,1
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31680(gp)
+  lh	v0, 31684(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_22ac
+  nop
+  sw	zero, 31824(gp)
+  j	 'VTON_FLIGHT_step_22b8
+  nop
+ 'VTON_FLIGHT_step_22ac lw	v0, 31820(gp)
+  nop
+  sw	v0, 31824(gp)
+ 'VTON_FLIGHT_step_22b8 lh	v0, 31682(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_22d4
+  nop
+  sw	zero, 31828(gp)
+  j	 'VTON_FLIGHT_step_22e0
+  nop
+ 'VTON_FLIGHT_step_22d4 lw	v0, 31816(gp)
+  nop
+  sw	v0, 31828(gp)
+ 'VTON_FLIGHT_step_22e0 lh	v0, 31680(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_33d8
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,12(v0)
+  nop
+  jr	v0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32084(gp)
+  sh	zero, 32592(gp)
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,48(v0)
+  lui	v1,65
+  addiu	v1,v1, 18860
+  move	a0,v1
+  jr	v0
+  nop
+  lh	v0, 32084(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_33d8
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	t0,40(v0)
+  lh	v0, 31916(gp)
+  lui	v1,77
+  sw	v0,40(sp)
+  addiu	v0,v1, 16572
+  lw	t1,16(v0)
+  lw	a3,20(v0)
+  lw	a2,24(v0)
+  lw	a1,28(v0)
+  lw	a0,32(v0)
+  lw	v0,36(v0)
+  sw	t1,16(sp)
+  sw	a3,20(sp)
+  sw	a2,24(sp)
+  sw	a1,28(sp)
+  sw	a0,32(sp)
+  sw	v0,36(sp)
+  lw	a0, 16572(v1)
+  addiu	v0,v1, 16572
+  lw	a1,4(v0)
+  addiu	v0,v1, 16572
+  lw	a2,8(v0)
+  addiu	v0,v1, 16572
+  lw	a3,12(v0)
+  jr	t0
+  nop
+  sw	v0, 31920(gp)
+  lh	v0, 31916(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_33d8
+  nop
+  lw	v0, 31920(gp)
+  nop
+  xori	v0,v0,1
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32592(gp)
+  sh	zero, 32586(gp)
+  sh	zero, 32494(gp)
+  sh	zero, 31560(gp)
+  sh	zero, 31518(gp)
+  sh	zero, 31382(gp)
+  sh	zero, 31374(gp)
+  sh	zero, 31364(gp)
+  lw	v0, 31920(gp)
+  nop
+  xori	v0,v0,2
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32434(gp)
+  sh	zero, 32428(gp)
+  sh	zero, 31352(gp)
+  lw	v0, 31920(gp)
+  nop
+  xori	v0,v0,3
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32320(gp)
+  sh	zero, 32314(gp)
+  sh	zero, 31344(gp)
+  lh	v0, 32592(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_2864
+  nop
+  lw	v1, 31828(gp)
+  lw	v0, 32676(gp)
+  nop
+  addu	v0,v1,v0
+  sw	v0, 31808(gp)
+  lw	v1, 31808(gp)
+  lw	v0, 32672(gp)
+  nop
+  addu	v0,v1,v0
+  sw	v0, 31804(gp)
+  lw	v0, 32620(gp)
+  nop
+  xori	v0,v0,5
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31536(gp)
+  lh	v0, 32590(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_24ec
+  nop
+  lh	v0, 31536(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_24dc
+  nop
+  sw	zero, 32620(gp)
+  j	 'VTON_FLIGHT_step_24ec
+  nop
+ 'VTON_FLIGHT_step_24dc lw	v0, 32620(gp)
+  nop
+  addiu	v0,v0,1
+  sw	v0, 32620(gp)
+ 'VTON_FLIGHT_step_24ec lw	v0, 32620(gp)
+  nop
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31660(gp)
+  lw	v0, 32620(gp)
+  nop
+  xori	v0,v0,1
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31658(gp)
+  lw	v0, 32620(gp)
+  nop
+  xori	v0,v0,2
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31654(gp)
+  lw	v0, 32620(gp)
+  nop
+  xori	v0,v0,3
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31650(gp)
+  sh	zero, 32496(gp)
+  lw	v0, 32620(gp)
+  nop
+  xori	v0,v0,5
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31648(gp)
+  lw	v0, 32620(gp)
+  nop
+  xori	v0,v0,4
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31644(gp)
+  lw	v1, 32620(gp)
+  lw	v0, 32660(gp)
+  nop
+  slt	v0,v0,v1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31594(gp)
+  lw	v1, 32620(gp)
+  lw	v0, 32656(gp)
+  nop
+  slt	v0,v1,v0
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31592(gp)
+  lh	v0, 31592(gp)
+  nop
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31590(gp)
+  lh	v0, 31594(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_2634
+  nop
+  lh	v0, 31592(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_2634
+  nop
+  li	v0,1
+  j	 'VTON_FLIGHT_step_2638
+  nop
+ 'VTON_FLIGHT_step_2634 move	v0,zero
+ 'VTON_FLIGHT_step_2638 sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31572(gp)
+  lh	v0, 31648(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_2664
+  nop
+  lh	v0, 31644(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_2670
+  nop
+ 'VTON_FLIGHT_step_2664 li	v0,1
+  j	 'VTON_FLIGHT_step_2674
+  nop
+ 'VTON_FLIGHT_step_2670 move	v0,zero
+ 'VTON_FLIGHT_step_2674 sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31566(gp)
+  lw	v1, 32620(gp)
+  li	v0,1
+  beq	v1,v0, 'VTON_FLIGHT_step_26c0
+  nop
+  lw	v1, 32620(gp)
+  li	v0,2
+  beq	v1,v0, 'VTON_FLIGHT_step_26c0
+  nop
+  lw	v1, 32620(gp)
+  li	v0,3
+  beq	v1,v0, 'VTON_FLIGHT_step_26c0
+  nop
+  lw	v1, 32620(gp)
+  li	v0,5
+  bne	v1,v0, 'VTON_FLIGHT_step_26cc
+  nop
+ 'VTON_FLIGHT_step_26c0 li	v0,1
+  j	 'VTON_FLIGHT_step_26d0
+  nop
+ 'VTON_FLIGHT_step_26cc move	v0,zero
+ 'VTON_FLIGHT_step_26d0 sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31534(gp)
+  lh	v0, 31572(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_2700
+  nop
+  lw	v0, 32620(gp)
+  nop
+  sw	v0, 31784(gp)
+  j	 'VTON_FLIGHT_step_2730
+  nop
+ 'VTON_FLIGHT_step_2700 lh	v0, 31590(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_2724
+  nop
+  lw	v0, 32656(gp)
+  nop
+  sw	v0, 31784(gp)
+  j	 'VTON_FLIGHT_step_2730
+  nop
+ 'VTON_FLIGHT_step_2724 lw	v0, 32660(gp)
+  nop
+  sw	v0, 31784(gp)
+ 'VTON_FLIGHT_step_2730 lh	v0, 31658(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_279c
+  nop
+  lh	v0, 32560(gp)
+  nop
+  sh	v0, 32558(gp)
+  lh	v0, 32558(gp)
+  nop
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31656(gp)
+  sh	zero, 32546(gp)
+  sh	zero, 32532(gp)
+  sh	zero, 32530(gp)
+  sh	zero, 32528(gp)
+  sh	zero, 31530(gp)
+  sh	zero, 31526(gp)
+  lh	v0, 31656(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_279c
+  nop
+  sh	zero, 32550(gp)
+  li	v0,1
+  sh	v0, 32548(gp)
+ 'VTON_FLIGHT_step_279c lh	v0, 31654(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_27f8
+  nop
+  lh	v0, 32518(gp)
+  nop
+  sh	v0, 32516(gp)
+  lh	v0, 32516(gp)
+  nop
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31652(gp)
+  sh	zero, 32506(gp)
+  sh	zero, 32504(gp)
+  lh	v0, 31652(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_27f8
+  nop
+  li	v0,1
+  sh	v0, 32512(gp)
+  sh	zero, 32510(gp)
+ 'VTON_FLIGHT_step_27f8 lh	v0, 31648(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_2864
+  nop
+  lh	v0, 32476(gp)
+  nop
+  sh	v0, 32474(gp)
+  lh	v0, 32474(gp)
+  nop
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31646(gp)
+  sh	zero, 32462(gp)
+  sh	zero, 32448(gp)
+  sh	zero, 32446(gp)
+  sh	zero, 32444(gp)
+  sh	zero, 31510(gp)
+  sh	zero, 31506(gp)
+  lh	v0, 31646(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_2864
+  nop
+  sh	zero, 32466(gp)
+  li	v0,1
+  sh	v0, 32464(gp)
+ 'VTON_FLIGHT_step_2864 lh	v0, 32592(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_2890
+  nop
+  lw	v1, 32620(gp)
+  li	v0,5
+  bne	v1,v0, 'VTON_FLIGHT_step_2890
+  nop
+  li	v0,1
+  j	 'VTON_FLIGHT_step_2894
+  nop
+ 'VTON_FLIGHT_step_2890 move	v0,zero
+ 'VTON_FLIGHT_step_2894 sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31662(gp)
+  lh	v0, 32434(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_2ccc
+  nop
+  lw	v1, 31828(gp)
+  lw	v0, 32676(gp)
+  nop
+  addu	v0,v1,v0
+  sw	v0, 31800(gp)
+  lw	v1, 31800(gp)
+  lw	v0, 32672(gp)
+  nop
+  addu	v0,v1,v0
+  sw	v0, 31796(gp)
+  lw	v0, 32624(gp)
+  nop
+  xori	v0,v0,5
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31504(gp)
+  lh	v0, 32432(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_2934
+  nop
+  lh	v0, 31504(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_2924
+  nop
+  sw	zero, 32624(gp)
+  j	 'VTON_FLIGHT_step_2934
+  nop
+ 'VTON_FLIGHT_step_2924 lw	v0, 32624(gp)
+  nop
+  addiu	v0,v0,1
+  sw	v0, 32624(gp)
+ 'VTON_FLIGHT_step_2934 lw	v0, 32624(gp)
+  nop
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31640(gp)
+  sh	zero, 32394(gp)
+  sh	zero, 31408(gp)
+  lw	v0, 32624(gp)
+  nop
+  xori	v0,v0,1
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31636(gp)
+  lw	v0, 32624(gp)
+  nop
+  xori	v0,v0,2
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31632(gp)
+  lw	v0, 32624(gp)
+  nop
+  xori	v0,v0,3
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31630(gp)
+  sh	zero, 32352(gp)
+  sh	zero, 31628(gp)
+  lw	v0, 32624(gp)
+  nop
+  xori	v0,v0,5
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31626(gp)
+  lw	v0, 32624(gp)
+  nop
+  xori	v0,v0,4
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31622(gp)
+  sh	zero, 32322(gp)
+  sh	zero, 31548(gp)
+  lw	v1, 32624(gp)
+  lw	v0, 32660(gp)
+  nop
+  slt	v0,v0,v1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31588(gp)
+  lw	v1, 32624(gp)
+  lw	v0, 32656(gp)
+  nop
+  slt	v0,v1,v0
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31586(gp)
+  lh	v0, 31586(gp)
+  nop
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31584(gp)
+  lh	v0, 31588(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_2a90
+  nop
+  lh	v0, 31586(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_2a90
+  nop
+  li	v0,1
+  j	 'VTON_FLIGHT_step_2a94
+  nop
+ 'VTON_FLIGHT_step_2a90 move	v0,zero
+ 'VTON_FLIGHT_step_2a94 sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31574(gp)
+  lh	v0, 31632(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_2ac0
+  nop
+  lh	v0, 31622(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_2acc
+  nop
+ 'VTON_FLIGHT_step_2ac0 li	v0,1
+  j	 'VTON_FLIGHT_step_2ad0
+  nop
+ 'VTON_FLIGHT_step_2acc move	v0,zero
+ 'VTON_FLIGHT_step_2ad0 sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31568(gp)
+  lw	v0, 32624(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_2b2c
+  nop
+  lw	v1, 32624(gp)
+  li	v0,1
+  beq	v1,v0, 'VTON_FLIGHT_step_2b2c
+  nop
+  lw	v1, 32624(gp)
+  li	v0,3
+  beq	v1,v0, 'VTON_FLIGHT_step_2b2c
+  nop
+  lw	v1, 32624(gp)
+  li	v0,4
+  beq	v1,v0, 'VTON_FLIGHT_step_2b2c
+  nop
+  lw	v1, 32624(gp)
+  li	v0,5
+  bne	v1,v0, 'VTON_FLIGHT_step_2b38
+  nop
+ 'VTON_FLIGHT_step_2b2c li	v0,1
+  j	 'VTON_FLIGHT_step_2b3c
+  nop
+ 'VTON_FLIGHT_step_2b38 move	v0,zero
+ 'VTON_FLIGHT_step_2b3c sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31502(gp)
+  lh	v0, 31574(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_2b6c
+  nop
+  lw	v0, 32624(gp)
+  nop
+  sw	v0, 31780(gp)
+  j	 'VTON_FLIGHT_step_2b9c
+  nop
+ 'VTON_FLIGHT_step_2b6c lh	v0, 31584(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_2b90
+  nop
+  lw	v0, 32656(gp)
+  nop
+  sw	v0, 31780(gp)
+  j	 'VTON_FLIGHT_step_2b9c
+  nop
+ 'VTON_FLIGHT_step_2b90 lw	v0, 32660(gp)
+  nop
+  sw	v0, 31780(gp)
+ 'VTON_FLIGHT_step_2b9c lh	v0, 31640(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_2c58
+  nop
+  lh	v0, 32416(gp)
+  nop
+  sh	v0, 32414(gp)
+  lh	v0, 32414(gp)
+  nop
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31638(gp)
+  sh	zero, 32380(gp)
+  sh	zero, 32378(gp)
+  sh	zero, 31498(gp)
+  lh	v0, 31638(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_2bfc
+  nop
+  li	v0,1
+  sh	v0, 32400(gp)
+  sh	zero, 32398(gp)
+ 'VTON_FLIGHT_step_2bfc lh	v0, 32414(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_2c58
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,24(v0)
+  lui	v1,1
+  ori	v1,v1,28
+  addu	v1,s8,v1
+  addiu	v1,v1,8
+  move	a0,v1
+  li	a1,2
+  jr	v0
+  nop
+  lui	v0,1
+  addu	v0,s8,v0
+  lw	v1,48(v0)
+  lui	v0,1
+  addu	v0,s8,v0
+  lw	v0,52(v0)
+  sw	v1, 32412(gp)
+  sw	v0, 32408(gp)
+ 'VTON_FLIGHT_step_2c58 lh	v0, 31636(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_2cb4
+  nop
+  lh	v0, 32376(gp)
+  nop
+  sh	v0, 32374(gp)
+  lh	v0, 32374(gp)
+  nop
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31634(gp)
+  sh	zero, 32362(gp)
+  sh	zero, 32360(gp)
+  lh	v0, 31634(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_2cb4
+  nop
+  sh	zero, 32368(gp)
+  li	v0,1
+  sh	v0, 32366(gp)
+ 'VTON_FLIGHT_step_2cb4 lh	v0, 31632(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_2ccc
+  nop
+  li	v0,5
+  sw	v0, 32340(gp)
+ 'VTON_FLIGHT_step_2ccc lh	v0, 32434(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_2cf8
+  nop
+  lw	v1, 32624(gp)
+  li	v0,5
+  bne	v1,v0, 'VTON_FLIGHT_step_2cf8
+  nop
+  li	v0,1
+  j	 'VTON_FLIGHT_step_2cfc
+  nop
+ 'VTON_FLIGHT_step_2cf8 move	v0,zero
+ 'VTON_FLIGHT_step_2cfc sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31642(gp)
+  lh	v0, 32320(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_3130
+  nop
+  lw	v1, 31828(gp)
+  lw	v0, 32676(gp)
+  nop
+  addu	v0,v1,v0
+  sw	v0, 31792(gp)
+  lw	v1, 31792(gp)
+  lw	v0, 32672(gp)
+  nop
+  addu	v0,v1,v0
+  sw	v0, 31788(gp)
+  lw	v0, 32628(gp)
+  nop
+  xori	v0,v0,5
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31484(gp)
+  lh	v0, 32318(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_2d9c
+  nop
+  lh	v0, 31484(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_2d8c
+  nop
+  sw	zero, 32628(gp)
+  j	 'VTON_FLIGHT_step_2d9c
+  nop
+ 'VTON_FLIGHT_step_2d8c lw	v0, 32628(gp)
+  nop
+  addiu	v0,v0,1
+  sw	v0, 32628(gp)
+ 'VTON_FLIGHT_step_2d9c lw	v0, 32628(gp)
+  nop
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31618(gp)
+  sh	zero, 32282(gp)
+  sh	zero, 31392(gp)
+  lw	v0, 32628(gp)
+  nop
+  xori	v0,v0,1
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31614(gp)
+  lw	v0, 32628(gp)
+  nop
+  xori	v0,v0,2
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31610(gp)
+  lw	v0, 32628(gp)
+  nop
+  xori	v0,v0,3
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31608(gp)
+  sh	zero, 32240(gp)
+  sh	zero, 31606(gp)
+  lw	v0, 32628(gp)
+  nop
+  xori	v0,v0,4
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31604(gp)
+  sh	zero, 32208(gp)
+  lw	v0, 32628(gp)
+  nop
+  xori	v0,v0,5
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31598(gp)
+  lw	v1, 32628(gp)
+  lw	v0, 32660(gp)
+  nop
+  slt	v0,v0,v1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31582(gp)
+  lw	v1, 32628(gp)
+  lw	v0, 32656(gp)
+  nop
+  slt	v0,v1,v0
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31580(gp)
+  lh	v0, 31580(gp)
+  nop
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31578(gp)
+  lh	v0, 31582(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_2ef4
+  nop
+  lh	v0, 31580(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_2ef4
+  nop
+  li	v0,1
+  j	 'VTON_FLIGHT_step_2ef8
+  nop
+ 'VTON_FLIGHT_step_2ef4 move	v0,zero
+ 'VTON_FLIGHT_step_2ef8 sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31576(gp)
+  lh	v0, 31610(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_2f24
+  nop
+  lh	v0, 31604(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_2f30
+  nop
+ 'VTON_FLIGHT_step_2f24 li	v0,1
+  j	 'VTON_FLIGHT_step_2f34
+  nop
+ 'VTON_FLIGHT_step_2f30 move	v0,zero
+ 'VTON_FLIGHT_step_2f34 sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31570(gp)
+  lw	v0, 32628(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_2f90
+  nop
+  lw	v1, 32628(gp)
+  li	v0,1
+  beq	v1,v0, 'VTON_FLIGHT_step_2f90
+  nop
+  lw	v1, 32628(gp)
+  li	v0,3
+  beq	v1,v0, 'VTON_FLIGHT_step_2f90
+  nop
+  lw	v1, 32628(gp)
+  li	v0,4
+  beq	v1,v0, 'VTON_FLIGHT_step_2f90
+  nop
+  lw	v1, 32628(gp)
+  li	v0,5
+  bne	v1,v0, 'VTON_FLIGHT_step_2f9c
+  nop
+ 'VTON_FLIGHT_step_2f90 li	v0,1
+  j	 'VTON_FLIGHT_step_2fa0
+  nop
+ 'VTON_FLIGHT_step_2f9c move	v0,zero
+ 'VTON_FLIGHT_step_2fa0 sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31482(gp)
+  lh	v0, 31576(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_2fd0
+  nop
+  lw	v0, 32628(gp)
+  nop
+  sw	v0, 31776(gp)
+  j	 'VTON_FLIGHT_step_3000
+  nop
+ 'VTON_FLIGHT_step_2fd0 lh	v0, 31578(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_2ff4
+  nop
+  lw	v0, 32656(gp)
+  nop
+  sw	v0, 31776(gp)
+  j	 'VTON_FLIGHT_step_3000
+  nop
+ 'VTON_FLIGHT_step_2ff4 lw	v0, 32660(gp)
+  nop
+  sw	v0, 31776(gp)
+ 'VTON_FLIGHT_step_3000 lh	v0, 31618(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_30bc
+  nop
+  lh	v0, 32304(gp)
+  nop
+  sh	v0, 32302(gp)
+  lh	v0, 32302(gp)
+  nop
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31616(gp)
+  sh	zero, 32268(gp)
+  sh	zero, 32266(gp)
+  sh	zero, 31478(gp)
+  lh	v0, 31616(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_3060
+  nop
+  li	v0,1
+  sh	v0, 32288(gp)
+  sh	zero, 32286(gp)
+ 'VTON_FLIGHT_step_3060 lh	v0, 32302(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_30bc
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,24(v0)
+  lui	v1,1
+  ori	v1,v1,28
+  addu	v1,s8,v1
+  addiu	v1,v1,8
+  move	a0,v1
+  li	a1,3
+  jr	v0
+  nop
+  lui	v0,1
+  addu	v0,s8,v0
+  lw	v1,48(v0)
+  lui	v0,1
+  addu	v0,s8,v0
+  lw	v0,52(v0)
+  sw	v1, 32300(gp)
+  sw	v0, 32296(gp)
+ 'VTON_FLIGHT_step_30bc lh	v0, 31614(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_3118
+  nop
+  lh	v0, 32264(gp)
+  nop
+  sh	v0, 32262(gp)
+  lh	v0, 32262(gp)
+  nop
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31612(gp)
+  sh	zero, 32250(gp)
+  sh	zero, 32248(gp)
+  lh	v0, 31612(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_3118
+  nop
+  sh	zero, 32256(gp)
+  li	v0,1
+  sh	v0, 32254(gp)
+ 'VTON_FLIGHT_step_3118 lh	v0, 31610(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_3130
+  nop
+  li	v0,15
+  sw	v0, 32232(gp)
+ 'VTON_FLIGHT_step_3130 lh	v0, 32320(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_315c
+  nop
+  lw	v1, 32628(gp)
+  li	v0,5
+  bne	v1,v0, 'VTON_FLIGHT_step_315c
+  nop
+  li	v0,1
+  j	 'VTON_FLIGHT_step_3160
+  nop
+ 'VTON_FLIGHT_step_315c move	v0,zero
+ 'VTON_FLIGHT_step_3160 sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31620(gp)
+  lh	v0, 31662(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_319c
+  nop
+  lh	v0, 31642(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_319c
+  nop
+  lh	v0, 31620(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_31a8
+  nop
+ 'VTON_FLIGHT_step_319c li	v0,1
+  j	 'VTON_FLIGHT_step_31ac
+  nop
+ 'VTON_FLIGHT_step_31a8 move	v0,zero
+ 'VTON_FLIGHT_step_31ac sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31538(gp)
+  sh	zero, 31910(gp)
+  lh	v0, 31538(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_33d8
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	t0,40(v0)
+  lh	v0, 31904(gp)
+  lui	v1,77
+  sw	v0,40(sp)
+  addiu	v0,v1, 16532
+  lw	t1,16(v0)
+  lw	a3,20(v0)
+  lw	a2,24(v0)
+  lw	a1,28(v0)
+  lw	a0,32(v0)
+  lw	v0,36(v0)
+  sw	t1,16(sp)
+  sw	a3,20(sp)
+  sw	a2,24(sp)
+  sw	a1,28(sp)
+  sw	a0,32(sp)
+  sw	v0,36(sp)
+  lw	a0, 16532(v1)
+  addiu	v0,v1, 16532
+  lw	a1,4(v0)
+  addiu	v0,v1, 16532
+  lw	a2,8(v0)
+  addiu	v0,v1, 16532
+  lw	a3,12(v0)
+  jr	t0
+  nop
+  sw	v0, 31908(gp)
+  lh	v0, 31904(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_3364
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,44(v0)
+  lw	v1, 31908(gp)
+  nop
+  move	a0,v1
+  jr	v0
+  nop
+  mtc1	v0,$f0
+  nop
+  cvt.s.w	$f0,$f0
+  mfc1	v0,$f0
+  nop
+  sw	v0, 31900(gp)
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,4(v0)
+  li	a0,1
+  jr	v0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31912(gp)
+  lw	v0, 31908(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_32fc
+  nop
+  lw	v1, 31900(gp)
+  lw	v0, 32744(gp)
+  mtc1	v1,$f2
+  mtc1	v0,$f0
+  nop
+  c.eq.s	$f2,$f0
+  nop
+  bc1f	 'VTON_FLIGHT_step_32fc
+  nop
+  lh	v0, 31912(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_32fc
+  nop
+  li	v0,1
+  j	 'VTON_FLIGHT_step_3300
+  nop
+ 'VTON_FLIGHT_step_32fc move	v0,zero
+ 'VTON_FLIGHT_step_3300 sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31910(gp)
+  lh	v0, 31910(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_3364
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,8(v0)
+  lw	v1, 31908(gp)
+  nop
+  move	a0,v1
+  li	a1,3
+  jr	v0
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,12(v0)
+  nop
+  jr	v0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31914(gp)
+ 'VTON_FLIGHT_step_3364 lh	v0, 31904(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_3380
+  nop
+  lh	v0, 31910(gp)
+  j	 'VTON_FLIGHT_step_3384
+  nop
+ 'VTON_FLIGHT_step_3380 move	v0,zero
+ 'VTON_FLIGHT_step_3384 sh	v0, 31466(gp)
+  lh	v0, 31466(gp)
+  nop
+  sltu	v0,zero,v0
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31446(gp)
+  lh	v0, 31446(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_33d8
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,16(v0)
+  lw	v1, 31908(gp)
+  nop
+  move	a0,v1
+  li	a1,7
+  jr	v0
+  nop
+ 'VTON_FLIGHT_step_33d8 lh	v0, 31700(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_33f4
+  nop
+  lh	v0, 31688(gp)
+  j	 'VTON_FLIGHT_step_33f8
+  nop
+ 'VTON_FLIGHT_step_33f4 move	v0,zero
+ 'VTON_FLIGHT_step_33f8 sh	v0, 31686(gp)
+  lh	v0, 32084(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_3418
+  nop
+  lh	v0, 31916(gp)
+  j	 'VTON_FLIGHT_step_341c
+  nop
+ 'VTON_FLIGHT_step_3418 move	v0,zero
+ 'VTON_FLIGHT_step_341c sh	v0, 31678(gp)
+  lh	v0, 31832(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_3440
+  nop
+  lh	v0, 31678(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_344c
+  nop
+ 'VTON_FLIGHT_step_3440 li	v0,1
+  j	 'VTON_FLIGHT_step_3450
+  nop
+ 'VTON_FLIGHT_step_344c move	v0,zero
+ 'VTON_FLIGHT_step_3450 sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31676(gp)
+  lh	v0, 31698(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_347c
+  nop
+  lh	v0, 31678(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_3488
+  nop
+ 'VTON_FLIGHT_step_347c li	v0,1
+  j	 'VTON_FLIGHT_step_348c
+  nop
+ 'VTON_FLIGHT_step_3488 move	v0,zero
+ 'VTON_FLIGHT_step_348c sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31674(gp)
+  lh	v0, 31696(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_34b8
+  nop
+  lh	v0, 31678(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_34c4
+  nop
+ 'VTON_FLIGHT_step_34b8 li	v0,1
+  j	 'VTON_FLIGHT_step_34c8
+  nop
+ 'VTON_FLIGHT_step_34c4 move	v0,zero
+ 'VTON_FLIGHT_step_34c8 sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31672(gp)
+  lh	v0, 31694(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_34f4
+  nop
+  lh	v0, 31678(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_3500
+  nop
+ 'VTON_FLIGHT_step_34f4 li	v0,1
+  j	 'VTON_FLIGHT_step_3504
+  nop
+ 'VTON_FLIGHT_step_3500 move	v0,zero
+ 'VTON_FLIGHT_step_3504 sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31670(gp)
+  lh	v0, 31692(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_3530
+  nop
+  lh	v0, 31678(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_353c
+  nop
+ 'VTON_FLIGHT_step_3530 li	v0,1
+  j	 'VTON_FLIGHT_step_3540
+  nop
+ 'VTON_FLIGHT_step_353c move	v0,zero
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31668(gp)
+  lh	v0, 31690(gp)
+ 'VTON_FLIGHT_step_3550 nop
+  bnez	v0, 'VTON_FLIGHT_step_356c
+  nop
+  lh	v0, 31678(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_3578
+  nop
+ 'VTON_FLIGHT_step_356c li	v0,1
+  j	 'VTON_FLIGHT_step_357c
+  nop
+ 'VTON_FLIGHT_step_3578 move	v0,zero
+ 'VTON_FLIGHT_step_357c sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31666(gp)
+  lh	v0, 31762(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_35a8
+  nop
+  lh	v0, 31678(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_35b4
+  nop
+ 'VTON_FLIGHT_step_35a8 li	v0,1
+  j	 'VTON_FLIGHT_step_35b8
+  nop
+ 'VTON_FLIGHT_step_35b4 move	v0,zero
+ 'VTON_FLIGHT_step_35b8 sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31664(gp)
+  lh	v0, 31700(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x990c
+  nop
+  lh	v0, 31688(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x990c
+  nop
+  lh	v0, 31680(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x9018
+  nop
+  lh	v0, 32084(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x9018
+  nop
+  lh	v0, 31916(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x9018
+  nop
+  lh	v0, 32592(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_3ab0
+  nop
+  lh	v0, 31654(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_3a8c
+  nop
+  lh	v0, 31652(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_3994
+  nop
+  lw	v0, 31220(gp)
+  nop
+  lw	t0,0(v0)
+  lw	a0, 32612(gp)
+  lui	v1,44
+  addiu	a1,v1, 18660
+  move	v0,zero
+  addiu	a2,sp,16
+  addiu	a3,a1,12
+  j	 'VTON_FLIGHT_step_3688
+  nop
+ 'VTON_FLIGHT_step_3670 addu	a1,a2,v0
+  addu	t1,a3,v0
+  lbu	t1,0(t1)
+  nop
+  sb	t1,0(a1)
+  addiu	v0,v0,1
+ 'VTON_FLIGHT_step_3688 sltiu	a1,v0,128
+  bnez	a1, 'VTON_FLIGHT_step_3670
+  nop
+  lw	a1, 18660(v1)
+  addiu	v0,v1, 18660
+  lw	a2,4(v0)
+  addiu	v0,v1, 18660
+  lw	a3,8(v0)
+  jr	t0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32508(gp)
+  lh	v0, 32508(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_36e8
+  nop
+  lh	v0, 32510(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_36e8
+  nop
+  li	v0,1
+  j	 'VTON_FLIGHT_step_36ec
+  nop
+ 'VTON_FLIGHT_step_36e8 move	v0,zero
+ 'VTON_FLIGHT_step_36ec sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31562(gp)
+  lh	v0, 31562(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_372c
+  nop
+  lui	v0,44
+  addiu	v0,v0, 18660
+  lw	v0,4(v0)
+  nop
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32506(gp)
+ 'VTON_FLIGHT_step_372c lh	v0, 31562(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_3748
+  nop
+  lh	v0, 32506(gp)
+  j	 'VTON_FLIGHT_step_374c
+  nop
+ 'VTON_FLIGHT_step_3748 move	v0,zero
+ 'VTON_FLIGHT_step_374c sh	v0, 31524(gp)
+  lh	v0, 31562(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_377c
+  nop
+  lh	v0, 32506(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_377c
+  nop
+  li	v0,1
+  j	 'VTON_FLIGHT_step_3780
+  nop
+ 'VTON_FLIGHT_step_377c move	v0,zero
+ 'VTON_FLIGHT_step_3780 sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31522(gp)
+  lh	v0, 32512(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_37b8
+  nop
+  lh	v0, 31522(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_37b8
+  nop
+  li	v0,1
+  j	 'VTON_FLIGHT_step_37bc
+  nop
+ 'VTON_FLIGHT_step_37b8 move	v0,zero
+ 'VTON_FLIGHT_step_37bc sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31462(gp)
+  lh	v0, 31462(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_38ec
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,4(v0)
+  li	a0,1
+  jr	v0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32504(gp)
+  lh	v0, 32504(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_38ec
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,8(v0)
+  li	a0,1
+  li	a1,3
+  jr	v0
+  nop
+  lui	v0,44
+  addiu	v0,v0, 18660
+  li	v1,1
+  sh	v1,14(v0)
+  lui	v0,44
+  addiu	v0,v0, 18660
+  lw	v0,8(v0)
+  nop
+  addiu	v1,v0,1
+  lui	v0,44
+  addiu	v0,v0, 18660
+  sw	v1,8(v0)
+  lw	v0, 31220(gp)
+  nop
+  lw	t0,4(v0)
+  lui	v0,44
+  addiu	a0,v0, 18660
+  move	v1,zero
+  addiu	a1,sp,16
+  addiu	a2,a0,16
+  j	 'VTON_FLIGHT_step_3898
+  nop
+ 'VTON_FLIGHT_step_3880 addu	a0,a1,v1
+  addu	a3,a2,v1
+  lbu	a3,0(a3)
+  nop
+  sb	a3,0(a0)
+  addiu	v1,v1,1
+ 'VTON_FLIGHT_step_3898 sltiu	a0,v1,124
+  bnez	a0, 'VTON_FLIGHT_step_3880
+  nop
+  lw	a0, 18660(v0)
+  addiu	v1,v0, 18660
+  lw	a1,4(v1)
+  addiu	v1,v0, 18660
+  lw	a2,8(v1)
+  addiu	v0,v0, 18660
+  lw	a3,12(v0)
+  jr	t0
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,12(v0)
+  nop
+  jr	v0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32502(gp)
+ 'VTON_FLIGHT_step_38ec lh	v0, 31462(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_3908
+  nop
+  lh	v0, 32504(gp)
+  j	 'VTON_FLIGHT_step_390c
+  nop
+ 'VTON_FLIGHT_step_3908 move	v0,zero
+ 'VTON_FLIGHT_step_390c sh	v0, 31434(gp)
+  lh	v0, 31462(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_393c
+  nop
+  lh	v0, 32504(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_393c
+  nop
+  li	v0,1
+  j	 'VTON_FLIGHT_step_3940
+  nop
+ 'VTON_FLIGHT_step_393c move	v0,zero
+ 'VTON_FLIGHT_step_3940 sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31432(gp)
+  lh	v0, 31434(gp)
+  nop
+  sltu	v0,zero,v0
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31378(gp)
+  lh	v0, 31378(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_3994
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,16(v0)
+  li	a0,1
+  li	a1,20
+  jr	v0
+  nop
+ 'VTON_FLIGHT_step_3994 lh	v0, 31652(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_3a10
+  nop
+  lh	v0, 32512(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_39c4
+  nop
+  lh	v0, 31522(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_3a04
+  nop
+ 'VTON_FLIGHT_step_39c4 lh	v0, 32508(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_3a04
+  nop
+  lh	v0, 32510(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_3a04
+  nop
+  lh	v0, 31432(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_3a04
+  nop
+  lh	v0, 31524(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_3a10
+  nop
+ 'VTON_FLIGHT_step_3a04 li	v0,1
+  j	 'VTON_FLIGHT_step_3a14
+  nop
+ 'VTON_FLIGHT_step_3a10 move	v0,zero
+ 'VTON_FLIGHT_step_3a14 sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31376(gp)
+  lh	v0, 32516(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_3a40
+  nop
+  lh	v0, 31376(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_3a4c
+  nop
+ 'VTON_FLIGHT_step_3a40 li	v0,1
+  j	 'VTON_FLIGHT_step_3a50
+  nop
+ 'VTON_FLIGHT_step_3a4c move	v0,zero
+ 'VTON_FLIGHT_step_3a50 sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31374(gp)
+  lh	v0, 31374(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_3a78
+  nop
+  sh	zero, 32514(gp)
+  j	 'VTON_FLIGHT_step_3a80
+  nop
+ 'VTON_FLIGHT_step_3a78 li	v0,1
+  sh	v0, 32514(gp)
+ 'VTON_FLIGHT_step_3a80 lh	v0, 32514(gp)
+  nop
+  sh	v0, 32518(gp)
+ 'VTON_FLIGHT_step_3a8c lh	v0, 31654(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_3aa8
+  nop
+  lh	v0, 31374(gp)
+  j	 'VTON_FLIGHT_step_3aac
+  nop
+ 'VTON_FLIGHT_step_3aa8 move	v0,zero
+ 'VTON_FLIGHT_step_3aac sh	v0, 31372(gp)
+ 'VTON_FLIGHT_step_3ab0 lh	v0, 32434(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_3ccc
+  nop
+  lh	v0, 31626(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_3ccc
+  nop
+  lw	v0, 31220(gp)
+  nop
+  lw	t0,0(v0)
+  lw	a0, 32612(gp)
+  lui	v1,74
+  addiu	a1,v1, 17988
+  move	v0,zero
+  addiu	a2,sp,16
+  addiu	a3,a1,12
+  j	 'VTON_FLIGHT_step_3b14
+  nop
+ 'VTON_FLIGHT_step_3afc addu	a1,a2,v0
+  addu	t1,a3,v0
+  lbu	t1,0(t1)
+  nop
+  sb	t1,0(a1)
+  addiu	v0,v0,1
+ 'VTON_FLIGHT_step_3b14 sltiu	a1,v0,128
+  bnez	a1, 'VTON_FLIGHT_step_3afc
+  nop
+  lw	a1, 17988(v1)
+  addiu	v0,v1, 17988
+  lw	a2,4(v0)
+  addiu	v0,v1, 17988
+  lw	a3,8(v0)
+  jr	t0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32344(gp)
+  lh	v0, 32344(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_3ccc
+  nop
+  lui	v0,74
+  lw	v1, 18128(v0)
+  lui	v0,74
+  lw	v0, 17988(v0)
+  move	a0,v1
+  move	a1,v0
+  jal	 'strcpy
+  nop
+  lui	v0,74
+  addiu	v0,v0, 17988
+  lw	v1,8(v0)
+  lui	v0,74
+  addiu	v0,v0, 18128
+  sw	v1,8(v0)
+  sw	zero, 31300(gp)
+  j	 'VTON_FLIGHT_step_3be4
+  nop
+ 'VTON_FLIGHT_step_3b9c lw	a0, 31300(gp)
+  lw	v1, 31300(gp)
+  lui	v0,74
+  addiu	v1,v1,4
+  sll	v1,v1,1
+  addiu	v0,v0, 17988
+  addu	v0,v1,v0
+  lh	v1,4(v0)
+  lui	v0,74
+  addiu	a0,a0,4
+  sll	a0,a0,1
+  addiu	v0,v0, 18128
+  addu	v0,a0,v0
+  sh	v1,4(v0)
+  lw	v0, 31300(gp)
+  nop
+  addiu	v0,v0,1
+  sw	v0, 31300(gp)
+ 'VTON_FLIGHT_step_3be4 lw	v0, 31300(gp)
+  nop
+  slti	v0,v0,63
+  bnez	v0, 'VTON_FLIGHT_step_3b9c
+  nop
+  lui	v0,74
+  addiu	v0,v0, 17988
+  lw	v0,4(v0)
+  nop
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31624(gp)
+  lh	v0, 31624(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_3c44
+  nop
+  lui	v0,74
+  addiu	v0,v0, 18128
+  li	v1,1
+  sw	v1,4(v0)
+  j	 'VTON_FLIGHT_step_3c5c
+  nop
+ 'VTON_FLIGHT_step_3c44 lui	v0,74
+  addiu	v0,v0, 17988
+  lw	v1,4(v0)
+  lui	v0,74
+  addiu	v0,v0, 18128
+  sw	v1,4(v0)
+ 'VTON_FLIGHT_step_3c5c lw	v0, 31220(gp)
+  nop
+  lw	t0,4(v0)
+  lui	v0,74
+  addiu	a0,v0, 18128
+  move	v1,zero
+  addiu	a1,sp,16
+  addiu	a2,a0,16
+  j	 'VTON_FLIGHT_step_3c9c
+  nop
+ 'VTON_FLIGHT_step_3c84 addu	a0,a1,v1
+  addu	a3,a2,v1
+  lbu	a3,0(a3)
+  nop
+  sb	a3,0(a0)
+  addiu	v1,v1,1
+ 'VTON_FLIGHT_step_3c9c sltiu	a0,v1,124
+  bnez	a0, 'VTON_FLIGHT_step_3c84
+  nop
+  lw	a0, 18128(v0)
+  addiu	v1,v0, 18128
+  lw	a1,4(v1)
+  addiu	v1,v0, 18128
+  lw	a2,8(v1)
+  addiu	v0,v0, 18128
+  lw	a3,12(v0)
+  jr	t0
+  nop
+ 'VTON_FLIGHT_step_3ccc lh	v0, 32320(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_407c
+  nop
+  lh	v0, 31598(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_407c
+  nop
+  lw	v0, 31220(gp)
+  nop
+  lw	t0,0(v0)
+  lw	a0, 32612(gp)
+  lui	v1,77
+  addiu	a1,v1, 16916
+  move	v0,zero
+  addiu	a2,sp,16
+  addiu	a3,a1,12
+  j	 'VTON_FLIGHT_step_3d30
+  nop
+ 'VTON_FLIGHT_step_3d18 addu	a1,a2,v0
+  addu	t1,a3,v0
+  lbu	t1,0(t1)
+  nop
+  sb	t1,0(a1)
+  addiu	v0,v0,1
+ 'VTON_FLIGHT_step_3d30 sltiu	a1,v0,128
+  bnez	a1, 'VTON_FLIGHT_step_3d18
+  nop
+  lw	a1, 16916(v1)
+  addiu	v0,v1, 16916
+  lw	a2,4(v0)
+  addiu	v0,v1, 16916
+  lw	a3,8(v0)
+  jr	t0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32202(gp)
+  lh	v0, 32202(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_407c
+  nop
+  lui	v0,77
+  addiu	v0,v0, 16916
+  lw	v0,8(v0)
+  nop
+  slt	v0,zero,v0
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32206(gp)
+  lui	v0,77
+  lw	v1, 17184(v0)
+  lui	v0,77
+  lw	v0, 16916(v0)
+  move	a0,v1
+  move	a1,v0
+  jal	 'strcpy
+  nop
+  lui	v0,77
+  addiu	v0,v0, 17184
+  sw	zero,8(v0)
+  sw	zero, 31300(gp)
+  j	 'VTON_FLIGHT_step_3e18
+  nop
+ 'VTON_FLIGHT_step_3dd0 lw	a0, 31300(gp)
+  lw	v1, 31300(gp)
+  lui	v0,77
+  addiu	v1,v1,4
+  sll	v1,v1,1
+  addiu	v0,v0, 16916
+  addu	v0,v1,v0
+  lh	v1,4(v0)
+  lui	v0,77
+  addiu	a0,a0,4
+  sll	a0,a0,1
+  addiu	v0,v0, 17184
+  addu	v0,a0,v0
+  sh	v1,4(v0)
+  lw	v0, 31300(gp)
+  nop
+  addiu	v0,v0,1
+  sw	v0, 31300(gp)
+ 'VTON_FLIGHT_step_3e18 lw	v0, 31300(gp)
+  nop
+  slti	v0,v0,63
+  bnez	v0, 'VTON_FLIGHT_step_3dd0
+  nop
+  lui	v0,77
+  addiu	v0,v0, 16916
+  lw	v0,4(v0)
+  nop
+  xori	v0,v0,1
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31596(gp)
+  lh	v0, 31596(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_3e78
+  nop
+  lui	v0,77
+  addiu	v0,v0, 17184
+  sw	zero,4(v0)
+  j	 'VTON_FLIGHT_step_3e90
+  nop
+ 'VTON_FLIGHT_step_3e78 lui	v0,77
+  addiu	v0,v0, 16916
+  lw	v1,4(v0)
+  lui	v0,77
+  addiu	v0,v0, 17184
+  sw	v1,4(v0)
+ 'VTON_FLIGHT_step_3e90 lw	v0, 31220(gp)
+  nop
+  lw	t0,4(v0)
+  lui	v0,77
+  addiu	a0,v0, 17184
+  move	v1,zero
+  addiu	a1,sp,16
+  addiu	a2,a0,16
+  j	 'VTON_FLIGHT_step_3ed0
+  nop
+ 'VTON_FLIGHT_step_3eb8 addu	a0,a1,v1
+  addu	a3,a2,v1
+  lbu	a3,0(a3)
+  nop
+  sb	a3,0(a0)
+  addiu	v1,v1,1
+ 'VTON_FLIGHT_step_3ed0 sltiu	a0,v1,124
+  bnez	a0, 'VTON_FLIGHT_step_3eb8
+  nop
+  lw	a0, 17184(v0)
+  addiu	v1,v0, 17184
+  lw	a1,4(v1)
+  addiu	v1,v0, 17184
+  lw	a2,8(v1)
+  addiu	v0,v0, 17184
+  lw	a3,12(v0)
+  jr	t0
+  nop
+  lh	v0, 32206(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_407c
+  nop
+  lui	v0,1
+  addu	v0,s8,v0
+  sw	zero,40(v0)
+  lui	v0,1
+  addu	v0,s8,v0
+  sw	zero,40(v0)
+  j	 'VTON_FLIGHT_step_3fc4
+  nop
+ 'VTON_FLIGHT_step_3f30 lui	v0,77
+  lui	v1,1
+  addu	v1,s8,v1
+  lw	v1,40(v1)
+  nop
+  addiu	v1,v1,4
+  sll	v1,v1,1
+  addiu	v0,v0, 17184
+  addu	v0,v1,v0
+  lh	v1,4(v0)
+  lui	v0,77
+  lui	a0,1
+  addu	a0,s8,a0
+  lw	a0,40(a0)
+  nop
+  sll	a0,a0,1
+  addiu	v0,v0, 17044
+  addu	v0,a0,v0
+  sh	v1,0(v0)
+  lui	v0,77
+  lui	v1,1
+  addu	v1,s8,v1
+  lw	v1,40(v1)
+  nop
+  addiu	v1,v1,4
+  sll	v1,v1,1
+  addiu	v0,v0, 17184
+  addu	v0,v1,v0
+  sh	zero,4(v0)
+  lui	v0,1
+  addu	v0,s8,v0
+  lw	v0,40(v0)
+  nop
+  addiu	v1,v0,1
+  lui	v0,1
+  addu	v0,s8,v0
+  sw	v1,40(v0)
+ 'VTON_FLIGHT_step_3fc4 lui	v0,1
+  addu	v0,s8,v0
+  lw	v0,40(v0)
+  nop
+  slti	v0,v0,63
+  bnez	v0, 'VTON_FLIGHT_step_3f30
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,28(v0)
+  lui	v1,77
+  addiu	v1,v1, 17044
+  move	a0,v1
+  jr	v0
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,36(v0)
+  lui	v1,77
+  addiu	v1,v1, 17044
+  move	a0,v1
+  li	a1,1
+  jr	v0
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,4(v0)
+  li	a0,1
+  jr	v0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32200(gp)
+  lh	v0, 32200(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_407c
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,12(v0)
+  nop
+  jr	v0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32204(gp)
+ 'VTON_FLIGHT_step_407c lh	v0, 32434(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_40b4
+  nop
+  lh	v0, 31632(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_40b4
+  nop
+  lw	v0, 32700(gp)
+  nop
+  sw	v0, 32424(gp)
+  lw	v0, 32424(gp)
+  nop
+  sw	v0, 32336(gp)
+ 'VTON_FLIGHT_step_40b4 lh	v0, 32320(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_40ec
+  nop
+  lh	v0, 31610(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_40ec
+  nop
+  lw	v0, 32700(gp)
+  nop
+  sw	v0, 32312(gp)
+  lw	v0, 32312(gp)
+  nop
+  sw	v0, 32228(gp)
+ 'VTON_FLIGHT_step_40ec lh	v0, 32592(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_457c
+  nop
+  lh	v0, 31650(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_4460
+  nop
+  lw	v0, 31208(gp)
+  nop
+  lw	t0,12(v0)
+  lw	a0, 32596(gp)
+  lui	v1,44
+  addiu	a1,v1, 18520
+  move	v0,zero
+  addiu	a2,sp,16
+  addiu	a3,a1,12
+  j	 'VTON_FLIGHT_step_6550
+  nop
+ 'VTON_FLIGHT_step_6538 addu	a1,a2,v0
+  addu	t1,a3,v0
+  lbu	t1,0(t1)
+  nop
+  sb	t1,0(a1)
+  addiu	v0,v0,1
+ 'VTON_FLIGHT_step_6550 sltiu	a1,v0,140
+  bnez	a1, 'VTON_FLIGHT_step_6538
+  nop
+  lw	a1, 18520(v1)
+  addiu	v0,v1, 18520
+  lw	a2,4(v0)
+  addiu	v0,v1, 18520
+  lw	a3,8(v0)
+  jr	t0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32498(gp)
+  lh	v0, 32498(gp)
+  nop
+  sltu	v0,zero,v0
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31560(gp)
+  lh	v0, 31560(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_4230
+  nop
+  lui	v0,44
+  addiu	v0,v0, 18520
+  lh	v0,16(v0)
+  nop
+  sh	v0, 32494(gp)
+  lh	v0, 32494(gp)
+  nop
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31518(gp)
+  lh	v0, 31518(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_4230
+  nop
+  lui	v0,44
+  addiu	v0,v0, 18520
+  lw	v0,4(v0)
+  nop
+  sw	v0, 32492(gp)
+  lui	v0,44
+  addiu	v0,v0, 18520
+  lw	v0,8(v0)
+  nop
+  sw	v0, 32488(gp)
+  lw	v0, 32488(gp)
+  nop
+  sw	v0, 32576(gp)
+  lw	v0, 32492(gp)
+  nop
+  sw	v0, 32572(gp)
+ 'VTON_FLIGHT_step_4230 lh	v0, 31560(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_424c
+  nop
+  lh	v0, 32494(gp)
+  j	 'VTON_FLIGHT_step_4250
+  nop
+ 'VTON_FLIGHT_step_424c move	v0,zero
+ 'VTON_FLIGHT_step_4250 sh	v0, 31520(gp)
+  lh	v0, 31560(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_4270
+  nop
+  lh	v0, 31518(gp)
+  j	 'VTON_FLIGHT_step_4274
+  nop
+ 'VTON_FLIGHT_step_4270 move	v0,zero
+ 'VTON_FLIGHT_step_4274 sh	v0, 31516(gp)
+  lh	v0, 31520(gp)
+  nop
+  sltu	v0,zero,v0
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31458(gp)
+  lh	v0, 31458(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_43b8
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,4(v0)
+  li	a0,1
+  jr	v0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32496(gp)
+  lh	v0, 32496(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_43b8
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,8(v0)
+  li	a0,1
+  li	a1,3
+  jr	v0
+  nop
+  lui	v0,44
+  addiu	v0,v0, 18520
+  li	v1,1
+  sh	v1,26(v0)
+  lui	v0,44
+  addiu	v0,v0, 18520
+  lw	v0,20(v0)
+  nop
+  addiu	v1,v0,1
+  lui	v0,44
+  addiu	v0,v0, 18520
+  sw	v1,20(v0)
+  lw	v0, 31208(gp)
+  nop
+  lw	t0,16(v0)
+  lui	v0,44
+  addiu	a0,v0, 18520
+  move	v1,zero
+  addiu	a1,sp,16
+  addiu	a2,a0,16
+  j	 'VTON_FLIGHT_step_4364
+  nop
+ 'VTON_FLIGHT_step_434c addu	a0,a1,v1
+  addu	a3,a2,v1
+  lbu	a3,0(a3)
+  nop
+  sb	a3,0(a0)
+  addiu	v1,v1,1
+ 'VTON_FLIGHT_step_4364 sltiu	a0,v1,136
+  bnez	a0, 'VTON_FLIGHT_step_434c
+  nop
+  lw	a0, 18520(v0)
+  addiu	v1,v0, 18520
+  lw	a1,4(v1)
+  addiu	v1,v0, 18520
+  lw	a2,8(v1)
+  addiu	v0,v0, 18520
+  lw	a3,12(v0)
+  jr	t0
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,12(v0)
+  nop
+  jr	v0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32500(gp)
+ 'VTON_FLIGHT_step_43b8 lh	v0, 31458(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_43d4
+  nop
+  lh	v0, 32496(gp)
+  j	 'VTON_FLIGHT_step_43d8
+  nop
+ 'VTON_FLIGHT_step_43d4 move	v0,zero
+ 'VTON_FLIGHT_step_43d8 sh	v0, 31430(gp)
+  lh	v0, 31458(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_4408
+  nop
+  lh	v0, 32496(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_4408
+  nop
+  li	v0,1
+  j	 'VTON_FLIGHT_step_440c
+  nop
+ 'VTON_FLIGHT_step_4408 move	v0,zero
+ 'VTON_FLIGHT_step_440c sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31428(gp)
+  lh	v0, 31430(gp)
+  nop
+  sltu	v0,zero,v0
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31370(gp)
+  lh	v0, 31370(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_4460
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,16(v0)
+  li	a0,1
+  li	a1,2
+  jr	v0
+  nop
+ 'VTON_FLIGHT_step_4460 lh	v0, 31560(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_447c
+  nop
+  lh	v0, 31518(gp)
+  j	 'VTON_FLIGHT_step_4480
+  nop
+ 'VTON_FLIGHT_step_447c move	v0,zero
+ 'VTON_FLIGHT_step_4480 sh	v0, 31514(gp)
+  lh	v0, 31644(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_44a4
+  nop
+  lh	v0, 31514(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_44b0
+  nop
+ 'VTON_FLIGHT_step_44a4 li	v0,1
+  j	 'VTON_FLIGHT_step_44b4
+  nop
+ 'VTON_FLIGHT_step_44b0 move	v0,zero
+ 'VTON_FLIGHT_step_44b4 sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31460(gp)
+  lh	v0, 31650(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_450c
+  nop
+  lh	v0, 32498(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_4500
+  nop
+  lh	v0, 31428(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_4500
+  nop
+  lh	v0, 31516(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_450c
+  nop
+ 'VTON_FLIGHT_step_4500 li	v0,1
+  j	 'VTON_FLIGHT_step_4510
+  nop
+ 'VTON_FLIGHT_step_450c move	v0,zero
+ 'VTON_FLIGHT_step_4510 sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31368(gp)
+  lh	v0, 31644(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_457c
+  nop
+  lw	v1, 32564(gp)
+  lw	v0, 32576(gp)
+  nop
+  addu	v0,v1,v0
+  sw	v0, 32580(gp)
+  lw	v1, 32568(gp)
+  lw	v0, 32572(gp)
+  mtc1	v1,$f2
+  mtc1	v0,$f0
+  nop
+  add	$f2,$f2,$f0
+  mfc1	v0,$f2
+  nop
+  sw	v0, 32584(gp)
+  lw	v0, 32580(gp)
+  nop
+  sw	v0, 32484(gp)
+  lw	v0, 32584(gp)
+  nop
+  sw	v0, 32480(gp)
+ 'VTON_FLIGHT_step_457c lh	v0, 32320(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_49b0
+  nop
+  lh	v0, 31604(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_49b0
+  nop
+  lw	v0, 31208(gp)
+  nop
+  lw	t0,12(v0)
+  lw	a0, 32596(gp)
+  lui	v1,77
+  addiu	a1,v1, 17336
+  move	v0,zero
+  addiu	a2,sp,16
+  addiu	a3,a1,12
+  j	 'VTON_FLIGHT_step_45e0
+  nop
+ 'VTON_FLIGHT_step_45c8 addu	a1,a2,v0
+  addu	t1,a3,v0
+  lbu	t1,0(t1)
+  nop
+  sb	t1,0(a1)
+  addiu	v0,v0,1
+ 'VTON_FLIGHT_step_45e0 sltiu	a1,v0,140
+  bnez	a1, 'VTON_FLIGHT_step_45c8
+  nop
+  lw	a1, 17336(v1)
+  addiu	v0,v1, 17336
+  lw	a2,4(v0)
+  addiu	v0,v1, 17336
+  lw	a3,8(v0)
+  jr	t0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32212(gp)
+  lh	v0, 32212(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_49b0
+  nop
+  lui	v0,77
+  addiu	v0,v0, 17336
+  lw	v1,12(v0)
+  lw	v0, 32232(gp)
+  nop
+  slt	v0,v1,v0
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32208(gp)
+  lh	v0, 32208(gp)
+  nop
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31602(gp)
+  lh	v0, 31602(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_49b0
+  nop
+  lui	v0,77
+  addiu	v0,v0, 17336
+  lw	v0,20(v0)
+  nop
+  slt	v0,zero,v0
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32224(gp)
+  lw	v0, 32228(gp)
+  nop
+  sw	v0, 32220(gp)
+  lw	v0, 32232(gp)
+  nop
+  sw	v0, 32216(gp)
+  lui	v0,77
+  lw	v1, 17616(v0)
+  lui	v0,77
+  lw	v0, 17336(v0)
+  move	a0,v1
+  move	a1,v0
+  jal	 'strcpy
+  nop
+  lw	v1, 32220(gp)
+  lui	v0,77
+  addiu	v0,v0, 17616
+  sw	v1,4(v0)
+  lw	v1, 32216(gp)
+  lui	v0,77
+  addiu	v0,v0, 17616
+  sw	v1,8(v0)
+  lui	v0,77
+  addiu	v0,v0, 17336
+  lw	v1,12(v0)
+  lui	v0,77
+  addiu	v0,v0, 17616
+  sw	v1,12(v0)
+  lui	v0,77
+  addiu	v0,v0, 17616
+  sw	zero,20(v0)
+  sw	zero, 31300(gp)
+  j	 'VTON_FLIGHT_step_476c
+  nop
+ 'VTON_FLIGHT_step_4724 lw	a0, 31300(gp)
+  lw	v1, 31300(gp)
+  lui	v0,77
+  addiu	v1,v1,12
+  sll	v1,v1,1
+  addiu	v0,v0, 17336
+  addu	v0,v1,v0
+  lh	v1,0(v0)
+  lui	v0,77
+  addiu	a0,a0,12
+  sll	a0,a0,1
+  addiu	v0,v0, 17616
+  addu	v0,a0,v0
+  sh	v1,0(v0)
+  lw	v0, 31300(gp)
+  nop
+  addiu	v0,v0,1
+  sw	v0, 31300(gp)
+ 'VTON_FLIGHT_step_476c lw	v0, 31300(gp)
+  nop
+  slti	v0,v0,63
+  bnez	v0, 'VTON_FLIGHT_step_4724
+  nop
+  lui	v0,77
+  addiu	v0,v0, 17336
+  lh	v0,16(v0)
+  nop
+  sh	v0, 31600(gp)
+  lh	v0, 31600(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_47b8
+  nop
+  lui	v0,77
+  addiu	v0,v0, 17616
+  sh	zero,16(v0)
+  j	 'VTON_FLIGHT_step_47c4
+  nop
+ 'VTON_FLIGHT_step_47b8 lui	v0,77
+  addiu	v0,v0, 17616
+  sh	zero,16(v0)
+ 'VTON_FLIGHT_step_47c4 lw	v0, 31208(gp)
+  nop
+  lw	t0,16(v0)
+  lui	v0,77
+  addiu	a0,v0, 17616
+  move	v1,zero
+  addiu	a1,sp,16
+  addiu	a2,a0,16
+  j	 'VTON_FLIGHT_step_4804
+  nop
+ 'VTON_FLIGHT_step_47ec addu	a0,a1,v1
+  addu	a3,a2,v1
+  lbu	a3,0(a3)
+  nop
+  sb	a3,0(a0)
+  addiu	v1,v1,1
+ 'VTON_FLIGHT_step_4804 sltiu	a0,v1,136
+  bnez	a0, 'VTON_FLIGHT_step_47ec
+  nop
+  lw	a0, 17616(v0)
+  addiu	v1,v0, 17616
+  lw	a1,4(v1)
+  addiu	v1,v0, 17616
+  lw	a2,8(v1)
+  addiu	v0,v0, 17616
+  lw	a3,12(v0)
+  jr	t0
+  nop
+  lh	v0, 32224(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_49b0
+  nop
+  lui	v0,1
+  addu	v0,s8,v0
+  sw	zero,44(v0)
+  lui	v0,1
+  addu	v0,s8,v0
+  sw	zero,44(v0)
+  j	 'VTON_FLIGHT_step_48f8
+  nop
+ 'VTON_FLIGHT_step_4864 lui	v0,77
+  lui	v1,1
+  addu	v1,s8,v1
+  lw	v1,44(v1)
+  nop
+  addiu	v1,v1,12
+  sll	v1,v1,1
+  addiu	v0,v0, 17616
+  addu	v0,v1,v0
+  lh	v1,0(v0)
+  lui	v0,77
+  lui	a0,1
+  addu	a0,s8,a0
+  lw	a0,44(a0)
+  nop
+  sll	a0,a0,1
+  addiu	v0,v0, 17464
+  addu	v0,a0,v0
+  sh	v1,0(v0)
+  lui	v0,77
+  lui	v1,1
+  addu	v1,s8,v1
+  lw	v1,44(v1)
+  nop
+  addiu	v1,v1,12
+  sll	v1,v1,1
+  addiu	v0,v0, 17616
+  addu	v0,v1,v0
+  sh	zero,0(v0)
+  lui	v0,1
+  addu	v0,s8,v0
+  lw	v0,44(v0)
+  nop
+  addiu	v1,v0,1
+  lui	v0,1
+  addu	v0,s8,v0
+  sw	v1,44(v0)
+ 'VTON_FLIGHT_step_48f8 lui	v0,1
+  addu	v0,s8,v0
+  lw	v0,44(v0)
+  nop
+  slti	v0,v0,63
+  bnez	v0, 'VTON_FLIGHT_step_4864
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,28(v0)
+  lui	v1,77
+  addiu	v1,v1, 17464
+  move	a0,v1
+  jr	v0
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,36(v0)
+  lui	v1,77
+  addiu	v1,v1, 17464
+  move	a0,v1
+  li	a1,1
+  jr	v0
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,4(v0)
+  li	a0,1
+  jr	v0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32210(gp)
+  lh	v0, 32210(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_49b0
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,12(v0)
+  nop
+  jr	v0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32222(gp)
+ 'VTON_FLIGHT_step_49b0 lh	v0, 32592(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_55fc
+  nop
+  lh	v0, 31658(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_55d8
+  nop
+  lh	v0, 31656(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_54f0
+  nop
+  lw	v0, 31216(gp)
+  nop
+  lw	t0,16(v0)
+  lw	a0, 32604(gp)
+  lui	v1,42
+  addiu	a1,v1, 18696
+  move	v0,zero
+  addiu	a2,sp,16
+  addiu	a3,a1,12
+  j	 'VTON_FLIGHT_step_7424
+  nop
+ 'VTON_FLIGHT_step_740c addu	a1,a2,v0
+  addu	t1,a3,v0
+  lbu	t1,0(t1)
+  nop
+  sb	t1,0(a1)
+  addiu	v0,v0,1
+ 'VTON_FLIGHT_step_7424 lui	a1,1
+  ori	a1,a1,18
+  sltu	a1,v0,a1
+  bnez	a1, 'VTON_FLIGHT_step_740c
+  nop
+  lw	a1, 18696(v1)
+  addiu	v0,v1, 18696
+  lw	a2,4(v0)
+  addiu	v0,v1, 18696
+  lw	a3,8(v0)
+  jr	t0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32552(gp)
+  lh	v0, 32552(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_748c
+  nop
+  lh	v0, 32550(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_748c
+  nop
+  li	v0,1
+  j	 'VTON_FLIGHT_step_7490
+  nop
+ 'VTON_FLIGHT_step_748c move	v0,zero
+ 'VTON_FLIGHT_step_7490 sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31564(gp)
+  lh	v0, 32552(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_74c0
+  nop
+  lw	v0, 32696(gp)
+  nop
+  sw	v0, 32544(gp)
+  li	v0,2
+  sw	v0, 32540(gp)
+ 'VTON_FLIGHT_step_74c0 lh	v0, 31564(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_5194
+  nop
+  lui	v0,42
+  addiu	v0,v0, 18696
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v1,4(v0)
+  lui	v0,42
+  addiu	v0,v0, 18696
+  lui	a0,1
+  addu	v0,a0,v0
+  lw	v0,8(v0)
+  nop
+  xor	v0,v1,v0
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32532(gp)
+  lh	v0, 32532(gp)
+  nop
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31530(gp)
+  lh	v0, 31530(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_5194
+  nop
+  lui	v0,42
+  addiu	v0,v0, 18696
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v0,12(v0)
+  nop
+  sw	v0, 32524(gp)
+  lw	v0, 32524(gp)
+  nop
+  slti	v0,v0,2
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32528(gp)
+  lh	v0, 32528(gp)
+  nop
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31526(gp)
+  lh	v0, 31526(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_5194
+  nop
+  lui	v0,42
+  addiu	v0,v0, 18696
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v0,20(v0)
+  nop
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32546(gp)
+  lh	v0, 32546(gp)
+  nop
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31442(gp)
+  lh	v0, 32546(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_5040
+  nop
+  lui	v0,65
+  lw	v1, 18732(v0)
+  lui	v0,42
+  lw	v0, 18696(v0)
+  move	a0,v1
+  move	a1,v0
+  jal	 'strcpy
+  nop
+  lui	v0,42
+  addiu	v0,v0, 18696
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v1,8(v0)
+  lui	v0,65
+  addiu	v0,v0, 18732
+  lui	a0,1
+  addu	v0,a0,v0
+  sw	v1,8(v0)
+  lui	v0,42
+  addiu	v0,v0, 18696
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v1,12(v0)
+  lui	v0,65
+  addiu	v0,v0, 18732
+  lui	a0,1
+  addu	v0,a0,v0
+  sw	v1,12(v0)
+  lui	v0,42
+  addiu	v0,v0, 18696
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v1,16(v0)
+  lui	v0,65
+  addiu	v0,v0, 18732
+  lui	a0,1
+  addu	v0,a0,v0
+  sw	v1,16(v0)
+  lui	v0,42
+  addiu	v0,v0, 18696
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v1,20(v0)
+  lui	v0,65
+  addiu	v0,v0, 18732
+  lui	a0,1
+  addu	v0,a0,v0
+  sw	v1,20(v0)
+  lui	v0,42
+  addiu	v0,v0, 18696
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v1,24(v0)
+  lui	v0,65
+  addiu	v0,v0, 18732
+  lui	a0,1
+  addu	v0,a0,v0
+  sw	v1,24(v0)
+  lui	v0,42
+  addiu	v0,v0, 18696
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v1,28(v0)
+  lui	v0,65
+  addiu	v0,v0, 18732
+  lui	a0,1
+  addu	v0,a0,v0
+  sw	v1,28(v0)
+  lui	v0,42
+  addiu	v0,v0, 18696
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v1,32(v0)
+  lui	v0,65
+  addiu	v0,v0, 18732
+  lui	a0,1
+  addu	v0,a0,v0
+  sw	v1,32(v0)
+  lui	v0,42
+  addiu	v0,v0, 18696
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v1,4(v0)
+  lui	v0,42
+  addiu	v0,v0, 18696
+  lui	a0,1
+  addu	v0,a0,v0
+  lw	v0,8(v0)
+  nop
+  slt	v0,v1,v0
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31438(gp)
+  lh	v0, 31438(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_77bc
+  nop
+  lui	v0,42
+  addiu	v0,v0, 18696
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v0,4(v0)
+  nop
+  addiu	v1,v0,1
+  lui	v0,65
+  addiu	v0,v0, 18732
+  lui	a0,1
+  addu	v0,a0,v0
+  sw	v1,4(v0)
+  j	 'VTON_FLIGHT_step_77e4
+  nop
+ 'VTON_FLIGHT_step_77bc lui	v0,42
+  addiu	v0,v0, 18696
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v1,4(v0)
+  lui	v0,65
+  addiu	v0,v0, 18732
+  lui	a0,1
+  addu	v0,a0,v0
+  sw	v1,4(v0)
+ 'VTON_FLIGHT_step_77e4 lh	v0, 31438(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_4e90
+  nop
+  sw	zero, 32652(gp)
+  j	 'VTON_FLIGHT_step_4e48
+  nop
+ 'VTON_FLIGHT_step_4e00 lw	v1, 32652(gp)
+  lw	a0, 32652(gp)
+  lui	v0,43
+  sll	v1,v1,3
+  addiu	v0,v0, 18660
+  addu	v0,v1,v0
+  lui	v1,42
+  sll	a0,a0,3
+  addiu	v1,v1, 18696
+  addu	v1,a0,v1
+  lw	a0,4(v1)
+  lw	v1,8(v1)
+  sw	a0,0(v0)
+  sw	v1,4(v0)
+  lw	v0, 32652(gp)
+  nop
+  addiu	v0,v0,1
+  sw	v0, 32652(gp)
+ 'VTON_FLIGHT_step_4e48 lw	v0, 32652(gp)
+  nop
+  slti	v0,v0,8192
+  bnez	v0, 'VTON_FLIGHT_step_4e00
+  nop
+  lui	v0,42
+  addiu	v0,v0, 18696
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v1,4(v0)
+  lui	v0,43
+  sll	v1,v1,3
+  addiu	v0,v0, 18660
+  addu	v0,v1,v0
+  lw	a0, 32544(gp)
+  lw	v1, 32540(gp)
+  sw	a0,0(v0)
+  sw	v1,4(v0)
+ 'VTON_FLIGHT_step_4e90 lh	v0, 31438(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_4f38
+  nop
+  sw	zero, 31300(gp)
+  j	 'VTON_FLIGHT_step_4f1c
+  nop
+ 'VTON_FLIGHT_step_4eac lw	v0, 31300(gp)
+  lw	a0, 31300(gp)
+  lui	v1,43
+  sll	a0,a0,3
+  addiu	v1,v1, 18660
+  addu	v1,a0,v1
+  lw	v1,0(v1)
+  lui	a0,65
+  addiu	a0,a0, 18732
+  sll	v0,v0,3
+  addu	v0,a0,v0
+  sw	v1,4(v0)
+  lw	a1, 31300(gp)
+  lw	v0, 31300(gp)
+  lui	v1,43
+  addiu	v1,v1, 18660
+  sll	v0,v0,3
+  addu	v0,v1,v0
+  lw	v1,4(v0)
+  lui	v0,65
+  addiu	a0,v0, 18732
+  sll	v0,a1,3
+  addu	v0,a0,v0
+  sw	v1,8(v0)
+  lw	v0, 31300(gp)
+  nop
+  addiu	v0,v0,1
+  sw	v0, 31300(gp)
+ 'VTON_FLIGHT_step_4f1c lw	v0, 31300(gp)
+  nop
+  slti	v0,v0,8192
+  bnez	v0, 'VTON_FLIGHT_step_4eac
+  nop
+  j	 'VTON_FLIGHT_step_4fc8
+  nop
+ 'VTON_FLIGHT_step_4f38 sw	zero, 31300(gp)
+  j	 'VTON_FLIGHT_step_4fb4
+  nop
+ 'VTON_FLIGHT_step_4f44 lw	a1, 31300(gp)
+  lw	v0, 31300(gp)
+  lui	v1,42
+  addiu	v1,v1, 18696
+  sll	v0,v0,3
+  addu	v0,v1,v0
+  lw	v1,4(v0)
+  lui	v0,65
+  addiu	a0,v0, 18732
+  sll	v0,a1,3
+  addu	v0,a0,v0
+  sw	v1,4(v0)
+  lw	a1, 31300(gp)
+  lw	v0, 31300(gp)
+  lui	v1,42
+  addiu	v1,v1, 18696
+  sll	v0,v0,3
+  addu	v0,v1,v0
+  lw	v1,8(v0)
+  lui	v0,65
+  addiu	a0,v0, 18732
+  sll	v0,a1,3
+  addu	v0,a0,v0
+  sw	v1,8(v0)
+  lw	v0, 31300(gp)
+  nop
+  addiu	v0,v0,1
+  sw	v0, 31300(gp)
+ 'VTON_FLIGHT_step_4fb4 lw	v0, 31300(gp)
+  nop
+  slti	v0,v0,8192
+  bnez	v0, 'VTON_FLIGHT_step_4f44
+  nop
+ 'VTON_FLIGHT_step_4fc8 lw	v0, 31216(gp)
+  nop
+  lw	t0,12(v0)
+  lui	v0,65
+  addiu	a0,v0, 18732
+  move	v1,zero
+  addiu	a1,sp,16
+  addiu	a2,a0,16
+  j	 'VTON_FLIGHT_step_5008
+  nop
+ 'VTON_FLIGHT_step_4ff0 addu	a0,a1,v1
+  addu	a3,a2,v1
+  lbu	a3,0(a3)
+  nop
+  sb	a3,0(a0)
+  addiu	v1,v1,1
+ 'VTON_FLIGHT_step_5008 lui	a0,1
+  ori	a0,a0,14
+  sltu	a0,v1,a0
+  bnez	a0, 'VTON_FLIGHT_step_4ff0
+  nop
+  lw	a0, 18732(v0)
+  addiu	v1,v0, 18732
+  lw	a1,4(v1)
+  addiu	v1,v0, 18732
+  lw	a2,8(v1)
+  addiu	v0,v0, 18732
+  lw	a3,12(v0)
+  jr	t0
+  nop
+ 'VTON_FLIGHT_step_5040 lh	v0, 31442(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_5194
+  nop
+  lui	v0,42
+  addiu	v0,v0, 18696
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v0,24(v0)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_507c
+  nop
+  sw	zero, 31920(gp)
+  j	 'VTON_FLIGHT_step_5084
+  nop
+ 'VTON_FLIGHT_step_507c li	v0,1
+  sw	v0, 31920(gp)
+ 'VTON_FLIGHT_step_5084 lui	v0,42
+  addiu	v0,v0, 18696
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v0,20(v0)
+  nop
+  addiu	v1,v0, 1
+  lui	v0,42
+  addiu	v0,v0, 18696
+  lui	a0,1
+  addu	v0,a0,v0
+  sw	v1,20(v0)
+  lw	v0, 31216(gp)
+  nop
+  lw	t0,12(v0)
+  lui	v0,42
+  addiu	a0,v0, 18696
+  move	v1,zero
+  addiu	a1,sp,16
+  addiu	a2,a0,16
+  j	 'VTON_FLIGHT_step_50f4
+  nop
+ 'VTON_FLIGHT_step_50dc addu	a0,a1,v1
+  addu	a3,a2,v1
+  lbu	a3,0(a3)
+  nop
+  sb	a3,0(a0)
+  addiu	v1,v1,1
+ 'VTON_FLIGHT_step_50f4 lui	a0,1
+  ori	a0,a0,14
+  sltu	a0,v1,a0
+  bnez	a0, 'VTON_FLIGHT_step_50dc
+  nop
+  lw	a0, 18696(v0)
+  addiu	v1,v0, 18696
+  lw	a1,4(v1)
+  addiu	v1,v0, 18696
+  lw	a2,8(v1)
+  addiu	v0,v0, 18696
+  lw	a3,12(v0)
+  jr	t0
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,32(v0)
+  lw	v1, 32536(gp)
+  lw	a0, 32544(gp)
+  lw	a1, 32540(gp)
+  move	a2,v1
+  jr	v0
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,0(v0)
+  lw	v1, 32536(gp)
+  nop
+  move	a0,v1
+  jr	v0
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,8(v0)
+  lw	v1, 32536(gp)
+  nop
+  move	a0,v1
+  li	a1,1
+  jr	v0
+  nop
+ 'VTON_FLIGHT_step_5194 lh	v0, 31564(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_51b0
+  nop
+  lh	v0, 32532(gp)
+  j	 'VTON_FLIGHT_step_51b4
+  nop
+ 'VTON_FLIGHT_step_51b0 move	v0,zero
+ 'VTON_FLIGHT_step_51b4 sh	v0, 31532(gp)
+  lh	v0, 31564(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_51d4
+  nop
+  lh	v0, 31530(gp)
+  j	 'VTON_FLIGHT_step_51d8
+  nop
+ 'VTON_FLIGHT_step_51d4 move	v0,zero
+ 'VTON_FLIGHT_step_51d8 sh	v0, 31528(gp)
+  lh	v0, 32548(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_5208
+  nop
+  lh	v0, 31532(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_5208
+  nop
+  li	v0,1
+  j	 'VTON_FLIGHT_step_520c
+  nop
+ 'VTON_FLIGHT_step_5208 move	v0,zero
+ 'VTON_FLIGHT_step_520c sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31464(gp)
+  lh	v0, 31526(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_5234
+  nop
+  lh	v0, 31442(gp)
+  j	 'VTON_FLIGHT_step_5238
+  nop
+ 'VTON_FLIGHT_step_5234 move	v0,zero
+ 'VTON_FLIGHT_step_5238 sh	v0, 31440(gp)
+  lh	v0, 31528(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_5260
+  nop
+  lh	v0, 32528(gp)
+  nop
+  sh	v0, 32520(gp)
+  j	 'VTON_FLIGHT_step_529c
+  nop
+ 'VTON_FLIGHT_step_5260 lh	v0, 32552(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_5280
+  nop
+  lh	v0, 32550(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_528c
+  nop
+ 'VTON_FLIGHT_step_5280 li	v0,1
+  j	 'VTON_FLIGHT_step_5290
+  nop
+ 'VTON_FLIGHT_step_528c move	v0,zero
+ 'VTON_FLIGHT_step_5290 sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32520(gp)
+ 'VTON_FLIGHT_step_529c lh	v0, 31464(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_53d8
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,4(v0)
+  li	a0,1
+  jr	v0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32530(gp)
+  lh	v0, 32530(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_53d8
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,8(v0)
+  li	a0,1
+  li	a1,3
+  jr	v0
+  nop
+  lui	v0,42
+  addiu	v0,v0, 18696
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v0,24(v0)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_5328
+  nop
+  sw	zero, 31920(gp)
+  j	 'VTON_FLIGHT_step_5330
+  nop
+ 'VTON_FLIGHT_step_5328 li	v0,1
+  sw	v0, 31920(gp)
+ 'VTON_FLIGHT_step_5330 lui	v0,42
+  addiu	v0,v0, 18696
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v0,16(v0)
+  nop
+  addiu	v1,v0,1
+  lui	v0,42
+  addiu	v0,v0, 18696
+  lui	a0,1
+  addu	v0,a0,v0
+  sw	v1,16(v0)
+  lw	v0, 31216(gp)
+  nop
+  lw	t0,12(v0)
+  lui	v0,42
+  addiu	a0,v0, 18696
+  move	v1,zero
+  addiu	a1,sp,16
+  addiu	a2,a0,16
+  j	 'VTON_FLIGHT_step_53a0
+  nop
+ 'VTON_FLIGHT_step_5388 addu	a0,a1,v1
+  addu	a3,a2,v1
+  lbu	a3,0(a3)
+  nop
+  sb	a3,0(a0)
+  addiu	v1,v1,1
+ 'VTON_FLIGHT_step_53a0 lui	a0,1
+  ori	a0,a0,14
+  sltu	a0,v1,a0
+  bnez	a0, 'VTON_FLIGHT_step_5388
+  nop
+  lw	a0, 18696(v0)
+  addiu	v1,v0, 18696
+  lw	a1,4(v1)
+  addiu	v1,v0, 18696
+  lw	a2,8(v1)
+  addiu	v0,v0, 18696
+  lw	a3,12(v0)
+  jr	t0
+  nop
+ 'VTON_FLIGHT_step_53d8 lh	v0, 31464(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_53f4
+  nop
+  lh	v0, 32530(gp)
+  j	 'VTON_FLIGHT_step_53f8
+  nop
+ 'VTON_FLIGHT_step_53f4 move	v0,zero
+ 'VTON_FLIGHT_step_53f8 sh	v0, 31444(gp)
+  lh	v0, 31464(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_5428
+  nop
+  lh	v0, 32530(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_5428
+  nop
+  li	v0,1
+  j	 'VTON_FLIGHT_step_542c
+  nop
+ 'VTON_FLIGHT_step_5428 move	v0,zero
+ 'VTON_FLIGHT_step_542c sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31436(gp)
+  lh	v0, 31444(gp)
+  nop
+  sltu	v0,zero,v0
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31334(gp)
+  lh	v0, 31444(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_5474
+  nop
+  lh	v0, 31440(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_5480
+  nop
+ 'VTON_FLIGHT_step_5474 li	v0,1
+  j	 'VTON_FLIGHT_step_5484
+  nop
+ 'VTON_FLIGHT_step_5480 move	v0,zero
+ 'VTON_FLIGHT_step_5484 sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31332(gp)
+  lh	v0, 31334(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_54bc
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,16(v0)
+  li	a0,1
+  li	a1,10
+  jr	v0
+  nop
+ 'VTON_FLIGHT_step_54bc lh	v0, 31332(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_54f0
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,12(v0)
+  nop
+  jr	v0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32554(gp)
+ 'VTON_FLIGHT_step_54f0 lh	v0, 31656(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_555c
+  nop
+  lh	v0, 32520(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_5550
+  nop
+  lh	v0, 32548(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_5530
+  nop
+  lh	v0, 31532(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_5550
+  nop
+ 'VTON_FLIGHT_step_5530 lh	v0, 31436(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_5550
+  nop
+  lh	v0, 31528(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_555c
+  nop
+ 'VTON_FLIGHT_step_5550 li	v0,1
+  j	 'VTON_FLIGHT_step_5560
+  nop
+ 'VTON_FLIGHT_step_555c move	v0,zero
+ 'VTON_FLIGHT_step_5560 sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31384(gp)
+  lh	v0, 32558(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_558c
+  nop
+  lh	v0, 31384(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_5598
+  nop
+ 'VTON_FLIGHT_step_558c li	v0,1
+  j	 'VTON_FLIGHT_step_559c
+  nop
+ 'VTON_FLIGHT_step_5598 move	v0,zero
+ 'VTON_FLIGHT_step_559c sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31382(gp)
+  lh	v0, 31382(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_55c4
+  nop
+  sh	zero, 32556(gp)
+  j	 'VTON_FLIGHT_step_55cc
+  nop
+ 'VTON_FLIGHT_step_55c4 li	v0,1
+  sh	v0, 32556(gp)
+ 'VTON_FLIGHT_step_55cc lh	v0, 32556(gp)
+  nop
+  sh	v0, 32560(gp)
+ 'VTON_FLIGHT_step_55d8 lh	v0, 31658(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_55f4
+  nop
+  lh	v0, 31382(gp)
+  j	 'VTON_FLIGHT_step_55f8
+  nop
+ 'VTON_FLIGHT_step_55f4 move	v0,zero
+ 'VTON_FLIGHT_step_55f8 sh	v0, 31380(gp)
+ 'VTON_FLIGHT_step_55fc lh	v0, 32320(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x6168
+  nop
+  lh	v0, 31618(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x611c
+  nop
+  lh	v0, 31616(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x6008
+  nop
+  lw	v0, 31216(gp)
+  nop
+  lw	t0,16(v0)
+  lw	a0, 32604(gp)
+  lui	v1,75
+  addiu	a1,v1, 17748
+  move	v0,zero
+  addiu	a2,sp,16
+  addiu	a3,a1,12
+  j	 'VTON_FLIGHT_step_5670
+  nop
+ 'VTON_FLIGHT_step_5658 addu	a1,a2,v0
+  addu	t1,a3,v0
+  lbu	t1,0(t1)
+  nop
+  sb	t1,0(a1)
+  addiu	v0,v0,1
+ 'VTON_FLIGHT_step_5670 lui	a1,1
+  ori	a1,a1,18
+  sltu	a1,v0,a1
+  bnez	a1, 'VTON_FLIGHT_step_5658
+  nop
+  lw	a1, 17748(v1)
+  addiu	v0,v1, 17748
+  lw	a2,4(v0)
+  addiu	v0,v1, 17748
+  lw	a3,8(v0)
+  jr	t0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32290(gp)
+  lh	v0, 32290(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_56d8
+  nop
+  lh	v0, 32286(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_56d8
+  nop
+  li	v0,1
+  j	 'VTON_FLIGHT_step_56dc
+  nop
+ 'VTON_FLIGHT_step_56d8 move	v0,zero
+ 'VTON_FLIGHT_step_56dc sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31546(gp)
+  lh	v0, 31546(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_5d0c
+  nop
+  lui	v0,75
+  addiu	v0,v0, 17748
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v0,4(v0)
+  nop
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32268(gp)
+  lh	v0, 32268(gp)
+  nop
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31478(gp)
+  lh	v0, 31478(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_5d0c
+  nop
+  lui	v0,75
+  addiu	v0,v0, 17748
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v0,16(v0)
+  nop
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32282(gp)
+  lh	v0, 32282(gp)
+  nop
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31396(gp)
+  lh	v0, 32282(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_597c
+  nop
+  lui	v0,74
+  lw	v1, 17784(v0)
+  lui	v0,75
+  lw	v0, 17748(v0)
+  move	a0,v1
+  move	a1,v0
+  jal	 'strcpy
+  nop
+  lui	v0,75
+  addiu	v0,v0, 17748
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v1,8(v0)
+  lui	v0,74
+  addiu	v0,v0, 17784
+  lui	a0,1
+  addu	v0,a0,v0
+  sw	v1,8(v0)
+  lui	v0,75
+  addiu	v0,v0, 17748
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v1,12(v0)
+  lui	v0,74
+  addiu	v0,v0, 17784
+  lui	a0,1
+  addu	v0,a0,v0
+  sw	v1,12(v0)
+  lui	v0,75
+  addiu	v0,v0, 17748
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v1,16(v0)
+  lui	v0,74
+  addiu	v0,v0, 17784
+  lui	a0,1
+  addu	v0,a0,v0
+  sw	v1,16(v0)
+  lui	v0,75
+  addiu	v0,v0, 17748
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v1,20(v0)
+  lui	v0,74
+  addiu	v0,v0, 17784
+  lui	a0,1
+  addu	v0,a0,v0
+  sw	v1,20(v0)
+  lui	v0,75
+  addiu	v0,v0, 17748
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v1,24(v0)
+  lui	v0,74
+  addiu	v0,v0, 17784
+  lui	a0,1
+  addu	v0,a0,v0
+  sw	v1,24(v0)
+  lui	v0,75
+  addiu	v0,v0, 17748
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v1,28(v0)
+  lui	v0,74
+  addiu	v0,v0, 17784
+  lui	a0,1
+  addu	v0,a0,v0
+  sw	v1,28(v0)
+  lui	v0,75
+  addiu	v0,v0, 17748
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v1,32(v0)
+  lui	v0,74
+  addiu	v0,v0, 17784
+  lui	a0,1
+  addu	v0,a0,v0
+  sw	v1,32(v0)
+  lui	v0,75
+  addiu	v0,v0, 17748
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v0,4(v0)
+  nop
+  slt	v0,zero,v0
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31392(gp)
+  lh	v0, 31392(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_5954
+  nop
+  lui	v0,75
+  addiu	v0,v0, 17748
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v0,4(v0)
+  nop
+  addiu	v1,v0, 1
+  lui	v0,74
+  addiu	v0,v0, 17784
+  lui	a0,1
+  addu	v0,a0,v0
+  sw	v1,4(v0)
+  j	 'VTON_FLIGHT_step_597c
+  nop
+ 'VTON_FLIGHT_step_5954 lui	v0,75
+  addiu	v0,v0, 17748
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v1,4(v0)
+  lui	v0,74
+  addiu	v0,v0, 17784
+  lui	a0,1
+  addu	v0,a0,v0
+  sw	v1,4(v0)
+ 'VTON_FLIGHT_step_597c lh	v0, 31396(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_5aac
+  nop
+  lui	v0,75
+  addiu	v0,v0, 17748
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v0,24(v0)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_59b8
+  nop
+  sw	zero, 31920(gp)
+  j	 'VTON_FLIGHT_step_59c0
+  nop
+ 'VTON_FLIGHT_step_59b8 li	v0,1
+  sw	v0, 31920(gp)
+ 'VTON_FLIGHT_step_59c0 lui	v0,75
+  addiu	v0,v0, 17748
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v0,16(v0)
+  nop
+  addiu	v1,v0, 1
+  lui	v0,75
+  addiu	v0,v0, 17748
+  lui	a0,1
+  addu	v0,a0,v0
+  sw	v1,16(v0)
+  lw	v0, 31216(gp)
+  nop
+  lw	t0,12(v0)
+  lui	v0,75
+  addiu	a0,v0, 17748
+  move	v1,zero
+  addiu	a1,sp,16
+  addiu	a2,a0,16
+  j	 'VTON_FLIGHT_step_5a30
+  nop
+ 'VTON_FLIGHT_step_5a18 addu	a0,a1,v1
+  addu	a3,a2,v1
+  lbu	a3,0(a3)
+  nop
+  sb	a3,0(a0)
+  addiu	v1,v1,1
+ 'VTON_FLIGHT_step_5a30 lui	a0,1
+  ori	a0,a0,14
+  sltu	a0,v1,a0
+  bnez	a0, 'VTON_FLIGHT_step_5a18
+  nop
+  lw	a0, 17748(v0)
+  addiu	v1,v0, 17748
+  lw	a1,4(v1)
+  addiu	v1,v0, 17748
+  lw	a2,8(v1)
+  addiu	v0,v0, 17748
+  lw	a3,12(v0)
+  jr	t0
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,0(v0)
+  lw	v1, 32272(gp)
+  nop
+  move	a0,v1
+  jr	v0
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,8(v0)
+  lw	v1, 32272(gp)
+  nop
+  move	a0,v1
+  li	a1,1
+  jr	v0
+  nop
+ 'VTON_FLIGHT_step_5aac lh	v0, 32282(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_5d0c
+  nop
+  lh	v0, 31392(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_5b5c
+  nop
+  sw	zero, 32640(gp)
+  j	 'VTON_FLIGHT_step_5b28
+  nop
+ 'VTON_FLIGHT_step_5ad8 lw	v1, 32640(gp)
+  lw	v0, 32640(gp)
+  nop
+  addiu	a0,v0,1
+  lui	v0,76
+  sll	v1,v1,3
+  addiu	v0,v0, 17712
+  addu	v0,v1,v0
+  lui	v1,75
+  sll	a0,a0,3
+  addiu	v1,v1, 17748
+  addu	v1,a0,v1
+  lw	a0,4(v1)
+  lw	v1,8(v1)
+  sw	a0,0(v0)
+  sw	v1,4(v0)
+  lw	v0, 32640(gp)
+  nop
+  addiu	v0,v0,1
+  sw	v0, 32640(gp)
+ 'VTON_FLIGHT_step_5b28 lw	v0, 32640(gp)
+  nop
+  slti	v0,v0,8191
+  bnez	v0, 'VTON_FLIGHT_step_5ad8
+  nop
+  lui	v0,76
+  addiu	v0,v0, 17712
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	a0, 32280(gp)
+  lw	v1, 32276(gp)
+  sw	a0, 8(v0)
+  sw	v1, 4(v0)
+ 'VTON_FLIGHT_step_5b5c lh	v0, 31392(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_5c04
+  nop
+  sw	zero, 31300(gp)
+  j	 'VTON_FLIGHT_step_5be8
+  nop
+ 'VTON_FLIGHT_step_5b78 lw	v0, 31300(gp)
+  lw	a0, 31300(gp)
+  lui	v1,76
+  sll	a0,a0,3
+  addiu	v1,v1, 17712
+  addu	v1,a0,v1
+  lw	v1,0(v1)
+  lui	a0,74
+  addiu	a0,a0, 17784
+  sll	v0,v0,3
+  addu	v0,a0,v0
+  sw	v1,4(v0)
+  lw	a1, 31300(gp)
+  lw	v0, 31300(gp)
+  lui	v1,76
+  addiu	v1,v1, 17712
+  sll	v0,v0,3
+  addu	v0,v1,v0
+  lw	v1,4(v0)
+  lui	v0,74
+  addiu	a0,v0, 17784
+  sll	v0,a1,3
+  addu	v0,a0,v0
+  sw	v1,8(v0)
+  lw	v0, 31300(gp)
+  nop
+  addiu	v0,v0,1
+  sw	v0, 31300(gp)
+ 'VTON_FLIGHT_step_5be8 lw	v0, 31300(gp)
+  nop
+  slti	v0,v0,8192
+  bnez	v0, 'VTON_FLIGHT_step_5b78
+  nop
+  j	 'VTON_FLIGHT_step_5c94
+  nop
+ 'VTON_FLIGHT_step_5c04 sw	zero, 31300(gp)
+  j	 'VTON_FLIGHT_step_5c80
+  nop
+ 'VTON_FLIGHT_step_5c10 lw	a1, 31300(gp)
+  lw	v0, 31300(gp)
+  lui	v1,75
+  addiu	v1,v1, 17748
+  sll	v0,v0,3
+  addu	v0,v1,v0
+  lw	v1,4(v0)
+  lui	v0,74
+  addiu	a0,v0, 17784
+  sll	v0,a1,3
+  addu	v0,a0,v0
+  sw	v1,4(v0)
+  lw	a1, 31300(gp)
+  lw	v0, 31300(gp)
+  lui	v1,75
+  addiu	v1,v1, 17748
+  sll	v0,v0,3
+  addu	v0,v1,v0
+  lw	v1,8(v0)
+  lui	v0,74
+  addiu	a0,v0, 17784
+  sll	v0,a1,3
+  addu	v0,a0,v0
+  sw	v1,8(v0)
+  lw	v0, 31300(gp)
+  nop
+  addiu	v0,v0,1
+  sw	v0, 31300(gp)
+ 'VTON_FLIGHT_step_5c80 lw	v0, 31300(gp)
+  nop
+  slti	v0,v0,8192
+  bnez	v0, 'VTON_FLIGHT_step_5c10
+  nop
+ 'VTON_FLIGHT_step_5c94 lw	v0, 31216(gp)
+  nop
+  lw	t0,12(v0)
+  lui	v0,74
+  addiu	a0,v0, 17784
+  move	v1,zero
+  addiu	a1,sp,16
+  addiu	a2,a0,16
+  j	 'VTON_FLIGHT_step_5cd4
+  nop
+ 'VTON_FLIGHT_step_5cbc addu	a0,a1,v1
+  addu	a3,a2,v1
+  lbu	a3,0(a3)
+  nop
+  sb	a3,0(a0)
+  addiu	v1,v1,1
+ 'VTON_FLIGHT_step_5cd4 lui	a0,1
+  ori	a0,a0,14
+  sltu	a0,v1,a0
+  bnez	a0, 'VTON_FLIGHT_step_5cbc
+  nop
+  lw	a0, 17784(v0)
+  addiu	v1,v0, 17784
+  lw	a1,4(v1)
+  addiu	v1,v0, 17784
+  lw	a2,8(v1)
+  addiu	v0,v0, 17784
+  lw	a3,12(v0)
+  jr	t0
+  nop
+ 'VTON_FLIGHT_step_5d0c lh	v0, 31546(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_5d28
+  nop
+  lh	v0, 32268(gp)
+  j	 'VTON_FLIGHT_step_5d2c
+  nop
+ 'VTON_FLIGHT_step_5d28 move	v0,zero
+ 'VTON_FLIGHT_step_5d2c sh	v0, 31480(gp)
+  lh	v0, 31546(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_5d4c
+  nop
+  lh	v0, 31478(gp)
+  j	 'VTON_FLIGHT_step_5d50
+  nop
+ 'VTON_FLIGHT_step_5d4c move	v0,zero
+ 'VTON_FLIGHT_step_5d50 sh	v0, 31476(gp)
+  lh	v0, 32288(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_5d80
+  nop
+  lh	v0, 31480(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_5d80
+  nop
+  li	v0,1
+  j	 'VTON_FLIGHT_step_5d84
+  nop
+ 'VTON_FLIGHT_step_5d80 move	v0,zero
+ 'VTON_FLIGHT_step_5d84 sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31450(gp)
+  lh	v0, 31478(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_5dac
+  nop
+  lh	v0, 31396(gp)
+  j	 'VTON_FLIGHT_step_5db0
+  nop
+ 'VTON_FLIGHT_step_5dac move	v0,zero
+ 'VTON_FLIGHT_step_5db0 sh	v0, 31394(gp)
+  lh	v0, 31450(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_5ef0
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,4(v0)
+  li	a0,1
+  jr	v0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32266(gp)
+  lh	v0, 32266(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_5ef0
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,8(v0)
+  li	a0,3
+  li	a1,3
+  jr	v0
+  nop
+  lui	v0,75
+  addiu	v0,v0, 17748
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v0,24(v0)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_5e40
+  nop
+  sw	zero, 31920(gp)
+  j	 'VTON_FLIGHT_step_5e48
+  nop
+ 'VTON_FLIGHT_step_5e40 li	v0,1
+  sw	v0, 31920(gp)
+ 'VTON_FLIGHT_step_5e48 lui	v0,75
+  addiu	v0,v0, 17748
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v0,20(v0)
+  nop
+  addiu	v1,v0,1
+  lui	v0,75
+  addiu	v0,v0, 17748
+  lui	a0,1
+  addu	v0,a0,v0
+  sw	v1,20(v0)
+  lw	v0, 31216(gp)
+  nop
+  lw	t0,12(v0)
+  lui	v0,75
+  addiu	a0,v0, 17748
+  move	v1,zero
+  addiu	a1,sp,16
+  addiu	a2,a0,16
+  j	 'VTON_FLIGHT_step_5eb8
+  nop
+ 'VTON_FLIGHT_step_5ea0 addu	a0,a1,v1
+  addu	a3,a2,v1
+  lbu	a3,0(a3)
+  nop
+  sb	a3,0(a0)
+  addiu	v1,v1,1
+ 'VTON_FLIGHT_step_5eb8 lui	a0,1
+  ori	a0,a0,14
+  sltu	a0,v1,a0
+  bnez	a0, 'VTON_FLIGHT_step_5ea0
+  nop
+  lw	a0, 17748(v0)
+  addiu	v1,v0, 17748
+  lw	a1,4(v1)
+  addiu	v1,v0, 17748
+  lw	a2,8(v1)
+  addiu	v0,v0, 17748
+  lw	a3,12(v0)
+  jr	t0
+  nop
+ 'VTON_FLIGHT_step_5ef0 lh	v0, 31450(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_5f1c
+  nop
+  lh	v0, 32266(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_5f1c
+  nop
+  li	v0,1
+  j	 'VTON_FLIGHT_step_5f20
+  nop
+ 'VTON_FLIGHT_step_5f1c move	v0,zero
+ 'VTON_FLIGHT_step_5f20 sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31400(gp)
+  lh	v0, 31450(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_5f48
+  nop
+  lh	v0, 32266(gp)
+  j	 'VTON_FLIGHT_step_5f4c
+  nop
+ 'VTON_FLIGHT_step_5f48 move	v0,zero
+ 'VTON_FLIGHT_step_5f4c sh	v0, 31398(gp)
+  lh	v0, 31398(gp)
+  nop
+  sltu	v0,zero,v0
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31340(gp)
+  lh	v0, 31398(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_5f8c
+  nop
+  lh	v0, 31394(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_5f98
+  nop
+ 'VTON_FLIGHT_step_5f8c li	v0,1
+  j	 'VTON_FLIGHT_step_5f9c
+  nop
+ 'VTON_FLIGHT_step_5f98 move	v0,zero
+ 'VTON_FLIGHT_step_5f9c sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31326(gp)
+  lh	v0, 31340(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_5fd4
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,16(v0)
+  li	a0,3
+  li	a1,2
+  jr	v0
+  nop
+ 'VTON_FLIGHT_step_5fd4 lh	v0, 31326(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x6008
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,12(v0)
+  nop
+  jr	v0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32284(gp)
+ 'VTON_FLIGHT_step_0x6008 lh	v0, 32282(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x6024
+  nop
+  lh	v0, 31392(gp)
+  j	 'VTON_FLIGHT_step_0x6028
+  nop
+ 'VTON_FLIGHT_step_0x6024 move	v0,zero
+ 'VTON_FLIGHT_step_0x6028 sh	v0, 31390(gp)
+  lh	v0, 31616(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x60a8
+  nop
+  lh	v0, 32288(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x605c
+  nop
+  lh	v0, 31480(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x609c
+  nop
+ 'VTON_FLIGHT_step_0x605c lh	v0, 32290(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x609c
+  nop
+  lh	v0, 32286(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x609c
+  nop
+  lh	v0, 31400(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x609c
+  nop
+  lh	v0, 31476(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x60a8
+  nop
+ 'VTON_FLIGHT_step_0x609c li	v0,1
+  j	 'VTON_FLIGHT_step_0x60ac
+  nop
+ 'VTON_FLIGHT_step_0x60a8 move	v0,zero
+ 'VTON_FLIGHT_step_0x60ac sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31316(gp)
+  lh	v0, 31390(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x60d4
+  nop
+  sh	zero, 32292(gp)
+  j	 'VTON_FLIGHT_step_0x60dc
+  nop
+ 'VTON_FLIGHT_step_0x60d4 li	v0,1
+  sh	v0, 32292(gp)
+ 'VTON_FLIGHT_step_0x60dc lh	v0, 32302(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x60f8
+  nop
+  sh	zero, 32304(gp)
+  j	 'VTON_FLIGHT_step_0x611c
+  nop
+ 'VTON_FLIGHT_step_0x60f8 lh	v0, 32292(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x6118
+  nop
+  li	v0,1
+  sh	v0, 32304(gp)
+  j	 'VTON_FLIGHT_step_0x611c
+  nop
+ 'VTON_FLIGHT_step_0x6118 sh	zero, 32304(gp)
+ 'VTON_FLIGHT_step_0x611c lh	v0, 31618(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x6158
+  nop
+  lh	v0, 32302(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x614c
+  nop
+  lh	v0, 31316(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x6158
+  nop
+ 'VTON_FLIGHT_step_0x614c li	v0,1
+  j	 'VTON_FLIGHT_step_0x615c
+  nop
+ 'VTON_FLIGHT_step_0x6158 move	v0,zero
+ 'VTON_FLIGHT_step_0x615c sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31314(gp)
+ 'VTON_FLIGHT_step_0x6168 lh	v0, 32592(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x6ef4
+  nop
+  lh	v0, 31648(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x6d98
+  nop
+  lh	v0, 31646(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x6cb0
+  nop
+  lw	v0, 31216(gp)
+  nop
+  lw	t0,16(v0)
+  lw	a0, 32600(gp)
+  lui	v1,45
+  addiu	a1,v1, 18332
+  move	v0,zero
+  addiu	a2,sp,16
+  addiu	a3,a1,12
+  j	 'VTON_FLIGHT_step_0x61dc
+  nop
+ 'VTON_FLIGHT_step_0x61c4 addu	a1,a2,v0
+  addu	t1,a3,v0
+  lbu	t1,0(t1)
+  nop
+  sb	t1,0(a1)
+  addiu	v0,v0,1
+ 'VTON_FLIGHT_step_0x61dc lui	a1,1
+  ori	a1,a1,18
+  sltu	a1,v0,a1
+  bnez	a1, 'VTON_FLIGHT_step_0x61c4
+  nop
+  lw	a1, 18332(v1)
+  addiu	v0,v1, 18332
+  lw	a2,4(v0)
+  addiu	v0,v1, 18332
+  lw	a3,8(v0)
+  jr	t0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32468(gp)
+  lh	v0, 32468(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x6244
+  nop
+  lh	v0, 32466(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x6244
+  nop
+  li	v0,1
+  j	 'VTON_FLIGHT_step_0x6248
+  nop
+ 'VTON_FLIGHT_step_0x6244 move	v0,zero
+ 'VTON_FLIGHT_step_0x6248 sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31558(gp)
+  lh	v0, 32468(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x627c
+  nop
+  lw	v0, 32480(gp)
+  nop
+  sw	v0, 32460(gp)
+  lw	v0, 32484(gp)
+  nop
+  sw	v0, 32456(gp)
+ 'VTON_FLIGHT_step_0x627c lh	v0, 31558(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x6954
+  nop
+  lui	v0,45
+  addiu	v0,v0, 18332
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v1,4(v0)
+  lui	v0,45
+  addiu	v0,v0, 18332
+  lui	a0,1
+  addu	v0,a0,v0
+  lw	v0,8(v0)
+  nop
+  xor	v0,v1,v0
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32448(gp)
+  lh	v0, 32448(gp)
+  nop
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31510(gp)
+  lh	v0, 31510(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x6954
+  nop
+  lui	v0,45
+  addiu	v0,v0, 18332
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v0,12(v0)
+  nop
+  sw	v0, 32440(gp)
+  lw	v1, 32484(gp)
+  lw	v0, 32440(gp)
+  nop
+  slt	v0,v0,v1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32444(gp)
+  lh	v0, 32444(gp)
+  nop
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31506(gp)
+  lh	v0, 31506(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x6954
+  nop
+  lui	v0,45
+  addiu	v0,v0, 18332
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v0,20(v0)
+  nop
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32462(gp)
+  lh	v0, 32462(gp)
+  nop
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31424(gp)
+  lh	v0, 32462(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x6800
+  nop
+  lui	v0,44
+  lw	v1, 18368(v0)
+  lui	v0,45
+  lw	v0, 18332(v0)
+  move	a0,v1
+  move	a1,v0
+  jal	 'strcpy
+  nop
+  lui	v0,45
+  addiu	v0,v0, 18332
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v1,8(v0)
+  lui	v0,44
+  addiu	v0,v0, 18368
+  lui	a0,1
+  addu	v0,a0,v0
+  sw	v1,8(v0)
+  lui	v0,45
+  addiu	v0,v0, 18332
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v1,12(v0)
+  lui	v0,44
+  addiu	v0,v0, 18368
+  lui	a0,1
+  addu	v0,a0,v0
+  sw	v1,12(v0)
+  lui	v0,45
+  addiu	v0,v0, 18332
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v1,16(v0)
+  lui	v0,44
+  addiu	v0,v0, 18368
+  lui	a0,1
+  addu	v0,a0,v0
+  sw	v1,16(v0)
+  lui	v0,45
+  addiu	v0,v0, 18332
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v1,20(v0)
+  lui	v0,44
+  addiu	v0,v0, 18368
+  lui	a0,1
+  addu	v0,a0,v0
+  sw	v1,20(v0)
+  lui	v0,45
+  addiu	v0,v0, 18332
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v1,24(v0)
+  lui	v0,44
+  addiu	v0,v0, 18368
+  lui	a0,1
+  addu	v0,a0,v0
+  sw	v1,24(v0)
+  lui	v0,45
+  addiu	v0,v0, 18332
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v1,28(v0)
+  lui	v0,44
+  addiu	v0,v0, 18368
+  lui	a0,1
+  addu	v0,a0,v0
+  sw	v1,28(v0)
+  lui	v0,45
+  addiu	v0,v0, 18332
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v1,32(v0)
+  lui	v0,44
+  addiu	v0,v0, 18368
+  lui	a0,1
+  addu	v0,a0,v0
+  sw	v1,32(v0)
+  lui	v0,45
+  addiu	v0,v0, 18332
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v1,4(v0)
+  lui	v0,45
+  addiu	v0,v0, 18332
+  lui	a0,1
+  addu	v0,a0,v0
+  lw	v0,8(v0)
+  nop
+  slt	v0,v1,v0
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31420(gp)
+  lh	v0, 31420(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x657c
+  nop
+  lui	v0,45
+  addiu	v0,v0, 18332
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v0,4(v0)
+  nop
+  addiu	v1,v0,1
+  lui	v0,44
+  addiu	v0,v0, 18368
+  lui	a0,1
+  addu	v0,a0,v0
+  sw	v1,4(v0)
+  j	 'VTON_FLIGHT_step_0x65a4
+  nop
+ 'VTON_FLIGHT_step_0x657c lui	v0,45
+  addiu	v0,v0, 18332
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v1,4(v0)
+  lui	v0,44
+  addiu	v0,v0, 18368
+  lui	a0,1
+  addu	v0,a0,v0
+  sw	v1,4(v0)
+ 'VTON_FLIGHT_step_0x65a4 lh	v0, 31420(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x6650
+  nop
+  sw	zero, 32648(gp)
+  j	 'VTON_FLIGHT_step_0x6608
+  nop
+ 'VTON_FLIGHT_step_0x65c0 lw	v1, 32648(gp)
+  lw	a0, 32648(gp)
+  lui	v0,46
+  sll	v1,v1,3
+  addiu	v0,v0, 18296
+  addu	v0,v1,v0
+  lui	v1,45
+  sll	a0,a0,3
+  addiu	v1,v1, 18332
+  addu	v1,a0,v1
+  lw	a0,4(v1)
+  lw	v1,8(v1)
+  sw	a0,0(v0)
+  sw	v1,4(v0)
+  lw	v0, 32648(gp)
+  nop
+  addiu	v0,v0,1
+  sw	v0, 32648(gp)
+ 'VTON_FLIGHT_step_0x6608 lw	v0, 32648(gp)
+  nop
+  slti	v0,v0,8192
+  bnez	v0, 'VTON_FLIGHT_step_0x65c0
+  nop
+  lui	v0,45
+  addiu	v0,v0, 18332
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v1,4(v0)
+  lui	v0,46
+  sll	v1,v1,3
+  addiu	v0,v0, 18296
+  addu	v0,v1,v0
+  lw	a0, 32460(gp)
+  lw	v1, 32456(gp)
+  sw	a0,0(v0)
+  sw	v1,4(v0)
+ 'VTON_FLIGHT_step_0x6650 lh	v0, 31420(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x66f8
+  nop
+  sw	zero, 31300(gp)
+  j	 'VTON_FLIGHT_step_0x66dc
+  nop
+ 'VTON_FLIGHT_step_0x666c lw	v0, 31300(gp)
+  lw	a0, 31300(gp)
+  lui	v1,46
+  sll	a0,a0,3
+  addiu	v1,v1, 18296
+  addu	v1,a0,v1
+  lw	v1,0(v1)
+  lui	a0,44
+  addiu	a0,a0, 18368
+  sll	v0,v0,3
+  addu	v0,a0,v0
+  sw	v1,4(v0)
+  lw	a1, 31300(gp)
+  lw	v0, 31300(gp)
+  lui	v1,46
+  addiu	v1,v1, 18296
+  sll	v0,v0,3
+  addu	v0,v1,v0
+  lw	v1,4(v0)
+  lui	v0,44
+  addiu	a0,v0, 18368
+  sll	v0,a1,3
+  addu	v0,a0,v0
+  sw	v1,8(v0)
+  lw	v0, 31300(gp)
+  nop
+  addiu	v0,v0,1
+  sw	v0, 31300(gp)
+ 'VTON_FLIGHT_step_0x66dc lw	v0, 31300(gp)
+  nop
+  slti	v0,v0,8192
+  bnez	v0, 'VTON_FLIGHT_step_0x666c
+  nop
+  j	 'VTON_FLIGHT_step_0x6788
+  nop
+ 'VTON_FLIGHT_step_0x66f8 sw	zero, 31300(gp)
+  j	 'VTON_FLIGHT_step_0x6774
+  nop
+ 'VTON_FLIGHT_step_0x6704 lw	a1, 31300(gp)
+  lw	v0, 31300(gp)
+  lui	v1,45
+  addiu	v1,v1, 18332
+  sll	v0,v0,3
+  addu	v0,v1,v0
+  lw	v1,4(v0)
+  lui	v0,44
+  addiu	a0,v0, 18368
+  sll	v0,a1,3
+  addu	v0,a0,v0
+  sw	v1,4(v0)
+  lw	a1, 31300(gp)
+  lw	v0, 31300(gp)
+  lui	v1,45
+  addiu	v1,v1, 18332
+  sll	v0,v0,3
+  addu	v0,v1,v0
+  lw	v1,8(v0)
+  lui	v0,44
+  addiu	a0,v0, 18368
+  sll	v0,a1,3
+  addu	v0,a0,v0
+  sw	v1,8(v0)
+  lw	v0, 31300(gp)
+  nop
+  addiu	v0,v0,1
+  sw	v0, 31300(gp)
+ 'VTON_FLIGHT_step_0x6774 lw	v0, 31300(gp)
+  nop
+  slti	v0,v0,8192
+  bnez	v0, 'VTON_FLIGHT_step_0x6704
+  nop
+ 'VTON_FLIGHT_step_0x6788 lw	v0, 31216(gp)
+  nop
+  lw	t0,12(v0)
+  lui	v0,44
+  addiu	a0,v0, 18368
+  move	v1,zero
+  addiu	a1,sp,16
+  addiu	a2,a0,16
+  j	 'VTON_FLIGHT_step_0x67c8
+  nop
+ 'VTON_FLIGHT_step_0x67b0 addu	a0,a1,v1
+  addu	a3,a2,v1
+  lbu	a3,0(a3)
+  nop
+  sb	a3,0(a0)
+  addiu	v1,v1,1
+ 'VTON_FLIGHT_step_0x67c8 lui	a0,1
+  ori	a0,a0,14
+  sltu	a0,v1,a0
+  bnez	a0, 'VTON_FLIGHT_step_0x67b0
+  nop
+  lw	a0, 18368(v0)
+  addiu	v1,v0, 18368
+  lw	a1,4(v1)
+  addiu	v1,v0, 18368
+  lw	a2,8(v1)
+  addiu	v0,v0, 18368
+  lw	a3,12(v0)
+  jr	t0
+  nop
+ 'VTON_FLIGHT_step_0x6800 lh	v0, 31424(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x6954
+  nop
+  lui	v0,45
+  addiu	v0,v0, 18332
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v0,24(v0)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x683c
+  nop
+  sw	zero, 31920(gp)
+  j	 'VTON_FLIGHT_step_0x6844
+  nop
+ 'VTON_FLIGHT_step_0x683c li	v0,1
+  sw	v0, 31920(gp)
+ 'VTON_FLIGHT_step_0x6844 lui	v0,45
+  addiu	v0,v0, 18332
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v0,20(v0)
+  nop
+  addiu	v1,v0, 1
+  lui	v0,45
+  addiu	v0,v0, 18332
+  lui	a0,1
+  addu	v0,a0,v0
+  sw	v1,20(v0)
+  lw	v0, 31216(gp)
+  nop
+  lw	t0,12(v0)
+  lui	v0,45
+  addiu	a0,v0, 18332
+  move	v1,zero
+  addiu	a1,sp,16
+  addiu	a2,a0,16
+  j	 'VTON_FLIGHT_step_0x68b4
+  nop
+ 'VTON_FLIGHT_step_0x689c addu	a0,a1,v1
+  addu	a3,a2,v1
+  lbu	a3,0(a3)
+  nop
+  sb	a3,0(a0)
+  addiu	v1,v1,1
+ 'VTON_FLIGHT_step_0x68b4 lui	a0,1
+  ori	a0,a0,14
+  sltu	a0,v1,a0
+  bnez	a0, 'VTON_FLIGHT_step_0x689c
+  nop
+  lw	a0, 18332(v0)
+  addiu	v1,v0, 18332
+  lw	a1,4(v1)
+  addiu	v1,v0, 18332
+  lw	a2,8(v1)
+  addiu	v0,v0, 18332
+  lw	a3,12(v0)
+  jr	t0
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,32(v0)
+  lw	v1, 32452(gp)
+  lw	a0, 32460(gp)
+  lw	a1, 32456(gp)
+  move	a2,v1
+  jr	v0
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,0(v0)
+  lw	v1, 32452(gp)
+  nop
+  move	a0,v1
+  jr	v0
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,8(v0)
+  lw	v1, 32452(gp)
+  nop
+  move	a0,v1
+  li	a1,1
+  jr	v0
+  nop
+ 'VTON_FLIGHT_step_0x6954 lh	v0, 31558(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x6970
+  nop
+  lh	v0, 32448(gp)
+  j	 'VTON_FLIGHT_step_0x6974
+  nop
+ 'VTON_FLIGHT_step_0x6970 move	v0,zero
+ 'VTON_FLIGHT_step_0x6974 sh	v0, 31512(gp)
+  lh	v0, 31558(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x6994
+  nop
+  lh	v0, 31510(gp)
+  j	 'VTON_FLIGHT_step_0x6998
+  nop
+ 'VTON_FLIGHT_step_0x6994 move	v0,zero
+ 'VTON_FLIGHT_step_0x6998 sh	v0, 31508(gp)
+  lh	v0, 32464(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x69c8
+  nop
+  lh	v0, 31512(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x69c8
+  nop
+  li	v0,1
+  j	 'VTON_FLIGHT_step_0x69cc
+  nop
+ 'VTON_FLIGHT_step_0x69c8 move	v0,zero
+ 'VTON_FLIGHT_step_0x69cc sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31456(gp)
+  lh	v0, 31506(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x69f4
+  nop
+  lh	v0, 31424(gp)
+  j	 'VTON_FLIGHT_step_0x69f8
+  nop
+ 'VTON_FLIGHT_step_0x69f4 move	v0,zero
+ 'VTON_FLIGHT_step_0x69f8 sh	v0, 31422(gp)
+  lh	v0, 31508(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x6a20
+  nop
+  lh	v0, 32444(gp)
+  nop
+  sh	v0, 32436(gp)
+  j	 'VTON_FLIGHT_step_0x6a5c
+  nop
+ 'VTON_FLIGHT_step_0x6a20 lh	v0, 32468(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x6a40
+  nop
+  lh	v0, 32466(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x6a4c
+  nop
+ 'VTON_FLIGHT_step_0x6a40 li	v0,1
+  j	 'VTON_FLIGHT_step_0x6a50
+  nop
+ 'VTON_FLIGHT_step_0x6a4c move	v0,zero
+ 'VTON_FLIGHT_step_0x6a50 sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32436(gp)
+ 'VTON_FLIGHT_step_0x6a5c lh	v0, 31456(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x6b98
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,4(v0)
+  li	a0,1
+  jr	v0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32446(gp)
+  lh	v0, 32446(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x6b98
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,8(v0)
+  li	a0,1
+  li	a1,3
+  jr	v0
+  nop
+  lui	v0,45
+  addiu	v0,v0, 18332
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v0,24(v0)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x6aec
+  nop
+  li	v0,1
+  sw	v0, 31920(gp)
+  j	 'VTON_FLIGHT_step_0x6af0
+  nop
+ 'VTON_FLIGHT_step_0x6aec sw	zero, 31920(gp)
+ 'VTON_FLIGHT_step_0x6af0 lui	v0,45
+  addiu	v0,v0, 18332
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v0,16(v0)
+  nop
+  addiu	v1,v0,1
+  lui	v0,45
+  addiu	v0,v0, 18332
+  lui	a0,1
+  addu	v0,a0,v0
+  sw	v1,16(v0)
+  lw	v0, 31216(gp)
+  nop
+  lw	t0,12(v0)
+  lui	v0,45
+  addiu	a0,v0, 18332
+  move	v1,zero
+  addiu	a1,sp,16
+  addiu	a2,a0,16
+  j	 'VTON_FLIGHT_step_0x6b60
+  nop
+ 'VTON_FLIGHT_step_0x6b48 addu	a0,a1,v1
+  addu	a3,a2,v1
+  lbu	a3,0(a3)
+  nop
+  sb	a3,0(a0)
+  addiu	v1,v1,1
+ 'VTON_FLIGHT_step_0x6b60 lui	a0,1
+  ori	a0,a0,14
+  sltu	a0,v1,a0
+  bnez	a0, 'VTON_FLIGHT_step_0x6b48
+  nop
+  lw	a0, 18332(v0)
+  addiu	v1,v0, 18332
+  lw	a1,4(v1)
+  addiu	v1,v0, 18332
+  lw	a2,8(v1)
+  addiu	v0,v0, 18332
+  lw	a3,12(v0)
+  jr	t0
+  nop
+ 'VTON_FLIGHT_step_0x6b98 lh	v0, 31456(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x6bb4
+  nop
+  lh	v0, 32446(gp)
+  j	 'VTON_FLIGHT_step_0x6bb8
+  nop
+ 'VTON_FLIGHT_step_0x6bb4 move	v0,zero
+ 'VTON_FLIGHT_step_0x6bb8 sh	v0, 31426(gp)
+  lh	v0, 31456(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x6be8
+  nop
+  lh	v0, 32446(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x6be8
+  nop
+  li	v0,1
+  j	 'VTON_FLIGHT_step_0x6bec
+  nop
+ 'VTON_FLIGHT_step_0x6be8 move	v0,zero
+ 'VTON_FLIGHT_step_0x6bec sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31418(gp)
+  lh	v0, 31426(gp)
+  nop
+  sltu	v0,zero,v0
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31336(gp)
+  lh	v0, 31426(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x6c34
+  nop
+  lh	v0, 31422(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x6c40
+  nop
+ 'VTON_FLIGHT_step_0x6c34 li	v0,1
+  j	 'VTON_FLIGHT_step_0x6c44
+  nop
+ 'VTON_FLIGHT_step_0x6c40 move	v0,zero
+ 'VTON_FLIGHT_step_0x6c44 sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31330(gp)
+  lh	v0, 31336(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x6c7c
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,16(v0)
+  li	a0,1
+  li	a1,10
+  jr	v0
+  nop
+ 'VTON_FLIGHT_step_0x6c7c lh	v0, 31330(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x6cb0
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,12(v0)
+  nop
+  jr	v0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32470(gp)
+ 'VTON_FLIGHT_step_0x6cb0 lh	v0, 31646(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x6d1c
+  nop
+  lh	v0, 32436(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x6d10
+  nop
+  lh	v0, 32464(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x6cf0
+  nop
+  lh	v0, 31512(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x6d10
+  nop
+ 'VTON_FLIGHT_step_0x6cf0 lh	v0, 31418(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x6d10
+  nop
+  lh	v0, 31508(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x6d1c
+  nop
+ 'VTON_FLIGHT_step_0x6d10 li	v0,1
+  j	 'VTON_FLIGHT_step_0x6d20
+  nop
+ 'VTON_FLIGHT_step_0x6d1c move	v0,zero
+ 'VTON_FLIGHT_step_0x6d20 sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31366(gp)
+  lh	v0, 32474(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x6d4c
+  nop
+  lh	v0, 31366(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x6d58
+  nop
+ 'VTON_FLIGHT_step_0x6d4c li	v0,1
+  j	 'VTON_FLIGHT_step_0x6d5c
+  nop
+ 'VTON_FLIGHT_step_0x6d58 move	v0,zero
+ 'VTON_FLIGHT_step_0x6d5c sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31364(gp)
+  lh	v0, 31364(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x6d84
+  nop
+  sh	zero, 32472(gp)
+  j	 'VTON_FLIGHT_step_0x6d8c
+  nop
+ 'VTON_FLIGHT_step_0x6d84 li	v0,1
+  sh	v0, 32472(gp)
+ 'VTON_FLIGHT_step_0x6d8c lh	v0, 32472(gp)
+  nop
+  sh	v0, 32476(gp)
+ 'VTON_FLIGHT_step_0x6d98 lh	v0, 31648(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x6db4
+  nop
+  lh	v0, 31364(gp)
+  j	 'VTON_FLIGHT_step_0x6db8
+  nop
+ 'VTON_FLIGHT_step_0x6db4 move	v0,zero
+ 'VTON_FLIGHT_step_0x6db8 sh	v0, 31362(gp)
+  lh	v0, 31372(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x6dfc
+  nop
+  lh	v0, 31380(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x6dfc
+  nop
+  lh	v0, 31368(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x6dfc
+  nop
+  lh	v0, 31362(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x6e08
+  nop
+ 'VTON_FLIGHT_step_0x6dfc li	v0,1
+  j	 'VTON_FLIGHT_step_0x6e0c
+  nop
+ 'VTON_FLIGHT_step_0x6e08 move	v0,zero
+ 'VTON_FLIGHT_step_0x6e0c sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31360(gp)
+  lh	v0, 31360(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x6e38
+  nop
+  lh	v0, 31534(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x6e44
+  nop
+ 'VTON_FLIGHT_step_0x6e38 li	v0,1
+  j	 'VTON_FLIGHT_step_0x6e48
+  nop
+ 'VTON_FLIGHT_step_0x6e44 move	v0,zero
+ 'VTON_FLIGHT_step_0x6e48 sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31358(gp)
+  lh	v0, 31358(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x6e88
+  nop
+  lh	v0, 31360(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x6e80
+  nop
+  sh	zero, 32586(gp)
+  j	 'VTON_FLIGHT_step_0x6e88
+  nop
+ 'VTON_FLIGHT_step_0x6e80 li	v0,1
+  sh	v0, 32586(gp)
+ 'VTON_FLIGHT_step_0x6e88 lh	v0, 31358(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x6ea4
+  nop
+  lh	v0, 32586(gp)
+  j	 'VTON_FLIGHT_step_0x6ea8
+  nop
+ 'VTON_FLIGHT_step_0x6ea4 move	v0,zero
+ 'VTON_FLIGHT_step_0x6ea8 sh	v0, 31308(gp)
+  lh	v0, 31308(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x6ecc
+  nop
+  li	v0,1
+  sh	v0, 32588(gp)
+  j	 'VTON_FLIGHT_step_0x6ef4
+  nop
+ 'VTON_FLIGHT_step_0x6ecc lh	v0, 31534(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x6ee8
+  nop
+  sh	zero, 32588(gp)
+  j	 'VTON_FLIGHT_step_0x6ef4
+  nop
+ 'VTON_FLIGHT_step_0x6ee8 lh	v0, 32590(gp)
+  nop
+  sh	v0, 32588(gp)
+ 'VTON_FLIGHT_step_0x6ef4 lh	v0, 32434(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x8534
+  nop
+  lh	v0, 31640(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x7a14
+  nop
+  lh	v0, 31638(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x7900
+  nop
+  lw	v0, 31216(gp)
+  nop
+  lw	t0,16(v0)
+  lw	a0, 32600(gp)
+  lui	v1,48
+  addiu	a1,v1, 18260
+  move	v0,zero
+  addiu	a2,sp,16
+  addiu	a3,a1,12
+  j	 'VTON_FLIGHT_step_0x6f68
+  nop
+ 'VTON_FLIGHT_step_0x6f50 addu	a1,a2,v0
+  addu	t1,a3,v0
+  lbu	t1,0(t1)
+  nop
+  sb	t1,0(a1)
+  addiu	v0,v0,1
+ 'VTON_FLIGHT_step_0x6f68 lui	a1,1
+  ori	a1,a1,18
+  sltu	a1,v0,a1
+  bnez	a1, 'VTON_FLIGHT_step_0x6f50
+  nop
+  lw	a1, 18260(v1)
+  addiu	v0,v1, 18260
+  lw	a2,4(v0)
+  addiu	v0,v1, 18260
+  lw	a3,8(v0)
+  jr	t0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32402(gp)
+  lh	v0, 32402(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x6fd0
+  nop
+  lh	v0, 32398(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x6fd0
+  nop
+  li	v0,1
+  j	 'VTON_FLIGHT_step_0x6fd4
+  nop
+ 'VTON_FLIGHT_step_0x6fd0 move	v0,zero
+ 'VTON_FLIGHT_step_0x6fd4 sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31556(gp)
+  lh	v0, 31556(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x7604
+  nop
+  lui	v0,48
+  addiu	v0,v0, 18260
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v0,4(v0)
+  nop
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32380(gp)
+  lh	v0, 32380(gp)
+  nop
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31498(gp)
+  lh	v0, 31498(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x7604
+  nop
+  lui	v0,48
+  addiu	v0,v0, 18260
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v0,16(v0)
+  nop
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32394(gp)
+  lh	v0, 32394(gp)
+  nop
+  sltiu	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31412(gp)
+  lh	v0, 32394(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x7274
+  nop
+  lui	v0,47
+  lw	v1, 18296(v0)
+  lui	v0,48
+  lw	v0, 18260(v0)
+  move	a0,v1
+  move	a1,v0
+  jal	 'strcpy
+  nop
+  lui	v0,48
+  addiu	v0,v0, 18260
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v1,8(v0)
+  lui	v0,47
+  addiu	v0,v0, 18296
+  lui	a0,1
+  addu	v0,a0,v0
+  sw	v1,8(v0)
+  lui	v0,48
+  addiu	v0,v0, 18260
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v1,12(v0)
+  lui	v0,47
+  addiu	v0,v0, 18296
+  lui	a0,1
+  addu	v0,a0,v0
+  sw	v1,12(v0)
+  lui	v0,48
+  addiu	v0,v0, 18260
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v1,16(v0)
+  lui	v0,47
+  addiu	v0,v0, 18296
+  lui	a0,1
+  addu	v0,a0,v0
+  sw	v1,16(v0)
+  lui	v0,48
+  addiu	v0,v0, 18260
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v1,20(v0)
+  lui	v0,47
+  addiu	v0,v0, 18296
+  lui	a0,1
+  addu	v0,a0,v0
+  sw	v1,20(v0)
+  lui	v0,48
+  addiu	v0,v0, 18260
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v1,24(v0)
+  lui	v0,47
+  addiu	v0,v0, 18296
+  lui	a0,1
+  addu	v0,a0,v0
+  sw	v1,24(v0)
+  lui	v0,48
+  addiu	v0,v0, 18260
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v1,28(v0)
+  lui	v0,47
+  addiu	v0,v0, 18296
+  lui	a0,1
+  addu	v0,a0,v0
+  sw	v1,28(v0)
+  lui	v0,48
+  addiu	v0,v0, 18260
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v1,32(v0)
+  lui	v0,47
+  addiu	v0,v0, 18296
+  lui	a0,1
+  addu	v0,a0,v0
+  sw	v1,32(v0)
+  lui	v0,48
+  addiu	v0,v0, 18260
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v0,4(v0)
+  nop
+  slt	v0,zero,v0
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31408(gp)
+  lh	v0, 31408(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x724c
+  nop
+  lui	v0,48
+  addiu	v0,v0, 18260
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v0,4(v0)
+  nop
+  addiu	v1,v0, 1
+  lui	v0,47
+  addiu	v0,v0, 18296
+  lui	a0,1
+  addu	v0,a0,v0
+  sw	v1,4(v0)
+  j	 'VTON_FLIGHT_step_0x7274
+  nop
+ 'VTON_FLIGHT_step_0x724c lui	v0,48
+  addiu	v0,v0, 18260
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v1,4(v0)
+  lui	v0,47
+  addiu	v0,v0, 18296
+  lui	a0,1
+  addu	v0,a0,v0
+  sw	v1,4(v0)
+ 'VTON_FLIGHT_step_0x7274 lh	v0, 31412(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x73a4
+  nop
+  lui	v0,48
+  addiu	v0,v0, 18260
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v0,24(v0)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x72b4
+  nop
+  li	v0,1
+  sw	v0, 31920(gp)
+  j	 'VTON_FLIGHT_step_0x72b8
+  nop
+ 'VTON_FLIGHT_step_0x72b4 sw	zero, 31920(gp)
+ 'VTON_FLIGHT_step_0x72b8 lui	v0,48
+  addiu	v0,v0, 18260
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v0,16(v0)
+  nop
+  addiu	v1,v0, 1
+  lui	v0,48
+  addiu	v0,v0, 18260
+  lui	a0,1
+  addu	v0,a0,v0
+  sw	v1,16(v0)
+  lw	v0, 31216(gp)
+  nop
+  lw	t0,12(v0)
+  lui	v0,48
+  addiu	a0,v0, 18260
+  move	v1,zero
+  addiu	a1,sp,16
+  addiu	a2,a0,16
+  j	 'VTON_FLIGHT_step_0x7328
+  nop
+ 'VTON_FLIGHT_step_0x7310 addu	a0,a1,v1
+  addu	a3,a2,v1
+  lbu	a3,0(a3)
+  nop
+  sb	a3,0(a0)
+  addiu	v1,v1,1
+ 'VTON_FLIGHT_step_0x7328 lui	a0,1
+  ori	a0,a0,14
+  sltu	a0,v1,a0
+  bnez	a0, 'VTON_FLIGHT_step_0x7310
+  nop
+  lw	a0, 18260(v0)
+  addiu	v1,v0, 18260
+  lw	a1,4(v1)
+  addiu	v1,v0, 18260
+  lw	a2,8(v1)
+  addiu	v0,v0, 18260
+  lw	a3,12(v0)
+  jr	t0
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,0(v0)
+  lw	v1, 32384(gp)
+  nop
+  move	a0,v1
+  jr	v0
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,8(v0)
+  lw	v1, 32384(gp)
+  nop
+  move	a0,v1
+  li	a1,1
+  jr	v0
+  nop
+ 'VTON_FLIGHT_step_0x73a4 lh	v0, 32394(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x7604
+  nop
+  lh	v0, 31408(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x7454
+  nop
+  sw	zero, 32644(gp)
+  j	 'VTON_FLIGHT_step_0x7420
+  nop
+  lw	v1, 32644(gp)
+  lw	v0, 32644(gp)
+  nop
+  addiu	a0,v0,1
+  lui	v0,49
+  sll	v1,v1,3
+  addiu	v0,v0, 18224
+  addu	v0,v1,v0
+  lui	v1,48
+  sll	a0,a0,3
+  addiu	v1,v1, 18260
+  addu	v1,a0,v1
+  lw	a0,4(v1)
+  lw	v1,8(v1)
+  sw	a0,0(v0)
+  sw	v1,4(v0)
+  lw	v0, 32644(gp)
+  nop
+  addiu	v0,v0,1
+  sw	v0, 32644(gp)
+ 'VTON_FLIGHT_step_0x7420 lw	v0, 32644(gp)
+  nop
+  slti	v0,v0,8191
+  bnez	v0, 'VTON_FLIGHT_step_0x73d0
+  nop
+  lui	v0,49
+  addiu	v0,v0, 18224
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	a0, 32392(gp)
+  lw	v1, 32388(gp)
+  sw	a0, 8(v0)
+  sw	v1, 4(v0)
+ 'VTON_FLIGHT_step_0x7454 lh	v0, 31408(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x74fc
+  nop
+  sw	zero, 31300(gp)
+  j	 'VTON_FLIGHT_step_0x74e0
+  nop
+ 'VTON_FLIGHT_step_0x7470 lw	v0, 31300(gp)
+  lw	a0, 31300(gp)
+  lui	v1,49
+  sll	a0,a0,3
+  addiu	v1,v1, 18224
+  addu	v1,a0,v1
+  lw	v1,0(v1)
+  lui	a0,47
+  addiu	a0,a0, 18296
+  sll	v0,v0,3
+  addu	v0,a0,v0
+  sw	v1,4(v0)
+  lw	a1, 31300(gp)
+  lw	v0, 31300(gp)
+  lui	v1,49
+  addiu	v1,v1, 18224
+  sll	v0,v0,3
+  addu	v0,v1,v0
+  lw	v1,4(v0)
+  lui	v0,47
+  addiu	a0,v0, 18296
+  sll	v0,a1,3
+  addu	v0,a0,v0
+  sw	v1,8(v0)
+  lw	v0, 31300(gp)
+  nop
+  addiu	v0,v0,1
+  sw	v0, 31300(gp)
+ 'VTON_FLIGHT_step_0x74e0 lw	v0, 31300(gp)
+  nop
+  slti	v0,v0,8192
+  bnez	v0, 'VTON_FLIGHT_step_0x7470
+  nop
+  j	 'VTON_FLIGHT_step_0x758c
+  nop
+ 'VTON_FLIGHT_step_0x74fc sw	zero, 31300(gp)
+  j	 'VTON_FLIGHT_step_0x7578
+  nop
+ 'VTON_FLIGHT_step_0x7508 lw	a1, 31300(gp)
+  lw	v0, 31300(gp)
+  lui	v1,48
+  addiu	v1,v1, 18260
+  sll	v0,v0,3
+  addu	v0,v1,v0
+  lw	v1,4(v0)
+  lui	v0,47
+  addiu	a0,v0, 18296
+  sll	v0,a1,3
+  addu	v0,a0,v0
+  sw	v1,4(v0)
+  lw	a1, 31300(gp)
+  lw	v0, 31300(gp)
+  lui	v1,48
+  addiu	v1,v1, 18260
+  sll	v0,v0,3
+  addu	v0,v1,v0
+  lw	v1,8(v0)
+  lui	v0,47
+  addiu	a0,v0, 18296
+  sll	v0,a1,3
+  addu	v0,a0,v0
+  sw	v1,8(v0)
+  lw	v0, 31300(gp)
+  nop
+  addiu	v0,v0,1
+  sw	v0, 31300(gp)
+ 'VTON_FLIGHT_step_0x7578 lw	v0, 31300(gp)
+  nop
+  slti	v0,v0,8192
+  bnez	v0, 'VTON_FLIGHT_step_0x7508
+  nop
+ 'VTON_FLIGHT_step_0x758c lw	v0, 31216(gp)
+  nop
+  lw	t0,12(v0)
+  lui	v0,47
+  addiu	a0,v0, 18296
+  move	v1,zero
+  addiu	a1,sp,16
+  addiu	a2,a0,16
+  j	 'VTON_FLIGHT_step_0x75cc
+  nop
+ 'VTON_FLIGHT_step_0x75b4 addu	a0,a1,v1
+  addu	a3,a2,v1
+  lbu	a3,0(a3)
+  nop
+  sb	a3,0(a0)
+  addiu	v1,v1,1
+ 'VTON_FLIGHT_step_0x75cc lui	a0,1
+  ori	a0,a0,14
+  sltu	a0,v1,a0
+  bnez	a0, 'VTON_FLIGHT_step_0x75b4
+  nop
+  lw	a0, 18296(v0)
+  addiu	v1,v0, 18296
+  lw	a1,4(v1)
+  addiu	v1,v0, 18296
+  lw	a2,8(v1)
+  addiu	v0,v0, 18296
+  lw	a3,12(v0)
+  jr	t0
+  nop
+ 'VTON_FLIGHT_step_0x7604 lh	v0, 31556(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x7620
+  nop
+  lh	v0, 32380(gp)
+  j	 'VTON_FLIGHT_step_0x7624
+  nop
+ 'VTON_FLIGHT_step_0x7620 move	v0,zero
+ 'VTON_FLIGHT_step_0x7624 sh	v0, 31500(gp)
+  lh	v0, 31556(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x7644
+  nop
+  lh	v0, 31498(gp)
+  j	 'VTON_FLIGHT_step_0x7648
+  nop
+ 'VTON_FLIGHT_step_0x7644 move	v0,zero
+ 'VTON_FLIGHT_step_0x7648 sh	v0, 31496(gp)
+  lh	v0, 32400(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x7678
+  nop
+  lh	v0, 31500(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x7678
+  nop
+  li	v0,1
+  j	 'VTON_FLIGHT_step_0x767c
+  nop
+ 'VTON_FLIGHT_step_0x7678 move	v0,zero
+ 'VTON_FLIGHT_step_0x767c sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31454(gp)
+  lh	v0, 31498(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x76a4
+  nop
+  lh	v0, 31412(gp)
+  j	 'VTON_FLIGHT_step_0x76a8
+  nop
+ 'VTON_FLIGHT_step_0x76a4 move	v0,zero
+ 'VTON_FLIGHT_step_0x76a8 sh	v0, 31410(gp)
+  lh	v0, 31454(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x77e8
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,4(v0)
+  li	a0,1
+  jr	v0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32378(gp)
+  lh	v0, 32378(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x77e8
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,8(v0)
+  li	a0,2
+  li	a1,3
+  jr	v0
+  nop
+  lui	v0,48
+  addiu	v0,v0, 18260
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v0,24(v0)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x7738
+  nop
+  sw	zero, 31920(gp)
+  j	 'VTON_FLIGHT_step_0x7740
+  nop
+ 'VTON_FLIGHT_step_0x7738 li	v0,1
+  sw	v0, 31920(gp)
+ 'VTON_FLIGHT_step_0x7740 lui	v0,48
+  addiu	v0,v0, 18260
+  lui	v1,1
+  addu	v0,v1,v0
+  lw	v0,20(v0)
+  nop
+  addiu	v1,v0,1
+  lui	v0,48
+  addiu	v0,v0, 18260
+  lui	a0,1
+  addu	v0,a0,v0
+  sw	v1,20(v0)
+  lw	v0, 31216(gp)
+  nop
+  lw	t0,12(v0)
+  lui	v0,48
+  addiu	a0,v0, 18260
+  move	v1,zero
+  addiu	a1,sp,16
+  addiu	a2,a0,16
+  j	 'VTON_FLIGHT_step_0x77b0
+  nop
+ 'VTON_FLIGHT_step_0x7798 addu	a0,a1,v1
+  addu	a3,a2,v1
+  lbu	a3,0(a3)
+  nop
+  sb	a3,0(a0)
+  addiu	v1,v1,1
+ 'VTON_FLIGHT_step_0x77b0 lui	a0,1
+  ori	a0,a0,14
+  sltu	a0,v1,a0
+  bnez	a0, 'VTON_FLIGHT_step_0x7798
+  nop
+  lw	a0, 18260(v0)
+  addiu	v1,v0, 18260
+  lw	a1,4(v1)
+  addiu	v1,v0, 18260
+  lw	a2,8(v1)
+  addiu	v0,v0, 18260
+  lw	a3,12(v0)
+  jr	t0
+  nop
+ 'VTON_FLIGHT_step_0x77e8 lh	v0, 31454(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x7814
+  nop
+  lh	v0, 32378(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x7814
+  nop
+  li	v0,1
+  j	 'VTON_FLIGHT_step_0x7818
+  nop
+ 'VTON_FLIGHT_step_0x7814 move	v0,zero
+ 'VTON_FLIGHT_step_0x7818 sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31416(gp)
+  lh	v0, 31454(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x7840
+  nop
+  lh	v0, 32378(gp)
+  j	 'VTON_FLIGHT_step_0x7844
+  nop
+ 'VTON_FLIGHT_step_0x7840 move	v0,zero
+ 'VTON_FLIGHT_step_0x7844 sh	v0, 31414(gp)
+  lh	v0, 31414(gp)
+  nop
+  sltu	v0,zero,v0
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31338(gp)
+  lh	v0, 31414(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x7884
+  nop
+  lh	v0, 31410(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x7890
+  nop
+ 'VTON_FLIGHT_step_0x7884 li	v0,1
+  j	 'VTON_FLIGHT_step_0x7894
+  nop
+ 'VTON_FLIGHT_step_0x7890 move	v0,zero
+ 'VTON_FLIGHT_step_0x7894 sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31328(gp)
+  lh	v0, 31338(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x78cc
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,16(v0)
+  li	a0,2
+  li	a1,10
+  jr	v0
+  nop
+ 'VTON_FLIGHT_step_0x78cc lh	v0, 31328(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x7900
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,12(v0)
+  nop
+  jr	v0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32396(gp)
+ 'VTON_FLIGHT_step_0x7900 lh	v0, 32394(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x791c
+  nop
+  lh	v0, 31408(gp)
+  j	 'VTON_FLIGHT_step_0x7920
+  nop
+ 'VTON_FLIGHT_step_0x791c move	v0,zero
+ 'VTON_FLIGHT_step_0x7920 sh	v0, 31406(gp)
+  lh	v0, 31638(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x79a0
+  nop
+  lh	v0, 32400(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x7954
+  nop
+  lh	v0, 31500(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x7994
+  nop
+ 'VTON_FLIGHT_step_0x7954 lh	v0, 32402(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x7994
+  nop
+  lh	v0, 32398(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x7994
+  nop
+  lh	v0, 31416(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x7994
+  nop
+  lh	v0, 31496(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x79a0
+  nop
+ 'VTON_FLIGHT_step_0x7994 li	v0,1
+  j 'VTON_FLIGHT_step_0x79a0
+  nop
+ 'VTON_FLIGHT_step_0x79a0 move	v0,zero
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31324(gp)
+  lh	v0, 31406(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x79cc
+  nop
+  sh	zero, 32404(gp)
+  j 'VTON_FLIGHT_step_0x79cc
+  nop
+ 'VTON_FLIGHT_step_0x79cc li	v0,1
+  sh	v0, 32404(gp)
+  lh	v0, 32414(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x79f0
+  nop
+  sh	zero, 32416(gp)
+  j	 'VTON_FLIGHT_step_0x7a14
+  nop
+ 'VTON_FLIGHT_step_0x79f0 lh	v0, 32404(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x7a10
+  nop
+  li	v0,1
+  sh	v0, 32416(gp)
+  j	 'VTON_FLIGHT_step_0x7a14
+  nop
+ 'VTON_FLIGHT_step_0x7a10 sh	zero, 32416(gp)
+ 'VTON_FLIGHT_step_0x7a14 lh	v0, 31640(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x7a50
+  nop
+  lh	v0, 32414(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x7a44
+  nop
+  lh	v0, 31324(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x7a50
+  nop
+ 'VTON_FLIGHT_step_0x7a44 li	v0,1
+  j	 'VTON_FLIGHT_step_0x7a54
+  nop
+ 'VTON_FLIGHT_step_0x7a50 move	v0,zero
+ 'VTON_FLIGHT_step_0x7a54 sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31322(gp)
+  lh	v0, 31636(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x7fe8
+  nop
+  lh	v0, 31634(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x7ef0
+  nop
+  lw	v0, 31204(gp)
+  nop
+  lw	t0,0(v0)
+  lw	a0, 32616(gp)
+  lui	v0,74
+  addiu	v1,v0, 18200
+  lw	a2,12(v1)
+  lw	a1,16(v1)
+  lw	v1,20(v1)
+  sw	a2,16(sp)
+  sw	a1,20(sp)
+  sw	v1,24(sp)
+  lw	a1, 18200(v0)
+  addiu	v1,v0, 18200
+  lw	a2,4(v1)
+  addiu	v0,v0, 18200
+  lw	a3,8(v0)
+  jr	t0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32364(gp)
+  lh	v0, 32364(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x7b04
+  nop
+  lh	v0, 32368(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x7b04
+  nop
+  li	v0,1
+  j	 'VTON_FLIGHT_step_0x7b08
+  nop
+ 'VTON_FLIGHT_step_0x7b04 move	v0,zero
+ 'VTON_FLIGHT_step_0x7b08 sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31554(gp)
+  lh	v0, 31554(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x7c94
+  nop
+  lui	v0,74
+  addiu	v0,v0, 18200
+  lw	v0,4(v0)
+  nop
+  slt	v0,zero,v0
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32362(gp)
+  lh	v0, 32362(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x7c94
+  nop
+  lui	v0,74
+  lw	v1, 18224(v0)
+  lui	v0,74
+  lw	v0, 18200(v0)
+  move	a0,v1
+  move	a1,v0
+  jal	 'strcpy
+  nop
+  lui	v0,74
+  addiu	v0,v0, 18200
+  lw	v1,8(v0)
+  lui	v0,74
+  addiu	v0,v0, 18224
+  sw	v1,8(v0)
+  lui	v0,74
+  addiu	v0,v0, 18200
+  lw	v1,12(v0)
+  lui	v0,74
+  addiu	v0,v0, 18224
+  sw	v1,12(v0)
+  lui	v0,74
+  addiu	v0,v0, 18200
+  lw	v1,16(v0)
+  lui	v0,74
+  addiu	v0,v0, 18224
+  sw	v1,16(v0)
+  lui	v0,74
+  addiu	v0,v0, 18200
+  lw	v1,20(v0)
+  lui	v0,74
+  addiu	v0,v0, 18224
+  sw	v1,20(v0)
+  lui	v0,74
+  addiu	v0,v0, 18200
+  lw	v0,4(v0)
+  nop
+  slt	v0,zero,v0
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31490(gp)
+  lh	v0, 31490(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x7c34
+  nop
+  lui	v0,74
+  addiu	v0,v0, 18200
+  lw	v0,4(v0)
+  nop
+  addiu	v1,v0, 1
+  lui	v0,74
+  addiu	v0,v0, 18224
+  sw	v1,4(v0)
+  j	 'VTON_FLIGHT_step_0x7c4c
+  nop
+ 'VTON_FLIGHT_step_0x7c34 lui	v0,74
+  addiu	v0,v0, 18200
+  lw	v1,4(v0)
+  lui	v0,74
+  addiu	v0,v0, 18224
+  sw	v1,4(v0)
+ 'VTON_FLIGHT_step_0x7c4c lw	v0, 31204(gp)
+  nop
+  lw	t0,4(v0)
+  lui	v0,74
+  addiu	v1,v0, 18224
+  lw	a0,16(v1)
+  lw	v1,20(v1)
+  sw	a0,16(sp)
+  sw	v1,20(sp)
+  lw	a0, 18224(v0)
+  addiu	v1,v0, 18224
+  lw	a1,4(v1)
+  addiu	v1,v0, 18224
+  lw	a2,8(v1)
+  addiu	v0,v0, 18224
+  lw	a3,12(v0)
+  jr	t0
+  nop
+ 'VTON_FLIGHT_step_0x7c94 lh	v0, 31554(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x7cb0
+  nop
+  lh	v0, 32362(gp)
+  j	 'VTON_FLIGHT_step_0x7cb4
+  nop
+ 'VTON_FLIGHT_step_0x7cb0 move	v0,zero
+ 'VTON_FLIGHT_step_0x7cb4 sh	v0, 31494(gp)
+  lh	v0, 31554(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x7ce4
+  nop
+  lh	v0, 32362(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x7ce4
+  nop
+  li	v0,1
+  j	 'VTON_FLIGHT_step_0x7ce8
+  nop
+ 'VTON_FLIGHT_step_0x7ce4 move	v0,zero
+ 'VTON_FLIGHT_step_0x7ce8 sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31492(gp)
+  lh	v0, 32366(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x7d20
+  nop
+  lh	v0, 31492(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x7d20
+  nop
+  li	v0,1
+  j	 'VTON_FLIGHT_step_0x7d24
+  nop
+ 'VTON_FLIGHT_step_0x7d20 move	v0,zero
+ 'VTON_FLIGHT_step_0x7d24 sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31452(gp)
+  lh	v0, 31452(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x7e48
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,4(v0)
+  li	a0,1
+  jr	v0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32360(gp)
+  lh	v0, 32360(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x7e48
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,8(v0)
+  li	a0,2
+  li	a1,3
+  jr	v0
+  nop
+  lui	v0,74
+  addiu	v0,v0, 18200
+  lw	v0,16(v0)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x7db8
+  nop
+  li	v0,1
+  sw	v0, 31920(gp)
+  j	 'VTON_FLIGHT_step_0x7dbc
+  nop
+ 'VTON_FLIGHT_step_0x7db8 sw	zero, 31920(gp)
+ 'VTON_FLIGHT_step_0x7dbc lui	v0,74
+  addiu	v0,v0, 18200
+  lw	v0,12(v0)
+  nop
+  addiu	v1,v0,1
+  lui	v0,74
+  addiu	v0,v0, 18200
+  sw	v1,12(v0)
+  lw	v0, 31204(gp)
+  nop
+  lw	t0,4(v0)
+  lui	v0,74
+  addiu	v1,v0, 18200
+  lw	a0,16(v1)
+  lw	v1,20(v1)
+  sw	a0,16(sp)
+  sw	v1,20(sp)
+  lw	a0, 18200(v0)
+  addiu	v1,v0, 18200
+  lw	a1,4(v1)
+  addiu	v1,v0, 18200
+  lw	a2,8(v1)
+  addiu	v0,v0, 18200
+  lw	a3,12(v0)
+  jr	t0
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,12(v0)
+  nop
+  jr	v0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32370(gp)
+ 'VTON_FLIGHT_step_0x7e48 lh	v0, 31452(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x7e64
+  nop
+  lh	v0, 32360(gp)
+  j	 'VTON_FLIGHT_step_0x7e68
+  nop
+ 'VTON_FLIGHT_step_0x7e64 move	v0,zero
+ 'VTON_FLIGHT_step_0x7e68 sh	v0, 31404(gp)
+  lh	v0, 31452(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x7e98
+  nop
+  lh	v0, 32360(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x7e98
+  nop
+  li	v0,1
+  j	 'VTON_FLIGHT_step_0x7e9c
+  nop
+ 'VTON_FLIGHT_step_0x7e98 move	v0,zero
+ 'VTON_FLIGHT_step_0x7e9c sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31402(gp)
+  lh	v0, 31404(gp)
+  nop
+  sltu	v0,zero,v0
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31356(gp)
+  lh	v0, 31356(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x7ef0
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,16(v0)
+  li	a0,2
+  li	a1,20
+  jr	v0
+  nop
+ 'VTON_FLIGHT_step_0x7ef0 lh	v0, 31634(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x7f6c
+  nop
+  lh	v0, 32366(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x7f20
+  nop
+  lh	v0, 31492(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x7f60
+  nop
+ 'VTON_FLIGHT_step_0x7f20 lh	v0, 32364(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x7f60
+  nop
+  lh	v0, 32368(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x7f60
+  nop
+  lh	v0, 31402(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x7f60
+  nop
+  lh	v0, 31494(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x7f6c
+  nop
+ 'VTON_FLIGHT_step_0x7f60 li	v0,1
+  j	 'VTON_FLIGHT_step_0x7f70
+  nop
+ 'VTON_FLIGHT_step_0x7f6c move	v0,zero
+ 'VTON_FLIGHT_step_0x7f70 sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31354(gp)
+  lh	v0, 32374(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x7f9c
+  nop
+  lh	v0, 31354(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x7f9c
+  nop
+ 'VTON_FLIGHT_step_0x7f9c li	v0,1
+  j	 'VTON_FLIGHT_step_0x7fac
+  nop
+  move	v0,zero
+ 'VTON_FLIGHT_step_0x7fac sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31352(gp)
+  lh	v0, 31352(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x7fd4
+  nop
+  sh	zero, 32372(gp)
+  j	 'VTON_FLIGHT_step_0x7fdc
+  nop
+ 'VTON_FLIGHT_step_0x7fd4 li	v0,1
+  sh	v0, 32372(gp)
+ 'VTON_FLIGHT_step_0x7fdc lh	v0, 32372(gp)
+  nop
+  sh	v0, 32376(gp)
+ 'VTON_FLIGHT_step_0x7fe8 lh	v0, 31636(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x8004
+  nop
+  lh	v0, 31352(gp)
+  j	 'VTON_FLIGHT_step_0x8008
+  nop
+ 'VTON_FLIGHT_step_0x8004 move	v0,zero
+ 'VTON_FLIGHT_step_0x8008 sh	v0, 31350(gp)
+  lh	v0, 31630(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x805c
+  nop
+  lh	v0, 31626(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x805c
+  nop
+  lh	v0, 31622(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x805c
+  nop
+  lh	v0, 31350(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x805c
+  nop
+  lh	v0, 31322(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x8068
+  nop
+ 'VTON_FLIGHT_step_0x805c li	v0,1
+  j	 'VTON_FLIGHT_step_0x806c
+  nop
+ 'VTON_FLIGHT_step_0x8068 move	v0,zero
+ 'VTON_FLIGHT_step_0x806c sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31320(gp)
+  lh	v0, 31320(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x8098
+  nop
+  lh	v0, 31502(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x80a4
+  nop
+ 'VTON_FLIGHT_step_0x8098 li	v0,1
+  j	 'VTON_FLIGHT_step_0x80a8
+  nop
+ 'VTON_FLIGHT_step_0x80a4 move	v0,zero
+ 'VTON_FLIGHT_step_0x80a8 sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31318(gp)
+  lh	v0, 31318(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x80e8
+  nop
+  lh	v0, 31320(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x80e0
+  nop
+  sh	zero, 32428(gp)
+  j	 'VTON_FLIGHT_step_0x80e8
+  nop
+ 'VTON_FLIGHT_step_0x80e0 li	v0,1
+  sh	v0, 32428(gp)
+ 'VTON_FLIGHT_step_0x80e8 lh	v0, 31318(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x8104
+  nop
+  lh	v0, 32428(gp)
+  j	 'VTON_FLIGHT_step_0x8108
+  nop
+ 'VTON_FLIGHT_step_0x8104 move	v0,zero
+ 'VTON_FLIGHT_step_0x8108 sh	v0, 31306(gp)
+  lh	v0, 31306(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x812c
+  nop
+  li	v0,1
+  sh	v0, 32430(gp)
+  j	 'VTON_FLIGHT_step_0x8154
+  nop
+ 'VTON_FLIGHT_step_0x812c lh	v0, 31502(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x8148
+  nop
+  sh	zero, 32430(gp)
+  j	 'VTON_FLIGHT_step_0x8154
+  nop
+ 'VTON_FLIGHT_step_0x8148 lh	v0, 32432(gp)
+  nop
+  sh	v0, 32430(gp)
+ 'VTON_FLIGHT_step_0x8154 lh	v0, 31630(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x8534
+  nop
+  lw	v0, 31204(gp)
+  nop
+  lw	t0,0(v0)
+  lw	a0, 32616(gp)
+  lui	v0,74
+  addiu	v1,v0, 18152
+  lw	a2,12(v1)
+  lw	a1,16(v1)
+  lw	v1,20(v1)
+  sw	a2,16(sp)
+  sw	a1,20(sp)
+  sw	v1,24(sp)
+  lw	a1, 18152(v0)
+  addiu	v1,v0, 18152
+  lw	a2,4(v1)
+  addiu	v0,v0, 18152
+  lw	a3,8(v0)
+  jr	t0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32348(gp)
+  lh	v0, 32348(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x8534
+  nop
+  lui	v0,74
+  addiu	v0,v0, 18152
+  lw	v0,12(v0)
+  nop
+  slt	v0,zero,v0
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32352(gp)
+  lui	v0,74
+  addiu	v0,v0, 18152
+  lw	v1,4(v0)
+  lui	v0,74
+  addiu	v0,v0, 18152
+  lw	v0,8(v0)
+  nop
+  xor	v0,v1,v0
+  sltu	v0,zero,v0
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31628(gp)
+  lh	v0, 31628(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x8250
+  nop
+  lh	v0, 32352(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x8250
+  nop
+  li	v0,1
+  j	 'VTON_FLIGHT_step_0x8254
+  nop
+ 'VTON_FLIGHT_step_0x8250 move	v0,zero
+ 'VTON_FLIGHT_step_0x8254 sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31552(gp)
+  lh	v0, 31628(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x828c
+  nop
+  lh	v0, 32352(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x828c
+  nop
+  li	v0,1
+  j	 'VTON_FLIGHT_step_0x8290
+  nop
+ 'VTON_FLIGHT_step_0x828c move	v0,zero
+ 'VTON_FLIGHT_step_0x8290 sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31550(gp)
+  lh	v0, 31550(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x83dc
+  nop
+  lui	v0,74
+  addiu	v0,v0, 18152
+  lw	v0,16(v0)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x82d4
+  nop
+  li	v0,1
+  sw	v0, 31920(gp)
+  j	 'VTON_FLIGHT_step_0x82d8
+  nop
+ 'VTON_FLIGHT_step_0x82d4 sw	zero, 31920(gp)
+ 'VTON_FLIGHT_step_0x82d8 lui	v0,74
+  addiu	v0,v0, 18152
+  lw	v0,12(v0)
+  nop
+  addiu	v1,v0, 1
+  lui	v0,74
+  addiu	v0,v0, 18152
+  sw	v1,12(v0)
+  lw	v0, 31204(gp)
+  nop
+  lw	t0,4(v0)
+  lui	v0,74
+  addiu	v1,v0, 18152
+  lw	a0,16(v1)
+  lw	v1,20(v1)
+  sw	a0,16(sp)
+  sw	v1,20(sp)
+  lw	a0, 18152(v0)
+  addiu	v1,v0, 18152
+  lw	a1,4(v1)
+  addiu	v1,v0, 18152
+  lw	a2,8(v1)
+  addiu	v0,v0, 18152
+  lw	a3,12(v0)
+  jr	t0
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,0(v0)
+  lw	v1, 32356(gp)
+  nop
+  move	a0,v1
+  jr	v0
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,8(v0)
+  lw	v1, 32356(gp)
+  nop
+  move	a0,v1
+  li	a1,1
+  jr	v0
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,4(v0)
+  li	a0,1
+  jr	v0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32346(gp)
+  lh	v0, 32346(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x83dc
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,12(v0)
+  nop
+  jr	v0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32350(gp)
+ 'VTON_FLIGHT_step_0x83dc lh	v0, 31552(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x8534
+  nop
+  lui	v0,74
+  lw	v1, 18176(v0)
+  lui	v0,74
+  lw	v0, 18152(v0)
+  move	a0,v1
+  move	a1,v0
+  jal	 'strcpy
+  nop
+  lui	v0,74
+  addiu	v0,v0, 18152
+  lw	v1,8(v0)
+  lui	v0,74
+  addiu	v0,v0, 18176
+  sw	v1,8(v0)
+  lui	v0,74
+  addiu	v0,v0, 18152
+  lw	v1,12(v0)
+  lui	v0,74
+  addiu	v0,v0, 18176
+  sw	v1,12(v0)
+  lui	v0,74
+  addiu	v0,v0, 18152
+  lw	v1,16(v0)
+  lui	v0,74
+  addiu	v0,v0, 18176
+  sw	v1,16(v0)
+  lui	v0,74
+  addiu	v0,v0, 18152
+  lw	v1,20(v0)
+  lui	v0,74
+  addiu	v0,v0, 18176
+  sw	v1,20(v0)
+  lui	v0,74
+  addiu	v0,v0, 18152
+  lw	v1,4(v0)
+  lui	v0,74
+  addiu	v0,v0, 18152
+  lw	v0,8(v0)
+  nop
+  slt	v0,v1,v0
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31488(gp)
+  lh	v0, 31488(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x84d4
+  nop
+  lui	v0,74
+  addiu	v0,v0, 18152
+  lw	v0,4(v0)
+  nop
+  addiu	v1,v0,1
+  lui	v0,74
+  addiu	v0,v0, 18176
+  sw	v1,4(v0)
+  j	 'VTON_FLIGHT_step_0x84ec
+  nop
+ 'VTON_FLIGHT_step_0x84d4 lui	v0,74
+  addiu	v0,v0, 18152
+  lw	v1,4(v0)
+  lui	v0,74
+  addiu	v0,v0, 18176
+  sw	v1,4(v0)
+ 'VTON_FLIGHT_step_0x84ec lw	v0, 31204(gp)
+  nop
+  lw	t0,4(v0)
+  lui	v0,74
+  addiu	v1,v0, 18176
+  lw	a0,16(v1)
+  lw	v1,20(v1)
+  sw	a0,16(sp)
+  sw	v1,20(sp)
+  lw	a0, 18176(v0)
+  addiu	v1,v0, 18176
+  lw	a1,4(v1)
+  addiu	v1,v0, 18176
+  lw	a2,8(v1)
+  addiu	v0,v0, 18176
+  lw	a3,12(v0)
+  jr	t0
+  nop
+ 'VTON_FLIGHT_step_0x8534 lh	v0, 32320(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x9018
+  nop
+  lh	v0, 31614(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x8acc
+  nop
+  lh	v0, 31612(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x89d4
+  nop
+  lw	v0, 31204(gp)
+  nop
+  lw	t0,0(v0)
+  lw	a0, 32616(gp)
+  lui	v0,77
+  addiu	v1,v0, 17688
+  lw	a2,12(v1)
+  lw	a1,16(v1)
+  lw	v1,20(v1)
+  sw	a2,16(sp)
+  sw	a1,20(sp)
+  sw	v1,24(sp)
+  lw	a1, 17688(v0)
+  addiu	v1,v0, 17688
+  lw	a2,4(v1)
+  addiu	v0,v0, 17688
+  lw	a3,8(v0)
+  jr	t0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32252(gp)
+  lh	v0, 32252(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x85e8
+  nop
+  lh	v0, 32256(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x85e8
+  nop
+  li	v0,1
+  j	 'VTON_FLIGHT_step_0x85ec
+  nop
+ 'VTON_FLIGHT_step_0x85e8 move	v0,zero
+ 'VTON_FLIGHT_step_0x85ec sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31544(gp)
+  lh	v0, 31544(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x8778
+  nop
+  lui	v0,77
+  addiu	v0,v0, 17688
+  lw	v0,4(v0)
+  nop
+  slt	v0,zero,v0
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32250(gp)
+  lh	v0, 32250(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x8778
+  nop
+  lui	v0,77
+  lw	v1, 17712(v0)
+  lui	v0,77
+  lw	v0, 17688(v0)
+  move	a0,v1
+  move	a1,v0
+  jal	 'strcpy
+  nop
+  lui	v0,77
+  addiu	v0,v0, 17688
+  lw	v1,8(v0)
+  lui	v0,77
+  addiu	v0,v0, 17712
+  sw	v1,8(v0)
+  lui	v0,77
+  addiu	v0,v0, 17688
+  lw	v1,12(v0)
+  lui	v0,77
+  addiu	v0,v0, 17712
+  sw	v1,12(v0)
+  lui	v0,77
+  addiu	v0,v0, 17688
+  lw	v1,16(v0)
+  lui	v0,77
+  addiu	v0,v0, 17712
+  sw	v1,16(v0)
+  lui	v0,77
+  addiu	v0,v0, 17688
+  lw	v1,20(v0)
+  lui	v0,77
+  addiu	v0,v0, 17712
+  sw	v1,20(v0)
+  lui	v0,77
+  addiu	v0,v0, 17688
+  lw	v0,4(v0)
+  nop
+  slt	v0,zero,v0
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31470(gp)
+  lh	v0, 31470(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x8718
+  nop
+  lui	v0,77
+  addiu	v0,v0, 17688
+  lw	v0,4(v0)
+  nop
+  addiu	v1,v0, 1
+  lui	v0,77
+  addiu	v0,v0, 17712
+  sw	v1,4(v0)
+  j	 'VTON_FLIGHT_step_0x8730
+  nop
+ 'VTON_FLIGHT_step_0x8718 lui	v0,77
+  addiu	v0,v0, 17688
+  lw	v1,4(v0)
+  lui	v0,77
+  addiu	v0,v0, 17712
+  sw	v1,4(v0)
+ 'VTON_FLIGHT_step_0x8730 lw	v0, 31204(gp)
+  nop
+  lw	t0,4(v0)
+  lui	v0,77
+  addiu	v1,v0, 17712
+  lw	a0,16(v1)
+  lw	v1,20(v1)
+  sw	a0,16(sp)
+  sw	v1,20(sp)
+  lw	a0, 17712(v0)
+  addiu	v1,v0, 17712
+  lw	a1,4(v1)
+  addiu	v1,v0, 17712
+  lw	a2,8(v1)
+  addiu	v0,v0, 17712
+  lw	a3,12(v0)
+  jr	t0
+  nop
+ 'VTON_FLIGHT_step_0x8778 lh	v0, 31544(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x8794
+  nop
+  lh	v0, 32250(gp)
+  j	 'VTON_FLIGHT_step_0x8798
+  nop
+ 'VTON_FLIGHT_step_0x8794 move	v0,zero
+ 'VTON_FLIGHT_step_0x8798 sh	v0, 31474(gp)
+  lh	v0, 31544(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x87c8
+  nop
+  lh	v0, 32250(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x87c8
+  nop
+  li	v0,1
+  j	 'VTON_FLIGHT_step_0x87cc
+  nop
+ 'VTON_FLIGHT_step_0x87c8 move	v0,zero
+ 'VTON_FLIGHT_step_0x87cc sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31472(gp)
+  lh	v0, 32254(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x8804
+  nop
+  lh	v0, 31472(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x8804
+  nop
+  li	v0,1
+  j	 'VTON_FLIGHT_step_0x8808
+  nop
+ 'VTON_FLIGHT_step_0x8804 move	v0,zero
+ 'VTON_FLIGHT_step_0x8808 sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31448(gp)
+  lh	v0, 31448(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x892c
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,4(v0)
+  li	a0,1
+  jr	v0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32248(gp)
+  lh	v0, 32248(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x892c
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,8(v0)
+  li	a0,3
+  li	a1,3
+  jr	v0
+  nop
+  lui	v0,77
+  addiu	v0,v0, 17688
+  lw	v0,16(v0)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x889c
+  nop
+  li	v0,1
+  sw	v0, 31920(gp)
+  j	 'VTON_FLIGHT_step_0x88a0
+  nop
+ 'VTON_FLIGHT_step_0x889c sw	zero, 31920(gp)
+ 'VTON_FLIGHT_step_0x88a0 lui	v0,77
+  addiu	v0,v0, 17688
+  lw	v0,12(v0)
+  nop
+  addiu	v1,v0,1
+  lui	v0,77
+  addiu	v0,v0, 17688
+  sw	v1,12(v0)
+  lw	v0, 31204(gp)
+  nop
+  lw	t0,4(v0)
+  lui	v0,77
+  addiu	v1,v0, 17688
+  lw	a0,16(v1)
+  lw	v1,20(v1)
+  sw	a0,16(sp)
+  sw	v1,20(sp)
+  lw	a0, 17688(v0)
+  addiu	v1,v0, 17688
+  lw	a1,4(v1)
+  addiu	v1,v0, 17688
+  lw	a2,8(v1)
+  addiu	v0,v0, 17688
+  lw	a3,12(v0)
+  jr	t0
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,12(v0)
+  nop
+  jr	v0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32258(gp)
+ 'VTON_FLIGHT_step_0x892c lh	v0, 31448(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x8948
+  nop
+  lh	v0, 32248(gp)
+  j	 'VTON_FLIGHT_step_0x894c
+  nop
+ 'VTON_FLIGHT_step_0x8948 move	v0,zero
+ 'VTON_FLIGHT_step_0x894c sh	v0, 31388(gp)
+  lh	v0, 31448(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x897c
+  nop
+  lh	v0, 32248(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x897c
+  nop
+  li	v0,1
+  j	 'VTON_FLIGHT_step_0x8980
+  nop
+ 'VTON_FLIGHT_step_0x897c move	v0,zero
+ 'VTON_FLIGHT_step_0x8980 sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31386(gp)
+  lh	v0, 31388(gp)
+  nop
+  sltu	v0,zero,v0
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31348(gp)
+  lh	v0, 31348(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x89d4
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,16(v0)
+  li	a0,3
+  li	a1,5
+  jr	v0
+  nop
+ 'VTON_FLIGHT_step_0x89d4 lh	v0, 31612(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x8a50
+  nop
+  lh	v0, 32254(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x8a04
+  nop
+  lh	v0, 31472(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x8a44
+  nop
+ 'VTON_FLIGHT_step_0x8a04 lh	v0, 32252(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x8a44
+  nop
+  lh	v0, 32256(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x8a44
+  nop
+  lh	v0, 31386(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x8a44
+  nop
+  lh	v0, 31474(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x8a50
+  nop
+ 'VTON_FLIGHT_step_0x8a44 li	v0,1
+  j	 'VTON_FLIGHT_step_0x8a54
+  nop
+ 'VTON_FLIGHT_step_0x8a50 move	v0,zero
+ 'VTON_FLIGHT_step_0x8a54 sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31346(gp)
+  lh	v0, 32262(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x8a80
+  nop
+  lh	v0, 31346(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x8a8c
+  nop
+ 'VTON_FLIGHT_step_0x8a80 li	v0,1
+  j	 'VTON_FLIGHT_step_0x8a90
+  nop
+ 'VTON_FLIGHT_step_0x8a8c move	v0,zero
+ 'VTON_FLIGHT_step_0x8a90 sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31344(gp)
+  lh	v0, 31344(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x8ab8
+  nop
+  sh	zero, 32260(gp)
+  j	 'VTON_FLIGHT_step_0x8ac0
+  nop
+ 'VTON_FLIGHT_step_0x8ab8 li	v0,1
+  sh	v0, 32260(gp)
+ 'VTON_FLIGHT_step_0x8ac0 lh	v0, 32260(gp)
+  nop
+  sh	v0, 32264(gp)
+ 'VTON_FLIGHT_step_0x8acc lh	v0, 31614(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x8ae8
+  nop
+  lh	v0, 31344(gp)
+  j	 'VTON_FLIGHT_step_0x8aec
+  nop
+ 'VTON_FLIGHT_step_0x8ae8 move	v0,zero
+ 'VTON_FLIGHT_step_0x8aec sh	v0, 31342(gp)
+  lh	v0, 31608(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x8b40
+  nop
+  lh	v0, 31604(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x8b40
+  nop
+  lh	v0, 31598(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x8b40
+  nop
+  lh	v0, 31342(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x8b40
+  nop
+  lh	v0, 31314(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x8b4c
+  nop
+ 'VTON_FLIGHT_step_0x8b40 li	v0,1
+  j	 'VTON_FLIGHT_step_0x8b50
+  nop
+ 'VTON_FLIGHT_step_0x8b4c move	v0,zero
+ 'VTON_FLIGHT_step_0x8b50 sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31312(gp)
+  lh	v0, 31312(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x8b7c
+  nop
+  lh	v0, 31482(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x8b88
+  nop
+ 'VTON_FLIGHT_step_0x8b7c li	v0,1
+  j	 'VTON_FLIGHT_step_0x8b8c
+  nop
+ 'VTON_FLIGHT_step_0x8b88 move	v0,zero
+ 'VTON_FLIGHT_step_0x8b8c sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31310(gp)
+  lh	v0, 31310(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x8bcc
+  nop
+  lh	v0, 31312(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x8bc4
+  nop
+  sh	zero, 32314(gp)
+  j	 'VTON_FLIGHT_step_0x8bcc
+  nop
+ 'VTON_FLIGHT_step_0x8bc4 li	v0,1
+  sh	v0, 32314(gp)
+ 'VTON_FLIGHT_step_0x8bcc lh	v0, 31310(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x8be8
+  nop
+  lh	v0, 32314(gp)
+  j	 'VTON_FLIGHT_step_0x8bec
+  nop
+ 'VTON_FLIGHT_step_0x8be8 move	v0,zero
+ 'VTON_FLIGHT_step_0x8bec sh	v0, 31304(gp)
+  lh	v0, 31304(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x8c10
+  nop
+  li	v0,1
+  sh	v0, 32316(gp)
+  j	 'VTON_FLIGHT_step_0x8c38
+  nop
+ 'VTON_FLIGHT_step_0x8c10 lh	v0, 31482(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x8c2c
+  nop
+  sh	zero, 32316(gp)
+  j	 'VTON_FLIGHT_step_0x8c38
+  nop
+ 'VTON_FLIGHT_step_0x8c2c lh	v0, 32318(gp)
+  nop
+  sh	v0, 32316(gp)
+ 'VTON_FLIGHT_step_0x8c38 lh	v0, 31608(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x9018
+  nop
+  lw	v0, 31204(gp)
+  nop
+  lw	t0,0(v0)
+  lw	a0, 32616(gp)
+  lui	v0,77
+  addiu	v1,v0, 17640
+  lw	a2,12(v1)
+  lw	a1,16(v1)
+  lw	v1,20(v1)
+  sw	a2,16(sp)
+  sw	a1,20(sp)
+  sw	v1,24(sp)
+  lw	a1, 17640(v0)
+  addiu	v1,v0, 17640
+  lw	a2,4(v1)
+  addiu	v0,v0, 17640
+  lw	a3,8(v0)
+  jr	t0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32236(gp)
+  lh	v0, 32236(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x9018
+  nop
+  lui	v0,77
+  addiu	v0,v0, 17640
+  lw	v0,12(v0)
+  nop
+  slt	v0,zero,v0
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32240(gp)
+  lui	v0,77
+  addiu	v0,v0, 17640
+  lw	v1,4(v0)
+  lui	v0,77
+  addiu	v0,v0, 17640
+  lw	v0,8(v0)
+  nop
+  xor	v0,v1,v0
+  sltu	v0,zero,v0
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31606(gp)
+  lh	v0, 31606(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x8d34
+  nop
+  lh	v0, 32240(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x8d34
+  nop
+  li	v0,1
+  j	 'VTON_FLIGHT_step_0x8d38
+  nop
+ 'VTON_FLIGHT_step_0x8d34 move	v0,zero
+ 'VTON_FLIGHT_step_0x8d38 sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31542(gp)
+  lh	v0, 31606(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x8d70
+  nop
+  lh	v0, 32240(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x8d70
+  nop
+  li	v0,1
+  j	 'VTON_FLIGHT_step_0x8d74
+  nop
+ 'VTON_FLIGHT_step_0x8d70 move	v0,zero
+ 'VTON_FLIGHT_step_0x8d74 sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31540(gp)
+  lh	v0, 31540(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x8ec0
+  nop
+  lui	v0,77
+  addiu	v0,v0, 17640
+  lw	v0,16(v0)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x8db8
+  nop
+  li	v0,1
+  sw	v0, 31920(gp)
+  j	 'VTON_FLIGHT_step_0x8dbc
+  nop
+ 'VTON_FLIGHT_step_0x8db8 sw	zero, 31920(gp)
+ 'VTON_FLIGHT_step_0x8dbc lui	v0,77
+  addiu	v0,v0, 17640
+  lw	v0,12(v0)
+  nop
+  addiu	v1,v0, 1
+  lui	v0,77
+  addiu	v0,v0, 17640
+  sw	v1,12(v0)
+  lw	v0, 31204(gp)
+  nop
+  lw	t0,4(v0)
+  lui	v0,77
+  addiu	v1,v0, 17640
+  lw	a0,16(v1)
+  lw	v1,20(v1)
+  sw	a0,16(sp)
+  sw	v1,20(sp)
+  lw	a0, 17640(v0)
+  addiu	v1,v0, 17640
+  lw	a1,4(v1)
+  addiu	v1,v0, 17640
+  lw	a2,8(v1)
+  addiu	v0,v0, 17640
+  lw	a3,12(v0)
+  jr	t0
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,0(v0)
+  lw	v1, 32244(gp)
+  nop
+  move	a0,v1
+  jr	v0
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,8(v0)
+  lw	v1, 32244(gp)
+  nop
+  move	a0,v1
+  li	a1,1
+  jr	v0
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,4(v0)
+  li	a0,1
+  jr	v0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32234(gp)
+  lh	v0, 32234(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x8ec0
+  nop
+  lw	v0, 31200(gp)
+  nop
+  lw	v0,12(v0)
+  nop
+  jr	v0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32238(gp)
+ 'VTON_FLIGHT_step_0x8ec0 lh	v0, 31542(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x9018
+  nop
+  lui	v0,77
+  lw	v1, 17664(v0)
+  lui	v0,77
+  lw	v0, 17640(v0)
+  move	a0,v1
+  move	a1,v0
+  jal	 'strcpy
+  nop
+  lui	v0,77
+  addiu	v0,v0, 17640
+  lw	v1,8(v0)
+  lui	v0,77
+  addiu	v0,v0, 17664
+  sw	v1,8(v0)
+  lui	v0,77
+  addiu	v0,v0, 17640
+  lw	v1,12(v0)
+  lui	v0,77
+  addiu	v0,v0, 17664
+  sw	v1,12(v0)
+  lui	v0,77
+  addiu	v0,v0, 17640
+  lw	v1,16(v0)
+  lui	v0,77
+  addiu	v0,v0, 17664
+  sw	v1,16(v0)
+  lui	v0,77
+  addiu	v0,v0, 17640
+  lw	v1,20(v0)
+  lui	v0,77
+  addiu	v0,v0, 17664
+  sw	v1,20(v0)
+  lui	v0,77
+  addiu	v0,v0, 17640
+  lw	v1,4(v0)
+  lui	v0,77
+  addiu	v0,v0, 17640
+  lw	v0,8(v0)
+  nop
+  slt	v0,v1,v0
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31468(gp)
+  lh	v0, 31468(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x8fb8
+  nop
+  lui	v0,77
+  addiu	v0,v0, 17640
+  lw	v0,4(v0)
+  nop
+  addiu	v1,v0,1
+  lui	v0,77
+  addiu	v0,v0, 17664
+  sw	v1,4(v0)
+  j	 'VTON_FLIGHT_step_0x8fd0
+  nop
+ 'VTON_FLIGHT_step_0x8fb8 lui	v0,77
+  addiu	v0,v0, 17640
+  lw	v1,4(v0)
+  lui	v0,77
+  addiu	v0,v0, 17664
+  sw	v1,4(v0)
+ 'VTON_FLIGHT_step_0x8fd0 lw	v0, 31204(gp)
+  nop
+  lw	t0,4(v0)
+  lui	v0,77
+  addiu	v1,v0, 17664
+  lw	a0,16(v1)
+  lw	v1,20(v1)
+  sw	a0,16(sp)
+  sw	v1,20(sp)
+  lw	a0, 17664(v0)
+  addiu	v1,v0, 17664
+  lw	a1,4(v1)
+  addiu	v1,v0, 17664
+  lw	a2,8(v1)
+  addiu	v0,v0, 17664
+  lw	a3,12(v0)
+  jr	t0
+  nop
+ 'VTON_FLIGHT_step_0x9018 lw	a0, 31812(gp)
+  lw	a1, 31824(gp)
+  lw	v1, 32676(gp)
+  lw	v0, 32676(gp)
+  nop
+  addu	v1,v1,v0
+  lw	v0, 32672(gp)
+  nop
+  addu	v1,v1,v0
+  lw	v0, 32680(gp)
+  nop
+  sll	v0,v0,1
+  sll	a2,v0,2
+  addu	v0,v0,a2
+  move	a2,v1
+  move	a3,v0
+  jal	 'WEFFACE
+  nop
+  lh	v0, 31680(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x990c
+  nop
+  lh	v0, 32084(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x990c
+  nop
+  lh	v0, 31916(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x990c
+  nop
+  lh	v0, 32592(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x91f0
+  nop
+  lw	a0, 31812(gp)
+  lw	a1, 31828(gp)
+  lw	v1, 32680(gp)
+  nop
+  move	v0,v1
+  sll	v0,v0,1
+  addu	v1,v0,v1
+  lw	v0, 31808(gp)
+  move	a2,v1
+  move	a3,v0
+  jal	 'WHLINE
+  nop
+  lw	a0, 31812(gp)
+  lw	a1, 31808(gp)
+  lw	v1, 32680(gp)
+  nop
+  move	v0,v1
+  sll	v0,v0,1
+  addu	v1,v0,v1
+  lw	v0, 32680(gp)
+  nop
+  sll	v0,v0,2
+  move	a2,v1
+  move	a3,v0
+  jal	 'WVLINE
+  nop
+  lw	a0, 31812(gp)
+  lw	a1, 31808(gp)
+  lw	v0, 32680(gp)
+  nop
+  sll	v1,v0,2
+  lw	v0, 31804(gp)
+  move	a2,v1
+  move	a3,v0
+  jal	 'WHLINE
+  nop
+  lw	a0, 31812(gp)
+  lw	a1, 31804(gp)
+  lw	v1, 32680(gp)
+  nop
+  move	v0,v1
+  sll	v0,v0,1
+  addu	v1,v0,v1
+  lw	v0, 32680(gp)
+  nop
+  sll	v0,v0,2
+  move	a2,v1
+  move	a3,v0
+  jal	 'WVLINE
+  nop
+  lw	a0, 31812(gp)
+  lw	a1, 31804(gp)
+  lw	v1, 32680(gp)
+  nop
+  move	v0,v1
+  sll	v0,v0,1
+  addu	v1,v0,v1
+  lw	a2, 31804(gp)
+  lw	v0, 32676(gp)
+  nop
+  addu	v0,a2,v0
+  move	a2,v1
+  move	a3,v0
+  jal	 'WHLINE
+  nop
+  lw	a0, 31812(gp)
+  lw	a1, 31784(gp)
+  lw	a2, 31828(gp)
+  lw	v0, 32680(gp)
+  nop
+  sll	a3,v0,1
+  lw	v1, 32668(gp)
+  nop
+  move	v0,v1
+  sll	v0,v0,3
+  addu	v0,v0,v1
+  negu	v0,v0
+  addu	v1,a3,v0
+  lw	v0, 32664(gp)
+  nop
+  subu	v0,v1,v0
+  move	a3,v0
+  jal	 'WSTRING
+  nop
+ 'VTON_FLIGHT_step_0x91f0 lh	v0, 32434(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x9400
+  nop
+  lw	a0, 31812(gp)
+  lw	a1, 31828(gp)
+  lw	v0, 32668(gp)
+  nop
+  sll	v0,v0,1
+  sll	v1,v0,2
+  subu	v0,v1,v0
+  negu	v0,v0
+  lw	v1, 32680(gp)
+  nop
+  subu	v1,v0,v1
+  lw	v0, 31800(gp)
+  move	a2,v1
+  move	a3,v0
+  jal	 'WHLINE
+  nop
+  lw	a0, 31812(gp)
+  lw	a1, 31800(gp)
+  lw	v0, 32668(gp)
+  nop
+  sll	v0,v0,1
+  sll	v1,v0,2
+  subu	v0,v1,v0
+  negu	v0,v0
+  lw	v1, 32680(gp)
+  nop
+  subu	v1,v0,v1
+  lw	v0, 32668(gp)
+  nop
+  sll	v0,v0,1
+  sll	a2,v0,2
+  subu	v0,a2,v0
+  negu	v0,v0
+  lw	a2, 32680(gp)
+  nop
+  subu	a2,v0,a2
+  lw	v0, 32680(gp)
+  nop
+  addu	v0,a2,v0
+  move	a2,v1
+  move	a3,v0
+  jal	 'WVLINE
+  nop
+  lw	a0, 31812(gp)
+  lw	a1, 31800(gp)
+  lw	v0, 32668(gp)
+  nop
+  sll	v0,v0,1
+  sll	v1,v0,2
+  subu	v0,v1,v0
+  negu	v0,v0
+  lw	v1, 32680(gp)
+  nop
+  subu	v1,v0,v1
+  lw	v0, 32680(gp)
+  nop
+  addu	v1,v1,v0
+  lw	v0, 31796(gp)
+  move	a2,v1
+  move	a3,v0
+  jal	 'WHLINE
+  nop
+  lw	a0, 31812(gp)
+  lw	a1, 31796(gp)
+  lw	v0, 32668(gp)
+  nop
+  sll	v0,v0,1
+  sll	v1,v0,2
+  subu	v0,v1,v0
+  negu	v0,v0
+  lw	v1, 32680(gp)
+  nop
+  subu	v1,v0,v1
+  lw	v0, 32668(gp)
+  nop
+  sll	v0,v0,1
+  sll	a2,v0,2
+  subu	v0,a2,v0
+  negu	v0,v0
+  lw	a2, 32680(gp)
+  nop
+  subu	a2,v0,a2
+  lw	v0, 32680(gp)
+  nop
+  addu	v0,a2,v0
+  move	a2,v1
+  move	a3,v0
+  jal	 'WVLINE
+  nop
+  lw	a0, 31812(gp)
+  lw	a1, 31796(gp)
+  lw	v0, 32668(gp)
+  nop
+  sll	v0,v0,1
+  sll	v1,v0,2
+  subu	v0,v1,v0
+  negu	v0,v0
+  lw	v1, 32680(gp)
+  nop
+  subu	v1,v0,v1
+  lw	a2, 31796(gp)
+  lw	v0, 32676(gp)
+  nop
+  addu	v0,a2,v0
+  move	a2,v1
+  move	a3,v0
+  jal	 'WHLINE
+  nop
+  lw	a0, 31812(gp)
+  lw	a1, 31780(gp)
+  lw	a2, 31828(gp)
+  lw	v1, 32680(gp)
+  nop
+  move	v0,v1
+  sll	v0,v0,1
+  addu	v0,v0,v1
+  negu	v0,v0
+  lw	v1, 32668(gp)
+  nop
+  sll	v1,v1,3
+  negu	v1,v1
+  addu	v1,v0,v1
+  lw	v0, 32664(gp)
+  nop
+  subu	v0,v1,v0
+  move	a3,v0
+  jal	 'WSTRING
+  nop
+ 'VTON_FLIGHT_step_0x9400 lh	v0, 32320(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x9690
+  nop
+  lw	a2, 31812(gp)
+  lw	a1, 31828(gp)
+  lw	v0, 32680(gp)
+  nop
+  sll	v0,v0,1
+  sll	v1,v0,2
+  subu	v1,v1,v0
+  negu	v1,v1
+  lw	a0, 32668(gp)
+  nop
+  move	v0,a0
+  sll	v0,v0,2
+  addu	v0,v0,a0
+  negu	v0,v0
+  addu	v1,v1,v0
+  lw	v0, 31792(gp)
+  move	a0,a2
+  move	a2,v1
+  move	a3,v0
+  jal	 'WHLINE
+  nop
+  lw	a3, 31812(gp)
+  lw	a1, 31792(gp)
+  lw	v0, 32680(gp)
+  nop
+  sll	v0,v0,1
+  sll	v1,v0,2
+  subu	v1,v1,v0
+  negu	v1,v1
+  lw	a0, 32668(gp)
+  nop
+  move	v0,a0
+  sll	v0,v0,2
+  addu	v0,v0,a0
+  negu	v0,v0
+  addu	a2,v1,v0
+  lw	v0, 32680(gp)
+  nop
+  sll	v0,v0,1
+  sll	v1,v0,2
+  subu	v1,v1,v0
+  negu	v1,v1
+  lw	a0, 32668(gp)
+  nop
+  move	v0,a0
+  sll	v0,v0,2
+  addu	v0,v0,a0
+  negu	v0,v0
+  addu	v1,v1,v0
+  lw	v0, 32680(gp)
+  nop
+  addu	v0,v1,v0
+  move	a0,a3
+  move	a3,v0
+  jal	 'WVLINE
+  nop
+  lw	a2, 31812(gp)
+  lw	a1, 31792(gp)
+  lw	v0, 32680(gp)
+  nop
+  sll	v0,v0,1
+  sll	v1,v0,2
+  subu	v1,v1,v0
+  negu	v1,v1
+  lw	a0, 32668(gp)
+  nop
+  move	v0,a0
+  sll	v0,v0,2
+  addu	v0,v0,a0
+  negu	v0,v0
+  addu	v1,v1,v0
+  lw	v0, 32680(gp)
+  nop
+  addu	v1,v1,v0
+  lw	v0, 31788(gp)
+  move	a0,a2
+  move	a2,v1
+  move	a3,v0
+  jal	 'WHLINE
+  nop
+  lw	a3, 31812(gp)
+  lw	a1, 31788(gp)
+  lw	v0, 32680(gp)
+  nop
+  sll	v0,v0,1
+  sll	v1,v0,2
+  subu	v1,v1,v0
+  negu	v1,v1
+  lw	a0, 32668(gp)
+  nop
+  move	v0,a0
+  sll	v0,v0,2
+  addu	v0,v0,a0
+  negu	v0,v0
+  addu	a2,v1,v0
+  lw	v0, 32680(gp)
+  nop
+  sll	v0,v0,1
+  sll	v1,v0,2
+  subu	v1,v1,v0
+  negu	v1,v1
+  lw	a0, 32668(gp)
+  nop
+  move	v0,a0
+  sll	v0,v0,2
+  addu	v0,v0,a0
+  negu	v0,v0
+  addu	v1,v1,v0
+  lw	v0, 32680(gp)
+  nop
+  addu	v0,v1,v0
+  move	a0,a3
+  move	a3,v0
+  jal	 'WVLINE
+  nop
+  lw	a2, 31812(gp)
+  lw	a1, 31788(gp)
+  lw	v0, 32680(gp)
+  nop
+  sll	v0,v0,1
+  sll	v1,v0,2
+  subu	v1,v1,v0
+  negu	v1,v1
+  lw	a0, 32668(gp)
+  nop
+  move	v0,a0
+  sll	v0,v0,2
+  addu	v0,v0,a0
+  negu	v0,v0
+  addu	v1,v1,v0
+  lw	a0, 31788(gp)
+  lw	v0, 32676(gp)
+  nop
+  addu	v0,a0,v0
+  move	a0,a2
+  move	a2,v1
+  move	a3,v0
+  jal	 'WHLINE
+  nop
+  lw	a0, 31812(gp)
+  lw	a1, 31776(gp)
+  lw	v1, 31828(gp)
+  lw	v0, 32680(gp)
+  nop
+  sll	v0,v0,3
+  negu	a2,v0
+  lw	v0, 32668(gp)
+  nop
+  sll	v0,v0,1
+  sll	a3,v0,2
+  subu	v0,a3,v0
+  negu	v0,v0
+  addu	a2,a2,v0
+  lw	v0, 32664(gp)
+  nop
+  subu	v0,a2,v0
+  move	a2,v1
+  move	a3,v0
+  jal	 'WSTRING
+  nop
+ 'VTON_FLIGHT_step_0x9690 lh	v0, 32434(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x990c
+  nop
+  lh	v0, 31622(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x990c
+  nop
+  lw	v0, 31212(gp)
+  nop
+  lw	t0,0(v0)
+  lw	a0, 32608(gp)
+  lui	v1,74
+  addiu	v0,v1, 17816
+  lw	t1,12(v0)
+  lw	a3,16(v0)
+  lw	a2,20(v0)
+  lw	a1,24(v0)
+  lw	v0,28(v0)
+  sw	t1,16(sp)
+  sw	a3,20(sp)
+  sw	a2,24(sp)
+  sw	a1,28(sp)
+  sw	v0,32(sp)
+  lw	a1, 17816(v1)
+  addiu	v0,v1, 17816
+  lw	a2,4(v0)
+  addiu	v0,v1, 17816
+  lw	a3,8(v0)
+  jr	t0
+  nop
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32324(gp)
+  lh	v0, 32324(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x990c
+  nop
+  lui	v0,74
+  addiu	v0,v0, 17816
+  lw	v1,4(v0)
+  lw	v0, 32340(gp)
+  nop
+  slt	v0,v1,v0
+  xori	v0,v0,1
+  andi	v0,v0,255
+  sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 32322(gp)
+  lh	v0, 32322(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x9788
+  nop
+  lui	v0,74
+  addiu	v0,v0, 17816
+  lw	v0,8(v0)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x9788
+  nop
+  li	v0,1
+  j	 'VTON_FLIGHT_step_0x978c
+  nop
+ 'VTON_FLIGHT_step_0x9788 move	v0,zero
+ 'VTON_FLIGHT_step_0x978c sll	v0,v0,16
+  sra	v0,v0,16
+  sh	v0, 31548(gp)
+  lh	v0, 32322(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x97c0
+  nop
+  lw	v0, 32336(gp)
+  nop
+  sw	v0, 32332(gp)
+  lw	v0, 32340(gp)
+  nop
+  sw	v0, 32328(gp)
+ 'VTON_FLIGHT_step_0x97c0 lh	v0, 31548(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_0x990c
+  nop
+  lui	v0,74
+  lw	v1, 17848(v0)
+  lui	v0,74
+  lw	v0, 17816(v0)
+  move	a0,v1
+  move	a1,v0
+  jal	 'strcpy
+  nop
+  lui	v0,74
+  addiu	v0,v0, 17816
+  lw	v1,4(v0)
+  lui	v0,74
+  addiu	v0,v0, 17848
+  sw	v1,4(v0)
+  lui	v0,74
+  addiu	v0,v0, 17816
+  lw	v1,8(v0)
+  lui	v0,74
+  addiu	v0,v0, 17848
+  sw	v1,8(v0)
+  lui	v0,74
+  addiu	v0,v0, 17816
+  lw	v1,12(v0)
+  lui	v0,74
+  addiu	v0,v0, 17848
+  sw	v1,12(v0)
+  lui	v0,74
+  addiu	v0,v0, 17816
+  lh	v1,16(v0)
+  lui	v0,74
+  addiu	v0,v0, 17848
+  sh	v1,16(v0)
+  lw	v1, 32332(gp)
+  lui	v0,74
+  addiu	v0,v0, 17848
+  sw	v1,24(v0)
+  lw	v1, 32328(gp)
+  lui	v0,74
+  addiu	v0,v0, 17848
+  sw	v1,28(v0)
+  lui	v0,74
+  addiu	v0,v0, 17816
+  lh	v0,18(v0)
+  nop
+  sh	v0, 31486(gp)
+  lh	v0, 31486(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_step_0x98a8
+  nop
+  lui	v0,74
+  addiu	v0,v0, 17848
+  sh	zero,18(v0)
+  j	 'VTON_FLIGHT_step_0x98b4
+  nop
+ 'VTON_FLIGHT_step_0x98a8 lui	v0,74
+  addiu	v0,v0, 17848
+  sh	zero,18(v0)
+ 'VTON_FLIGHT_step_0x98b4 lw	v0, 31212(gp)
+  nop
+  lw	t0,4(v0)
+  lui	v0,74
+  addiu	v1,v0, 17848
+  lw	a2,16(v1)
+  lw	a1,20(v1)
+  lw	a0,24(v1)
+  lw	v1,28(v1)
+  sw	a2,16(sp)
+  sw	a1,20(sp)
+  sw	a0,24(sp)
+  sw	v1,28(sp)
+  lw	a0, 17848(v0)
+  addiu	v1,v0, 17848
+  lw	a1,4(v1)
+  addiu	v1,v0, 17848
+  lw	a2,8(v1)
+  addiu	v0,v0, 17848
+  lw	a3,12(v0)
+  jr	t0
+  nop
+ 'VTON_FLIGHT_step_0x990c jal	 'VTON_FLIGHT_step_finalize
+  nop
+  li	v0,1
+ 'VTON_FLIGHT_step_0x9918 li	t0,32848
+  addu	sp,s8,t0
+  lw	ra,32748(sp)
+  lw	s8,32744(sp)
+  addiu	sp,sp,32752
+  jr	ra
+  nop
+
+
+'VTON_FLIGHT_step_finalize
+  addiu	sp,sp, 24
+  sw	ra,20(sp)
+  sw	s8,16(sp)
+  move	s8,sp
+  sh	zero, 31832(gp)
+  lh	v0, 31700(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_finalize_0xbc
+  nop
+  sh	zero, 31830(gp)
+  lh	v0, 31688(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_finalize_0xbc
+  nop
+  lh	v0, 31680(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_finalize_0xbc
+  nop
+  lh	v0, 32084(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_finalize_0xbc
+  nop
+  lh	v0, 31916(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_finalize_0xbc
+  nop
+  lh	v0, 32592(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_finalize_0x84
+  nop
+  lh	v0, 32588(gp)
+  nop
+  sh	v0, 32590(gp)
+ 'VTON_FLIGHT_step_finalize_0x84 lh	v0, 32434(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_finalize_0xa0
+  nop
+  lh	v0, 32430(gp)
+  nop
+  sh	v0, 32432(gp)
+ 'VTON_FLIGHT_step_finalize_0xa0 lh	v0, 32320(gp)
+  nop
+  beqz	v0, 'VTON_FLIGHT_step_finalize_0xbc
+  nop
+  lh	v0, 32316(gp)
+  nop
+  sh	v0, 32318(gp)
+ 'VTON_FLIGHT_step_finalize_0xbc jal	 'VTON_FLIGHT_step_initialize
+  nop
+  li	v0,1
+  move	sp,s8
+  lw	ra,20(sp)
+  lw	s8,16(sp)
+  addiu	sp,sp,24
+  jr	ra
+  nop
+
+
+'VTON_FLIGHT_OpenIO
+  addiu	sp,sp, 24
+  sw	ra,20(sp)
+  sw	s8,16(sp)
+  move	s8,sp
+  lui	v0,65
+  addiu	a0,v0, 22812
+  lui	v0,65
+  addiu	a1,v0, 22804
+  jal	 'fopen
+  nop
+  sw	v0, 31260(gp)
+  lw	v0, 31260(gp)
+  nop
+  bnez	v0, 'VTON_FLIGHT_OpenIO_48
+  nop
+  li	a0,1
+  jal	 'exit
+  nop
+'VTON_FLIGHT_OpenIO_48  move	sp,s8
+  lw	ra,20(sp)
+  lw	s8,16(sp)
+  addiu	sp,sp,24
+  jr	ra
+  nop
+
+
+'VTON_FLIGHT_CloseIO
+  addiu	sp,sp, 24
+  sw	ra,20(sp)
+  sw	s8,16(sp)
+  move	s8,sp
+  lw	v0, 31260(gp)
+  nop
+  move	a0,v0
+  jal	 'fclose
+  nop
+  move	sp,s8
+  lw	ra,20(sp)
+  lw	s8,16(sp)
+  addiu	sp,sp,24
+  jr	ra
+  nop
+
+
+'r_VTON_FLIGHT_H
+  addiu	sp,sp, 24
+  sw	ra,20(sp)
+  sw	s8,16(sp)
+  move	s8,sp
+  sw	a0,24(s8)
+  lw	v0, 31260(gp)
+  nop
+  move	a0,v0
+  lui	v0,65
+  addiu	a1,v0, 22800
+  lw	a2,24(s8)
+  jal	 'fscanf
+  nop
+  move	v1,v0
+  li	v0, 1
+  bne	v1,v0, 'r_VTON_FLIGHT_H_50
+  nop
+  move	v0,zero
+  j	 'r_VTON_FLIGHT_H_54
+  nop
+'r_VTON_FLIGHT_H_50 li	v0,1
+'r_VTON_FLIGHT_H_54 move	sp,s8
+  lw	ra,20(sp)
+  lw	s8,16(sp)
+  addiu	sp,sp,24
+  jr	ra
+  nop
+
+
+'VTON_FLIGHT_stepIO_begin
+  addiu	sp,sp, 8
+  sw	s8,4(sp)
+  move	s8,sp
+  move	sp,s8
+  lw	s8,4(sp)
+  addiu	sp,sp,8
+  jr	ra
+  nop
+
+
+'VTON_FLIGHT_stepIO_end
+  addiu	sp,sp, 8
+  sw	s8,4(sp)
+  move	s8,sp
+  move	sp,s8
+  lw	s8,4(sp)
+  addiu	sp,sp,8
+  jr	ra
+  nop
+
+
+'fscanf
+  addiu	sp,sp, 8
+  sw	s8,4(sp)
+  move	s8,sp
+  sw	a0,8(s8)
+  sw	a2,16(s8)
+  sw	a3,20(s8)
+  sw	a1,12(s8)
+  move	v0,zero
+  move	sp,s8
+  lw	s8,4(sp)
+  addiu	sp,sp,8
+  jr	ra
+  nop
+
+
+'fclose
+ addiu	sp,sp, 8
+  sw	s8,4(sp)
+  move	s8,sp
+  sw	a0,8(s8)
+  move	v0,zero
+  move	sp,s8
+  lw	s8,4(sp)
+  addiu	sp,sp,8
+  jr	ra
+  nop
+
+
+
+'fopen
+ addiu	sp,sp, 8
+  sw	s8,4(sp)
+  move	s8,sp
+  sw	a0,8(s8)
+  sw	a1,12(s8)
+  move	v0,zero
+  move	sp,s8
+  lw	s8,4(sp)
+  addiu	sp,sp,8
+  jr	ra
+  nop
+
+
+'exit
+  addiu	sp,sp, 8
+  sw	s8,4(sp)
+  move	s8,sp
+  sw	a0,8(s8)
+  move	sp,s8
+  lw	s8,4(sp)
+  addiu	sp,sp,8
+  jr	ra
+  nop
+
+
+'strcpy
+ addiu	sp,sp, 8
+  sw	s8,4(sp)
+  move	s8,sp
+  sw	a0,8(s8)
+  sw	a1,12(s8)
+  move	v0,zero
+  move	sp,s8
+  lw	s8,4(sp)
+  addiu	sp,sp,8
+  jr	ra
+  nop
+
+
+'WHLINE
+  addiu	sp,sp, 8
+  sw	s8,4(sp)
+  move	s8,sp
+  sw	a0,8(s8)
+  sw	a1,12(s8)
+  sw	a2,16(s8)
+  sw	a3,20(s8)
+  move	sp,s8
+  lw	s8,4(sp)
+  addiu	sp,sp,8
+  jr	ra
+  nop
+
+
+'WVLINE
+  addiu	sp,sp, 8
+  sw	s8,4(sp)
+  move	s8,sp
+  sw	a0,8(s8)
+  sw	a1,12(s8)
+  sw	a2,16(s8)
+  sw	a3,20(s8)
+  move	sp,s8
+  lw	s8,4(sp)
+  addiu	sp,sp,8
+  jr	ra
+  nop
+
+
+'WSTRING
+  addiu	sp,sp, 8
+  sw	s8,4(sp)
+  move	s8,sp
+  sw	a0,8(s8)
+  sw	a1,12(s8)
+  sw	a2,16(s8)
+  sw	a3,20(s8)
+  move	sp,s8
+  lw	s8,4(sp)
+  addiu	sp,sp,8
+  jr	ra
+  nop
+
+
+'WSTOP
+  addiu	sp,sp, 8
+  sw	s8,4(sp)
+  move	s8,sp
+  move	v0,a0
+  sh	v0,8(s8)
+  move	sp,s8
+  lw	s8,4(sp)
+  addiu	sp,sp,8
+  jr	ra
+  nop
+
+
+'RSTOP
+  addiu	sp,sp, 8
+  sw	s8,4(sp)
+  move	s8,sp
+  move	v0,zero
+  move	sp,s8
+  lw	s8,4(sp)
+  addiu	sp,sp,8
+  jr	ra
+  nop
+
+
+'RAUTO
+  addiu	sp,sp, 8
+  sw	s8,4(sp)
+  move	s8,sp
+  li	v0,1
+  move	sp,s8
+  lw	s8,4(sp)
+  addiu	sp,sp,8
+  jr	ra
+  nop
+
+
+'WIWRITE
+  addiu	sp,sp, 8
+  sw	s8,4(sp)
+  move	s8,sp
+  sw	a0,8(s8)
+  sw	a1,12(s8)
+  move	sp,s8
+  lw	s8,4(sp)
+  addiu	sp,sp,8
+  jr	ra
+  nop
+
+
+'RUPDOWN
+  addiu	sp,sp, 8
+  sw	s8,4(sp)
+  move	s8,sp
+  sw	a0,8(s8)
+  move	v0,zero
+  move	sp,s8
+  lw	s8,4(sp)
+  addiu	sp,sp,8
+  jr	ra
+  nop
+
+
+'RCHANGE
+  addiu	sp,sp, 8
+  sw	s8,4(sp)
+  move	s8,sp
+  sw	a0,8(s8)
+  lw	v0,8(s8)
+  move	sp,s8
+  lw	s8,4(sp)
+  addiu	sp,sp,8
+  jr	ra
+  nop
+
+
+'WEFFACE
+  addiu	sp,sp, 8
+  sw	s8,4(sp)
+  move	s8,sp
+  sw	a0,8(s8)
+  sw	a1,12(s8)
+  sw	a2,16(s8)
+  sw	a3,20(s8)
+  move	sp,s8
+  lw	s8,4(sp)
+  addiu	sp,sp,8
+  jr	ra
+  nop
+
+
+'RTICK
+  addiu	sp,sp, 8
+  sw	s8,4(sp)
+  move	s8,sp
+  li	v0,1
+  move	sp,s8
+  lw	s8,4(sp)
+  addiu	sp,sp,8
+  jr	ra
+  nop
+
+
+'RESET_PANEL
+  addiu	sp,sp, 8
+  sw	s8,4(sp)
+  move	s8,sp
+  move	v0,a0
+  sh	v0,8(s8)
+  move	sp,s8
+  lw	s8,4(sp)
+  addiu	sp,sp,8
+  jr	ra
+  nop
+
+
+'GET_DISPLAY
+  addiu	sp,sp, 8
+  sw	s8,4(sp)
+  move	s8,sp
+  move	v0,zero
+  move	sp,s8
+  lw	s8,4(sp)
+  addiu	sp,sp,8
+  jr	ra
+  nop
+
+
+'GET_ACTIVE_PARTITION
+  addiu	sp,sp, 8
+  sw	s8,4(sp)
+  move	s8,sp
+  move	v0,zero
+  move	sp,s8
+  lw	s8,4(sp)
+  addiu	sp,sp,8
+  jr	ra
+  nop
+
+
+'GET_PI_PACEMAKER
+  addiu	sp,sp, 8
+  sw	s8,4(sp)
+  move	s8,sp
+  move	v0,zero
+  move	sp,s8
+  lw	s8,4(sp)
+  addiu	sp,sp,8
+  jr	ra
+  nop
+
+
+'GET_DESCR_PACEMAKER
+  addiu	sp,sp, 8
+  sw	s8,4(sp)
+  move	s8,sp
+  li	v0,1
+  move	sp,s8
+  lw	s8,4(sp)
+  addiu	sp,sp,8
+  jr	ra
+  nop
+ .
+endm)
+
+
