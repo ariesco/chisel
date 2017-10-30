@@ -1259,33 +1259,33 @@ eq myFuns = 'main (nv)
     'buff1 := 0 ;
     'board := 0 ;
     'V2 := 1 ;
-    'zblocked := 'pk_false ;
+    'zblocked := 0 ;
     'diag_size := 0 ;
     'diag_area := 0 ;
-    'L6342_blocked := 'pk_false ;
-    'L6717_blocked := 'pk_false ;
+    'L6342_blocked := 0 ;
+    'L6717_blocked := 0 ;
     'L7083_Message_Size_cell := 0 ;
     'L7095_Message_Area_cell := 0 ;
-    'L7114_blocked := 'pk_false ;
+    'L7114_blocked := 0 ;
     'V3 := 1 ;
-    'L7562_zblocked := 'pk_false ;
-    'L7663_blocked := 'pk_false ;
-    'L8045_blocked := 'pk_false ;
+    'L7562_zblocked := 0 ;
+    'L7663_blocked := 0 ;
+    'L8045_blocked := 0 ;
     'L8505_Message_Size_cell := 0 ;
     'L8513_Message_Area_cell := 0 ;
     'V4 := 1 ;
-    'L8726_zblocked := 'pk_false ;
-    'L8827_blocked := 'pk_false ;
-    'L9211_blocked := 'pk_false ;
+    'L8726_zblocked := 0 ;
+    'L8827_blocked := 0 ;
+    'L9211_blocked := 0 ;
     'L9596_Message_Size_cell := 0 ;
     'L9604_Message_Area_cell := 0 ;
     'V := 1 ;
     'L11797_DYN_EVERY_var := 0 ;
     'NEW_BOUND := 1 ;
-    'NEXTAUTO := 'pk_true ;
+    'NEXTAUTO := 1 ;
     'DESCR := 0 ;
-    'CINIT := 'pk_true ;
-    'b_init := 'pk_true ;
+    'CINIT := 1 ;
+    'b_init := 1 ;
     'L12123_V := (((('DELTA +. 'DELTA) +. 'TICK_WIDTH)) *. ('FRONT_NUMBER -. 1)) ;
     'X := (((('DELTA +. 'DELTA) +. 'TICK_WIDTH)) *. ('TICK_NUMBER -. 1)) ;
     'ECRAN := 0 ;
@@ -1317,98 +1317,98 @@ eq myFuns = 'main (nv)
     'att3Time_Capacity := 4 ;
     'att3Deadline := 'HARD ;
     Call 'VTON_FLIGHT_step_initialize ('empty) ;
-    '__ret_VTON_FLIGHT_initialize := 'pk_false
+    '__ret_VTON_FLIGHT_initialize := 0
 }
 
 'VTON_FLIGHT_step_initialize (nv)
 {
-    'present := 'pk_false ;
-    'L6762_present := 'pk_false ;
-    'L6941_present := 'pk_false ;
-    'L7152_present := 'pk_false ;
-    'L7700_present := 'pk_false ;
-    'L8096_present := 'pk_false ;
-    'release := 'pk_false ;
-    'L8312_present := 'pk_false ;
-    'L8444_present := 'pk_false ;
-    'L8535_present := 'pk_false ;
-    'L8864_present := 'pk_false ;
-    'L9262_present := 'pk_false ;
-    'L9465_release := 'pk_false ;
-    'L9475_present := 'pk_false ;
-    'release_all := 'pk_false ;
-    'L9634_present := 'pk_false ;
-    'L9776_release_all := 'pk_false ;
-    'L9784_present := 'pk_false ;
-    'recorded := 'pk_false ;
-    'L9893_present := 'pk_false ;
-    'L9998_recorded := 'pk_false ;
-    'L10000_present := 'pk_false ;
-    'L10127_recorded := 'pk_false ;
-    'L10129_present := 'pk_false ;
-    'L10240_recorded := 'pk_false ;
-    'L10248_present := 'pk_false ;
-    'L10332_recorded := 'pk_false ;
-    'L10340_present := 'pk_false ;
-    'L10465_recorded := 'pk_false ;
-    'L10467_present := 'pk_false ;
-    'created := 'pk_false ;
-    'L10472_OK_req := 'pk_false ;
-    'success := 'pk_false ;
-    'recorded1 := 'pk_false ;
-    'recorded2 := 'pk_false ;
-    'recorded3 := 'pk_false ;
-    'L10711_present := 'pk_false ;
-    'L10717_created := 'pk_false ;
-    'L10868_present := 'pk_false ;
-    'L10874_created := 'pk_false ;
-    'L11025_present := 'pk_false ;
-    'L11031_created := 'pk_false ;
-    'L11153_present := 'pk_false ;
-    'L11292_present := 'pk_false ;
-    'L11431_present := 'pk_false ;
-    'ok := 'pk_false ;
-    'L11629_ok := 'pk_false ;
-    'C_LIN_EXP := 'pk_false ;
-    'C_STOP := 'pk_false ;
-    'L16810_CREATE_SAMPLING_PORT_var := 'pk_false ;
-    'L16961_START_var := 'pk_false ;
-    'L16972_START_var := 'pk_false ;
-    'L16982_START_var := 'pk_false ;
-    'L16993_START_var := 'pk_false ;
-    'L17003_START_var := 'pk_false ;
-    'L17014_START_var := 'pk_false ;
-    'CLK_7071 := 'pk_false ;
-    'L17043_SET_BOUND_var := 'pk_false ;
-    'C_CREATE_BLACKBOARD_ := 'pk_false ;
-    'C_CREATE_BUFFER_ := 'pk_false ;
-    'L17138_C_CREATE_BUFFER_ := 'pk_false ;
-    'C_CREATE_EVENT_ := 'pk_false ;
-    'C_CREATE_SEMAPHORE_ := 'pk_false ;
-    'C_NEW_BOUND := 'pk_false ;
-    'L17252_C_NEW_BOUND := 'pk_false ;
-    'L17428_ZV := 'pk_false ;
-    'L17446_success := 'pk_false ;
-    'L17532_SEND_cond := 'pk_false ;
-    'L17556_present := 'pk_false ;
-    'L17574_present := 'pk_false ;
-    'L17603_SEND_cond := 'pk_false ;
-    'L17643_outofrange := 'pk_false ;
-    'L17669_present := 'pk_false ;
-    'L17692_present := 'pk_false ;
-    'L17709_present := 'pk_false ;
-    'L17721_present := 'pk_false ;
-    'L17757_outofrange := 'pk_false ;
-    'L17783_present := 'pk_false ;
-    'L17806_present := 'pk_false ;
-    'L17823_DISPLAY_BLACKBOARD_cond := 'pk_false ;
-    'L17846_present := 'pk_false ;
-    'C_SIGNAL_SEMAPHORE_ := 'pk_false ;
-    'L18000_C_SIGNAL_SEMAPHORE_ := 'pk_false ;
-    'L18426_SEND_var := 'pk_false ;
-    'L18484_SEND_var := 'pk_false ;
-    'L18523_RECEIVE_var := 'pk_false ;
-    'L18576_RECEIVE_var := 'pk_false
+    'present := 0 ;
+    'L6762_present := 0 ;
+    'L6941_present := 0 ;
+    'L7152_present := 0 ;
+    'L7700_present := 0 ;
+    'L8096_present := 0 ;
+    'release := 0 ;
+    'L8312_present := 0 ;
+    'L8444_present := 0 ;
+    'L8535_present := 0 ;
+    'L8864_present := 0 ;
+    'L9262_present := 0 ;
+    'L9465_release := 0 ;
+    'L9475_present := 0 ;
+    'release_all := 0 ;
+    'L9634_present := 0 ;
+    'L9776_release_all := 0 ;
+    'L9784_present := 0 ;
+    'recorded := 0 ;
+    'L9893_present := 0 ;
+    'L9998_recorded := 0 ;
+    'L10000_present := 0 ;
+    'L10127_recorded := 0 ;
+    'L10129_present := 0 ;
+    'L10240_recorded := 0 ;
+    'L10248_present := 0 ;
+    'L10332_recorded := 0 ;
+    'L10340_present := 0 ;
+    'L10465_recorded := 0 ;
+    'L10467_present := 0 ;
+    'created := 0 ;
+    'L10472_OK_req := 0 ;
+    'success := 0 ;
+    'recorded1 := 0 ;
+    'recorded2 := 0 ;
+    'recorded3 := 0 ;
+    'L10711_present := 0 ;
+    'L10717_created := 0 ;
+    'L10868_present := 0 ;
+    'L10874_created := 0 ;
+    'L11025_present := 0 ;
+    'L11031_created := 0 ;
+    'L11153_present := 0 ;
+    'L11292_present := 0 ;
+    'L11431_present := 0 ;
+    'ok := 0 ;
+    'L11629_ok := 0 ;
+    'C_LIN_EXP := 0 ;
+    'C_STOP := 0 ;
+    'L16810_CREATE_SAMPLING_PORT_var := 0 ;
+    'L16961_START_var := 0 ;
+    'L16972_START_var := 0 ;
+    'L16982_START_var := 0 ;
+    'L16993_START_var := 0 ;
+    'L17003_START_var := 0 ;
+    'L17014_START_var := 0 ;
+    'CLK_7071 := 0 ;
+    'L17043_SET_BOUND_var := 0 ;
+    'C_CREATE_BLACKBOARD_ := 0 ;
+    'C_CREATE_BUFFER_ := 0 ;
+    'L17138_C_CREATE_BUFFER_ := 0 ;
+    'C_CREATE_EVENT_ := 0 ;
+    'C_CREATE_SEMAPHORE_ := 0 ;
+    'C_NEW_BOUND := 0 ;
+    'L17252_C_NEW_BOUND := 0 ;
+    'L17428_ZV := 0 ;
+    'L17446_success := 0 ;
+    'L17532_SEND_cond := 0 ;
+    'L17556_present := 0 ;
+    'L17574_present := 0 ;
+    'L17603_SEND_cond := 0 ;
+    'L17643_outofrange := 0 ;
+    'L17669_present := 0 ;
+    'L17692_present := 0 ;
+    'L17709_present := 0 ;
+    'L17721_present := 0 ;
+    'L17757_outofrange := 0 ;
+    'L17783_present := 0 ;
+    'L17806_present := 0 ;
+    'L17823_DISPLAY_BLACKBOARD_cond := 0 ;
+    'L17846_present := 0 ;
+    'C_SIGNAL_SEMAPHORE_ := 0 ;
+    'L18000_C_SIGNAL_SEMAPHORE_ := 0 ;
+    'L18426_SEND_var := 0 ;
+    'L18484_SEND_var := 0 ;
+    'L18523_RECEIVE_var := 0 ;
+    'L18576_RECEIVE_var := 0
 }
 
 'VTON_FLIGHT_step (nv)
@@ -1416,7 +1416,7 @@ eq myFuns = 'main (nv)
     Local 'tmp1 ;
     Call 'r_VTON_FLIGHT_H ('H) ;
     'tmp1 := '__res_r_VTON_FLIGHT_H ;
-    If Equal ('tmp1, 0) Then ('pk_false := 1) ;
+    If Equal ('tmp1, 0) Then ('tmp1 := 1) ;
     Call 'RAUTO ('empty) ;
     'C_SW_AUTO := '__res_RAUTO ;
     Call 'RTICK ('empty) ;
@@ -1516,7 +1516,7 @@ eq myFuns = 'main (nv)
                    (
                     'GPMgs1 := 'pid1 ;
                     'state := 'GLOBAL_PROCESS_MANAGERGetState ;
-                    'L16961_START_var := Equal ('state, 'DORMANT) ;
+                    'L16961_START_var := Equal ('state, 'DORMANT);
                     If Equal ('L16961_START_var, 1)
                     Then
                        (
@@ -1541,7 +1541,7 @@ eq myFuns = 'main (nv)
                             'GPMsdt1 := 'pid1 ;
                             'GPMsdt2 := 'tmp2 ;
                             'gpm1 := 'GLOBAL_PROCESS_MANAGER_SetDeadlineTime ;
-                            'GPMcps1 := 'pk_true ;
+                            'GPMcps1 := 1 ;
                             'L11194_enabled := 'GLOBAL_PROCESS_MANAGER_CheckPreemptionStatus ;
                             If Equal ('L11194_enabled, 0)
                             Then
@@ -1593,7 +1593,7 @@ eq myFuns = 'main (nv)
                     'GPMgs1 := 'pid2 ;
                     'L11291_state := 'GLOBAL_PROCESS_MANAGER_GetState ;
                     'L16982_START_var := Equal ('L11291_state, 'DORMANT) ;
-                    If ('L16982_START_var, 1)
+                    If Equal('L16982_START_var, 1)
                     Then
                        (
                         'GPMgbp1 := 'pid2 ;
@@ -1614,7 +1614,7 @@ eq myFuns = 'main (nv)
                             'GPMsdt1 := 'pid2 ;
                             'GPMsdt2 := 'L11281_time_capacity +. 'L11280_cur_time ;
                             'gpm2 := 'GLOBAL_PROCESS_MANAGER_SetDeadlineTime ;
-                            'GPMcps1 := 'pk_true ;
+                            'GPMcps1 := 1 ;
                             'L11333_enabled := 'GLOBAL_PROCESS_MANAGER_CheckPreemptionStatus ;
                             If Equal ('L11333_enabled, 1)
                             Then
@@ -1689,7 +1689,7 @@ eq myFuns = 'main (nv)
                             'GPMsdt1 := 'pid3 ;
                             'GPMsdt2 := 'L11420_time_capacity +. 'L11419_cur_time ;
                             'gpm3 := 'GLOBAL_PROCESS_MANAGER_SetDeadlineTime ;
-                            'GPMcps1 := 'pk_true ;
+                            'GPMcps1 := 1 ;
                             'L11472_enabled := 'GLOBAL_PROCESS_MANAGER_CheckPreemptionStatus ;
                             If Equal ('L11472_enabled, 1)
                             Then
@@ -1780,42 +1780,42 @@ eq myFuns = 'main (nv)
     Local 't1 ;
     (If Equal ('L10472_OK_req , 1)
     Then ('t1 := 'L10465_recorded)
-    Else ('t1 := 'pk_false)) ;
+    Else ('t1 := 0)) ;
     'L16827_extended_recorded := 't1 ;
     Local 't2 ;
     (If Equal ('C_CREATE_BLACKBOARD_, 1)
     Then 't2 := 'recorded
-    Else 't2 := 'pk_false) ;
+    Else 't2 := 0) ;
     'L17387_extended_recorded := 't2 ;
     Local 't3 ;
     (If Equal ('C_CREATE_BUFFER_, 1)
     Then 't3 := 'L9998_recorded
-    Else 't3 := 'pk_false) ;
+    Else 't3 := 0) ;
     'L17396_extended_recorded := 't3 ;
     Local 't4 ;
     (If Equal ('L17138_C_CREATE_BUFFER_, 1)
     Then 't4 := 'L10127_recorded
-    Else 't4 := 'pk_false) ;
+    Else 't4 := 0) ;
     'L17405_extended_recorded := 't4 ;
     Local 't5 ;
     (If Equal ('C_CREATE_EVENT_, 1)
     Then 't5 := 'L10240_recorded
-    Else 't5 := 'pk_false) ;
+    Else 't5 := 0) ;
     'L17414_extended_recorded := 't5 ;
     Local 't6 ;
     (If Equal ('C_CREATE_SEMAPHORE_, 1)
     Then 't6 := 'L10332_recorded
-    Else 't6 := 'pk_false) ;
+    Else 't6 := 0) ;
     'L17423_extended_recorded := 't6 ;
     If Equal ('L16709_PERIOD_INPUT_var, 1)
     Then
        (
         'C_LIN_EXP := Equal ('CODE_CHANGE, 'LIN_CODE) ;
-        'CLK_7188 := 'pk_false ;
+        'CLK_7188 := 0 ;
         Call 'RUPDOWN ('DESCR) ;
         'C_UP_DOWN := '__res_RUPDOWN ;
         'L17043_SET_BOUND_var := 1 -. 'C_LIN_EXP ;
-        'CLK_7150 := 'pk_false ;
+        'CLK_7150 := 0 ;
         If Equal ('C_LIN_EXP, 1)
         Then
            (
@@ -1844,7 +1844,7 @@ eq myFuns = 'main (nv)
             Local 't7 ;
             (If Equal ('L17065_VD, 1)
             Then 't7 := 'CLK_7188
-            Else 't7 := 'pk_false) ;
+            Else 't7 := 0) ;
             'L17075_extended_CLK_7188 := 't7 ;
             'L17252_C_NEW_BOUND := Equal ('C_VU, 1) Or Equal ('L17075_extended_CLK_7188, 1) ;
             If Equal ('C_VU, 1)
@@ -1874,7 +1874,7 @@ eq myFuns = 'main (nv)
             Local 't8 ;
             (If Equal ('L17045_VD, 1)
             Then 't8 := 'CLK_7150
-            Else 't8 := 'pk_false) ;
+            Else 't8 := 0) ;
             'L17055_extended_CLK_7150 := 't8 ;
             'C_NEW_BOUND := Equal ('L17231_C_VU, 1) Or Equal ('L17055_extended_CLK_7150, 1) ;
             If Equal ('L17231_C_VU, 1)
@@ -1894,12 +1894,12 @@ eq myFuns = 'main (nv)
     Local 't9 ;
     (If Equal ('L17043_SET_BOUND_var, 1)
     Then 't9 := 'C_NEW_BOUND
-    Else 't9 := 'pk_false) ;
+    Else 't9 := 0) ;
     'L17246_extended_C_NEW_BOUND := 't9 ;
     Local 't10 ;
     (If Equal ('C_LIN_EXP, 1)
     Then 't10 := 'L17252_C_NEW_BOUND
-    Else 't10 := 'pk_false) ;
+    Else 't10 := 0) ;
     'L17258_extended_C_NEW_BOUND := 't10 ;
     If Equal ('C_ZAUTO, 1)
     Then
@@ -1916,7 +1916,7 @@ eq myFuns = 'main (nv)
         If Equal ('C_STOP, 1)
         Then
            (
-            Call 'WSTOP ('pk_true)
+            Call 'WSTOP (1)
            )
        ) ;
     If Equal ('C_S_PACE__, 1)
@@ -1945,7 +1945,7 @@ eq myFuns = 'main (nv)
     Local 't11 ;
     (If Equal ('NEXTAUTO, 1)
     Then 't11 := 'V
-    Else 't11 := 'pk_false) ;
+    Else 't11 := 0) ;
     'L17038_extended_L11766_HS_1 := 't11 ;
     'C_b_init := Equal ('C_TICK, 1) Or Equal ('L17038_extended_L11766_HS_1, 1) ;
     If Equal ('C_b_init, 1)
@@ -1972,7 +1972,7 @@ eq myFuns = 'main (nv)
             Then
                (
                 'success := 'GLOBAL_PROCESS_MANAGER_SchedulingRequest ;
-                'trigger := 'pk_false ;
+                'trigger := 0 ;
                 'GPMutc1 := 'timed_out ;
                 'gpm4 := 'GLOBAL_PROCESS_MANAGER_UpdateTimeCounters ;
                 If Equal ('success, 1)
@@ -1985,19 +1985,19 @@ eq myFuns = 'main (nv)
                     Then
                        (
                         'trigger := 'pid +. 1 ;
-                        'L6250_CONTROL_cond := 'pk_false ;
-                        'empty := 'pk_false ;
-                        'C_empty := 'pk_false ;
-                        'L18107_Message_Size := 'pk_false ;
-                        'C_ret1 := 'pk_false ;
-                        'C_ret2 := 'pk_false ;
-                        'C_ret5 := 'pk_false ;
+                        'L6250_CONTROL_cond := 0 ;
+                        'empty := 0 ;
+                        'C_empty := 0 ;
+                        'L18107_Message_Size := 0 ;
+                        'C_ret1 := 0 ;
+                        'C_ret2 := 0 ;
+                        'C_ret5 := 0 ;
                         'L7561_trigger := 'pid +. 2 ;
-                        'L7591_CONTROL_cond := 'pk_false ;
-                        'L18721_C_ret1 := 'pk_false ;
+                        'L7591_CONTROL_cond := 0 ;
+                        'L18721_C_ret1 := 0 ;
                         'L8725_trigger := 'pid +. 3 ;
-                        'L8755_CONTROL_cond := 'pk_false ;
-                        'L18745_C_ret1 := 'pk_false ;
+                        'L8755_CONTROL_cond := 0 ;
+                        'L18745_C_ret1 := 0 ;
                         If Equal ('trigger, 1)
                         Then
                            (
@@ -2012,7 +2012,7 @@ eq myFuns = 'main (nv)
                             'L17524_SEND_BUFFER_cond := Equal ('V2, 1) ;
                             'L17548_WAIT_EVENT_cond := Equal ('V2, 2) ;
                             'L17574_present := Equal ('V2, 3) ;
-                            'L6960_enabled := 'pk_false ;
+                            'L6960_enabled := 0 ;
                             'L17595_SEND_BUFFER_cond := Equal ('V2, 5) ;
                             'L17619_Message_Size := Equal ('V2, 4) ;
                             'CLK_7493 := Gt ('V2, 'MIN_A) ;
@@ -2031,12 +2031,12 @@ eq myFuns = 'main (nv)
                                (
                                 'on_waiting := 'L6342_blocked ;
                                 'L17532_SEND_cond := 1 -. 'on_waiting ;
-                                'nowaitingprocess := 'pk_false ;
-                                'full := 'pk_false ;
-                                'enabled := 'pk_false ;
-                                'toolong := 'pk_false ;
-                                'L18089_toolongXZX_subexpr := 'pk_false ;
-                                'L18094_nowaitingprocess := 'pk_false ;
+                                'nowaitingprocess := 0 ;
+                                'full := 0 ;
+                                'enabled := 0 ;
+                                'toolong := 0 ;
+                                'L18089_toolongXZX_subexpr := 0 ;
+                                'L18094_nowaitingprocess := 0 ;
                                 If Equal ('L17532_SEND_cond, 1)
                                 Then
                                    (
@@ -2049,8 +2049,8 @@ eq myFuns = 'main (nv)
                                (
                                 'L6722_on_waiting := 'L6717_blocked ;
                                 'L17556_present := 1 -. 'L6722_on_waiting ;
-                                'up := 'pk_false ;
-                                'L6783_enabled := 'pk_false ;
+                                'up := 0 ;
+                                'L6783_enabled := 0 ;
                                 If Equal ('L17556_present, 1)
                                 Then
                                    (
@@ -2063,12 +2063,12 @@ eq myFuns = 'main (nv)
                                (
                                 'L7116_on_waiting := 'L7114_blocked ;
                                 'L17603_SEND_cond := 1 -. 'L7116_on_waiting ;
-                                'L7189_nowaitingprocess := 'pk_false ;
-                                'L7259_full := 'pk_false ;
-                                'L7260_enabled := 'pk_false ;
-                                'L7261_toolong := 'pk_false ;
-                                'L18118_toolongXZX_subexpr := 'pk_false ;
-                                'L18123_nowaitingprocess := 'pk_false ;
+                                'L7189_nowaitingprocess := 0 ;
+                                'L7259_full := 0 ;
+                                'L7260_enabled := 0 ;
+                                'L7261_toolong := 0 ;
+                                'L18118_toolongXZX_subexpr := 0 ;
+                                'L18123_nowaitingprocess := 0 ;
                                 If Equal ('L17603_SEND_cond, 1)
                                 Then
                                    (
@@ -2080,7 +2080,7 @@ eq myFuns = 'main (nv)
                         Local 't12 ;
                         (If Equal ('trigger, 1)
                         Then 't12 := 'V2 +. 5
-                        Else 't12 := 'pk_false) ;
+                        Else 't12 := 0) ;
                         'L17514_extended_L6158_end_processing1 := 't12 ;
                         If Equal ('L7561_trigger, 1)
                         Then
@@ -2093,17 +2093,17 @@ eq myFuns = 'main (nv)
                                      Then 'V3 := 0
                                      Else 'V3 := 'V3 +. 1)) ;
                             'L17635_RECEIVE_BUFFER_cond := Equal ('V3, 0) ;
-                            'L7782_nowaitingprocess := 'pk_false ;
-                            'L18531_mess_cell := 'pk_false ;
+                            'L7782_nowaitingprocess := 0 ;
+                            'L18531_mess_cell := 0 ;
                             'L17661_WAIT_SEMAPHORE_cond := Equal ('V3, 1) ;
                             'L17687_Message_Size := 'V3 -. 2 ;
                             'L17692_present := 'V3 -. 3 ;
-                            'release := 'pk_false ;
-                            'L17702_FF_noaction := 'pk_false ;
+                            'release := 0 ;
+                            'L17702_FF_noaction := 0 ;
                             'L17709_present := 'V3 -. 5 ;
                             'L17721_present := 'V3 -. 4 ;
-                            'length_OK := 'pk_false ;
-                            'C_Message := 'pk_false ;
+                            'length_OK := 0 ;
+                            'C_Message := 0 ;
                             'CLK_7527 := Gt ('V3, 'MIN_A) ;
                             'CLK_7530 := Lt ('V3, 'MAX_A) ;
                             'CLK_7531 := 1 -. 'CLK_7530 ;
@@ -2121,9 +2121,9 @@ eq myFuns = 'main (nv)
                                (
                                 'retrieve := 'L7663_blocked ;
                                 'L17643_outofrange := 1 -. 'retrieve ;
-                                'L7844_empty := 'pk_false ;
-                                'L7845_enabled := 'pk_false ;
-                                'L18141_some_message_cell := 'pk_false ;
+                                'L7844_empty := 0 ;
+                                'L7845_enabled := 0 ;
+                                'L18141_some_message_cell := 0 ;
                                 If Equal ('L17643_outofrange, 1)
                                 Then
                                    (
@@ -2142,8 +2142,8 @@ eq myFuns = 'main (nv)
                                (
                                 'L8050_on_waiting := 'L8045_blocked ;
                                 'L17669_present := 1 -. 'L8050_on_waiting ;
-                                'positive := 'pk_false ;
-                                'L8117_enabled := 'pk_false ;
+                                'positive := 0 ;
+                                'L8117_enabled := 0 ;
                                 If Equal ('L17669_present, 1)
                                 Then
                                    (
@@ -2160,7 +2160,7 @@ eq myFuns = 'main (nv)
                         Local 't13 ;
                         (If Equal ('L7561_trigger, 1)
                         Then 't13 := 'V3 +. 5
-                        Else 't13 := 'pk_false) ;
+                        Else 't13 := 0) ;
                         'L17630_extended_L6157_end_processing2 := 't13 ;
                         If Equal ('L8725_trigger, 1)
                         Then
@@ -2173,15 +2173,15 @@ eq myFuns = 'main (nv)
                                       Then 'V4 := 0
                                       Else 'V4 := 'V4 +. 1)) ;
                             'L17749_RECEIVE_BUFFER_cond := Equal ('V4, 0) ;
-                            'L8946_nowaitingprocess := 'pk_false ;
-                            'L18584_mess_cell := 'pk_false ;
+                            'L8946_nowaitingprocess := 0 ;
+                            'L18584_mess_cell := 0 ;
                             'L17775_WAIT_SEMAPHORE_cond := Equal ('V4, 1) ;
                             'L17801_Message_Size := 'V4 +. 2 ;
                             'L17806_present := 'V4 +. 3 ;
-                            'L9465_release := 'pk_false ;
-                            'L17816_FF_L9489_noaction := 'pk_false ;
+                            'L9465_release := 0 ;
+                            'L17816_FF_L9489_noaction := 0 ;
                             'L17823_DISPLAY_BLACKBOARD_cond := Equal ('V4, 4) ;
-                            'L9651_toolong := 'pk_false ;
+                            'L9651_toolong := 0 ;
                             'L17846_present := 'V4 +. 5 ;
                             'CLK_7561 := Gt ('V4, 'MIN_A) ;
                             'CLK_7564 := Lt ('V4, 'MAX_A) ;
@@ -2192,7 +2192,7 @@ eq myFuns = 'main (nv)
                                                                                   (Equal ('V4, 4) Or Equal ('V4, 5)) ;
                             (If Equal ('C_CLK_8210, 1)
                             Then 'L12649_C_aff := 'V4
-                            Else (If ('CLK_7565, 1)
+                            Else (If Equal('CLK_7565, 1)
                                     Then 'L12649_C_aff := 'MAX_A
                                      Else 'L12649_C_aff := 'MIN_A)) ;
                             If Equal ('L17749_RECEIVE_BUFFER_cond, 1)
@@ -2200,9 +2200,9 @@ eq myFuns = 'main (nv)
                                (
                                 'L8829_retrieve := 'L8827_blocked ;
                                 'L17757_outofrange := 1 -. 'L8829_retrieve ;
-                                'L9008_empty := 'pk_false ;
-                                'L9009_enabled := 'pk_false ;
-                                'L18188_some_message_cell := 'pk_false ;
+                                'L9008_empty := 0 ;
+                                'L9009_enabled := 0 ;
+                                'L18188_some_message_cell := 0 ;
                                 If Equal ('L17757_outofrange, 1)
                                 Then
                                    (
@@ -2221,8 +2221,8 @@ eq myFuns = 'main (nv)
                                (
                                 'L9216_on_waiting := 'L9211_blocked ;
                                 'L17783_present := 1 -. 'L9216_on_waiting ;
-                                'L9282_positive := 'pk_false ;
-                                'L9283_enabled := 'pk_false ;
+                                'L9282_positive := 0 ;
+                                'L9283_enabled := 0 ;
                                 If Equal ('L17783_present, 1)
                                 Then
                                    (
@@ -2239,12 +2239,12 @@ eq myFuns = 'main (nv)
                         Local 't15 ;
                         (If Equal ('L8725_trigger, 1)
                         Then 't15 := 'V4 +. 5
-                        Else 't15 := 'pk_false) ;
+                        Else 't15 := 0) ;
                         'L17744_extended_L6156_end_processing3 := 't15 ;
                         'C_ok := (Equal ('L17514_extended_L6158_end_processing1, 1) Or
                                         Equal ('L17630_extended_L6157_end_processing2, 1)) Or
                                         Equal ('L17744_extended_L6156_end_processing3, 1) ;
-                        'L11618_OK_req := 'pk_false ;
+                        'L11618_OK_req := 0 ;
                         If Equal ('C_ok, 1)
                         Then
                            (
@@ -2256,7 +2256,7 @@ eq myFuns = 'main (nv)
                                (
                                 'GPMgp1 := 'L11627_pid ;
                                 'period := 'GLOBAL_PROCESS_MANAGER_GetPeriod ;
-                                'GPMcps1 := 'pk_true ;
+                                'GPMcps1 := 1 ;
                                 'L11616_enabled := 'GLOBAL_PROCESS_MANAGER_CheckPreemptionStatus ;
                                 'L11618_OK_req := ((Gt (7, 100) And Equal ('L11627_pid, 0)) Or Equal ('period, 1)) And
                                                                  Equal ('L11616_enabled, 1) ;
@@ -2290,12 +2290,12 @@ eq myFuns = 'main (nv)
     Local 't17 ;
     (If Equal ('C_b_init, 1)
     Then 't17 := 'L17428_ZV
-    Else 't17 := 'pk_false) ;
+    Else 't17 := 0) ;
     'L17431_extended_ZV := 't17 ;
     Local 't18 ;
     (If Equal ('success, 1)
     Then 't18 := 'ok
-    Else 't18 := 'pk_false) ;
+    Else 't18 := 0) ;
     'L17470_extended_ok := 't18 ;
     'C_global_params__ := Equal ('CINIT, 1) Or Equal ('L17470_extended_ok, 1) ;
     'C_board_cell_ := Equal ('L17387_extended_recorded, 1) Or Equal ('L17470_extended_ok, 1) ;
@@ -2340,18 +2340,18 @@ eq myFuns = 'main (nv)
                                     Local 't19 ;
                                     (If Equal ('C_up, 1)
                                     Then 't19 := 'up
-                                    Else 't19 := 'pk_false) ;
+                                    Else 't19 := 0) ;
                                     'L18097_extended_up := 't19 ;
                                     Local 't20 ;
                                     (If Equal ('C_up, 1)
                                     Then 't20 := 1 -. 'up
-                                    Else 't20 := 'pk_false) ;
+                                    Else 't20 := 0) ;
                                     'L18102_extended_FF_up := 't20 ;
                                     'C_WAIT_cond := Equal ('L6759_available, 1) And Equal ('L18102_extended_FF_up, 1) ;
                                     If Equal ('C_WAIT_cond, 1)
                                     Then
                                         (
-                                         'GPMcps1 := 'pk_true ;
+                                         'GPMcps1 := 1 ;
                                          'L6783_enabled := 'GLOBAL_PROCESS_MANAGER_CheckPreemptionStatus ;
                                          If Equal ('L6783_enabled, 1)
                                          Then
@@ -2369,12 +2369,12 @@ eq myFuns = 'main (nv)
                                     Local 't21 ;
                                     (If Equal ('C_WAIT_cond, 1)
                                     Then 't21 := 'L6783_enabled
-                                    Else 't21 := 'pk_false) ;
+                                    Else 't21 := 0) ;
                                     'L18449_extended_enabled := 't21 ;
                                     Local 't22 ;
                                     (If Equal ('C_WAIT_cond, 1)
                                     Then 't22 := 1 -. 'L6783_enabled
-                                    Else 't22 := 'pk_false) ;
+                                    Else 't22 := 0) ;
                                     'L18454_extended_WAIT_cond := 't22 ;
                                     'C_WAIT_var := (Not (Equal (20, 99))) And Equal ('L18449_extended_enabled, 1) ;
                                     If Equal ('C_WAIT_var, 1)
@@ -2396,19 +2396,19 @@ eq myFuns = 'main (nv)
                                        'tmp10 := Equal ('L18454_extended_WAIT_cond, 1) And Equal ('L18097_extended_up, 1) ;
                                        't23 := (Equal ('tmp8, 1) Or Equal ('tmp9, 1)) Or Equal ('tmp10, 1)
                                      )
-                                Else 't23 := 'pk_false) ;
+                                Else 't23 := 0) ;
                                 'L18640_extended_C_return_code_ := 't23 ;
                                 'C_ret2 := Equal ('L6722_on_waiting, 1) Or
                                                   Equal ('L18640_extended_C_return_code_, 1) ;
                                 (If Equal ('C_ret2, 1)
-                                 Then 'L6723_WAIT_EVENT_cond := 'pk_false
-                                 Else 'L6723_WAIT_EVENT_cond := 'pk_true) ;
+                                 Then 'L6723_WAIT_EVENT_cond := 0
+                                 Else 'L6723_WAIT_EVENT_cond := 1) ;
                                 'L6717_blocked := 'L6723_WAIT_EVENT_cond
                                 ) ;
                             Local 't24 ;
                             (If Equal ('L17548_WAIT_EVENT_cond, 1)
                             Then 't24 := 'C_ret2
-                            Else 't24 := 'pk_false) ;
+                            Else 't24 := 0) ;
                             'L18649_extended_C_ret2 := 't23
                             ) ;
                         If Equal ('L7561_trigger, 1)
@@ -2468,7 +2468,7 @@ eq myFuns = 'main (nv)
                                       'GPMssm1 := 'L9782_process_range ;
                                       'GPMssm2 := 'READY ;
                                       'gpm5 := 'GLOBAL_PROCESS_MANAGER_SetState_many ;
-                                      'GPMcps1 := 'pk_true ;
+                                      'GPMcps1 := 1 ;
                                       'L9797_enabled := 'GLOBAL_PROCESS_MANAGER_CheckPreemptionStatus ;
                                        If Equal ('L9797_enabled, 1)
                                        Then
@@ -2526,18 +2526,18 @@ eq myFuns = 'main (nv)
                                 Local 't25 ;
                                 (If Equal ('C_empty, 1)
                                 Then 't25 := 'empty
-                                Else 't25 := 'pk_false) ;
+                                Else 't25 := 0) ;
                                 'L18105_extended_empty := 't25 ;
                                 Local 't26 ;
                                 (If Equal ('C_empty, 1)
                                 Then 't26 := 'L18107_Message_Size
-                                Else 't26 := 'pk_false) ;
+                                Else 't26 := 0) ;
                                 'L18110_extended_Message_Size := 't26 ;
                                 'C_READ_BLACKBOARD_ := Gt (2, 0) And Equal ('L18105_extended_empty, 1) ;
                                 If Equal ('C_READ_BLACKBOARD_, 1)
                                 Then
                                     (
-                                    'GPMcps1 := 'pk_true ;
+                                    'GPMcps1 := 1 ;
                                     'L6960_enabled := 'GLOBAL_PROCESS_MANAGER_CheckPreemptionStatus ;
                                     If Equal ('L6960_enabled, 1)
                                     Then
@@ -2555,12 +2555,12 @@ eq myFuns = 'main (nv)
                                 Local 't27 ;
                                 (If Equal ('C_READ_BLACKBOARD_, 1)
                                 Then 't27 := 'L6960_enabled
-                                Else 't27 := 'pk_false) ;
+                                Else 't27 := 0) ;
                                 'L18460_extended_enabled := 't27 ;
                                 Local 't28 ;
                                 (If Equal ('C_READ_BLACKBOARD_, 1)
                                 Then 't28 := 'L6960_enabled
-                                Else 't28 := 'pk_false) ;
+                                Else 't28 := 0) ;
                                 'L18465_extended_READ_BLACKBOARD_cond := 't28 ;
                                 'L18655_C_READ_BLACKBOARD_ := Equal (2, 99) And
                                                               Equal ('L18460_extended_enabled, 1) ;
@@ -2575,7 +2575,7 @@ eq myFuns = 'main (nv)
                             Local 't29 ;
                             (If Equal ('C_empty, 1)
                             Then 't29 := 'L18107_Message_Size
-                            Else 't29 := 'pk_false) ;
+                            Else 't29 := 0) ;
                             'L18113_extended_Message_Size := 't29 ;
                             'C_diag_area_ := Equal ('L17619_Message_Size, 1) Or
                                                         Equal ('L18113_extended_Message_Size, 1) ;
@@ -2590,7 +2590,7 @@ eq myFuns = 'main (nv)
                                   't30 := ('t31 Or 't32) Or (Equal ('L18465_extended_READ_BLACKBOARD_cond, 1) Or
                                                                      Equal ('L18110_extended_Message_Size, 1))
                                 )
-                            Else 't30 := 'pk_false) ;
+                            Else 't30 := 0) ;
                             'L18667_extended_C_ret3 := 't30 ;
                             If Equal ('L17619_Message_Size, 1)
                             Then
@@ -2631,8 +2631,8 @@ eq myFuns = 'main (nv)
                                         'blackboard_outWaiting_Queue := 'L9635_blackboard_inWaiting_Queue ;
                                         'CLK_5573 := 'L9635_blackboard_inEmpty_Indicator ;
                                         (If Equal ('CLK_5573, 1)
-                                        Then 'blackboard_outEmpty_Indicator := 'pk_false
-                                        Else 'blackboard_outEmpty_Indicator := 'pk_false) ;
+                                        Then 'blackboard_outEmpty_Indicator := 0
+                                        Else 'blackboard_outEmpty_Indicator := 0) ;
                                         'GBLMu1 := 'blackboard_out ;
                                         'gpm5 := 'GLOBAL_BLACKBOARD_MANAGER_Update ;
                                         If Equal ('release_all, 1)
@@ -2645,7 +2645,7 @@ eq myFuns = 'main (nv)
                                         'GPMssm1 := 'process_range ;
                                         'GPMssm2 := 'READY ;
                                         'gpm5 := 'GLOBAL_PROCESS_MANAGER_SetState_many ;
-                                        'GPMcps1 := 'pk_true ;
+                                        'GPMcps1 := 1 ;
                                         'L9650_enabled := 'GLOBAL_PROCESS_MANAGER_CheckPreemptionStatus ;
                                         If Equal ('L9650_enabled, 1)
                                         Then
@@ -2756,21 +2756,21 @@ eq myFuns = 'main (nv)
                                      ) ;
                                     (If Equal ('C_full, 1)
                                     Then 'L18087_extended_full := 'full
-                                    Else 'L18087_extended_full := 'pk_false) ;
+                                    Else 'L18087_extended_full := 0) ;
                                     (If Equal ('C_full, 1)
                                     Then 'L18092_extended_toolongXZX_subexpr := 'L18089_toolongXZX_subexpr
-                                    Else 'L18092_extended_toolongXZX_subexpr := 'pk_false) ;
+                                    Else 'L18092_extended_toolongXZX_subexpr := 0) ;
                                     'C_SEND_cond := Equal ('available, 1) And Equal ('L18087_extended_full, 1) ;
                                     (If Equal ('L18094_nowaitingprocess, 1)
                                     Then 'L18435_extended_SEND_var := 'L18426_SEND_var
-                                    Else 'L18435_extended_SEND_var :=  'pk_false) ;
+                                    Else 'L18435_extended_SEND_var :=  0) ;
                                     (If Equal ('L18092_extended_toolongXZX_subexpr, 1)
                                     Then 'L6657_SEND_cond := 'toolong
                                     Else 'L6657_SEND_cond := Equal ('present, 0) Or Equal ('outofrange, 1)) ;
                                     If Equal ('C_SEND_cond, 1)
                                     Then
                                         (
-                                        'GPMcps1 := 'pk_true ;
+                                        'GPMcps1 := 1 ;
                                         'enabled := 'GLOBAL_PROCESS_MANAGER_CheckPreemptionStatus ;
                                         If Equal ('enabled, 1)
                                         Then
@@ -2794,10 +2794,10 @@ eq myFuns = 'main (nv)
                                       ) ;
                                     (If Equal ('C_SEND_cond, 1)
                                     Then 'L18413_extended_enabled := 'enabled
-                                    Else 'L18413_extended_enabled := 'pk_false) ;
+                                    Else 'L18413_extended_enabled := 0) ;
                                     (If Equal ('C_SEND_cond, 1)
                                     Then 'L18443_extended_SEND_cond := 1 -. 'enabled
-                                    Else 'L18443_extended_SEND_cond := 'pk_false) ;
+                                    Else 'L18443_extended_SEND_cond := 0) ;
                                     'L18763_C_SEND_var := Equal (10, 99) And Equal ('L18413_extended_enabled, 1) ;
                                     'C_diagnostic := Equal ('L18413_extended_enabled, 1) Or
                                                                  Equal ('L18435_extended_SEND_var, 1) ;
@@ -2823,16 +2823,16 @@ eq myFuns = 'main (nv)
                                                    (Equal ('L18443_extended_SEND_cond, 1) And
                                                     Equal ('L18092_extended_toolongXZX_subexpr, 1))
                                      )
-                                Else 'L18619_extended_C_return_code_ := 'pk_false) ;
+                                Else 'L18619_extended_C_return_code_ := 0) ;
                                 'C_ret1 := Equal ('on_waiting, 1) Or Equal ('L18619_extended_C_return_code_, 1) ;
                                 (If Equal ('C_ret1, 1)
-                                 Then 'L6345_SEND_BUFFER_cond := 'pk_false
-                                 Else 'L6345_SEND_BUFFER_cond := 'pk_true) ;
+                                 Then 'L6345_SEND_BUFFER_cond := 0
+                                 Else 'L6345_SEND_BUFFER_cond := 1) ;
                                 'L6342_blocked := 'L6345_SEND_BUFFER_cond
                                 ) ;
                             (If Equal ('L17524_SEND_BUFFER_cond, 1)
                             Then 'L18628_extended_C_ret1 := 'C_ret1
-                            Else 'L18628_extended_C_ret1 := 'pk_false)
+                            Else 'L18628_extended_C_ret1 := 0)
                             ) ;
                         If Equal ('L8725_trigger, 1)
                         Then
@@ -2921,18 +2921,18 @@ eq myFuns = 'main (nv)
                                       ) ;
                                     (If Equal ('L17988_C_empty, 1)
                                     Then 'L18186_extended_empty := 'L9008_empty
-                                    Else 'L18186_extended_empty := 'pk_false) ;
+                                    Else 'L18186_extended_empty := 0) ;
                                     (If Equal ('L17988_C_empty, 1)
                                     Then 'L18191_extended_some_message_cell := 'L18188_some_message_cell
-                                    Else 'L18191_extended_some_message_cell := 'pk_false) ;
+                                    Else 'L18191_extended_some_message_cell := 0) ;
                                     'L18317_C_enabled := Equal ('L8870_available, 1) And Equal ('L18186_extended_empty, 1) ;
                                     (If Equal ('L18188_some_message_cell, 1)
                                     Then 'L18582_extended_RECEIVE_var := 'L18576_RECEIVE_var
-                                    Else 'L18582_extended_RECEIVE_var := 'pk_false) ;
+                                    Else 'L18582_extended_RECEIVE_var := 0) ;
                                     If Equal ('L18317_C_enabled, 1)
                                     Then
                                         (
-                                        'GPMcps1 := 'pk_true ;
+                                        'GPMcps1 := 1 ;
                                         'L9009_enabled := 'GLOBAL_PROCESS_MANAGER_CheckPreemptionStatus ;
                                         If Equal ('L9009_enabled, 1)
                                         Then
@@ -2956,10 +2956,10 @@ eq myFuns = 'main (nv)
                                       ) ;
                                     (If Equal ('L18317_C_enabled, 1)
                                     Then 'L18560_extended_RECEIVE_cond := 1 -. 'L9009_enabled
-                                    Else 'L18560_extended_RECEIVE_cond := 'pk_false) ;
+                                    Else 'L18560_extended_RECEIVE_cond := 0) ;
                                     (If Equal ('L18317_C_enabled, 1)
                                     Then 'L18566_extended_enabled := 'L9009_enabled
-                                    Else 'L18566_extended_enabled := 'pk_true) ;
+                                    Else 'L18566_extended_enabled := 1) ;
                                     'C_RECEIVE_var := Equal (2, 99) And Equal ('L18566_extended_enabled, 1) ;
                                     'L18796_C_diagnostic := Equal ('L18566_extended_enabled, 1) Or
                                                                                Equal ('L18582_extended_RECEIVE_var, 1) ;
@@ -2978,7 +2978,7 @@ eq myFuns = 'main (nv)
                                     ) ;
                                 (If Equal ('L8946_nowaitingprocess, 1)
                                 Then 'L18596_extended_mess_cell := 'L18584_mess_cell
-                                Else 'L18596_extended_mess_cell := 'pk_false) ;
+                                Else 'L18596_extended_mess_cell := 0) ;
                                 (If Equal ('L17757_outofrange, 1)
                                 Then
                                    (
@@ -2989,20 +2989,20 @@ eq myFuns = 'main (nv)
                                       'L18853_extended_C_return_code_ := Equal ('t34, 't35) Or (Equal ('L18560_extended_RECEIVE_cond, 1) Or
                                                          Equal ('L18191_extended_some_message_cell, 1))
                                     )
-                                Else 'L18853_extended_C_return_code_ := 'pk_false) ;
+                                Else 'L18853_extended_C_return_code_ := 0) ;
                                 (If Equal ('L18596_extended_mess_cell, 1)
-                                Then 'L8835_RECEIVE_BUFFER_cond := 'pk_false
-                                Else 'L8835_RECEIVE_BUFFER_cond := 'pk_true) ;
+                                Then 'L8835_RECEIVE_BUFFER_cond := 0
+                                Else 'L8835_RECEIVE_BUFFER_cond := 1) ;
                                 (If Equal ('L8829_retrieve, 1)
-                                Then 'L8827_blocked := 'pk_false
+                                Then 'L8827_blocked := 0
                                 Else
                                         (If Equal ('L8835_RECEIVE_BUFFER_cond, 1)
-                                        Then 'L8827_blocked := 'pk_true
-                                        Else 'L8827_blocked := 'pk_false)
+                                        Then 'L8827_blocked := 1
+                                        Else 'L8827_blocked := 0)
                                 )) ;
                             (If Equal ('L17749_RECEIVE_BUFFER_cond, 1)
                             Then 'L18862_extended_C_ret0 := Equal ('L8829_retrieve, 1) Or Equal ('L18853_extended_C_return_code_, 1)
-                            Else 'L18862_extended_C_ret0 := 'pk_false)
+                            Else 'L18862_extended_C_ret0 := 0)
                             ) ;
                         If Equal ('trigger, 1)
                         Then
@@ -3073,7 +3073,7 @@ eq myFuns = 'main (nv)
                                         'L7168_buffer_outMessage_RangeMessage_Area := 'L7169_buffer_inMessage_RangeMessage_Area ;
                                         'L7168_buffer_outMessage_RangeMessage_Size := 'L7169_buffer_inMessage_RangeMessage_Size
                                         )) ;
-                                        'GBUMu1 := 'L7168_buffer_out p ;
+                                        'GBUMu1 := 'L7168_buffer_out_p ;
                                         'gpm7 := 'GLOBAL_BUFFER_MANAGER_Update
                                         ) ;
                                         If Equal ('L18484_SEND_var, 1)
@@ -3107,18 +3107,18 @@ eq myFuns = 'main (nv)
                                     Then
                                        'L18116_extended_full := 'L7259_full
                                     Else
-                                       'L18116_extended_full := 'pk_false) ;
+                                       'L18116_extended_full := 0) ;
                                     (If Equal ('L17946_C_full, 1)
                                     Then
                                         'L18121_extended_toolongXZX_subexpr := 'L18118_toolongXZX_subexpr
                                     Else
-                                        'L18121_extended_toolongXZX_subexpr := 'pk_false) ;
+                                        'L18121_extended_toolongXZX_subexpr := 0) ;
                                     'L18281_C_SEND_cond := Equal ('L7154_available, 1) And Equal ('L18116_extended_full, 1) ;
                                     (If Equal ('L18123_nowaitingprocess, 1)
                                     Then
                                        'L18493_extended_SEND_var := 'L18484_SEND_var
                                     Else
-                                        'L18493_extended_SEND_var := 'pk_false) ;
+                                        'L18493_extended_SEND_var := 0) ;
                                     (If Equal ('L18121_extended_toolongXZX_subexpr, 1)
                                     Then
                                          'L7416_SEND_cond := 'L7261_toolong
@@ -3127,7 +3127,7 @@ eq myFuns = 'main (nv)
                                     If Equal ('L18281_C_SEND_cond, 1)
                                     Then
                                         (
-                                        'GPMcps1 := 'pk_true ;
+                                        'GPMcps1 := 1 ;
                                         'L7260_enabled := 'GLOBAL_PROCESS_MANAGER_CheckPreemptionStatus ;
                                         If Equal ('L7260_enabled, 1)
                                         Then
@@ -3153,12 +3153,12 @@ eq myFuns = 'main (nv)
                                     Then
                                        'L18471_extended_enabled := 'L7260_enabled
                                     Else
-                                        'L18471_extended_enabled := 'pk_false) ;
+                                        'L18471_extended_enabled := 0) ;
                                     (If Equal ('L18281_C_SEND_cond, 1)
                                     Then
                                        'L18501_extended_SEND_cond := 1 -. 'L7260_enabled
                                     Else
-                                       'L18501_extended_SEND_cond := 'pk_false) ;
+                                       'L18501_extended_SEND_cond := 0) ;
                                     'C_SEND_var := Equal (10, 99) And Equal ('L18471_extended_enabled, 1) ;
                                     'L18775_C_diagnostic := Equal ('L18471_extended_enabled, 1) Or
                                                                               Equal ('L18493_extended_SEND_var, 1) ;
@@ -3185,16 +3185,16 @@ eq myFuns = 'main (nv)
                                                                        Equal ('L18121_extended_toolongXZX_subexpr, 1))
                                    )
                                 Else
-                                       'L18682_extended_C_return_code_ := 'pk_false) ;
+                                       'L18682_extended_C_return_code_ := 0) ;
                                 'C_ret5 := Equal ('L7116_on_waiting, 1) Or Equal ('L18682_extended_C_return_code_, 1) ;
                                 (If Equal ('C_ret5, 1)
-                                Then 'L7117_SEND_BUFFER_cond := 'pk_false
-                                Else 'L7117_SEND_BUFFER_cond := 'pk_true) ;
+                                Then 'L7117_SEND_BUFFER_cond := 0
+                                Else 'L7117_SEND_BUFFER_cond := 1) ;
                                 'L7114_blocked := 'L7117_SEND_BUFFER_cond
                                 ) ;
                             (If Equal ('L17595_SEND_BUFFER_cond, 1)
                             Then 'L18691_extended_C_ret5 := 'C_ret5
-                            Else 'L18691_extended_C_ret5 := 'pk_false) ;
+                            Else 'L18691_extended_C_ret5 := 0) ;
                             'C_continue := Equal ('L18649_extended_C_ret2, 'L18628_extended_C_ret1) Or
                                                      Equal ('L18667_extended_C_ret3, 'L18691_extended_C_ret5) ;
                             'C_CONTROL_cond := Equal ('C_continue, 1) Or Equal ('L18081_service_call, 1) ;
@@ -3202,18 +3202,18 @@ eq myFuns = 'main (nv)
                             Then
                                 (
                                 (If Equal ('C_continue, 1)
-                                 Then 'L6250_CONTROL_cond := 'pk_false
-                                 Else 'L6250_CONTROL_cond := 'pk_true )
+                                 Then 'L6250_CONTROL_cond := 0
+                                 Else 'L6250_CONTROL_cond := 1 )
                                 ) ;
                             (If Equal ('C_CONTROL_cond, 1)
                             Then 'L19009_extended_CONTROL_cond := 'L6250_CONTROL_cond
-                            Else 'L19009_extended_CONTROL_cond := 'pk_false) ;
+                            Else 'L19009_extended_CONTROL_cond := 0) ;
                             (If Equal ('L19009_extended_CONTROL_cond, 1)
-                            Then 'blocked := 'pk_true
+                            Then 'blocked := 1
                              Else
                                 (
                                   If Equal ('L18081_service_call, 1)
-                                  Then 'blocked := 'pk_false
+                                  Then 'blocked := 0
                                   Else 'blocked := 'zblocked
                                 )
                             ) ;
@@ -3304,22 +3304,22 @@ eq myFuns = 'main (nv)
                                     ) ;
                                     (If Equal ('L17949_C_empty, 1)
                                     Then 'L18139_extended_empty := 'L7844_empty
-                                    Else 'L18139_extended_empty := 'pk_false) ;
+                                    Else 'L18139_extended_empty := 0) ;
                                     (If Equal ('L17949_C_empty, 1)
                                     Then
                                         'L18144_extended_some_message_cell := 'L18141_some_message_cell
                                     Else
-                                        'L18144_extended_some_message_cell := 'pk_false) ;
+                                        'L18144_extended_some_message_cell := 0) ;
                                     'C_enabled := Equal ('L7706_available, 1) And Equal ('L18139_extended_empty, 1) ;
                                     (If Equal ('L18141_some_message_cell, 1)
                                     Then
                                        'L18529_extended_RECEIVE_var := 'L18523_RECEIVE_var
                                     Else
-                                       'L18529_extended_RECEIVE_var := 'pk_false) ;
+                                       'L18529_extended_RECEIVE_var := 0) ;
                                     If Equal ('C_enabled, 1)
                                     Then
                                         (
-                                        'GPMcps1 := 'pk_true ;
+                                        'GPMcps1 := 1 ;
                                         'L7845_enabled := 'GLOBAL_PROCESS_MANAGER_CheckPreemptionStatus ;
                                         If Equal ('L7845_enabled, 1)
                                         Then
@@ -3345,12 +3345,12 @@ eq myFuns = 'main (nv)
                                     Then
                                         'L18507_extended_RECEIVE_cond := 1 -. 'L7845_enabled
                                     Else
-                                        'L18507_extended_RECEIVE_cond := 'pk_false) ;
+                                        'L18507_extended_RECEIVE_cond := 0) ;
                                     (If Equal ('C_enabled, 1)
                                     Then
                                         'L18513_extended_enabled := 'L7845_enabled
                                     Else
-                                        'L18513_extended_enabled := 'pk_false) ;
+                                        'L18513_extended_enabled := 0) ;
                                     'L18757_C_RECEIVE_var := Equal (10, 99) And Equal ('L18513_extended_enabled, 1) ;
                                     'L18784_C_diagnostic := Equal ('L18513_extended_enabled, 1) Or Equal ('L18529_extended_RECEIVE_var, 1) ;
                                     If Equal ('L18757_C_RECEIVE_var, 1)
@@ -3370,7 +3370,7 @@ eq myFuns = 'main (nv)
                                 Then
                                     'L18543_extended_mess_cell := 'L18531_mess_cell
                                 Else
-                                    'L18543_extended_mess_cell := 'pk_false) ;
+                                    'L18543_extended_mess_cell := 0) ;
                                (If Equal ('L17643_outofrange, 1)
                                Then
                                    (
@@ -3384,22 +3384,22 @@ eq myFuns = 'main (nv)
                                      'L18823_extended_C_return_code_ := Equal ('t37, 1) Or (Equal ('t38, 1) Or Equal ('t39, 1))
                                    )
                                Else
-                                     'L18823_extended_C_return_code_ := 'pk_false) ;
+                                     'L18823_extended_C_return_code_ := 0) ;
                                 (If Equal ('L18543_extended_mess_cell, 1)
-                                Then 'L7671_RECEIVE_BUFFER_cond := 'pk_false
-                                Else 'L7671_RECEIVE_BUFFER_cond := 'pk_true) ;
+                                Then 'L7671_RECEIVE_BUFFER_cond := 0
+                                Else 'L7671_RECEIVE_BUFFER_cond := 1) ;
                                 (If Equal ('retrieve, 1)
-                                Then 'L7663_blocked := 'pk_false
+                                Then 'L7663_blocked := 0
                                 Else
                                    (If Equal ('L7671_RECEIVE_BUFFER_cond, 1)
-                                    Then 'L7663_blocked := 'pk_true
-                                    Else 'L7663_blocked := 'pk_false)
+                                    Then 'L7663_blocked := 1
+                                    Else 'L7663_blocked := 0)
                                 ) ;
                             (If Equal ('L17635_RECEIVE_BUFFER_cond, 1)
                             Then
                                 'L18832_extended_C_ret0 := Equal ('retrieve, 1) Or Equal ('L18823_extended_C_return_code_, 1)
                             Else
-                                'L18832_extended_C_ret0 := 'pk_false) ;
+                                'L18832_extended_C_ret0 := 0) ;
                             If Equal ('L17661_WAIT_SEMAPHORE_cond, 1)
                            Then
                                 (
@@ -3432,15 +3432,15 @@ eq myFuns = 'main (nv)
                                      ) ;
                                     (If Equal ('C_positive, 1)
                                     Then 'L18147_extended_positive := 'positive
-                                    Else 'L18147_extended_positive := 'pk_false) ;
+                                    Else 'L18147_extended_positive := 0) ;
                                     (If Equal ('C_positive, 1)
                                     Then 'L18152_extended_FF_positive := 1 -. 'positive
-                                    Else 'L18152_extended_FF_positive := 'pk_false) ;
+                                    Else 'L18152_extended_FF_positive := 0) ;
                                     'L18308_C_WAIT_cond := Equal ('L8094_available, 1) And Equal ('L18152_extended_FF_positive, 1) ;
                                     If Equal ('L18308_C_WAIT_cond, 1)
                                     Then
                                         (
-                                        'GPMcps1 := 'pk_true ;
+                                        'GPMcps1 := 1 ;
                                         'L8117_enabled := 'GLOBAL_PROCESS_MANAGER_CheckPreemptionStatus ;
                                         If Equal ('L8117_enabled, 1)
                                         Then
@@ -3465,10 +3465,10 @@ eq myFuns = 'main (nv)
                                      ) ;
                                     (If Equal ('L18308_C_WAIT_cond, 1)
                                     Then 'L18549_extended_enabled := 'L8117_enabled
-                                    Else 'L18549_extended_enabled := 'pk_false) ;
+                                    Else 'L18549_extended_enabled := 0) ;
                                     (If Equal ('L18308_C_WAIT_cond, 1)
                                     Then 'L18554_extended_WAIT_cond  := 1 -. 'L8117_enabled
-                                    Else 'L18554_extended_WAIT_cond  := 'pk_false) ;
+                                    Else 'L18554_extended_WAIT_cond  := 0) ;
                                     'L18706_C_WAIT_var := Equal (20, 99) And Equal ('L18549_extended_enabled, 1) ;
                                     If Equal ('L18706_C_WAIT_var, 1)
                                    Then
@@ -3489,18 +3489,18 @@ eq myFuns = 'main (nv)
                                       't42 := Equal ('L18554_extended_WAIT_cond, 1) Or Equal ('L18147_extended_positive, 1) ;
                                       'L18715_extended_C_return_code_ := (Equal ('t40, 1) Or Equal ('t41, 1)) Or Equal ('t42, 1)
                                     )
-                                Else 'L18715_extended_C_return_code_ := 'pk_false) ;
+                                Else 'L18715_extended_C_return_code_ := 0) ;
                                 'L18721_C_ret1 := Equal ('L8050_on_waiting, 1) Or Equal ('L18715_extended_C_return_code_, 1) ;
                                 (If Equal ('L18721_C_ret1, 1)
-                                Then 'L8051_WAIT_SEMAPHORE_cond := 'pk_false
-                                Else 'L8051_WAIT_SEMAPHORE_cond := 'pk_true) ;
+                                Then 'L8051_WAIT_SEMAPHORE_cond := 0
+                                Else 'L8051_WAIT_SEMAPHORE_cond := 1) ;
                                 'L8045_blocked := 'L8051_WAIT_SEMAPHORE_cond
                                 ) ;
                             (If Equal ('L17661_WAIT_SEMAPHORE_cond, 1)
                             Then
                                 'L18724_extended_C_ret1 := 'L18721_C_ret1
                             Else
-                                 'L18724_extended_C_ret1 := 'pk_false) ;
+                                 'L18724_extended_C_ret1 := 0) ;
                            Local 't43 ;
                            't43 := Equal ('L17692_present, 1) Or (Equal ('L17709_present, 1) Or Equal ('L17721_present, 1)) ;
                            'C_L7558_continue := Equal ('t43, 1) Or (Equal ('L18724_extended_C_ret1, 1) Or
@@ -3511,17 +3511,17 @@ eq myFuns = 'main (nv)
                             Then
                                 (
                                 (If Equal ('C_L7558_continue, 1)
-                                Then 'L7591_CONTROL_cond := 'pk_false
-                                Else 'L7591_CONTROL_cond := 'pk_true)
+                                Then 'L7591_CONTROL_cond := 0
+                                Else 'L7591_CONTROL_cond := 1)
                                 ) ;
                             (If Equal ('L18847_C_CONTROL_cond, 1)
                             Then 'L19015_extended_CONTROL_cond := 'L7591_CONTROL_cond
-                            Else 'L19015_extended_CONTROL_cond := 'pk_false) ;
+                            Else 'L19015_extended_CONTROL_cond := 0) ;
                             (If Equal ('L19015_extended_CONTROL_cond, 1)
-                            Then 'L7563_blocked := 'pk_true
+                            Then 'L7563_blocked := 1
                             Else
                                 (If Equal ('L18133_L7559_service_call, 1)
-                                Then 'L7563_blocked := 'pk_false
+                                Then 'L7563_blocked := 0
                                 Else 'L7563_blocked := 'L7562_zblocked)
                             ) ;
                             If Equal ('L17692_present, 1)
@@ -3556,7 +3556,7 @@ eq myFuns = 'main (nv)
                                         'GPMss1 := 'L8300_some_processID ;
                                         'GPMss2 := 'READY ;
                                         'gpm8 := 'GLOBAL_PROCESS_MANAGER_SetState ;
-                                        'GPMcps1 := 'pk_true ;
+                                        'GPMcps1 := 1 ;
                                         'L8325_enabled := 'GLOBAL_PROCESS_MANAGER_CheckPreemptionStatus ;
                                         If Equal ('L8325_enabled, 1)
                                         Then
@@ -3617,15 +3617,15 @@ eq myFuns = 'main (nv)
                                     ) ;
                                     (If Equal ('L17991_C_positive, 1)
                                     Then 'L18194_extended_positive := 'L9282_positive
-                                    Else 'L18194_extended_positive := 'pk_false) ;
+                                    Else 'L18194_extended_positive := 0) ;
                                     (If Equal ('L17991_C_positive, 1)
                                     Then 'L18199_extended_FF_L9282_positive := 1 -. 'L9282_positive
-                                    Else 'L18199_extended_FF_L9282_positive := 'pk_false) ;
+                                    Else 'L18199_extended_FF_L9282_positive := 0) ;
                                     'L18332_C_WAIT_cond := Equal ('L9260_available, 1) And Equal ('L18199_extended_FF_L9282_positive, 1) ;
                                     If Equal ('L18332_C_WAIT_cond, 1)
                                    Then
                                         (
-                                        'GPMcps1 := 'pk_true ;
+                                        'GPMcps1 := 1 ;
                                         'L9283_enabled := 'GLOBAL_PROCESS_MANAGER_CheckPreemptionStatus ;
                                         If Equal ('L9283_enabled, 1)
                                         Then
@@ -3650,10 +3650,10 @@ eq myFuns = 'main (nv)
                                     ) ;
                                     (If Equal ('L18332_C_WAIT_cond, 1)
                                     Then 'L18602_extended_enabled := 'L9283_enabled
-                                    Else 'L18602_extended_enabled := 'pk_false) ;
+                                    Else 'L18602_extended_enabled := 0) ;
                                     (If Equal ('L18332_C_WAIT_cond, 1)
                                     Then 'L18607_extended_WAIT_cond := 1 -. 'L9283_enabled
-                                    Else 'L18607_extended_WAIT_cond := 'pk_false) ;
+                                    Else 'L18607_extended_WAIT_cond := 0) ;
                                     'L18730_C_WAIT_var := Equal (5, 99) And Equal ('L18602_extended_enabled, 1) ;
                                     If Equal ('L18730_C_WAIT_var, 1)
                                    Then
@@ -3676,19 +3676,19 @@ eq myFuns = 'main (nv)
                                                                      Equal ('t45, 1))
                                      )
                                 Else
-                                       'L18739_extended_C_return_code_ := 'pk_false
+                                       'L18739_extended_C_return_code_ := 0
                                 ) ;
                                 'L18745_C_ret1 := Equal ('L9216_on_waiting, 1) Or Equal ('L18739_extended_C_return_code_, 1) ;
                                 (If Equal ('L18745_C_ret1, 1)
-                                Then 'L9217_WAIT_SEMAPHORE_cond := 'pk_false
-                                Else 'L9217_WAIT_SEMAPHORE_cond := 'pk_true) ;
+                                Then 'L9217_WAIT_SEMAPHORE_cond := 0
+                                Else 'L9217_WAIT_SEMAPHORE_cond := 1) ;
                                 'L9211_blocked := 'L9217_WAIT_SEMAPHORE_cond
                                 ) ;
                             (If Equal ('L17775_WAIT_SEMAPHORE_cond, 1)
                             Then
                                  'L18748_extended_C_ret1 := 'L18745_C_ret1
                              Else
-                                 'L18748_extended_C_ret1 := 'pk_false) ;
+                                 'L18748_extended_C_ret1 := 0) ;
                             Local 't46 ;
                             't46 := Equal ('L17823_DISPLAY_BLACKBOARD_cond, 1) Or Equal ('L17846_present, 1) ;
                             Local 't47 ;
@@ -3699,17 +3699,17 @@ eq myFuns = 'main (nv)
                             Then
                                 (
                                  (If Equal ('C_L8722_continue, 1)
-                                 Then 'L8755_CONTROL_cond := 'pk_false
-                                 Else 'L8755_CONTROL_cond := 'pk_true)
+                                 Then 'L8755_CONTROL_cond := 0
+                                 Else 'L8755_CONTROL_cond := 1)
                                 ) ;
                             (If Equal ('L18877_C_CONTROL_cond, 1)
                             Then 'L19021_extended_CONTROL_cond := 'L8755_CONTROL_cond
-                            Else  'L19021_extended_CONTROL_cond := 'pk_false) ;
+                            Else  'L19021_extended_CONTROL_cond := 0) ;
                             (If Equal ('L19021_extended_CONTROL_cond, 1)
-                            Then 'L8727_blocked := 'pk_true
+                            Then 'L8727_blocked := 1
                             Else
                                 (If Equal ('L18180_L8723_service_call, 1)
-                                Then 'L8727_blocked := 'pk_false
+                                Then 'L8727_blocked := 0
                                 Else 'L8727_blocked := 'L8726_zblocked)
                             ) ;
                             If Equal ('L17806_present, 1)
@@ -3747,7 +3747,7 @@ eq myFuns = 'main (nv)
                                         'GPMss1 := 'L9463_some_processID ;
                                         'GPMss2 := 'READY ;
                                         'gpm8 := 'GLOBAL_PROCESS_MANAGER_SetState ;
-                                        'GPMcps1 := 'pk_true ;
+                                        'GPMcps1 := 1 ;
                                         'L9488_enabled := 'GLOBAL_PROCESS_MANAGER_CheckPreemptionStatus ;
                                         If Equal ('L9488_enabled, 1)
                                         Then
@@ -3823,14 +3823,14 @@ eq myFuns = 'main (nv)
                             'a9 := 'L12310_X2 +. 'DELTA ;
                             Call 'WHLINE ('ECRAN, 'L12310_X2, 'a7, 'a9) ;
                             Local 'a10 ;
-                            'a10 := ((3 *. 'TICK_HEIGHT) -. (8 * 'ESP_HEIGHT)) -. 'STRING_HEIGHT ;
+                            'a10 := ((3 *. 'TICK_HEIGHT) -. (8 *. 'ESP_HEIGHT)) -. 'STRING_HEIGHT ;
                             Call 'WSTRING ('ECRAN, 'L12589_C_aff, 'X, 'a10)
                             ) ;
                         If Equal ('L8725_trigger, 1)
                         Then
                             (
                             Local 'a11 ;
-                            'a11 := (6 *. 'TICK_HEIGHT) -. (5 * 'ESP_HEIGHT) ;
+                            'a11 := (6 *. 'TICK_HEIGHT) -. (5 *. 'ESP_HEIGHT) ;
                             Call 'WHLINE ('ECRAN, 'X, 'a11, 'L12413_X1) ;
                             Local 'a12 ;
                             'a12 := 'a11 +. 'TICK_HEIGHT ;
@@ -3841,7 +3841,7 @@ eq myFuns = 'main (nv)
                             'a13 := 'L12415_X2 +. 'DELTA ;
                             Call 'WHLINE ('ECRAN, 'L12415_X2, 'a11, 'a13) ;
                             Local 'a14 ;
-                            'a14 := ((8 *. 'TICK_HEIGHT) -. (6 * 'ESP_HEIGHT)) -. 'STRING_HEIGHT ;
+                            'a14 := ((8 *. 'TICK_HEIGHT) -. (6 *. 'ESP_HEIGHT)) -. 'STRING_HEIGHT ;
                             Call 'WSTRING ('ECRAN, 'L12649_C_aff, 'X, 'a14)
                             ) ;
                         If Equal ('L7561_trigger, 1)
@@ -3876,8 +3876,8 @@ eq myFuns = 'main (nv)
                                         'samplingPort_outMessageMessage_Size := 'L8533_messMessage_Size ;
                                         'CLK_4946 := 'samplingPort_inEmpty ;
                                         (If Equal ('CLK_4946, 0)
-                                        Then 'samplingPort_outEmpty := 'pk_false
-                                        Else 'samplingPort_outEmpty := 'pk_false) ;
+                                        Then 'samplingPort_outEmpty := 0
+                                        Else 'samplingPort_outEmpty := 0) ;
                                         'GSAMu1 := 'samplingPort_out ;
                                         'gpm8 := 'GLOBAL_SAMPLINGPORT_MANAGER_Update
                                         )
@@ -3890,16 +3890,16 @@ eq myFuns = 'main (nv)
             )
         ) ) ;
     Call 'VTON_FLIGHT_step_finalize ('empty) ;
-    '__res_VTON_FLIGHT_step := 'pk_true
+    '__res_VTON_FLIGHT_step := 1
 }
 
 'VTON_FLIGHT_step_finalize (nv)
 {
-    'CINIT := 'pk_false ;
+    'CINIT := 0 ;
     If Equal ('C_b_init, 1)
     Then
         (
-        'b_init := 'pk_false ;
+        'b_init := 0 ;
         If Equal ('L17428_ZV, 1)
         Then
             (
@@ -3933,7 +3933,7 @@ eq myFuns = 'main (nv)
             )
         ) ;
     Call 'VTON_FLIGHT_step_initialize ('empty) ;
-    '__res_VTON_FLIGHT_step_finalize := 'pk_true
+    '__res_VTON_FLIGHT_step_finalize := 1
 }
 
 
@@ -3943,12 +3943,12 @@ eq myFuns = 'main (nv)
     '__x1 := '"%hd" ;
     Call 'fscanf ('frH, '__x1, 'H) ;
     (If Equal ('__res_fscanf, 'EOF)
-    Then '__res_r_VTON_FLIGHT_H := 'pk_false) ;
+    Then '__res_r_VTON_FLIGHT_H := 0) ;
     Call 'print_VCD_boolean ('H) ;
     Local '__x2 ;
     '__x2 := '"<_1\n" ;
     Call 'fprintf ('fwXZX_DUMPFILE_VCD_, '__x2) ;
-    '__res_r_VTON_FLIGHT_H := 'pk_true
+    '__res_r_VTON_FLIGHT_H := 1
 }
 
 
@@ -4081,4 +4081,205 @@ eq myFuns = 'main (nv)
 .
 
 endm)
+
+(set side-effect sorts ESt RWBUF .)
+
+(set context-update rules CallF .)
+
+(islice Statement with defs myFuns wrt 'recorded3 .)
+
+eof
+
+*** Slice 1
+
+1. vars for process_manager ('pMessage_type, 'pProcessStatus_type, 'pProcessAttributes_type and all vars with prefix GLOBAL_PROCESS_MANAGER_...)
+
+(islice Statement with defs myFuns wrt 'pMessage_type 'pProcessStatus_type 'pProcessAttributes_type
+     'GLOBAL_PROCESS_MANAGER_StopCounter
+     'GLOBAL_PROCESS_MANAGER_CheckPreemptionStatus
+     'GLOBAL_PROCESS_MANAGER_SetState
+     'GLOBAL_PROCESS_MANAGER_SchedulingRequest
+     'GLOBAL_PROCESS_MANAGER_StartCounter
+     'GLOBAL_PROCESS_MANAGER_Recording
+     'GLOBAL_PROCESS_MANAGER_RetrieveMessage
+     'GLOBAL_PROCESS_MANAGER_StopCounters_many
+     'GLOBAL_PROCESS_MANAGER_CopyMessage
+     'GLOBAL_PROCESS_MANAGER_SetState_many
+     'GLOBAL_PROCESS_MANAGER_GetActive
+     'GLOBAL_PROCESS_MANAGER_GetPeriod
+     'GLOBAL_PROCESS_MANAGER_UpdateTimeCounters
+     'GLOBAL_PROCESS_MANAGER_CheckOperatingMode
+     'GLOBAL_PROCESS_MANAGER_SetDeadlineTime
+     'GLOBAL_PROCESS_MANAGER_GetTimeCapacity
+     'GLOBAL_PROCESS_MANAGER_CheckID
+     'GLOBAL_PROCESS_MANAGER_CheckName
+     'GLOBAL_PROCESS_MANAGER_GetTime
+     'GLOBAL_PROCESS_MANAGER_SetPriority
+     'GLOBAL_PROCESS_MANAGER_GetBasicPriority
+     'GLOBAL_PROCESS_MANAGER_GetState
+     'GLOBAL_PROCESS_MANAGER_SetCreated
+     'GLOBAL_PROCESS_MANAGER_SetAttributes
+     'GLOBAL_PROCESS_MANAGER_CheckCreated  .)
+
+*** Slice 2
+
+2. vars for semaphore_manager  ('pAPEX_Semaphore_type and all vars with prefix GLOBAL_SEMAPHORE_MANAGER_...)
+
+(islice Statement with defs myFuns wrt 'pAPEX_Semaphore_type
+     'GLOBAL_SEMAPHORE_MANAGER_CheckID
+     'GLOBAL_SEMAPHORE_MANAGER_Update
+     'GLOBAL_SEMAPHORE_MANAGER_Record
+     'GLOBAL_SEMAPHORE_MANAGER_CheckID_Full
+     'GLOBAL_SEMAPHORE_MANAGER_CheckID
+
+.)
+
+*** Slice 3
+
+3. vars for event_manager ('pAPEX_Event_type and all vars with prefix GLOBAL_EVENT_MANAGER_... )
+
+(islice Statement with defs myFuns wrt 'spAPEX_Event_type
+    'GLOBAL_EVENT_MANAGER_CheckID
+    'GLOBAL_EVENT_MANAGER_Update
+    'GLOBAL_EVENT_MANAGER_Full
+    'GLOBAL_EVENT_MANAGER_CheckName
+    'GLOBAL_EVENT_MANAGER_CheckID
+.)
+
+*** Slice 4
+
+4. vars for blackboard_manager ('pAPEX_Blackboard_type and all vars with prefix GLOBAL_BLACKBOARD_MANAGER_...)
+
+(islice Statement with defs myFuns wrt 'pAPEX_Blackboard_type
+    'GLOBAL_BLACKBOARD_MANAGER_CheckName
+    'GLOBAL_BLACKBOARD_MANAGER_Full
+    'GLOBAL_BLACKBOARD_MANAGER_Record
+    'GLOBAL_BLACKBOARD_MANAGER_CheckID
+    'GLOBAL_BLACKBOARD_MANAGER_Update
+.)
+
+*** Slice 5
+
+5. vars for buffer_manager ('pAPEX_Buffer_type and all vars with prefix GLOBAL_BUFFER_MANAGER_...)
+
+(islice Statement with defs myFuns wrt 'pAPEX_Buffer_type
+    'GLOBAL_BUFFER_MANAGER_CheckName
+    'GLOBAL_BUFFER_MANAGER_Full
+    'GLOBAL_BUFFER_MANAGER_Record
+    'GLOBAL_BUFFER_MANAGER_Update
+    'GLOBAL_BUFFER_MANAGER_CheckID
+.)
+
+*** Slice 6
+
+6. vars for samplingport_manager ('pAPEX_SamplingPort_type and all vars with prefix GLOBAL_SAMPLINGPORT_MANAGER_...)
+
+(islice Statement with defs myFuns wrt 'pAPEX_SamplingPort_type
+   'GLOBAL_SAMPLINGPORT_MANAGER_CheckID
+   'GLOBAL_SAMPLINGPORT_MANAGER_Update
+   'GLOBAL_SAMPLINGPORT_MANAGER_Full
+   'GLOBAL_SAMPLINGPORT_MANAGER_CheckName
+   'GLOBAL_SAMPLINGPORT_MANAGER_CheckCreated
+   'GLOBAL_SAMPLINGPORT_MANAGER_Record
+.)
+
+*** Slice 7
+
+7. vars for create processes (all vars with _CREATE_, create or created in their name)
+
+(islice Statement with defs myFuns wrt
+    'L10006_CREATE_BUFFER_var
+    'L10135_CREATE_BUFFER_var
+    'L10380_CREATE_SEMAPHORE_var
+    'L10535_CREATE_SAMPLING_PORT_var
+    'L10735_CREATE_PROCESS_var
+    'L10892_CREATE_PROCESS_var
+    'L11047_CREATE_PROCESS_var
+    'L16810_CREATE_SAMPLING_PORT_var
+    'C_CREATE_BLACKBOARD_
+    'C_CREATE_BUFFER_
+    'L17138_C_CREATE_BUFFER_
+    'C_CREATE_EVENT_
+    'C_CREATE_SEMAPHORE_
+    'created
+    'L10717_created
+    'L10874_created
+    'L11031_created
+.)
+
+*** Slice 8
+
+8. vars for testing the present signals (all vars with _present_ in their name, including the var 'present).
+
+
+
+(islice Statement with defs myFuns wrt 'present
+     'L6762_present_up
+     'L6941_present
+     'L7152_present
+     'L8096_present
+     'L7700_present
+     'L8312_present
+     'L8444_present
+     'L8535_present
+     'L8864_present
+     'L9262_present
+     'L9475_present
+     'L9634_present
+     'L9784_present
+     'L9893_present
+     'L10000_present
+     'L10129_present
+     'L10248_present
+     'L10340_present
+     'L10467_present
+     'L10711_present
+     'L10868_present
+     'L11025_present
+     'L11153_present
+     'L11292_present
+     'L11431_present
+     'L17556_present
+     'L17574_present
+     'L17669_present
+     'L17692_present
+     'L17709_present
+     'L17721_present
+     'L17783_present
+     'L17806_present
+     'L17846_present
+.)
+
+*** Slice 9
+
+9. vars for initialization (all vars with _init in their name)
+
+(islice Statement with defs myFuns wrt
+     'b_init
+     'C_b_init
+.)
+
+*** Slice 10
+
+10. var 'NORMAL
+
+(islice Statement with defs myFuns wrt 'NORMAL .)
+
+*** Slice 11
+
+11. 'recorded1
+
+(islice Statement with defs myFuns wrt 'recorded1 .)
+
+*** Slice 12
+
+12. 'recorded2
+
+(islice Statement with defs myFuns wrt 'recorded2 .)
+
+*** Slice 13
+
+13. 'recorded3
+
+(islice Statement with defs myFuns wrt 'recorded3 .)
 

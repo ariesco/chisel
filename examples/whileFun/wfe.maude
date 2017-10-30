@@ -13,7 +13,7 @@ load ../../slicing.prj
 
   subsort Com < Prog .
   subsort Var < VarL .
-  subsort Exp < ExpL .
+  subsort BExp < Exp < ExpL .
   subsort VarL < ExpL .
 
   ops a b c d e i j k l m o p q r s t u w x y z sum : -> Var .
