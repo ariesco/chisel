@@ -4,6 +4,7 @@ load ../../slicing.prj
   pr INT .
 
   sort RegId .
+  subsort Int < RegId .
 
   op reg : Nat -> RegId [ctor] .
   ops R1 R2 R3 R4 R5 R6 R7 R8 : -> RegId [ctor] .
@@ -14,6 +15,9 @@ load ../../slicing.prj
   ops $f0 $f1 $f2 $f3 $f4 $f5 $f6 $f7 $f8 $f9 $f10 $31 : -> RegId [ctor] .
   ops zero gp ra sp $fcc0 : -> RegId [ctor] .
   ops hi lo acc : -> RegId [ctor] .
+
+  *** Only for slicing purposes
+  ops memAcc0 memAcc1 : -> RegId [ctor] .
 
   sort Value .
   subsort Int < Value .
@@ -122,6 +126,8 @@ endfm)
   op sh_`,_`(_`) : RegId Int RegId -> BasicIns [ctor prec 15 format(!r o o o o o o o)] .
   *** sw R1, N(R2) : mem[R2 + N] <- R1 (32 bits)
   op sw_`,_`(_`) : RegId Int RegId -> BasicIns [ctor prec 15 format(!r o o o o o o o)] .
+  *** sw R1, N(R2) : mem[R2 + N] <- R1 (32 bits)
+  op swAux_`,_ : RegId RegId -> BasicIns [ctor prec 15 format(!r o o o o)] .
   *** swr R1, N(R2) : mem[R2 + N] <- R1 (right)
   op swr_`,_`(_`) : RegId Int RegId -> BasicIns [ctor prec 15 format(!r o o o o o o o)] .
   *** swl R1, N(R2) : mem[R2 + N] <- R1 (left)
@@ -857,6 +863,8 @@ endfm)
   op _<i_ : Int Int -> Int .
   eq I <i I' = if I < I' then 1 else 0 fi .
 endm)
+
+eof
 
 (memory inferences .)
 

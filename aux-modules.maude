@@ -48,7 +48,7 @@ fmod PRINTING-FUNCTIONS is
   vars N N' : Nat .
 
   op slicedCode : Module Term TermList DirectionSet -> QidList .
-  ceq slicedCode(M, T, TL, DS) = printVars(TL) '\n
+  ceq slicedCode(M, T, TL, DS) = printVars(M, TL) '\n
                              clean(metaPrettyPrint(M', T', po), nil)
    if T' := slice(M, T, TL, DS) /\
       M' := addUndefOp2Sorts(M) .
@@ -58,7 +58,7 @@ fmod PRINTING-FUNCTIONS is
                                             'failed. '\o '\n) .
   eq printSlicingResult(M, VL, sliRes(QS, TL, DS)) = printRules(QS)
                                                      printDirection(M, DS)
-                                                     printVars(TL) .
+                                                     printVars(M, TL) .
   eq printSlicingResult(M, VL, sr(ST)) = '\n printVarsWRT(M, VL)
                                          '\n printSets(M, ST)
                                          '\n printCode(M, ST) .
@@ -82,9 +82,9 @@ fmod PRINTING-FUNCTIONS is
                                    printVarsWRTAux(M, TL) [owise] .
 
 
-  op printVars : TermList -> QidList .
-  eq printVars(TL) = '\n '\b '\! 'The 'variables 'obtained 'by 'the 'slicing 'process 'are: '\o
-                     termlist2qidlist(TL) '\n .
+  op printVars : Module TermList -> QidList .
+  eq printVars(M, TL) = '\n '\b '\! 'The 'variables 'obtained 'by 'the 'slicing 'process 'are: '\o
+                        termlist2qidlist(M, TL) '\n .
 
   op printDirection : Module DirectionSet -> QidList .
   eq printDirection(M, DS) = '\n '\! '\b 'The 'inferred 'data-flow 'information 'is: '\o '\n
@@ -133,9 +133,9 @@ fmod PRINTING-FUNCTIONS is
   eq qidset2qidlist(none) = nil .
   eq qidset2qidlist(Q ; QS) = Q qidset2qidlist(QS) .
 
-  op termlist2qidlist : TermList ~> QidList .
-  eq termlist2qidlist(empty) = nil .
-  eq termlist2qidlist((C, TL)) = getName(C) termlist2qidlist(TL) .
+  op termlist2qidlist : Module TermList ~> QidList .
+  eq termlist2qidlist(M, empty) = nil .
+  eq termlist2qidlist(M, (T, TL)) = metaPrettyPrint(M, T, po) termlist2qidlist(M, TL) .
 
   op po : -> PrintOptionSet .
   eq po = mixfix number rat format .
