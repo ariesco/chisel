@@ -4086,7 +4086,11 @@ endm)
 
 (set context-update rules CallF .)
 
-(islice Statement with defs myFuns wrt 'recorded3 .)
+(islice Statement with defs myFuns wrt 'recorded3 'L7671_RECEIVE_BUFFER_cond
+         'L8835_RECEIVE_BUFFER_cond 'L17635_RECEIVE_BUFFER_cond 'L17749_RECEIVE_BUFFER_cond
+         'L8051_WAIT_SEMAPHORE_cond 'L9217_WAIT_SEMAPHORE_cond 'L17661_WAIT_SEMAPHORE_cond
+         'L17775_WAIT_SEMAPHORE_cond 'C_SIGNAL_SEMAPHORE_ 'L18000_C_SIGNAL_SEMAPHORE_
+         'GLOBAL_EVENT_MANAGER_Update .)
 
 eof
 
@@ -4267,19 +4271,39 @@ eof
 
 *** Slice 11
 
-11. 'recorded1
+11. 'recorded1, 'L6345_SEND_BUFFER_cond, 'L7117_SEND_BUFFER_cond, 'L17524_SEND_BUFFER_cond,
+'L17595_SEND_BUFFER_cond, 'L6723_WAIT_EVENT_cond,  'L17548_WAIT_EVENT_cond, 'C_READ_BLACKBOARD_,
+'L18465_extended_READ_BLACKBOARD_cond, 'L18655_C_READ_BLACKBOARD_
 
-(islice Statement with defs myFuns wrt 'recorded1 .)
+(islice Statement with defs myFuns wrt 'recorded1 'L6345_SEND_BUFFER_cond 'L7117_SEND_BUFFER_cond
+          'L17524_SEND_BUFFER_cond 'L17595_SEND_BUFFER_cond 'L6723_WAIT_EVENT_cond
+          'L17548_WAIT_EVENT_cond 'C_READ_BLACKBOARD_ 'L18465_extended_READ_BLACKBOARD_cond
+          'L18655_C_READ_BLACKBOARD_ .)
 
 *** Slice 12
 
-12. 'recorded2
+12. 'recorded2, 'L7671_RECEIVE_BUFFER_cond, 'L8835_RECEIVE_BUFFER_cond, 'L17635_RECEIVE_BUFFER_cond,
+'L17749_RECEIVE_BUFFER_cond, 'L8051_WAIT_SEMAPHORE_cond, 'L9217_WAIT_SEMAPHORE_cond,
+'L17661_WAIT_SEMAPHORE_cond, 'L17775_WAIT_SEMAPHORE_cond, 'C_SIGNAL_SEMAPHORE_,
+'L18000_C_SIGNAL_SEMAPHORE_, 'GLOBAL_SAMPLINGPORT_MANAGER_Update
 
-(islice Statement with defs myFuns wrt 'recorded2 .)
+(islice Statement with defs myFuns wrt 'recorded2 'L7671_RECEIVE_BUFFER_cond
+     'L8835_RECEIVE_BUFFER_cond 'L17635_RECEIVE_BUFFER_cond 'L17749_RECEIVE_BUFFER_cond
+     'L8051_WAIT_SEMAPHORE_cond 'L9217_WAIT_SEMAPHORE_cond 'L17661_WAIT_SEMAPHORE_cond
+     'L17775_WAIT_SEMAPHORE_cond 'C_SIGNAL_SEMAPHORE_ 'L18000_C_SIGNAL_SEMAPHORE_
+     'GLOBAL_SAMPLINGPORT_MANAGER_Update .)
 
 *** Slice 13
 
-13. 'recorded3
+13. 'recorded3, 'L7671_RECEIVE_BUFFER_cond, 'L8835_RECEIVE_BUFFER_cond, 'L17635_RECEIVE_BUFFER_cond,
+'L17749_RECEIVE_BUFFER_cond, 'L8051_WAIT_SEMAPHORE_cond, 'L9217_WAIT_SEMAPHORE_cond,
+'L17661_WAIT_SEMAPHORE_cond, 'L17775_WAIT_SEMAPHORE_cond, 'C_SIGNAL_SEMAPHORE_,
+'L18000_C_SIGNAL_SEMAPHORE_ 'GLOBAL_EVENT_MANAGER_Update
 
-(islice Statement with defs myFuns wrt 'recorded3 .)
+
+(islice Statement with defs myFuns wrt 'recorded3 'L7671_RECEIVE_BUFFER_cond
+         'L8835_RECEIVE_BUFFER_cond 'L17635_RECEIVE_BUFFER_cond 'L17749_RECEIVE_BUFFER_cond
+         'L8051_WAIT_SEMAPHORE_cond 'L9217_WAIT_SEMAPHORE_cond 'L17661_WAIT_SEMAPHORE_cond
+         'L17775_WAIT_SEMAPHORE_cond 'C_SIGNAL_SEMAPHORE_ 'L18000_C_SIGNAL_SEMAPHORE_
+         'GLOBAL_EVENT_MANAGER_Update .)
 
