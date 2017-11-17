@@ -1,6 +1,6 @@
 *** Evaluation semantics for WhileL
 
-load ../../slicing.prj
+*** load ../../slicing.prj
 
 (fmod WHILE-SYNTAX-EVAL is
   protecting QID .
@@ -350,6 +350,10 @@ endm)
    if st' := allocateLocals(vl, st) .
 
 endm)
+
+(set side-effect sorts ESt RWBUF .)
+
+(branch ins .)
 
 eof
 

@@ -651,3 +651,63 @@ fmod MEMORY-ANALYSIS is
 endfm
 
 
+fmod SIDE-EFFECTS is
+ pr META-LEVEL .
+
+ vars TL TL' : TermList .
+ var  COND : Condition .
+ vars T T' T'' : Term .
+ var  AtS : AttrSet .
+ var  SS : SortSet .
+ var  RS : RuleSet .
+ vars R R' : Rule .
+ var  M : Module .
+ vars Q Q' : Qid .
+ var  S : Sort .
+
+ op getUnconditionalBranches : Module SortSet -> QidSet .
+
+ op getUnconditionalBranches : RuleSet -> QidSet .
+
+ *** We assume instructions are in the first argument of the system
+ op getBranchOps : Module SortSet -> QidSet .
+ eq getBranchOps(M, SS) = getBranchOps(getRls(M), SS) .
+
+ op getBranchOps : RuleSet SortSet -> QidSet .
+ ceq getBranchOps(R R' RS, SS) = getInsOp(R) ;
+                                 getBranchOps(RS, SS)
+  if getInsOp(R) == getInsOp(R') .
+ eq getBranchOps(RS, SS) = none [owise] .
+
+ op getInsOp : Rule ~> Qid .
+ eq getInsOp(rl T => T' [AtS] .) = getInsOp(T, nil) .
+ eq getInsOp(crl T => T' if COND [AtS] .) = getInsOp(T, COND) .
+
+ op getInsOp : Term Condition ~> Qid .
+ eq getInsOp(Q[Q'[TL], TL'], COND) = Q' .
+ eq getInsOp(Q[T, TL], COND) = getInsCond(T, COND) .
+
+ op getInsCond : Term Condition ~> Qid .
+ eq getInsCond(T, T' => T'' /\ COND) = getInsCond(T, COND) .
+ eq getInsCond(T, T' = T'' /\ COND) = getInsCond(T, COND) .
+ eq getInsCond(T, T' : S /\ COND) = getInsCond(T, COND) .
+ eq getInsCond(T, T' := T'' /\ COND) =
+         if in?(T'', T)
+         then top(T')
+         else getInsCond(T, COND)
+         fi .
+
+ op top : Term ~> Qid .
+ eq top(Q[TL]) = Q .
+
+ op in? : Term Term -> Bool .
+ eq in?(T, T) = true .
+ ceq in?(Q[TL], T) = in?*(TL, T)
+  if Q[TL] =/= T .
+ eq in?(T, T') = false [owise] .
+
+ op in?* : TermList Term -> Bool .
+ eq in?*(empty, T) = false .
+ eq in?*((T, TL), T') = in?(T, T') or in?*(TL, T') .
+endfm
+

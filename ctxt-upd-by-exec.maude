@@ -17,33 +17,142 @@ fmod PROG-GEN is
  pr MAP{Sort, TermList} * (sort Map{Sort, TermList} to ConsTable,
                            op _|->_ to _||->_,
                            op undefined to errCT) .
+ pr SIDE-EFFECTS .
  pr META-LEVEL .
 
- var  M : Module .
- vars ODS POL : OpDeclSet .
- var  OD : OpDecl .
- var  MAS : MembAxSet .
- var  AtS : AttrSet .
- vars S S' S'' : Sort .
- var  TyL : TypeList .
- var  Ty : Type .
- var  N N' : Nat .
  vars TL TL' TL'' ATL ATL' : TermList .
+ vars SM SM' SM'' : SubstitutionMap .
  vars PTL PTL' PTL'' : TermList .
+ vars ODS POL : OpDeclSet .
  vars SS SS' : SortSet .
- var  V : Variable .
+ var  MAS : MembAxSet .
+ vars S S' S'' : Sort .
  vars T T' T'' : Term .
- var  Q : Qid .
- var  B : Bool .
- var  CT : ConsTable .
- var  OT : OpsTable .
  var  CND : Condition .
+ var  CT : ConsTable .
  var  CNS : Constant .
- var  ST : Step .
+ var  TyL : TypeList .
+ var  OT : OpsTable .
+ var  AtS : AttrSet .
+ var  V : Variable .
  var  GR : GenRes .
+ var  OD : OpDecl .
+ var  M : Module .
+ vars Q Q' : Qid .
+ var  N N' : Nat .
+ var  ST : Step .
+ var  Ty : Type .
+ var  B : Bool .
+
+ op look4branches : Module Term SortSet Nat -> QidSet .
+ ceq look4branches(M, T, SS, N) = look4branches(M, T, SM, SS)
+  if SM := buildSubstitutionMap(M, SS, N) .
+
+ *** We assume the first argument is a list of instructions that we can traverse
+ op look4branches : Module Term SubstitutionMap SortSet -> QidSet .
+ ceq look4branches(M, T, SM, SS) = tryCurrent(M, T, SM, SS) ;
+                                   look4branches(M, remove(T), SM, SS)
+  if not last?(T) .
+ ceq look4branches(M, T, SM, SS) = tryCurrent(M, T, SM, SS) ;
+                                   look4branchesLast(M, remove(T), SM, SS)
+  if last?(T) .
+
+ op look4branchesLast : Module Term SubstitutionMap SortSet -> QidSet .
+ eq look4branches(M, T, SM, SS) = tryCurrent(M, T, SM, SS) .
+
+ op tryCurrent : Module Term SubstitutionMap SortSet -> QidSet .
+ eq tryCurrent(M, T, mtSM, SS) = none .
+ ceq tryCurrent(M, T, SM, SS) = analyzeTerm(M, T', SS) ;
+                                tryCurrent(M, T, SM', SS)
+  if SM' := first(SM) /\
+     SM'' := remove(SM) /\
+     T' := substitute(T, SM) [owise] .
+
+ op analyzeTerm : Module Term SortSet -> QidSet .
+ ceq analyzeTerm(M, T, SS) = compare(M, T, T', SS)
+  if T' := getTerm(metaRewrite(M, T, unbounded)) .
+
+ op compare : Module Term Term SortSet -> QidSet .
+ eq compare(M, Q[TL], Q[TL'], SS) = compare*(M, TL, TL', SS) .
+ eq compare(M, T, T', SS) = none [owise] .
+
+ op compare* : Module TermList TermList SortSet -> QidSet .
+ ceq compare*(M, (T, TL), (T', TL'), SS) = compare*(M, TL, TL', SS)
+  if S ; SS' := SS /\
+     S := getType(metaReduce(M, T)) .
+
+ ceq compare*(M, (T, TL), (T', TL'), SS) = top(T)
+  if allSubterms(T, T') [owise] .
+
+ op allSubterms : Term Term -> Bool .
+ eq allSubterms(T, Q[TL]) = allSubterms*(T, TL) or
+                            (T =/= Q[TL] and isSubterm(T, Q[TL])) .
+ eq allSubterms(T, CNS) = T =/= CNS and isSubterm(T, CNS) .
+ eq allSubterms(T, T') = false [owise] .
+
+ op isSubterm : Term Term -> Bool .
+ eq isSubterm(T, T) = true .
+ eq isSubterm(Q[TL], T) = isSubterm*(TL, T) .
+ eq isSubterm(T, T') = false [owise] .
+
+ op isSubterm* : TermList Term -> Bool .
+ eq isSubterm*(empty, T) = false .
+ eq isSubterm*((T, TL), T') = isSubterm(T, T') or isSubterm*(TL, T') .
+
+ op allSubterms* : Term TermList -> Bool .
+ eq allSubterms*(T, empty) = true .
+ eq allSubterms*(T, (T', TL)) = isSubterm(T, T') and allSubterms*(T, TL) .
+
+
+ op last? : Term -> Bool .
+ eq last?(Q[Q'[T, T'], TL]) = true .
+ eq last?(T) = false [owise] .
+
+ op remove : Term ~> Term .
+ eq remove(Q[Q'[T, T', TL], TL']) = if TL == empty
+                                    then Q[T', TL']
+                                    else Q[Q'[T', TL], TL']
+                                    fi .
+
+ op substitute : Term SubstitutionMap -> TermList .
+ eq substitute(Q[TL], SM) = Q[substitute*(TL, SM)] .
+ eq substitute(V, SM) = SM [getType(V)] .
+ eq substitute(T, SM) = T [owise] .
+
+ op substitute* : TermList SubstitutionMap -> TermList .
+ eq substitute*(empty, SM) = empty .
+ eq substitute*((T, TL), SM) = substitute(T, SM), substitute*(TL, SM) .
+
+ op buildSubstitutionMap : Module SortSet Nat -> SubstitutionMap .
+ eq buildSubstitutionMap(M, none, N) = mtSM .
+ ceq buildSubstitutionMap(M, S ; SS, N) = [S, TL] buildSubstitutionMap(M, SS, N)
+  if TL := fst(generateTerms(M, S, N)) .
 
  sort GenRes .
  op gr : TermList TermList -> GenRes [ctor] .
+
+ sort SubstitutionMap .
+ op mtSM : -> SubstitutionMap [ctor] .
+ op [_,_] : Sort TermList -> SubstitutionMap [ctor] .
+ op __ : SubstitutionMap SubstitutionMap -> SubstitutionMap [ctor assoc comm id: mtSM] .
+
+ op first : SubstitutionMap -> SubstitutionMap .
+ eq first([S, (T, TL)] SM) = [S, T] first(SM) .
+ eq first(mtSM) = mtSM .
+
+ op remove : SubstitutionMap -> SubstitutionMap .
+ eq remove([S, (T, TL)] SM) = if TL == empty
+                              then mtSM
+                              else [S, TL] remove(SM)
+                              fi .
+ eq remove(mtSM) = mtSM .
+
+ op _[_] : SubstitutionMap Sort ~> TermList .
+ eq ([S, TL] SM) [S] = TL .
+
+ ops fst snd : GenRes -> TermList .
+ eq fst(gr(TL, TL')) = TL .
+ eq snd(gr(TL, TL')) = TL' .
 
  sort Step .
  subsort TermList < Step .
@@ -51,7 +160,7 @@ fmod PROG-GEN is
  op ground : -> Step [ctor] .
  op error-sort : -> Step [ctor] .
 
- op generateTerms : Module Sort Nat -> GenRes .
+ op generateTerms : Module Sort Nat -> GenRes [memo] .
  ceq generateTerms(M, S, N) = termsModulo(M, S, N, TL, PTL, empty, B)
   if V := qid("V:" + string(S)) /\
      CT := createConsTable(M) /\

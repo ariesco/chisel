@@ -10,6 +10,7 @@ fmod SLI-SIGNATURE is
   op memory`inferences`. : -> @Command@ .
   op context`update`sorts`. : -> @Command@ .
   op context`update`rules`. : -> @Command@ .
+  op branch`ins`. : -> @Command@ .
 endfm
 
 fmod META-SLI-SIGN is
@@ -228,6 +229,7 @@ endfm
 mod SLI-DATABASE-HANDLING is
   pr SLI-COMMAND-PROCESSING .
   inc DATABASE-HANDLING .
+  pr SIDE-EFFECTS .
   pr MAYBE{Sort} .
 
   sort SLIDatabaseClass .
@@ -410,6 +412,15 @@ mod SLI-DATABASE-HANDLING is
                   default : ME, AtS >
    if M := getFlatModule(modExp(evalModExp(ME, DB)), database(evalModExp(ME, DB))) /\
       SS' := getContextUpdateRules(M) .
+
+  crl [infer-context-update-rules] :
+      < O : SDC | db : DB, input : ('branch`ins`..@Command@), output : nil,
+                  default : ME, sideEffectSorts : SS, AtS >
+   => < O : SDC | db : DB, input : nilTermList, output :
+                        ('\n '\! '\b 'The 'branch 'instructions 'are '\o ss2qil(SS') '\o '\n),
+                  default : ME, sideEffectSorts : SS, AtS >
+   if M := getFlatModule(modExp(evalModExp(ME, DB)), database(evalModExp(ME, DB))) /\
+      SS' := getBranchOps(M, SS) .
 
   **********************************************************************************
   ********************************* MEMORY INFERENCE *******************************

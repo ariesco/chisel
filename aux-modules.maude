@@ -4,9 +4,11 @@ fmod MAYBE{X :: TRIV} is
   op maybe : -> Maybe{X} .
 endfm
 
+***(
 view Sort from TRIV to META-MODULE is
  sort Elt to Sort .
 endv
+)
 
 fth CTL-Theory is
  sorts Prop HyperTree .
