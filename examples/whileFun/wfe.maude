@@ -351,6 +351,8 @@ endm)
 
 endm)
 
+eof
+
 (set side-effect sorts ESt RWBUF .)
 
 (branch ins .)

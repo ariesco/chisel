@@ -711,3 +711,54 @@ fmod SIDE-EFFECTS is
  eq in?*((T, TL), T') = in?(T, T') or in?*(TL, T') .
 endfm
 
+fmod TRACE-LIST is
+ pr META-LEVEL .
+
+ sort ExecList .
+ subsort QidSet < ExecList .
+
+ op mtEL : -> ExecList .
+ op _-_ : ExecList ExecList -> ExecList [ctor assoc id: mtEL] .
+
+ var  COND : Condition .
+ var  TS : TraceStep .
+ var  EL : ExecList .
+ var  AtS : AttrSet .
+ var  V : Variable .
+ var  QS : QidSet .
+ var  T T' : Term .
+ vars Q Q' : Qid .
+ var  M : Module .
+ var  TR : Trace .
+ var  Ty : Type .
+ var  R : Rule .
+
+ op compare : Module Term ExecList -> QidSet .
+ ceq compare(M, T, EL) = compare(TR, EL, ' )
+  if Ty := getType(metaReduce(M, T)) /\
+     V := qid("foo:" + string(Ty)) /\
+     TR := metaSearchPath(M, T, V, nil, '*, unbounded, 0) .
+
+ op compare : Trace ExecList Qid -> QidSet .
+ ceq compare(TS TR, QS - EL, Q) = if QS contains Q'
+                                  then Q
+                                  else compare(TR, EL, Q')
+                                  fi
+  if Q' := getLabel(TS) .
+ eq compare(TR, EL, Q) = none [owise] .
+
+ op getLabel : TraceStep ~> Qid .
+ eq getLabel({T, Ty, R}) = getLabel(R) .
+
+ op getLabel : Rule ~> Qid .
+ eq getLabel(rl T => T' [AtS] .) = getLabel(AtS) .
+ eq getLabel(crl T => T' if COND [AtS] .) = getLabel(AtS) .
+
+ op getLabel : AttrSet ~> Qid .
+ eq getLabel(label(Q) AtS) = Q .
+
+ op _contains_ : QidSet Qid -> Bool .
+ eq (Q ; QS) contains Q = true .
+ eq QS contains Q = false [owise] .
+endfm
+
