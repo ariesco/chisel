@@ -23,7 +23,7 @@ load ../wfe.maude
 		'radio_ok := 1 ;
 		'radio_really_lost := 0 ;
 		'time_since_last_ppm := 0 ;
-		Call 'last_radio_from_ppm ('empty) ;
+		Call 'last_radio_from_ppm (nv) ;
 		(If Equal ('last_radio_contains_avg_channels, 1)
 		Then
 		(
@@ -45,12 +45,12 @@ load ../wfe.maude
 	Then 'radio_really_lost := 0
 }
 
-'last_radio_from_ppm ('empty)
+'last_radio_from_ppm (nv)
 {
-	Call 'LastRadioFromPpm ('empty)
+	Call 'LastRadioFromPpm (nv)
 }
 
-'LastRadioFromPpm ('empty)
+'LastRadioFromPpm (nv)
 {
 	'to_complete := 1
 }
@@ -137,11 +137,791 @@ load ../wfe.maude
 	Call 'lookup_arr ('a, 'idx) ;
 	'__res_update_arr := 'val
 } .
+
+ *****************
+
+ ops test1 test2 test3 test4 test5 test6 test7 test8 test9
+     test10 test11 test12 test13 test14 test15 test16 test17
+     test18 : -> Statement .
+
+ *** Function 'ChopServo
+
+ eq test1 = <
+ 	If Lt ('value, 'SERVO_MIN)
+	Then '__res_ChopServo := 'SERVO_MIN
+	Else
+	(
+		If Gt ('value, 'SERVO_MAX)
+		Then '__res_ChopServo := 'SERVO_MAX
+		Else '__res_ChopServo := 'value
+	),
+	'RADIO_MODE	=	1
+ '_var_roll	=	3
+ 'last_radio	=	1
+ 'last_radio_contains_avg_channels	=	3
+ 'mode	=	1
+ 'ppm_cpt	=	1
+ 'ppm_valid	=	1
+ 'radio_ok	=	1
+ 'radio_really_lost	=	0
+ 'time_since_last_ppm	=	3
+ 'value	=	2
+ 'SERVO_MIN = 0 *** Added manually
+ 'SERVO_MAX = 0 *** Added manually
+ ,
+ nb,
+ myFuns > .
+
+
+ eq test2 = <
+ 	If Lt ('value, 'SERVO_MIN)
+	Then '__res_ChopServo := 'SERVO_MIN
+	Else
+	(
+		If Gt ('value, 'SERVO_MAX)
+		Then '__res_ChopServo := 'SERVO_MAX
+		Else '__res_ChopServo := 'value
+	),
+ 'RADIO_MODE	=	1
+ '_var_roll	=	3
+ 'last_radio	=	1
+ 'last_radio_contains_avg_channels	=	3
+ 'mode	=	1
+ 'ppm_cpt	=	1
+ 'ppm_valid	=	1
+ 'radio_ok	=	1
+ 'radio_really_lost	=	0
+ 'time_since_last_ppm	=	3
+ 'value	=	23389
+ 'SERVO_MIN = 0 *** Added manually
+ 'SERVO_MAX = 0 *** Added manually
+ ,
+ nb,
+ myFuns > .
+
+
+ eq test3 = <
+ 	If Lt ('value, 'SERVO_MIN)
+	Then '__res_ChopServo := 'SERVO_MIN
+	Else
+	(
+		If Gt ('value, 'SERVO_MAX)
+		Then '__res_ChopServo := 'SERVO_MAX
+		Else '__res_ChopServo := 'value
+	),
+ 'RADIO_MODE	=	1
+ '_var_roll	=	3
+ 'last_radio	=	1
+ 'last_radio_contains_avg_channels	=	3
+ 'mode	=	1
+ 'ppm_cpt	=	1
+ 'ppm_valid	=	1
+ 'radio_ok	=	1
+ 'radio_really_lost	=	0
+ 'time_since_last_ppm	=	3
+ 'value	=	168
+ 'SERVO_MIN = 0 *** Added manually
+ 'SERVO_MAX = 0 *** Added manually
+ ,
+ nb,
+ myFuns > .
+
+ *** Function 'test_ppm_task
+
+ eq test4 = <
+ 		(If Equal ('ppm_valid, 1)
+	Then
+	(
+		'ppm_valid := 0 ;
+		'ppm_cpt := 'ppm_cpt +. 1 ;
+		'radio_ok := 1 ;
+		'radio_really_lost := 0 ;
+		'time_since_last_ppm := 0 ;
+		Call 'last_radio_from_ppm (nv) ;
+		(If Equal ('last_radio_contains_avg_channels, 1)
+		Then
+		(
+			Call 'lookup_arr ('last_radio, 'RADIO_MODE) ;
+			Call 'MODE_OF_PPRZ ('__res_lookup_arr) ;
+			'mode := 'res_MODE_OF_PPRZ
+		)) ;
+		If Equal ('mode, 'MODE_MANUAL)
+		Then Call 'servo_set ('last_radio)
+	)
+	Else
+	(
+		If (Equal ('mode, 'MODE_MANUAL)) And (Equal ('radio_really_lost, 1))
+		Then 'mode := 'MODE_AUTO
+	)) ;
+	(If Gte ('time_since_last_ppm, 'STALLED_TIME)
+	Then 'radio_ok := 0) ;
+	If Gte ('time_since_last_ppm, 'REALLY_STALLED_TIME)
+	Then 'radio_really_lost := 0,
+ 'RADIO_MODE	=	0
+ '_var_roll	=	3
+ 'last_radio	=	3
+ 'last_radio_contains_avg_channels	=	3
+ 'mode	=	3
+ 'ppm_cpt	=	3
+ 'ppm_valid	=	1
+ 'radio_ok	=	1
+ 'radio_really_lost	=	2
+ 'time_since_last_ppm	=	2
+ '__res_lookup_arr = 0 ***
+ 'res_MODE_OF_PPRZ = 0 ***
+ 'MODE_MANUAL = 0 ***
+ 'MODE_AUTO = 0 ***
+ 'STALLED_TIME = 0 ***
+ 'REALLY_STALLED_TIME = 0 ***
+ ,
+ nb,
+ myFuns > .
+
+ eq test5 = <
+ 		(If Equal ('ppm_valid, 1)
+	Then
+	(
+		'ppm_valid := 0 ;
+		'ppm_cpt := 'ppm_cpt +. 1 ;
+		'radio_ok := 1 ;
+		'radio_really_lost := 0 ;
+		'time_since_last_ppm := 0 ;
+		Call 'last_radio_from_ppm ('empty) ;
+		(If Equal ('last_radio_contains_avg_channels, 1)
+		Then
+		(
+			Call 'lookup_arr ('last_radio, 'RADIO_MODE) ;
+			Call 'MODE_OF_PPRZ ('__res_lookup_arr) ;
+			'mode := 'res_MODE_OF_PPRZ
+		)) ;
+		If Equal ('mode, 'MODE_MANUAL)
+		Then Call 'servo_set ('last_radio)
+	)
+	Else
+	(
+		If (Equal ('mode, 'MODE_MANUAL)) And (Equal ('radio_really_lost, 1))
+		Then 'mode := 'MODE_AUTO
+	)) ;
+	(If Gte ('time_since_last_ppm, 'STALLED_TIME)
+	Then 'radio_ok := 0) ;
+	If Gte ('time_since_last_ppm, 'REALLY_STALLED_TIME)
+	Then 'radio_really_lost := 0,
+ 'RADIO_MODE	=	0
+ '_var_roll	=	3
+ 'last_radio	=	0
+ 'last_radio_contains_avg_channels	=	3
+ 'mode	=	3
+ 'ppm_cpt	=	3
+ 'ppm_valid	=	1
+ 'radio_ok	=	1
+ 'radio_really_lost	=	2
+ 'time_since_last_ppm	=	2
+ '__res_lookup_arr = 0 ***
+ 'res_MODE_OF_PPRZ = 0 ***
+ 'MODE_MANUAL = 0 ***
+ 'MODE_AUTO = 0 ***
+ 'STALLED_TIME = 0 ***
+ 'REALLY_STALLED_TIME = 0 ***
+ ,
+ nb,
+ myFuns > .
+
+ eq test6 = <
+ 		(If Equal ('ppm_valid, 1)
+	Then
+	(
+		'ppm_valid := 0 ;
+		'ppm_cpt := 'ppm_cpt +. 1 ;
+		'radio_ok := 1 ;
+		'radio_really_lost := 0 ;
+		'time_since_last_ppm := 0 ;
+		Call 'last_radio_from_ppm ('empty) ;
+		(If Equal ('last_radio_contains_avg_channels, 1)
+		Then
+		(
+			Call 'lookup_arr ('last_radio, 'RADIO_MODE) ;
+			Call 'MODE_OF_PPRZ ('__res_lookup_arr) ;
+			'mode := 'res_MODE_OF_PPRZ
+		)) ;
+		If Equal ('mode, 'MODE_MANUAL)
+		Then Call 'servo_set ('last_radio)
+	)
+	Else
+	(
+		If (Equal ('mode, 'MODE_MANUAL)) And (Equal ('radio_really_lost, 1))
+		Then 'mode := 'MODE_AUTO
+	)) ;
+	(If Gte ('time_since_last_ppm, 'STALLED_TIME)
+	Then 'radio_ok := 0) ;
+	If Gte ('time_since_last_ppm, 'REALLY_STALLED_TIME)
+	Then 'radio_really_lost := 0,
+ 'RADIO_MODE	=	0
+ '_var_roll	=	3
+ 'last_radio	=	3
+ 'last_radio_contains_avg_channels	=	0
+ 'mode	=	3
+ 'ppm_cpt	=	3
+ 'ppm_valid	=	1
+ 'radio_ok	=	1
+ 'radio_really_lost	=	2
+ 'time_since_last_ppm	=	2
+ '__res_lookup_arr = 0 ***
+ 'res_MODE_OF_PPRZ = 0 ***
+ 'MODE_MANUAL = 0 ***
+ 'MODE_AUTO = 0 ***
+ 'STALLED_TIME = 0 ***
+ 'REALLY_STALLED_TIME = 0 ***
+ ,
+ nb,
+ myFuns > .
+
+ eq test7 = <
+ 		(If Equal ('ppm_valid, 1)
+	Then
+	(
+		'ppm_valid := 0 ;
+		'ppm_cpt := 'ppm_cpt +. 1 ;
+		'radio_ok := 1 ;
+		'radio_really_lost := 0 ;
+		'time_since_last_ppm := 0 ;
+		Call 'last_radio_from_ppm ('empty) ;
+		(If Equal ('last_radio_contains_avg_channels, 1)
+		Then
+		(
+			Call 'lookup_arr ('last_radio, 'RADIO_MODE) ;
+			Call 'MODE_OF_PPRZ ('__res_lookup_arr) ;
+			'mode := 'res_MODE_OF_PPRZ
+		)) ;
+		If Equal ('mode, 'MODE_MANUAL)
+		Then Call 'servo_set ('last_radio)
+	)
+	Else
+	(
+		If (Equal ('mode, 'MODE_MANUAL)) And (Equal ('radio_really_lost, 1))
+		Then 'mode := 'MODE_AUTO
+	)) ;
+	(If Gte ('time_since_last_ppm, 'STALLED_TIME)
+	Then 'radio_ok := 0) ;
+	If Gte ('time_since_last_ppm, 'REALLY_STALLED_TIME)
+	Then 'radio_really_lost := 0,
+ 'RADIO_MODE	=	0
+ '_var_roll	=	3
+ 'last_radio	=	3
+ 'last_radio_contains_avg_channels	=	0
+ 'mode	=	0
+ 'ppm_cpt	=	3
+ 'ppm_valid	=	1
+ 'radio_ok	=	1
+ 'radio_really_lost	=	2
+ 'time_since_last_ppm	=	2
+ '__res_lookup_arr = 0 ***
+ 'res_MODE_OF_PPRZ = 0 ***
+ 'MODE_MANUAL = 0 ***
+ 'MODE_AUTO = 0 ***
+ 'STALLED_TIME = 0 ***
+ 'REALLY_STALLED_TIME = 0 ***
+ ,
+ nb,
+ myFuns > .
+
+ eq test8 = <
+ 		(If Equal ('ppm_valid, 1)
+	Then
+	(
+		'ppm_valid := 0 ;
+		'ppm_cpt := 'ppm_cpt +. 1 ;
+		'radio_ok := 1 ;
+		'radio_really_lost := 0 ;
+		'time_since_last_ppm := 0 ;
+		Call 'last_radio_from_ppm ('empty) ;
+		(If Equal ('last_radio_contains_avg_channels, 1)
+		Then
+		(
+			Call 'lookup_arr ('last_radio, 'RADIO_MODE) ;
+			Call 'MODE_OF_PPRZ ('__res_lookup_arr) ;
+			'mode := 'res_MODE_OF_PPRZ
+		)) ;
+		If Equal ('mode, 'MODE_MANUAL)
+		Then Call 'servo_set ('last_radio)
+	)
+	Else
+	(
+		If (Equal ('mode, 'MODE_MANUAL)) And (Equal ('radio_really_lost, 1))
+		Then 'mode := 'MODE_AUTO
+	)) ;
+	(If Gte ('time_since_last_ppm, 'STALLED_TIME)
+	Then 'radio_ok := 0) ;
+	If Gte ('time_since_last_ppm, 'REALLY_STALLED_TIME)
+	Then 'radio_really_lost := 0,
+ 'RADIO_MODE	=	0
+ '_var_roll	=	3
+ 'last_radio	=	3
+ 'last_radio_contains_avg_channels	=	3
+ 'mode	=	3
+ 'ppm_cpt	=	3
+ 'ppm_valid	=	0
+ 'radio_ok	=	1
+ 'radio_really_lost	=	2
+ 'time_since_last_ppm	=	2
+ '__res_lookup_arr = 0 ***
+ 'res_MODE_OF_PPRZ = 0 ***
+ 'MODE_MANUAL = 0 ***
+ 'MODE_AUTO = 0 ***
+ 'STALLED_TIME = 0 ***
+ 'REALLY_STALLED_TIME = 0 ***
+ ,
+ nb,
+ myFuns > .
+
+ eq test9 = <
+ 		(If Equal ('ppm_valid, 1)
+	Then
+	(
+		'ppm_valid := 0 ;
+		'ppm_cpt := 'ppm_cpt +. 1 ;
+		'radio_ok := 1 ;
+		'radio_really_lost := 0 ;
+		'time_since_last_ppm := 0 ;
+		Call 'last_radio_from_ppm ('empty) ;
+		(If Equal ('last_radio_contains_avg_channels, 1)
+		Then
+		(
+			Call 'lookup_arr ('last_radio, 'RADIO_MODE) ;
+			Call 'MODE_OF_PPRZ ('__res_lookup_arr) ;
+			'mode := 'res_MODE_OF_PPRZ
+		)) ;
+		If Equal ('mode, 'MODE_MANUAL)
+		Then Call 'servo_set ('last_radio)
+	)
+	Else
+	(
+		If (Equal ('mode, 'MODE_MANUAL)) And (Equal ('radio_really_lost, 1))
+		Then 'mode := 'MODE_AUTO
+	)) ;
+	(If Gte ('time_since_last_ppm, 'STALLED_TIME)
+	Then 'radio_ok := 0) ;
+	If Gte ('time_since_last_ppm, 'REALLY_STALLED_TIME)
+	Then 'radio_really_lost := 0,
+ 'RADIO_MODE	=	0
+ '_var_roll	=	3
+ 'last_radio	=	3
+ 'last_radio_contains_avg_channels	=	3
+ 'mode	=	3
+ 'ppm_cpt	=	3
+ 'ppm_valid	=	0
+ 'radio_ok	=	1
+ 'radio_really_lost	=	2
+ 'time_since_last_ppm	=	15861
+ '__res_lookup_arr = 0 ***
+ 'res_MODE_OF_PPRZ = 0 ***
+ 'MODE_MANUAL = 0 ***
+ 'MODE_AUTO = 0 ***
+ 'STALLED_TIME = 0 ***
+ 'REALLY_STALLED_TIME = 0 ***
+ ,
+ nb,
+ myFuns > .
+
+ eq test10 = <
+ 		(If Equal ('ppm_valid, 1)
+	Then
+	(
+		'ppm_valid := 0 ;
+		'ppm_cpt := 'ppm_cpt +. 1 ;
+		'radio_ok := 1 ;
+		'radio_really_lost := 0 ;
+		'time_since_last_ppm := 0 ;
+		Call 'last_radio_from_ppm ('empty) ;
+		(If Equal ('last_radio_contains_avg_channels, 1)
+		Then
+		(
+			Call 'lookup_arr ('last_radio, 'RADIO_MODE) ;
+			Call 'MODE_OF_PPRZ ('__res_lookup_arr) ;
+			'mode := 'res_MODE_OF_PPRZ
+		)) ;
+		If Equal ('mode, 'MODE_MANUAL)
+		Then Call 'servo_set ('last_radio)
+	)
+	Else
+	(
+		If (Equal ('mode, 'MODE_MANUAL)) And (Equal ('radio_really_lost, 1))
+		Then 'mode := 'MODE_AUTO
+	)) ;
+	(If Gte ('time_since_last_ppm, 'STALLED_TIME)
+	Then 'radio_ok := 0) ;
+	If Gte ('time_since_last_ppm, 'REALLY_STALLED_TIME)
+	Then 'radio_really_lost := 0,
+ 'RADIO_MODE	=	0
+ '_var_roll	=	3
+ 'last_radio	=	3
+ 'last_radio_contains_avg_channels	=	3
+ 'mode	=	3
+ 'ppm_cpt	=	3
+ 'ppm_valid	=	0
+ 'radio_ok	=	1
+ 'radio_really_lost	=	2
+ 'time_since_last_ppm	=	65
+ '__res_lookup_arr = 0 ***
+ 'res_MODE_OF_PPRZ = 0 ***
+ 'MODE_MANUAL = 0 ***
+ 'MODE_AUTO = 0 ***
+ 'STALLED_TIME = 0 ***
+ 'REALLY_STALLED_TIME = 0 ***
+ ,
+ nb,
+ myFuns > .
+
+ eq test11 = <
+ 		(If Equal ('ppm_valid, 1)
+	Then
+	(
+		'ppm_valid := 0 ;
+		'ppm_cpt := 'ppm_cpt +. 1 ;
+		'radio_ok := 1 ;
+		'radio_really_lost := 0 ;
+		'time_since_last_ppm := 0 ;
+		Call 'last_radio_from_ppm ('empty) ;
+		(If Equal ('last_radio_contains_avg_channels, 1)
+		Then
+		(
+			Call 'lookup_arr ('last_radio, 'RADIO_MODE) ;
+			Call 'MODE_OF_PPRZ ('__res_lookup_arr) ;
+			'mode := 'res_MODE_OF_PPRZ
+		)) ;
+		If Equal ('mode, 'MODE_MANUAL)
+		Then Call 'servo_set ('last_radio)
+	)
+	Else
+	(
+		If (Equal ('mode, 'MODE_MANUAL)) And (Equal ('radio_really_lost, 1))
+		Then 'mode := 'MODE_AUTO
+	)) ;
+	(If Gte ('time_since_last_ppm, 'STALLED_TIME)
+	Then 'radio_ok := 0) ;
+	If Gte ('time_since_last_ppm, 'REALLY_STALLED_TIME)
+	Then 'radio_really_lost := 0,
+ 'RADIO_MODE	=	0
+ '_var_roll	=	3
+ 'last_radio	=	3
+ 'last_radio_contains_avg_channels	=	3
+ 'mode	=	0
+ 'ppm_cpt	=	3
+ 'ppm_valid	=	0
+ 'radio_ok	=	1
+ 'radio_really_lost	=	2
+ 'time_since_last_ppm	=	2
+ '__res_lookup_arr = 0 ***
+ 'res_MODE_OF_PPRZ = 0 ***
+ 'MODE_MANUAL = 0 ***
+ 'MODE_AUTO = 0 ***
+ 'STALLED_TIME = 0 ***
+ 'REALLY_STALLED_TIME = 0 ***
+ ,
+ nb,
+ myFuns > .
+
+ eq test12 = <
+ 		(If Equal ('ppm_valid, 1)
+	Then
+	(
+		'ppm_valid := 0 ;
+		'ppm_cpt := 'ppm_cpt +. 1 ;
+		'radio_ok := 1 ;
+		'radio_really_lost := 0 ;
+		'time_since_last_ppm := 0 ;
+		Call 'last_radio_from_ppm ('empty) ;
+		(If Equal ('last_radio_contains_avg_channels, 1)
+		Then
+		(
+			Call 'lookup_arr ('last_radio, 'RADIO_MODE) ;
+			Call 'MODE_OF_PPRZ ('__res_lookup_arr) ;
+			'mode := 'res_MODE_OF_PPRZ
+		)) ;
+		If Equal ('mode, 'MODE_MANUAL)
+		Then Call 'servo_set ('last_radio)
+	)
+	Else
+	(
+		If (Equal ('mode, 'MODE_MANUAL)) And (Equal ('radio_really_lost, 1))
+		Then 'mode := 'MODE_AUTO
+	)) ;
+	(If Gte ('time_since_last_ppm, 'STALLED_TIME)
+	Then 'radio_ok := 0) ;
+	If Gte ('time_since_last_ppm, 'REALLY_STALLED_TIME)
+	Then 'radio_really_lost := 0,
+ 'RADIO_MODE	=	0
+ '_var_roll	=	3
+ 'last_radio	=	3
+ 'last_radio_contains_avg_channels	=	3
+ 'mode	=	0
+ 'ppm_cpt	=	3
+ 'ppm_valid	=	0
+ 'radio_ok	=	1
+ 'radio_really_lost	=	2
+ 'time_since_last_ppm	=	3733
+ '__res_lookup_arr = 0 ***
+ 'res_MODE_OF_PPRZ = 0 ***
+ 'MODE_MANUAL = 0 ***
+ 'MODE_AUTO = 0 ***
+ 'STALLED_TIME = 0 ***
+ 'REALLY_STALLED_TIME = 0 ***
+ ,
+ nb,
+ myFuns > .
+
+ eq test13 = <
+ 		(If Equal ('ppm_valid, 1)
+	Then
+	(
+		'ppm_valid := 0 ;
+		'ppm_cpt := 'ppm_cpt +. 1 ;
+		'radio_ok := 1 ;
+		'radio_really_lost := 0 ;
+		'time_since_last_ppm := 0 ;
+		Call 'last_radio_from_ppm ('empty) ;
+		(If Equal ('last_radio_contains_avg_channels, 1)
+		Then
+		(
+			Call 'lookup_arr ('last_radio, 'RADIO_MODE) ;
+			Call 'MODE_OF_PPRZ ('__res_lookup_arr) ;
+			'mode := 'res_MODE_OF_PPRZ
+		)) ;
+		If Equal ('mode, 'MODE_MANUAL)
+		Then Call 'servo_set ('last_radio)
+	)
+	Else
+	(
+		If (Equal ('mode, 'MODE_MANUAL)) And (Equal ('radio_really_lost, 1))
+		Then 'mode := 'MODE_AUTO
+	)) ;
+	(If Gte ('time_since_last_ppm, 'STALLED_TIME)
+	Then 'radio_ok := 0) ;
+	If Gte ('time_since_last_ppm, 'REALLY_STALLED_TIME)
+	Then 'radio_really_lost := 0,
+ 'RADIO_MODE	=	0
+ '_var_roll	=	3
+ 'last_radio	=	3
+ 'last_radio_contains_avg_channels	=	3
+ 'mode	=	0
+ 'ppm_cpt	=	3
+ 'ppm_valid	=	0
+ 'radio_ok	=	1
+ 'radio_really_lost	=	2
+ 'time_since_last_ppm	=	90
+ '__res_lookup_arr = 0 ***
+ 'res_MODE_OF_PPRZ = 0 ***
+ 'MODE_MANUAL = 0 ***
+ 'MODE_AUTO = 0 ***
+ 'STALLED_TIME = 0 ***
+ 'REALLY_STALLED_TIME = 0 ***
+ ,
+ nb,
+ myFuns > .
+
+ eq test14 = <
+ 		(If Equal ('ppm_valid, 1)
+	Then
+	(
+		'ppm_valid := 0 ;
+		'ppm_cpt := 'ppm_cpt +. 1 ;
+		'radio_ok := 1 ;
+		'radio_really_lost := 0 ;
+		'time_since_last_ppm := 0 ;
+		Call 'last_radio_from_ppm ('empty) ;
+		(If Equal ('last_radio_contains_avg_channels, 1)
+		Then
+		(
+			Call 'lookup_arr ('last_radio, 'RADIO_MODE) ;
+			Call 'MODE_OF_PPRZ ('__res_lookup_arr) ;
+			'mode := 'res_MODE_OF_PPRZ
+		)) ;
+		If Equal ('mode, 'MODE_MANUAL)
+		Then Call 'servo_set ('last_radio)
+	)
+	Else
+	(
+		If (Equal ('mode, 'MODE_MANUAL)) And (Equal ('radio_really_lost, 1))
+		Then 'mode := 'MODE_AUTO
+	)) ;
+	(If Gte ('time_since_last_ppm, 'STALLED_TIME)
+	Then 'radio_ok := 0) ;
+	If Gte ('time_since_last_ppm, 'REALLY_STALLED_TIME)
+	Then 'radio_really_lost := 0,
+ 'RADIO_MODE	=	0
+ '_var_roll	=	3
+ 'last_radio	=	3
+ 'last_radio_contains_avg_channels	=	3
+ 'mode	=	0
+ 'ppm_cpt	=	3
+ 'ppm_valid	=	0
+ 'radio_ok	=	1
+ 'radio_really_lost	=	0
+ 'time_since_last_ppm	=	2
+ '__res_lookup_arr = 0 ***
+ 'res_MODE_OF_PPRZ = 0 ***
+ 'MODE_MANUAL = 0 ***
+ 'MODE_AUTO = 0 ***
+ 'STALLED_TIME = 0 ***
+ 'REALLY_STALLED_TIME = 0 ***
+ ,
+ nb,
+ myFuns > .
+
+ eq test15 = <
+ 		(If Equal ('ppm_valid, 1)
+	Then
+	(
+		'ppm_valid := 0 ;
+		'ppm_cpt := 'ppm_cpt +. 1 ;
+		'radio_ok := 1 ;
+		'radio_really_lost := 0 ;
+		'time_since_last_ppm := 0 ;
+		Call 'last_radio_from_ppm ('empty) ;
+		(If Equal ('last_radio_contains_avg_channels, 1)
+		Then
+		(
+			Call 'lookup_arr ('last_radio, 'RADIO_MODE) ;
+			Call 'MODE_OF_PPRZ ('__res_lookup_arr) ;
+			'mode := 'res_MODE_OF_PPRZ
+		)) ;
+		If Equal ('mode, 'MODE_MANUAL)
+		Then Call 'servo_set ('last_radio)
+	)
+	Else
+	(
+		If (Equal ('mode, 'MODE_MANUAL)) And (Equal ('radio_really_lost, 1))
+		Then 'mode := 'MODE_AUTO
+	)) ;
+	(If Gte ('time_since_last_ppm, 'STALLED_TIME)
+	Then 'radio_ok := 0) ;
+	If Gte ('time_since_last_ppm, 'REALLY_STALLED_TIME)
+	Then 'radio_really_lost := 0,
+ 'RADIO_MODE	=	0
+ '_var_roll	=	3
+ 'last_radio	=	3
+ 'last_radio_contains_avg_channels	=	3
+ 'mode	=	0
+ 'ppm_cpt	=	3
+ 'ppm_valid	=	0
+ 'radio_ok	=	1
+ 'radio_really_lost	=	0
+ 'time_since_last_ppm	=	20502
+ '__res_lookup_arr = 0 ***
+ 'res_MODE_OF_PPRZ = 0 ***
+ 'MODE_MANUAL = 0 ***
+ 'MODE_AUTO = 0 ***
+ 'STALLED_TIME = 0 ***
+ 'REALLY_STALLED_TIME = 0 ***
+ ,
+ nb,
+ myFuns > .
+
+ eq test16 = <
+ 		(If Equal ('ppm_valid, 1)
+	Then
+	(
+		'ppm_valid := 0 ;
+		'ppm_cpt := 'ppm_cpt +. 1 ;
+		'radio_ok := 1 ;
+		'radio_really_lost := 0 ;
+		'time_since_last_ppm := 0 ;
+		Call 'last_radio_from_ppm ('empty) ;
+		(If Equal ('last_radio_contains_avg_channels, 1)
+		Then
+		(
+			Call 'lookup_arr ('last_radio, 'RADIO_MODE) ;
+			Call 'MODE_OF_PPRZ ('__res_lookup_arr) ;
+			'mode := 'res_MODE_OF_PPRZ
+		)) ;
+		If Equal ('mode, 'MODE_MANUAL)
+		Then Call 'servo_set ('last_radio)
+	)
+	Else
+	(
+		If (Equal ('mode, 'MODE_MANUAL)) And (Equal ('radio_really_lost, 1))
+		Then 'mode := 'MODE_AUTO
+	)) ;
+	(If Gte ('time_since_last_ppm, 'STALLED_TIME)
+	Then 'radio_ok := 0) ;
+	If Gte ('time_since_last_ppm, 'REALLY_STALLED_TIME)
+	Then 'radio_really_lost := 0,
+ 'RADIO_MODE	=	0
+ '_var_roll	=	3
+ 'last_radio	=	3
+ 'last_radio_contains_avg_channels	=	3
+ 'mode	=	0
+ 'ppm_cpt	=	3
+ 'ppm_valid	=	0
+ 'radio_ok	=	1
+ 'radio_really_lost	=	0
+ 'time_since_last_ppm	=	78
+ '__res_lookup_arr = 0 ***
+ 'res_MODE_OF_PPRZ = 0 ***
+ 'MODE_MANUAL = 0 ***
+ 'MODE_AUTO = 0 ***
+ 'STALLED_TIME = 0 ***
+ 'REALLY_STALLED_TIME = 0 ***
+ ,
+ nb,
+ myFuns > .
+
+ *** Function 'MODE_OF_PPRZ
+
+ eq test17 = <
+	If Lt ('mode, 'THRESHOLD_MANUAL_PPRZ)
+	Then '__res_MODE_OF_PPRZ := 'MODE_MANUAL
+	Else '__res_MODE_OF_PPRZ := 'MODE_AUTO
+	,
+ 'RADIO_MODE	=	1
+ 'THRESHOLD_MANUAL_PPRZ	=	3
+ '_var_roll	=	0
+ 'last_radio	=	0
+ 'last_radio_contains_avg_channels	=	1
+ 'mode	=	2
+ 'mode_0	=	3
+ 'ppm_cpt	=	2
+ 'ppm_valid	=	1
+ 'radio_ok	=	0
+ 'radio_really_lost	=	2
+ 'time_since_last_ppm	=	1
+ 'MODE_MANUAL = 1 ***
+ 'MODE_AUTO = 0 ***
+ '__res_MODE_OF_PPRZ = 0 ***
+ ,
+ nb,
+ myFuns > .
+
+ eq test18 = <
+	If Lt ('mode, 'THRESHOLD_MANUAL_PPRZ)
+	Then '__res_MODE_OF_PPRZ := 'MODE_MANUAL
+	Else '__res_MODE_OF_PPRZ := 'MODE_AUTO
+	,
+ 'RADIO_MODE	=	1
+ 'THRESHOLD_MANUAL_PPRZ	=	10820
+ '_var_roll	=	0
+ 'last_radio	=	0
+ 'last_radio_contains_avg_channels	=	1
+ 'mode	=	2
+ 'mode_0	=	0
+ 'ppm_cpt	=	2
+ 'ppm_valid	=	1
+ 'radio_ok	=	0
+ 'radio_really_lost	=	2
+ 'time_since_last_ppm	=	1
+ 'MODE_MANUAL = 1 ***
+ 'MODE_AUTO = 0 ***
+ '__res_MODE_OF_PPRZ = 0 ***
+ ,
+ nb,
+ myFuns > .
+
 endm)
 
 (set side-effect sorts ESt RWBUF .)
 
 (set context-update rules CallF .)
+
+(rew test18 .)
 
 eof
 

@@ -11,6 +11,7 @@ fmod SLI-SIGNATURE is
   op context`update`sorts`. : -> @Command@ .
   op context`update`rules`. : -> @Command@ .
   op branch`ins`. : -> @Command@ .
+  op compare_with_. : @Bubble@ @Bubble@ -> @Command@ .
 endfm
 
 fmod META-SLI-SIGN is
@@ -22,12 +23,13 @@ fmod META-SLI-SIGN is
 endfm
 
 fmod SLI-COMMAND-PROCESSING is
+  pr MAYBE{Term} * (op maybe to noTerm) .
   pr COMMAND-PROCESSING .
   pr PRINTING-FUNCTIONS .
   pr DATABASE-DECLS .
-  pr META-LEVEL .
   pr MAYBE{Module} .
-  pr MAYBE{Term} * (op maybe to noTerm) .
+  pr TRACE-LIST .
+  pr META-LEVEL .
 
   vars T T' T'' T3 : Term .
   var  T? : [Term] .
@@ -249,7 +251,7 @@ mod SLI-DATABASE-HANDLING is
   vars ME ME' : ModuleExpression .
   var  SDC : SLIDatabaseClass .
   var  O : Oid .
-  vars T T' T'' TN : Term .
+  vars T T' T'' TN T1 T2 : Term .
   vars TL VL : TermList .
   var  AtS : AttributeSet .
   var  DB : Database .
@@ -421,6 +423,23 @@ mod SLI-DATABASE-HANDLING is
                   default : ME, sideEffectSorts : SS, AtS >
    if M := getFlatModule(modExp(evalModExp(ME, DB)), database(evalModExp(ME, DB))) /\
       SS' := getBranchOps(M, SS) .
+
+  **********************************************************************************
+  ************************************ COMPARISON **********************************
+  **********************************************************************************
+
+  crl [compare] :
+      < O : SDC | db : DB, input : ('compare_with_.['bubble[T], 'bubble[T']]),
+                  output : nil, default : ME, AtS >
+   => < O : SDC | db : DB, input : nilTermList,
+                  output : ('\n '\! '\b 'The 'branch 'instructions 'are '\o ss2qil(QS) '\n),
+                  default : ME, AtS >
+   if M := getFlatModule(modExp(evalModExp(ME, DB)), database(evalModExp(ME, DB))) /\
+      T1 := getTerm(metaParse(M, downQid(T), anyType)) /\
+      T2 := getTerm(metaParse(upModule('TRACE-LIST, false), downQid(T'), 'ExecList)) /\
+      QS := compare(M, T1, downTerm(T2, error)) .
+
+  op error : -> [ExecList] [ctor] .
 
   **********************************************************************************
   ********************************* MEMORY INFERENCE *******************************

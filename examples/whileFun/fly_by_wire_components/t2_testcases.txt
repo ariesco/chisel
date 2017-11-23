@@ -1,0 +1,258 @@
+Function main
+Total: 11 test cases
+Branch coverage: 100%
+Total paths: 14 paths (3 infeasible)
+
+Test 1:
+SPI_PIN	=	-2
+SPI_SS_PIN	=	2
+last_ppm_cpt	=	1
+last_radio_0	=	3
+last_radio_1	=	3
+last_radio_2	=	-3
+last_radio_3	=	-1
+last_radio_4	=	3
+last_radio_5	=	1
+last_radio_6	=	3
+last_radio_7	=	-2
+last_radio_8	=	3
+last_radio_contains_avg_channels	=	-2
+mega128_receive_valid	=	-3
+radio_ok	=	-1
+spi_was_interrupted	=	1
+to_mega128	=	1
+to_mega128_ppm_cpt	=	-2
+to_mega128_status	=	1
+to_mega128_vsupply	=	3
+vsupply_adc_buf_sum	=	-2
+
+Test 2:
+SPI_PIN	=	-2
+SPI_SS_PIN	=	2
+last_ppm_cpt	=	1
+last_radio_0	=	3
+last_radio_1	=	3
+last_radio_2	=	-3
+last_radio_3	=	-1
+last_radio_4	=	3
+last_radio_5	=	1
+last_radio_6	=	3
+last_radio_7	=	-2
+last_radio_8	=	3
+last_radio_contains_avg_channels	=	1
+mega128_receive_valid	=	-3
+radio_ok	=	-1
+spi_was_interrupted	=	1
+to_mega128	=	1
+to_mega128_ppm_cpt	=	-2
+to_mega128_status	=	1
+to_mega128_vsupply	=	3
+vsupply_adc_buf_sum	=	-2
+
+Test 3:
+SPI_PIN	=	-2
+SPI_SS_PIN	=	2
+last_ppm_cpt	=	1
+last_radio_0	=	3
+last_radio_1	=	3
+last_radio_2	=	-3
+last_radio_3	=	-1
+last_radio_4	=	3
+last_radio_5	=	1
+last_radio_6	=	3
+last_radio_7	=	-2
+last_radio_8	=	3
+last_radio_contains_avg_channels	=	-2
+mega128_receive_valid	=	-3
+radio_ok	=	0
+spi_was_interrupted	=	1
+to_mega128	=	1
+to_mega128_ppm_cpt	=	-2
+to_mega128_status	=	1
+to_mega128_vsupply	=	3
+vsupply_adc_buf_sum	=	-2
+
+Test 4:
+SPI_PIN	=	-2
+SPI_SS_PIN	=	2
+last_ppm_cpt	=	1
+last_radio_0	=	3
+last_radio_1	=	3
+last_radio_2	=	-3
+last_radio_3	=	-1
+last_radio_4	=	3
+last_radio_5	=	1
+last_radio_6	=	3
+last_radio_7	=	-2
+last_radio_8	=	3
+last_radio_contains_avg_channels	=	1
+mega128_receive_valid	=	-3
+radio_ok	=	0
+spi_was_interrupted	=	1
+to_mega128	=	1
+to_mega128_ppm_cpt	=	-2
+to_mega128_status	=	1
+to_mega128_vsupply	=	3
+vsupply_adc_buf_sum	=	-2
+
+Test 5:
+SPI_PIN	=	-2
+SPI_SS_PIN	=	2
+last_ppm_cpt	=	1
+last_radio_0	=	3
+last_radio_1	=	3
+last_radio_2	=	-3
+last_radio_3	=	-1
+last_radio_4	=	3
+last_radio_5	=	1
+last_radio_6	=	3
+last_radio_7	=	-2
+last_radio_8	=	3
+last_radio_contains_avg_channels	=	-2
+mega128_receive_valid	=	-3
+radio_ok	=	-1
+spi_was_interrupted	=	0
+to_mega128	=	1
+to_mega128_ppm_cpt	=	-2
+to_mega128_status	=	1
+to_mega128_vsupply	=	3
+vsupply_adc_buf_sum	=	-2
+
+Test 6:
+SPI_PIN	=	1
+SPI_SS_PIN	=	2
+last_ppm_cpt	=	1
+last_radio_0	=	3
+last_radio_1	=	3
+last_radio_2	=	-3
+last_radio_3	=	-1
+last_radio_4	=	3
+last_radio_5	=	1
+last_radio_6	=	3
+last_radio_7	=	-2
+last_radio_8	=	3
+last_radio_contains_avg_channels	=	-2
+mega128_receive_valid	=	-3
+radio_ok	=	-1
+spi_was_interrupted	=	1
+to_mega128	=	1
+to_mega128_ppm_cpt	=	-2
+to_mega128_status	=	1
+to_mega128_vsupply	=	3
+vsupply_adc_buf_sum	=	-2
+
+Test 7:
+SPI_PIN	=	1
+SPI_SS_PIN	=	2
+last_ppm_cpt	=	1
+last_radio_0	=	3
+last_radio_1	=	3
+last_radio_2	=	-3
+last_radio_3	=	-1
+last_radio_4	=	3
+last_radio_5	=	1
+last_radio_6	=	3
+last_radio_7	=	-2
+last_radio_8	=	3
+last_radio_contains_avg_channels	=	1
+mega128_receive_valid	=	-3
+radio_ok	=	-1
+spi_was_interrupted	=	1
+to_mega128	=	1
+to_mega128_ppm_cpt	=	-2
+to_mega128_status	=	1
+to_mega128_vsupply	=	3
+vsupply_adc_buf_sum	=	-2
+
+Test 8:
+SPI_PIN	=	1
+SPI_SS_PIN	=	2
+last_ppm_cpt	=	1
+last_radio_0	=	3
+last_radio_1	=	3
+last_radio_2	=	-3
+last_radio_3	=	-1
+last_radio_4	=	3
+last_radio_5	=	1
+last_radio_6	=	3
+last_radio_7	=	-2
+last_radio_8	=	3
+last_radio_contains_avg_channels	=	-2
+mega128_receive_valid	=	-3
+radio_ok	=	0
+spi_was_interrupted	=	1
+to_mega128	=	1
+to_mega128_ppm_cpt	=	-2
+to_mega128_status	=	1
+to_mega128_vsupply	=	3
+vsupply_adc_buf_sum	=	-2
+
+Test 9:
+SPI_PIN	=	1
+SPI_SS_PIN	=	2
+last_ppm_cpt	=	1
+last_radio_0	=	3
+last_radio_1	=	3
+last_radio_2	=	-3
+last_radio_3	=	-1
+last_radio_4	=	3
+last_radio_5	=	1
+last_radio_6	=	3
+last_radio_7	=	-2
+last_radio_8	=	3
+last_radio_contains_avg_channels	=	1
+mega128_receive_valid	=	-3
+radio_ok	=	0
+spi_was_interrupted	=	1
+to_mega128	=	1
+to_mega128_ppm_cpt	=	-2
+to_mega128_status	=	1
+to_mega128_vsupply	=	3
+
+Test 10:
+SPI_PIN	=	1
+SPI_SS_PIN	=	2
+last_ppm_cpt	=	1
+last_radio_0	=	3
+last_radio_1	=	3
+last_radio_2	=	-3
+last_radio_3	=	-1
+last_radio_4	=	3
+last_radio_5	=	1
+last_radio_6	=	3
+last_radio_7	=	-2
+last_radio_8	=	3
+last_radio_contains_avg_channels	=	-2
+mega128_receive_valid	=	-3
+radio_ok	=	-1
+spi_was_interrupted	=	0
+to_mega128	=	1
+to_mega128_ppm_cpt	=	-2
+to_mega128_status	=	1
+to_mega128_vsupply	=	3
+vsupply_adc_buf_sum	=	-2
+
+Test 11:
+SPI_PIN	=	1
+SPI_SS_PIN	=	1
+last_ppm_cpt	=	1
+last_radio_0	=	3
+last_radio_1	=	3
+last_radio_2	=	-3
+last_radio_3	=	-1
+last_radio_4	=	3
+last_radio_5	=	1
+last_radio_6	=	3
+last_radio_7	=	-2
+last_radio_8	=	3
+last_radio_contains_avg_channels	=	-2
+mega128_receive_valid	=	-3
+radio_ok	=	-1
+spi_was_interrupted	=	1
+to_mega128	=	1
+to_mega128_ppm_cpt	=	-2
+to_mega128_status	=	1
+to_mega128_vsupply	=	3
+vsupply_adc_buf_sum	=	-2
+
+

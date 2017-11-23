@@ -10,22 +10,22 @@ load ../wfe.maude
  op myFuns : -> FunSet .
  eq myFuns = 'Main (nv)
 {
-	Call 'send_data_to_autopilot_task ('empty)
+	Call 'send_data_to_autopilot_task (nv)
 }
 
-'send_data_to_autopilot_task ('empty)
+'send_data_to_autopilot_task (nv)
 {
-	Call 'SpiIsSelected ('empty) ;
+	Call 'SpiIsSelected (nv) ;
 	If (Not Equal ('__res_SpiIsSelected, 1)) And Equal ('spi_was_interrupted, 1)
 	Then
 	(
 		'spi_was_interrupted := 0 ;
-		Call 'to_autopilot_from_last_radio ('empty) ;
-		Call 'spi_reset ('empty)
+		Call 'to_autopilot_from_last_radio (nv) ;
+		Call 'spi_reset (nv)
 	)
 }
 
-'SpiIsSelected ('empty)
+'SpiIsSelected (nv)
 {
 	Call 'bit_is_set ('SPI_PIN, 'SPI_SS_PIN) ;
 	'__res_SpiIsSelected := '__res_bit_is_set
@@ -38,7 +38,7 @@ load ../wfe.maude
 	Else '__res_bit_is_set := 0
 }
 
-'to_autopilot_from_last_radio ('empty)
+'to_autopilot_from_last_radio (nv)
 {
 	Local 'i ;
 	'to_mega128.channels_0 := 'last_radio_0 ;
@@ -73,7 +73,7 @@ load ../wfe.maude
 	'to_mega128.vsupply := 0
 }
 
-'spi_reset ('empty)
+'spi_reset (nv)
 {
 	'idx_buf := 0 ;
 	'xor_in := 0 ;
@@ -99,11 +99,48 @@ load ../wfe.maude
 }
 
 .
+
+ *****************
+
+ ops test1 test2 test3 test4 test5 test6 test7 test8 test9
+     test10 test11 : -> Statement .
+
+ *** Function 'main
+
+ eq test1 = <
+ 	Call 'send_data_to_autopilot_task (nv)
+ 	,
+ 'SPI_PIN	=	2
+ 'SPI_SS_PIN	=	2
+ 'last_ppm_cpt	=	1
+ 'last_radio_0	=	3
+ 'last_radio_1	=	3
+ 'last_radio_2	=	3
+ 'last_radio_3	=	1
+ 'last_radio_4	=	3
+ 'last_radio_5	=	1
+ 'last_radio_6	=	3
+ 'last_radio_7	=	2
+ 'last_radio_8	=	3
+ 'last_radio_contains_avg_channels	=	2
+ 'mega128_receive_valid	=	3
+ 'radio_ok	=	1
+ 'spi_was_interrupted	=	1
+ 'to_mega128	=	1
+ 'to_mega128_ppm_cpt	=	2
+ 'to_mega128_status	=	1
+ 'to_mega128_vsupply	=	3
+ 'vsupply_adc_buf_sum	=	2
+ ,
+ nb,
+ myFuns > .
 endm)
 
 (set side-effect sorts ESt RWBUF .)
 
 (set context-update rules CallF .)
+
+(rew test1 .)
 
 eof
 
