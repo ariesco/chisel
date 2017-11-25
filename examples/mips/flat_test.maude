@@ -1,0 +1,74 @@
+load assembly.maude
+
+(mod TEST is
+  pr SEMANTICS .
+
+  op il : -> InsList .
+  eq il =
+      'test
+              addiu   sp,sp,32
+              sw      ra,28(sp)
+              sw      s8,24(sp)
+              move    s8,sp
+              lbu     v0,40(gp)
+              andi    v0,v0,255
+              beqz    v0, 'test2
+              nop
+              sb      zero,40(gp)
+      'test2  lbu     v0,12(gp)
+              addiu   v0,v0,1
+              andi    v0,v0,255
+  .
+
+  op test : -> System .
+  eq test = [il | mtReg | mtMem | 0] .
+endm)
+
+***(red il .)
+
+(flat test with Nat .)
+
+eof
+
+Flatten list 0
+next
+32
+next
+1
+next
+28
+next
+2
+next
+24
+next
+3
+next
+4
+next
+40
+next
+5
+next
+255
+next
+6
+next
+7
+next
+8
+next
+40
+next
+9
+next
+12
+next
+10
+next
+1
+next
+11
+next
+255
+next

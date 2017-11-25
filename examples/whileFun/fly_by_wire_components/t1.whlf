@@ -10,10 +10,10 @@ load ../wfe.maude
  op myFuns : -> FunSet .
  eq myFuns = 'Main (nv)
 {
-  Call 'test_ppm_task ('empty)
+  Call 'test_ppm_task (nv)
 }
 
-'test_ppm_task ('empty)
+'test_ppm_task (nv)
 {
 	(If Equal ('ppm_valid, 1)
 	Then

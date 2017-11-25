@@ -720,18 +720,21 @@ fmod TRACE-LIST is
  op mtEL : -> ExecList .
  op _-_ : ExecList ExecList -> ExecList [ctor assoc id: mtEL] .
 
+ vars Ty Ty' Ty'' : Type .
  var  COND : Condition .
+ var  CNS : Constant .
  var  TS : TraceStep .
  var  EL : ExecList .
  var  AtS : AttrSet .
+ var  TL : TermList .
  var  V : Variable .
  var  QS : QidSet .
  var  T T' : Term .
  vars Q Q' : Qid .
  var  M : Module .
  var  TR : Trace .
- var  Ty : Type .
  var  R : Rule .
+ var  S : Sort .
 
  op compare : Module Term ExecList -> QidSet .
  ceq compare(M, T, EL) = compare(TR, EL, ' )
@@ -762,9 +765,38 @@ fmod TRACE-LIST is
  eq QS contains Q = false [owise] .
 
  op getFlat : Module Term Sort ~> TermList .
- eq getFlat(M, Q[T, TL], S) = $getFlat(M, T, TL) .
+ eq getFlat(M, Q[T, TL], S) = $getFlat(M, T, S) .
 
  op $getFlat : Module Term Sort -> TermList .
- eq $getFlat(M, T, S)
+ eq $getFlat(M, V, S) = empty .
+ eq $getFlat(M, CNS, S) = if sortLeq(M, getType(CNS), S)
+                          then CNS
+                          else empty
+                          fi .
+ ceq $getFlat(M, Q[T, T', TL], S) = if sortLeq(M, Ty, S) and sortLeq(M, Ty', S)
+                                    then empty
+                                    else if sortLeq(M, Ty'', S)
+                                         then Q[T, T', TL]
+                                         else empty
+                                         fi
+                                    fi,
+                                    getFlat*(M, (T, T', TL), S)
+  if Ty := getType(metaReduce(M, T)) /\
+     Ty' := getType(metaReduce(M, T')) /\
+     Ty'' := getType(metaReduce(M, Q[T, T', TL])) .
+ ceq $getFlat(M, Q[T], S) = if sortLeq(M, Ty, S)
+                            then Q[T]
+                            else empty
+                            fi,
+                            if S == 'Nat
+                            then empty
+                            else $getFlat(M, T, S)
+                            fi
+  if Ty := getType(metaReduce(M, Q[T])) .
+ eq $getFlat(M, T, S) = empty [owise] .
+
+ op getFlat* : Module TermList Sort -> TermList .
+ eq getFlat*(M, empty, S) = empty .
+ eq getFlat*(M, (T, TL), S) = $getFlat(M, T, S), getFlat*(M, TL, S) .
 endfm
 

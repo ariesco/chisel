@@ -3,3 +3,114 @@ load wfe.maude
 (mod FLAT-TEST is
  pr EVALUATION-WHILE .
 
+ op myFuns : -> FunSet .
+ eq myFuns = 'Main (nv)
+{
+  Call 'test_ppm_task ('empty)
+} .
+
+ *****************
+
+ op test : -> Statement .
+
+ eq test = <
+ 			(If Equal ('ppm_valid, 1)
+	Then
+	(
+		'ppm_valid := 0 ;
+		'ppm_cpt := 'ppm_cpt +. 1 ;
+		'radio_ok := 1 ;
+		'radio_really_lost := 0 ;
+		'time_since_last_ppm := 0 ;
+		Call 'last_radio_from_ppm (nv) ;
+		(If Equal ('last_radio_contains_avg_channels, 1)
+		Then
+		(
+			Call 'lookup_arr ('last_radio, 'RADIO_MODE) ;
+			Call 'MODE_OF_PPRZ ('__res_lookup_arr) ;
+			'mode := 'res_MODE_OF_PPRZ
+		)) ;
+		If Equal ('mode, 'MODE_MANUAL)
+		Then Call 'servo_set ('last_radio)
+	)
+	Else
+	(
+		If (Equal ('mode, 'MODE_MANUAL)) And (Equal ('radio_really_lost, 1))
+		Then 'mode := 'MODE_AUTO
+	)) ;
+	(If Gte ('time_since_last_ppm, 'STALLED_TIME)
+	Then 'radio_ok := 0) ;
+	If Gte ('time_since_last_ppm, 'REALLY_STALLED_TIME)
+	Then 'radio_really_lost := 0
+	,
+	mt,
+ nb,
+ myFuns > .
+endm)
+
+***(red test .)
+
+(flat test with Com .)
+
+eof
+
+Flatten list If Equal('ppm_valid,1)Then
+    'ppm_valid := 0 ;
+      'ppm_cpt := 'ppm_cpt +. 1 ;
+      'radio_ok := 1 ;
+      'radio_really_lost := 0 ;
+      'time_since_last_ppm := 0 ;
+    Call 'last_radio_from_ppm(nv);
+      If Equal('last_radio_contains_avg_channels,1)Then
+(    Call 'lookup_arr('last_radio,'RADIO_MODE);
+        Call 'MODE_OF_PPRZ('__res_lookup_arr);
+        'mode := 'res_MODE_OF_PPRZ);
+    If Equal('mode,'MODE_MANUAL)Then
+Call 'servo_set('last_radio)
+Else
+  If Equal('mode,'MODE_MANUAL)And Equal('radio_really_lost,1)Then
+    'mode := 'MODE_AUTO
+next
+'ppm_valid := 0
+next
+'ppm_cpt := 'ppm_cpt +. 1
+next
+'radio_ok := 1
+next
+'radio_really_lost := 0
+next
+'time_since_last_ppm := 0
+next
+Call 'last_radio_from_ppm(nv)
+next
+If Equal('last_radio_contains_avg_channels,1)Then
+(  Call 'lookup_arr('last_radio,'RADIO_MODE);
+    Call 'MODE_OF_PPRZ('__res_lookup_arr);
+    'mode := 'res_MODE_OF_PPRZ)
+next
+Call 'lookup_arr('last_radio,'RADIO_MODE)
+next
+Call 'MODE_OF_PPRZ('__res_lookup_arr)
+next
+'mode := 'res_MODE_OF_PPRZ
+next
+If Equal('mode,'MODE_MANUAL)Then
+Call 'servo_set('last_radio)
+next
+Call 'servo_set('last_radio)
+next
+If Equal('mode,'MODE_MANUAL)And Equal('radio_really_lost,1)Then
+  'mode := 'MODE_AUTO
+next
+'mode := 'MODE_AUTO
+next
+If Gte('time_since_last_ppm,'STALLED_TIME)Then
+  'radio_ok := 0
+next
+'radio_ok := 0
+next
+If Gte('time_since_last_ppm,'REALLY_STALLED_TIME)Then
+  'radio_really_lost := 0
+next
+'radio_really_lost := 0
+next

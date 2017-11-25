@@ -12,7 +12,7 @@ fmod SLI-SIGNATURE is
   op context`update`rules`. : -> @Command@ .
   op branch`ins`. : -> @Command@ .
   op compare_with_. : @Bubble@ @Bubble@ -> @Command@ .
-  op flat_`with_. : -> @Command@ .
+  op flat_with_. : @Token@ @Token@ -> @Command@ .
 endfm
 
 fmod META-SLI-SIGN is
@@ -441,6 +441,26 @@ mod SLI-DATABASE-HANDLING is
       QS := compare(M, T1, downTerm(T2, error)) .
 
   op error : -> [ExecList] [ctor] .
+
+  **********************************************************************************
+  *************************************** FLAT *************************************
+  **********************************************************************************
+
+  crl [compare] :
+      < O : SDC | db : DB, input : ('flat_with_.['token[T], 'token[T']]),
+                  output : nil, default : ME, AtS >
+   => < O : SDC | db : DB, input : nilTermList,
+                  output : ('\n '\! '\b 'Flatten 'list '\o printList(M, TL) '\n),
+                  default : ME, AtS >
+   if M := getFlatModule(modExp(evalModExp(ME, DB)), database(evalModExp(ME, DB))) /\
+      T1 := getTerm(metaReduce(M, getTerm(metaParse(M, downQid(T), anyType)))) /\
+      S := downQid(T') /\
+      TL := getFlat(M, T1, S) [print T1 " y " S] .
+
+  op printList : Module TermList -> QidList .
+  eq printList(M, empty) = nil .
+  eq printList(M, (T, TL)) = metaPrettyPrint(M, T, po) '\n '\! '\b 'next '\n '\o
+                             printList(M, TL) .
 
   **********************************************************************************
   ********************************* MEMORY INFERENCE *******************************
