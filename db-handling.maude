@@ -12,6 +12,7 @@ fmod SLI-SIGNATURE is
   op context`update`rules`. : -> @Command@ .
   op branch`ins`. : -> @Command@ .
   op compare_with_. : @Bubble@ @Bubble@ -> @Command@ .
+  op flat_`with_. : -> @Command@ .
 endfm
 
 fmod META-SLI-SIGN is

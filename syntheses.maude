@@ -760,5 +760,11 @@ fmod TRACE-LIST is
  op _contains_ : QidSet Qid -> Bool .
  eq (Q ; QS) contains Q = true .
  eq QS contains Q = false [owise] .
+
+ op getFlat : Module Term Sort ~> TermList .
+ eq getFlat(M, Q[T, TL], S) = $getFlat(M, T, TL) .
+
+ op $getFlat : Module Term Sort -> TermList .
+ eq $getFlat(M, T, S)
 endfm
 

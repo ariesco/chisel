@@ -1,0 +1,5 @@
+load wfe.maude
+
+(mod FLAT-TEST is
+ pr EVALUATION-WHILE .
+
