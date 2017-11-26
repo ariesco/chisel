@@ -26,49 +26,31 @@ endm)
 
 ***(red il .)
 
-(flat test with Nat .)
+(flat test with IndexIns .)
 
 eof
 
-Flatten list 0
+Flatten list 0 : addiu sp,sp,32
 next
-32
+1 : sw ra,28(sp)
 next
-1
+2 : sw s8,24(sp)
 next
-28
+3 : move s8,sp
 next
-2
+4 : lbu v0,40(gp)
 next
-24
+5 : andi v0,v0,255
 next
-3
+6 : beqz v0,'test2
 next
-4
+7 : nop
 next
-40
+8 : sb zero,40(gp)
 next
-5
+9 : lbu v0,12(gp)
 next
-255
+10 : addiu v0,v0,1
 next
-6
-next
-7
-next
-8
-next
-40
-next
-9
-next
-12
-next
-10
-next
-1
-next
-11
-next
-255
+11 : andi v0,v0,255
 next
