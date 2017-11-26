@@ -462,11 +462,55 @@ load ../wfe.maude
         Else 'modem_nb_ovrn := 'modem_nb_ovrn +. 1
 } .
 
+ ***********************************
+
+ ops test1 test2 test3 test4 test5 test6 test7 test8 test9
+     test10 test11 : -> Statement .
+
+ eq test1 = <
+ 	Call 'Main (nv),
+ 'PPRZ_MODE_AUTO1	=	1
+ 'PPRZ_MODE_AUTO2	=	2
+ 'PPRZ_MODE_MANUAL	=	3
+ '__res_and_bitwise	=	3
+ '__res_bit_is_set	=	2
+ '__res_inflight_calib_mode_update	=	3
+ '__res_mcu1_status_update	=	3
+ '__res_shiftl_bitwise	=	2
+ 'calib_mode_changed	=	2
+ 'desired_gaz	=	3
+ 'desired_pitch	=	0
+ 'desired_roll	=	1
+ 'estimator_flight_time	=	2
+ 'from_fbw_channels	=	2
+ 'from_fbw_ppm_cpt	=	2
+ 'from_fbw_status	=	3
+ 'from_fbw_vsupply	=	3
+ 'inflight_calib_mode	=	3
+ 'ir_estim_mode	=	3
+ 'launch	=	1
+ 'link_fbw_receive_valid	=	2
+ 'mcu1_ppm_cpt	=	0
+ 'mcu1_status	=	3
+ 'mode_changed	=	3
+ 'pitch_pgain	=	0
+ 'pprz_mode	=	1
+ 'pprz_mode_changed	=	3
+ 'roll_pgain	=	1
+ 'too_far_from_home	=	1
+ 'vertical_mode	=	3
+ 'vsupply	=	3
+ ,
+ nb,
+ myFuns > .
+
 endm)
 
 (set side-effect sorts ESt RWBUF .)
 
 (set context-update rules CallF .)
+
+(rew test1 .)
 
 eof
 

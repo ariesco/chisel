@@ -105,11 +105,8 @@ load ../wfe.maude
  ops test1 test2 test3 test4 test5 test6 test7 test8 test9
      test10 test11 : -> Statement .
 
- *** Function 'main
-
  eq test1 = <
- 	Call 'send_data_to_autopilot_task (nv)
- 	,
+ 	Call 'Main (nv),
  'SPI_PIN	=	2
  'SPI_SS_PIN	=	2
  'last_ppm_cpt	=	1

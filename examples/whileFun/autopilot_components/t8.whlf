@@ -92,12 +92,38 @@ load ../wfe.maude
 	'__res_SFR_BYTE := '__res_SFR_BYTE +. '__res_BV
 } .
 
+ ***********************************
+
+ ops test1 test2 test3 test4 test5 test6 test7 test8 test9
+     test10 test11 : -> Statement .
+
+ eq test1 = <
+ 	Call 'Main (nv),
+ 'MSTR	=	0
+ 'SPCR	=	3
+ 'SPDR	=	1
+ 'SPE	=	3
+ 'SPIE	=	3
+ 'SPIF	=	1
+ 'SPI_NAME	=	1
+ 'SPR0	=	3
+ 'SPSR	=	1
+ 'link_fbw_receive_valid	=	3
+ 'spi_cur_slave	=	3
+ 'spi_nb_ovrn	=	0
+ 'to_fbw	=	1
+ ,
+ nb,
+ myFuns > .
+
 
 endm)
 
 (set side-effect sorts ESt RWBUF .)
 
 (set context-update rules CallF .)
+
+(rew test1 .)
 
 eof
 

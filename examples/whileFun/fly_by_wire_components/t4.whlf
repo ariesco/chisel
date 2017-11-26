@@ -10,10 +10,10 @@ load ../wfe.maude
  op myFuns : -> FunSet .
  eq myFuns = 'Main (nv)
 {
-	Call 'servo_transmit ('empty)
+	Call 'servo_transmit (nv)
 }
 
-'servo_transmit ('empty)
+'servo_transmit (nv)
 {
 	Local 'servo ;
 	Local '__tmp_1 ;
@@ -33,7 +33,7 @@ load ../wfe.maude
 		Call 'uart_transmit ('__tmp_2)
 	)) ;
 	Local '__tmp_4 ;
-	'__tmp_4 := '"\n" ;
+	'__tmp_4 := 0 ;
 	Call 'uart_transmit ('__tmp_4)
 }
 
@@ -90,11 +90,39 @@ load ../wfe.maude
 	'__res_shiftr_bitwise := 'val1 *. 'val2
 } .
 
+ *****************
+
+ ops test1 test2 test3 test4 test5 test6 test7 test8 test9
+     test10 test11 : -> Statement .
+
+ eq test1 = <
+ 	Call 'Main (nv),
+ 'BUF_SIZE	=	3
+ 'UCSRB	=	0
+ 'UDR	=	1
+ '__res_BV	=	0
+ '__res_SFR_BYTE	=	0
+ '__res_shiftr_bitwise	=	2
+ '__tmp_1	=	3
+ '__tmp_2	=	1
+ '__tmp_3	=	1
+ '__tmp_4	=	2
+ 'servo	=	3
+ 'servo_widths	=	0
+ 'tx_buf	=	3
+ 'tx_head	=	3
+ 'tx_tail	=	1
+ ,
+ nb,
+ myFuns > .
+
 endm)
 
 (set side-effect sorts ESt RWBUF .)
 
 (set context-update rules CallF .)
+
+(rew test1 .)
 
 eof
 

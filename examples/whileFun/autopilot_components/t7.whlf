@@ -94,11 +94,43 @@ load ../wfe.maude
 	'__res_update_arr := 'val
 } .
 
+ ***********************************
+
+ ops test1 test2 test3 test4 test5 test6 test7 test8 test9
+     test10 test11 : -> Statement .
+
+ eq test1 = <
+ 	Call 'Main (nv),
+ 'EstimatorGainIsCorrect	=	2
+ '__res_TRIM_PPRZ	=	1
+ '__res_fabs	=	1
+ 'desired_aileron	=	3
+ 'desired_elevator	=	3
+ 'desired_gaz	=	2
+ 'desired_pitch	=	2
+ 'desired_roll	=	1
+ 'ir_estim_mode	=	3
+ 'ir_pitch	=	3
+ 'ir_pitch_neutral	=	2
+ 'ir_rad_of_ir	=	3
+ 'ir_roll	=	3
+ 'ir_roll_neutral	=	0
+ 'pitch_of_roll	=	1
+ 'pitch_pgain	=	3
+ 'roll_pgain	=	2
+ 'simul_ir_pitch	=	2
+ 'simul_ir_roll	=	3
+ ,
+ nb,
+ myFuns > .
+
 endm)
 
 (set side-effect sorts ESt RWBUF .)
 
 (set context-update rules CallF .)
+
+(rew test1 .)
 
 eof
 

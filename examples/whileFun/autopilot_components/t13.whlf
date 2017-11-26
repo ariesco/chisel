@@ -408,11 +408,42 @@ load ../wfe.maude
         Else 'modem_nb_ovrn := 'modem_nb_ovrn +. 1
 } .
 
+ ***********************************
+
+ ops test1 test2 test3 test4 test5 test6 test7 test8 test9
+     test10 test11 : -> Statement .
+
+ eq test1 = <
+ 	Call 'Main (nv),
+ 'DL_ADC	=	1
+ 'DL_ATTITUDE	=	1
+ 'DL_BAT	=	1
+ 'DL_CLIMB_PID	=	0
+ 'DL_DEBUG	=	1
+ 'DL_DESIRED	=	3
+ 'DL_NAVIGATION_REF	=	1
+ 'DL_PPRZ_MODE	=	0
+ 'DL_SETTING	=	2
+ 'MODEM_CHECK_FREE_SPACE	=	3
+ 'boot	=	2
+ 'count	=	1
+ 'estimator_ir	=	2
+ 'estimator_rad	=	0
+ 'estimator_rad_of_ir	=	2
+ 'ir_pitch_neutral	=	1
+ 'ir_roll_neutral	=	1
+ 'version	=	2
+ ,
+ nb,
+ myFuns > .
+
 endm)
 
 (set side-effect sorts ESt RWBUF .)
 
 (set context-update rules CallF .)
+
+(rew test1 .)
 
 eof
 

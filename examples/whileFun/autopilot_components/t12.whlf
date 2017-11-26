@@ -73,11 +73,47 @@ load ../wfe.maude
 	'to_complete := 1
 } .
 
+ ***********************************
+
+ ops test1 test2 test3 test4 test5 test6 test7 test8 test9
+     test10 test11 : -> Statement .
+
+ eq test1 = <
+ 	Call 'Main (nv),
+ 'auto_pitch	=	1
+ 'climb_igain	=	1
+ 'climb_pgain	=	1
+ 'climb_pitch_igain	=	3
+ 'climb_pitch_pgain	=	2
+ 'climb_pitch_sum_err	=	3
+ 'climb_sum_err	=	2
+ 'desired_climb	=	3
+ 'desired_gaz	=	0
+ 'desired_pitch	=	2
+ 'err	=	1
+ 'estimator_flight_time	=	3
+ 'estimator_z_dot	=	1
+ 'fgaz	=	2
+ 'launch	=	0
+ 'low_battery	=	2
+ 'max_pitch	=	1
+ 'nav_desired_gaz	=	3
+ 'nav_pitch	=	2
+ 'pitch_of_vz	=	1
+ 'pitch_of_vz_pgain	=	0
+ 'pprz_mode	=	2
+ 'vertical_mode	=	3
+ ,
+ nb,
+ myFuns > .
+
 endm)
 
 (set side-effect sorts ESt RWBUF .)
 
 (set context-update rules CallF .)
+
+(rew test1 .)
 
 eof
 

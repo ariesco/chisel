@@ -109,23 +109,26 @@ endfm)
   op remove : Env Variable -> Env .
   eq [rmv1] : remove(mt, X) = mt .
   eq [rmv2] : remove(X = V ro, X') = if X == X' then ro else X = V remove(ro, X') fi .
+  eq [rmv3] : remove(ro, X) = ro [owise] . ***
 
   *** This function is now partial, because the variable has to be declared beforehand.
   op _`[_/_`] : ESt Value Variable -> ESt [prec 35] .
   eq [upd1] : (mu | X = V' ro) [V / X] = mu | X = V ro .
   eq [upd2] : (X = V' ro) [V / X] = X = V ro .
   eq [upd3] : (mu | ro) [V / X] = (mu [V / X]) | ro [owise] .
+  eq [upd4] : ro [V / X] = (X = V) ro [owise] . ***
 
   op _`(_`) : ESt Variable -> Value .
   eq [lkp1] : (mu | X = V ro)(X) = V .
   eq [lkp2] : (X = V ro)(X) = V .
   eq [lkp3] : (mu | ro)(X) = mu (X) [owise] .
+  eq [lkp4] : ro (X) = 0 [owise] . ***
 
   op allocateLocals : VarL ESt -> ESt .
   eq [aloc1] : allocateLocals(nv, mu | ro) = mu | ro .
   eq [aloc2] : allocateLocals((X,Vs), mu | ro) =
-     	         allocateLocals(Vs, mu | remove(ro, X) (X = nd)) .
-  eq [aloc3] : allocateLocals((X,Vs), ro) = allocateLocals(Vs, (X = nd) remove(ro, X)) .
+     	         allocateLocals(Vs, mu | remove(ro, X) (X = 0)) . *** nd -> 0
+  eq [aloc3] : allocateLocals((X,Vs), ro) = allocateLocals(Vs, (X = 0) remove(ro, X)) . *** nd -> 0
   eq [aloc4] : allocateLocals(nv, ro) = ro .
 
 
@@ -326,11 +329,11 @@ endm)
       < C', st', rwb', fs > => < skip, st'', rwb'', fs > .
 
   crl [WhileR1] : < While be Do C, st, rwb, fs > => < skip, st, rwb, fs >
-               if < be, st > => < F, st > .
+   if < be, st > => < F, st > [print be] .
 
   crl [WhileR2] : < While be Do C, st, rwb, fs > => < skip, st', rwb', fs >
    if < be, st > => < T, st > /\
-      < C ; (While be Do C), st, rwb, fs > => < skip, st', rwb', fs > .
+      < C ; (While be Do C), st, rwb, fs > => < skip, st', rwb', fs > [print be] .
 
   crl [WriteR] : < Write e, st, rwb, fs > => < skip, st', insert(v, rwb), fs >
    if < e, st > => < v, st' > .

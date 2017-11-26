@@ -35,11 +35,34 @@ load ../wfe.maude
 	Then 'desired_climb := 'CLIMB_MAX
 } .
 
+ ***********************************
+
+ ops test1 test2 test3 test4 test5 test6 test7 test8 test9
+     test10 test11 : -> Statement .
+
+ eq test1 = <
+ 	Call 'Main (nv),
+ 'CLIMB_MAX	=	1
+ 'CLIMB_MAX_m	=	3
+ 'altitude_pgain	=	3
+ 'desired_altitude	=	3
+ 'desired_climb	=	3
+ 'err	=	2
+ 'estimator_z	=	1
+ 'pprz_mode	=	3
+ 'pre_climb	=	1
+ 'vertical_mode	=	0
+ ,
+ nb,
+ myFuns > .
+
 endm)
 
 (set side-effect sorts ESt RWBUF .)
 
 (set context-update rules CallF .)
+
+(rew test1 .)
 
 eof
 

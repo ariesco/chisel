@@ -96,11 +96,42 @@ load ../wfe.maude
 	)
 } .
 
+ *****************
+
+ ops test1 test2 test3 test4 test5 test6 test7 test8 test9
+     test10 test11 : -> Statement .
+
+ eq test1 = <
+ 	Call 'Main (nv),
+ 'SERVO_AILERON_LEFT	=	3
+ 'SERVO_AILERON_LEFT_TRAVEL	=	1
+ 'SERVO_AILERON_RIGHT	=	0
+ 'SERVO_AILERON_RIGHT_TRAVEL	=	3
+ 'SERVO_ELEVATOR	=	1
+ 'SERVO_ELEVATOR_TRAVEL	=	2
+ 'SERVO_MAX	=	3
+ 'SERVO_MIN	=	3
+ 'SERVO_MOTOR_LEFT	=	0
+ 'SERVO_MOTOR_LEFT_TRAVEL	=	0
+ 'SERVO_MOTOR_RIGHT	=	3
+ 'SERVO_MOTOR_RIGHT_TRAVEL	=	1
+ 'SERVO_RUDDER	=	1
+ 'SERVO_RUDDER_TRAVEL	=	3
+ '_var_roll	=	2
+ 'servo_value	=	2
+ ,
+ nb,
+ myFuns > .
+
 endm)
 
 (set side-effect sorts ESt RWBUF .)
 
 (set context-update rules CallF .)
+
+(rew test1 .)
+
+eof
 
 (islice Statement with defs myFuns wrt '__res_lookup_arr '__res_update_arr .)
 

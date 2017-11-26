@@ -155,11 +155,56 @@ load ../wfe.maude
 	'__res_MODEM_PUT_2_BYTE_BY_ADDR := 'data
 } .
 
+ ***********************************
+
+ ops test1 test2 test3 test4 test5 test6 test7 test8 test9
+     test10 test11 : -> Statement .
+
+ eq test1 = <
+ 	Call 'Main (nv),
+ 'DL_GPS	=	1
+ 'DL_RAD_OF_IR	=	1
+ 'DL_TAKEOFF	=	3
+ 'MIN_SPEED_FOR_TAKEOFF	=	0
+ 'MODEM_CHECK_FREE_SPACE	=	1
+ 'cputime	=	3
+ 'desired_course	=	2
+ 'estimator_flight_time	=	1
+ 'estimator_hspeed_dir	=	1
+ 'estimator_hspeed_mod	=	3
+ 'estimator_ir	=	0
+ 'estimator_rad	=	2
+ 'estimator_rad_of_ir	=	3
+ 'estimator_x	=	0
+ 'estimator_y	=	2
+ 'estimator_z	=	1
+ 'estimator_z_dot	=	3
+ 'gps_east	=	2
+ 'gps_falt	=	2
+ 'gps_fclimb	=	1
+ 'gps_fcourse	=	0
+ 'gps_fspeed	=	1
+ 'gps_ftow	=	1
+ 'gps_mode	=	3
+ 'gps_msg_received	=	3
+ 'gps_north	=	1
+ 'gps_pos_available	=	2
+ 'gps_utm_east	=	1
+ 'gps_utm_north	=	0
+ 'ir_pitch_neutral	=	2
+ 'ir_roll_neutral	=	1
+ 'launch	=	1
+ ,
+ nb,
+ myFuns > .
+
 endm)
 
 (set side-effect sorts ESt RWBUF .)
 
 (set context-update rules CallF .)
+
+(rew test1 .)
 
 eof
 

@@ -170,11 +170,49 @@ load ../wfe.maude
 	While Lt ('val, 'm_PI) Do 'val := 'val +. (2 *. 'M_PI)
 } .
 
+ ***********************************
+
+ ops test1 test2 test3 test4 test5 test6 test7 test8 test9
+     test10 test11 : -> Statement .
+
+ eq test1 = <
+ 	Call 'Main (nv),
+ 'DL_NAVIGATION	=	2
+ 'MODEM_CHECK_FREE_SPACE	=	2
+ 'PPRZ_MODE_AUTO2	=	1
+ 'PPRZ_MODE_HOME	=	2
+ 'course_pgain	=	3
+ 'desired_altitude	=	2
+ 'desired_course	=	3
+ 'desired_roll	=	3
+ 'dist2_to_home	=	3
+ 'dist2_to_wp	=	0
+ 'estimator_hspeed_dir	=	3
+ 'estimator_x	=	2
+ 'estimator_y	=	3
+ 'lateral_mode	=	0
+ 'max_roll	=	3
+ 'min_roll	=	0
+ 'nav_block	=	2
+ 'nav_desired_roll	=	3
+ 'nav_pitch	=	2
+ 'nav_stage	=	1
+ 'pprz_mode	=	1
+ 'too_far_from_home	=	2
+ 'vertical_mode	=	3
+ 'waypoints_x	=	2
+ 'waypoints_y	=	3
+ ,
+ nb,
+ myFuns > .
+
 endm)
 
 (set side-effect sorts ESt RWBUF .)
 
 (set context-update rules CallF .)
+
+(rew test1 .)
 
 eof
 
