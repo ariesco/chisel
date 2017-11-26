@@ -1,0 +1,825 @@
+Function main
+Total: 41 test cases
+Branch coverage: 98.75%
+Total paths: 400 paths (359 infeasible)
+
+Test 1:  
+DL_ADC	=	1
+DL_ATTITUDE	=	1
+DL_BAT	=	1
+DL_CLIMB_PID	=	0
+DL_DEBUG	=	1
+DL_DESIRED	=	-3
+DL_NAVIGATION_REF	=	1
+DL_PPRZ_MODE	=	0
+DL_SETTING	=	-2
+MODEM_CHECK_FREE_SPACE	=	3
+boot	=	-2
+count	=	1
+estimator_ir	=	-2
+estimator_rad	=	0
+estimator_rad_of_ir	=	-2
+ir_pitch_neutral	=	1
+ir_roll_neutral	=	-1
+version	=	-2
+
+Test 2:
+DL_ADC	=	1
+DL_ATTITUDE	=	1
+DL_BAT	=	1
+DL_CLIMB_PID	=	0
+DL_DEBUG	=	1
+DL_DESIRED	=	-3
+DL_NAVIGATION_REF	=	1
+DL_PPRZ_MODE	=	0
+DL_SETTING	=	-2
+MODEM_CHECK_FREE_SPACE	=	3
+boot	=	-2
+count	=	-52
+estimator_ir	=	-2
+estimator_rad	=	0
+estimator_rad_of_ir	=	-2
+ir_pitch_neutral	=	1
+ir_roll_neutral	=	-1
+version	=	-2
+
+Test 3:
+DL_ADC	=	1
+DL_ATTITUDE	=	1
+DL_BAT	=	1
+DL_CLIMB_PID	=	0
+DL_DEBUG	=	1
+DL_DESIRED	=	-3
+DL_NAVIGATION_REF	=	1
+DL_PPRZ_MODE	=	0
+DL_SETTING	=	-2
+MODEM_CHECK_FREE_SPACE	=	3
+boot	=	-2
+count	=	-22
+estimator_ir	=	-2
+estimator_rad	=	0
+estimator_rad_of_ir	=	-2
+ir_pitch_neutral	=	1
+ir_roll_neutral	=	-1
+version	=	-2
+
+Test 4:
+DL_ADC	=	1
+DL_ATTITUDE	=	1
+DL_BAT	=	1
+DL_CLIMB_PID	=	0
+DL_DEBUG	=	1
+DL_DESIRED	=	-3
+DL_NAVIGATION_REF	=	1
+DL_PPRZ_MODE	=	0
+DL_SETTING	=	-2
+MODEM_CHECK_FREE_SPACE	=	3
+boot	=	-2
+count	=	-42
+estimator_ir	=	-2
+estimator_rad	=	0
+estimator_rad_of_ir	=	-2
+ir_pitch_neutral	=	1
+ir_roll_neutral	=	-1
+version	=	-2
+
+Test 5:
+DL_ADC	=	1
+DL_ATTITUDE	=	1
+DL_BAT	=	1
+DL_CLIMB_PID	=	0
+DL_DEBUG	=	1
+DL_DESIRED	=	-3
+DL_NAVIGATION_REF	=	1
+DL_PPRZ_MODE	=	0
+DL_SETTING	=	-2
+MODEM_CHECK_FREE_SPACE	=	3
+boot	=	-2
+count	=	-3
+estimator_ir	=	-2
+estimator_rad	=	0
+estimator_rad_of_ir	=	-2
+ir_pitch_neutral	=	1
+ir_roll_neutral	=	-1
+version	=	-2
+
+Test 6:
+DL_ADC	=	1
+DL_ATTITUDE	=	1
+DL_BAT	=	1
+DL_CLIMB_PID	=	0
+DL_DEBUG	=	1
+DL_DESIRED	=	-3
+DL_NAVIGATION_REF	=	1
+DL_PPRZ_MODE	=	0
+DL_SETTING	=	-2
+MODEM_CHECK_FREE_SPACE	=	3
+boot	=	-2
+count	=	-13
+estimator_ir	=	-2
+estimator_rad	=	0
+estimator_rad_of_ir	=	-2
+ir_pitch_neutral	=	1
+ir_roll_neutral	=	-1
+version	=	-2
+
+Test 7:
+DL_ADC	=	1
+DL_ATTITUDE	=	1
+DL_BAT	=	1
+DL_CLIMB_PID	=	0
+DL_DEBUG	=	1
+DL_DESIRED	=	-3
+DL_NAVIGATION_REF	=	1
+DL_PPRZ_MODE	=	0
+DL_SETTING	=	-2
+MODEM_CHECK_FREE_SPACE	=	3
+boot	=	-2
+count	=	-8
+estimator_ir	=	-2
+estimator_rad	=	0
+estimator_rad_of_ir	=	-2
+ir_pitch_neutral	=	1
+ir_roll_neutral	=	-1
+version	=	-2
+
+Test 8:
+DL_ADC	=	1
+DL_ATTITUDE	=	1
+DL_BAT	=	1
+DL_CLIMB_PID	=	0
+DL_DEBUG	=	1
+DL_DESIRED	=	-3
+DL_NAVIGATION_REF	=	1
+DL_PPRZ_MODE	=	0
+DL_SETTING	=	-2
+MODEM_CHECK_FREE_SPACE	=	3
+boot	=	-2
+count	=	-4
+estimator_ir	=	-2
+estimator_rad	=	0
+estimator_rad_of_ir	=	-2
+ir_pitch_neutral	=	1
+ir_roll_neutral	=	-1
+version	=	-2
+
+Test 9:
+DL_ADC	=	1
+DL_ATTITUDE	=	1
+DL_BAT	=	1
+DL_CLIMB_PID	=	0
+DL_DEBUG	=	1
+DL_DESIRED	=	-3
+DL_NAVIGATION_REF	=	1
+DL_PPRZ_MODE	=	0
+DL_SETTING	=	-2
+MODEM_CHECK_FREE_SPACE	=	3
+boot	=	-2
+count	=	-5
+estimator_ir	=	-2
+estimator_rad	=	0
+estimator_rad_of_ir	=	-2
+ir_pitch_neutral	=	1
+ir_roll_neutral	=	-1
+version	=	-2
+
+Test 10:
+DL_ADC	=	1
+DL_ATTITUDE	=	1
+DL_BAT	=	1
+DL_CLIMB_PID	=	0
+DL_DEBUG	=	1
+DL_DESIRED	=	-3
+DL_NAVIGATION_REF	=	1
+DL_PPRZ_MODE	=	0
+DL_SETTING	=	-2
+MODEM_CHECK_FREE_SPACE	=	3
+boot	=	-2
+count	=	-6
+estimator_ir	=	-2
+estimator_rad	=	0
+estimator_rad_of_ir	=	-2
+ir_pitch_neutral	=	1
+ir_roll_neutral	=	-1
+version	=	-2
+
+Test 11:  
+DL_ADC	=	1
+DL_ATTITUDE	=	1
+DL_BAT	=	1
+DL_CLIMB_PID	=	0
+DL_DEBUG	=	1
+DL_DESIRED	=	-3
+DL_NAVIGATION_REF	=	1
+DL_PPRZ_MODE	=	0
+DL_SETTING	=	-2
+MODEM_CHECK_FREE_SPACE	=	3
+boot	=	-2
+count	=	249
+estimator_ir	=	-2
+estimator_rad	=	0
+estimator_rad_of_ir	=	-2
+ir_pitch_neutral	=	1
+ir_roll_neutral	=	-1
+version	=	-2
+
+Test 12:
+DL_ADC	=	1
+DL_ATTITUDE	=	1
+DL_BAT	=	1
+DL_CLIMB_PID	=	0
+DL_DEBUG	=	1
+DL_DESIRED	=	-3
+DL_NAVIGATION_REF	=	1
+DL_PPRZ_MODE	=	0
+DL_SETTING	=	-2
+MODEM_CHECK_FREE_SPACE	=	12372
+boot	=	-2
+count	=	1
+estimator_ir	=	-2
+estimator_rad	=	0
+estimator_rad_of_ir	=	-2
+ir_pitch_neutral	=	1
+ir_roll_neutral	=	-1
+version	=	-2
+
+Test 13:
+DL_ADC	=	1
+DL_ATTITUDE	=	1
+DL_BAT	=	1
+DL_CLIMB_PID	=	0
+DL_DEBUG	=	1
+DL_DESIRED	=	-3
+DL_NAVIGATION_REF	=	1
+DL_PPRZ_MODE	=	0
+DL_SETTING	=	-2
+MODEM_CHECK_FREE_SPACE	=	12372
+boot	=	-2
+count	=	-52
+estimator_ir	=	-2
+estimator_rad	=	0
+estimator_rad_of_ir	=	-2
+ir_pitch_neutral	=	1
+ir_roll_neutral	=	-1
+version	=	-2
+
+Test 14:
+DL_ADC	=	1
+DL_ATTITUDE	=	1
+DL_BAT	=	1
+DL_CLIMB_PID	=	0
+DL_DEBUG	=	1
+DL_DESIRED	=	-3
+DL_NAVIGATION_REF	=	0
+DL_PPRZ_MODE	=	0
+DL_SETTING	=	-2
+MODEM_CHECK_FREE_SPACE	=	12372
+boot	=	-2
+count	=	-52
+estimator_ir	=	-2
+estimator_rad	=	0
+estimator_rad_of_ir	=	-2
+ir_pitch_neutral	=	1
+ir_roll_neutral	=	-1
+version	=	-2
+
+Test 15:
+DL_ADC	=	1
+DL_ATTITUDE	=	1
+DL_BAT	=	1
+DL_CLIMB_PID	=	0
+DL_DEBUG	=	1
+DL_DESIRED	=	-3
+DL_NAVIGATION_REF	=	1
+DL_PPRZ_MODE	=	0
+DL_SETTING	=	-2
+MODEM_CHECK_FREE_SPACE	=	7
+boot	=	-2
+count	=	-52
+estimator_ir	=	-2
+estimator_rad	=	0
+estimator_rad_of_ir	=	-2
+ir_pitch_neutral	=	1
+ir_roll_neutral	=	-1
+version	=	-2
+
+Test 16:
+DL_ADC	=	1
+DL_ATTITUDE	=	1
+DL_BAT	=	1
+DL_CLIMB_PID	=	0
+DL_DEBUG	=	1
+DL_DESIRED	=	-3
+DL_NAVIGATION_REF	=	1
+DL_PPRZ_MODE	=	0
+DL_SETTING	=	-2
+MODEM_CHECK_FREE_SPACE	=	12372
+boot	=	-2
+count	=	-22
+estimator_ir	=	-2
+estimator_rad	=	0
+estimator_rad_of_ir	=	-2
+ir_pitch_neutral	=	1
+ir_roll_neutral	=	-1
+version	=	-2
+
+Test 17:
+DL_ADC	=	1
+DL_ATTITUDE	=	1
+DL_BAT	=	1
+DL_CLIMB_PID	=	0
+DL_DEBUG	=	0
+DL_DESIRED	=	-3
+DL_NAVIGATION_REF	=	1
+DL_PPRZ_MODE	=	0
+DL_SETTING	=	-2
+MODEM_CHECK_FREE_SPACE	=	12372
+boot	=	-2
+count	=	-22
+estimator_ir	=	-2
+estimator_rad	=	0
+estimator_rad_of_ir	=	-2
+ir_pitch_neutral	=	1
+ir_roll_neutral	=	-1
+version	=	-2
+
+Test 18:
+DL_ADC	=	1
+DL_ATTITUDE	=	1
+DL_BAT	=	1
+DL_CLIMB_PID	=	0
+DL_DEBUG	=	1
+DL_DESIRED	=	-3
+DL_NAVIGATION_REF	=	1
+DL_PPRZ_MODE	=	0
+DL_SETTING	=	-2
+MODEM_CHECK_FREE_SPACE	=	9
+boot	=	-2
+count	=	-22
+estimator_ir	=	-2
+estimator_rad	=	0
+estimator_rad_of_ir	=	-2
+ir_pitch_neutral	=	1
+ir_roll_neutral	=	-1
+version	=	-2
+
+Test 19:
+DL_ADC	=	1
+DL_ATTITUDE	=	1
+DL_BAT	=	1
+DL_CLIMB_PID	=	0
+DL_DEBUG	=	1
+DL_DESIRED	=	-3
+DL_NAVIGATION_REF	=	1
+DL_PPRZ_MODE	=	0
+DL_SETTING	=	-2
+MODEM_CHECK_FREE_SPACE	=	12372
+boot	=	-2
+count	=	-42
+estimator_ir	=	-2
+estimator_rad	=	0
+estimator_rad_of_ir	=	-2
+ir_pitch_neutral	=	1
+ir_roll_neutral	=	-1
+version	=	-2
+
+Test 20:
+DL_ADC	=	1
+DL_ATTITUDE	=	1
+DL_BAT	=	1
+DL_CLIMB_PID	=	0
+DL_DEBUG	=	1
+DL_DESIRED	=	-3
+DL_NAVIGATION_REF	=	1
+DL_PPRZ_MODE	=	1
+DL_SETTING	=	-2
+MODEM_CHECK_FREE_SPACE	=	12372
+boot	=	-2
+count	=	-42
+estimator_ir	=	-2
+estimator_rad	=	0
+estimator_rad_of_ir	=	-2
+ir_pitch_neutral	=	1
+ir_roll_neutral	=	-1
+version	=	-2
+
+Test 21:  
+DL_ADC	=	1
+DL_ATTITUDE	=	1
+DL_BAT	=	1
+DL_CLIMB_PID	=	0
+DL_DEBUG	=	1
+DL_DESIRED	=	-3
+DL_NAVIGATION_REF	=	1
+DL_PPRZ_MODE	=	0
+DL_SETTING	=	-2
+MODEM_CHECK_FREE_SPACE	=	9
+boot	=	-2
+count	=	-42
+estimator_ir	=	-2
+estimator_rad	=	0
+estimator_rad_of_ir	=	-2
+ir_pitch_neutral	=	1
+ir_roll_neutral	=	-1
+version	=	-2
+
+Test 22:
+DL_ADC	=	1
+DL_ATTITUDE	=	1
+DL_BAT	=	1
+DL_CLIMB_PID	=	0
+DL_DEBUG	=	1
+DL_DESIRED	=	-3
+DL_NAVIGATION_REF	=	1
+DL_PPRZ_MODE	=	0
+DL_SETTING	=	-2
+MODEM_CHECK_FREE_SPACE	=	12372
+boot	=	-2
+count	=	-3
+estimator_ir	=	-2
+estimator_rad	=	0
+estimator_rad_of_ir	=	-2
+ir_pitch_neutral	=	1
+ir_roll_neutral	=	-1
+version	=	-2
+
+Test 23:
+DL_ADC	=	1
+DL_ATTITUDE	=	1
+DL_BAT	=	1
+DL_CLIMB_PID	=	1
+DL_DEBUG	=	1
+DL_DESIRED	=	-3
+DL_NAVIGATION_REF	=	1
+DL_PPRZ_MODE	=	0
+DL_SETTING	=	-2
+MODEM_CHECK_FREE_SPACE	=	12372
+boot	=	-2
+count	=	-3
+estimator_ir	=	-2
+estimator_rad	=	0
+estimator_rad_of_ir	=	-2
+ir_pitch_neutral	=	1
+ir_roll_neutral	=	-1
+version	=	-2
+
+Test 24:
+DL_ADC	=	1
+DL_ATTITUDE	=	1
+DL_BAT	=	1
+DL_CLIMB_PID	=	0
+DL_DEBUG	=	1
+DL_DESIRED	=	-3
+DL_NAVIGATION_REF	=	1
+DL_PPRZ_MODE	=	0
+DL_SETTING	=	-2
+MODEM_CHECK_FREE_SPACE	=	12
+boot	=	-2
+count	=	-3
+estimator_ir	=	-2
+estimator_rad	=	0
+estimator_rad_of_ir	=	-2
+ir_pitch_neutral	=	1
+ir_roll_neutral	=	-1
+version	=	-2
+
+Test 25:
+DL_ADC	=	1
+DL_ATTITUDE	=	1
+DL_BAT	=	1
+DL_CLIMB_PID	=	0
+DL_DEBUG	=	1
+DL_DESIRED	=	-3
+DL_NAVIGATION_REF	=	1
+DL_PPRZ_MODE	=	0
+DL_SETTING	=	-2
+MODEM_CHECK_FREE_SPACE	=	12372
+boot	=	-2
+count	=	-13
+estimator_ir	=	-2
+estimator_rad	=	0
+estimator_rad_of_ir	=	-2
+ir_pitch_neutral	=	1
+ir_roll_neutral	=	-1
+version	=	-2
+
+Test 26:
+DL_ADC	=	1
+DL_ATTITUDE	=	1
+DL_BAT	=	0
+DL_CLIMB_PID	=	0
+DL_DEBUG	=	1
+DL_DESIRED	=	-3
+DL_NAVIGATION_REF	=	1
+DL_PPRZ_MODE	=	0
+DL_SETTING	=	-2
+MODEM_CHECK_FREE_SPACE	=	12372
+boot	=	-2
+count	=	-13
+estimator_ir	=	-2
+estimator_rad	=	0
+estimator_rad_of_ir	=	-2
+ir_pitch_neutral	=	1
+ir_roll_neutral	=	-1
+version	=	-2
+
+Test 27:
+DL_ADC	=	1
+DL_ATTITUDE	=	1
+DL_BAT	=	1
+DL_CLIMB_PID	=	0
+DL_DEBUG	=	1
+DL_DESIRED	=	-3
+DL_NAVIGATION_REF	=	1
+DL_PPRZ_MODE	=	0
+DL_SETTING	=	-2
+MODEM_CHECK_FREE_SPACE	=	11
+boot	=	-2
+count	=	-13
+estimator_ir	=	-2
+estimator_rad	=	0
+estimator_rad_of_ir	=	-2
+ir_pitch_neutral	=	1
+ir_roll_neutral	=	-1
+version	=	-2
+
+Test 28:
+DL_ADC	=	1
+DL_ATTITUDE	=	1
+DL_BAT	=	1
+DL_CLIMB_PID	=	0
+DL_DEBUG	=	1
+DL_DESIRED	=	-3
+DL_NAVIGATION_REF	=	1
+DL_PPRZ_MODE	=	0
+DL_SETTING	=	-2
+MODEM_CHECK_FREE_SPACE	=	12372
+boot	=	-2
+count	=	-8
+estimator_ir	=	-2
+estimator_rad	=	0
+estimator_rad_of_ir	=	-2
+ir_pitch_neutral	=	1
+ir_roll_neutral	=	-1
+version	=	-2
+
+Test 29:
+DL_ADC	=	1
+DL_ATTITUDE	=	1
+DL_BAT	=	1
+DL_CLIMB_PID	=	0
+DL_DEBUG	=	1
+DL_DESIRED	=	1
+DL_NAVIGATION_REF	=	1
+DL_PPRZ_MODE	=	0
+DL_SETTING	=	-2
+MODEM_CHECK_FREE_SPACE	=	12372
+boot	=	-2
+count	=	-8
+estimator_ir	=	-2
+estimator_rad	=	0
+estimator_rad_of_ir	=	-2
+ir_pitch_neutral	=	1
+ir_roll_neutral	=	-1
+version	=	-2
+
+Test 30:
+DL_ADC	=	1
+DL_ATTITUDE	=	1
+DL_BAT	=	1
+DL_CLIMB_PID	=	0
+DL_DEBUG	=	1
+DL_DESIRED	=	-3
+DL_NAVIGATION_REF	=	1
+DL_PPRZ_MODE	=	0
+DL_SETTING	=	-2
+MODEM_CHECK_FREE_SPACE	=	15
+boot	=	-2
+count	=	-8
+estimator_ir	=	-2
+estimator_rad	=	0
+estimator_rad_of_ir	=	-2
+ir_pitch_neutral	=	1
+ir_roll_neutral	=	-1
+version	=	-2
+
+Test 31:  
+DL_ADC	=	1
+DL_ATTITUDE	=	1
+DL_BAT	=	1
+DL_CLIMB_PID	=	0
+DL_DEBUG	=	1
+DL_DESIRED	=	-3
+DL_NAVIGATION_REF	=	1
+DL_PPRZ_MODE	=	0
+DL_SETTING	=	-2
+MODEM_CHECK_FREE_SPACE	=	12372
+boot	=	-2
+count	=	-4
+estimator_ir	=	-2
+estimator_rad	=	0
+estimator_rad_of_ir	=	-2
+ir_pitch_neutral	=	1
+ir_roll_neutral	=	-1
+version	=	-2
+
+Test 32:
+DL_ADC	=	1
+DL_ATTITUDE	=	1
+DL_BAT	=	1
+DL_CLIMB_PID	=	0
+DL_DEBUG	=	1
+DL_DESIRED	=	-3
+DL_NAVIGATION_REF	=	1
+DL_PPRZ_MODE	=	0
+DL_SETTING	=	1
+MODEM_CHECK_FREE_SPACE	=	12372
+boot	=	-2
+count	=	-4
+estimator_ir	=	-2
+estimator_rad	=	0
+estimator_rad_of_ir	=	-2
+ir_pitch_neutral	=	1
+ir_roll_neutral	=	-1
+version	=	-2
+
+Test 33:
+DL_ADC	=	1
+DL_ATTITUDE	=	1
+DL_BAT	=	1
+DL_CLIMB_PID	=	0
+DL_DEBUG	=	1
+DL_DESIRED	=	-3
+DL_NAVIGATION_REF	=	1
+DL_PPRZ_MODE	=	0
+DL_SETTING	=	-2
+MODEM_CHECK_FREE_SPACE	=	12
+boot	=	-2
+count	=	-4
+estimator_ir	=	-2
+estimator_rad	=	0
+estimator_rad_of_ir	=	-2
+ir_pitch_neutral	=	1
+ir_roll_neutral	=	-1
+version	=	-2
+
+Test 34:
+DL_ADC	=	1
+DL_ATTITUDE	=	1
+DL_BAT	=	1
+DL_CLIMB_PID	=	0
+DL_DEBUG	=	1
+DL_DESIRED	=	-3
+DL_NAVIGATION_REF	=	1
+DL_PPRZ_MODE	=	0
+DL_SETTING	=	-2
+MODEM_CHECK_FREE_SPACE	=	12372
+boot	=	-2
+count	=	-5
+estimator_ir	=	-2
+estimator_rad	=	0
+estimator_rad_of_ir	=	-2
+ir_pitch_neutral	=	1
+ir_roll_neutral	=	-1
+version	=	-2
+
+Test 35:
+DL_ADC	=	0
+DL_ATTITUDE	=	1
+DL_BAT	=	1
+DL_CLIMB_PID	=	0
+DL_DEBUG	=	1
+DL_DESIRED	=	-3
+DL_NAVIGATION_REF	=	1
+DL_PPRZ_MODE	=	0
+DL_SETTING	=	-2
+MODEM_CHECK_FREE_SPACE	=	12372
+boot	=	-2
+count	=	-5
+estimator_ir	=	-2
+estimator_rad	=	0
+estimator_rad_of_ir	=	-2
+ir_pitch_neutral	=	1
+ir_roll_neutral	=	-1
+version	=	-2
+
+Test 36:
+DL_ADC	=	1
+DL_ATTITUDE	=	1
+DL_BAT	=	1
+DL_CLIMB_PID	=	0
+DL_DEBUG	=	1
+DL_DESIRED	=	-3
+DL_NAVIGATION_REF	=	1
+DL_PPRZ_MODE	=	0
+DL_SETTING	=	-2
+MODEM_CHECK_FREE_SPACE	=	7
+boot	=	-2
+count	=	-5
+estimator_ir	=	-2
+estimator_rad	=	0
+estimator_rad_of_ir	=	-2
+ir_pitch_neutral	=	1
+ir_roll_neutral	=	-1
+version	=	-2
+
+Test 37:
+DL_ADC	=	1
+DL_ATTITUDE	=	1
+DL_BAT	=	1
+DL_CLIMB_PID	=	0
+DL_DEBUG	=	1
+DL_DESIRED	=	-3
+DL_NAVIGATION_REF	=	1
+DL_PPRZ_MODE	=	0
+DL_SETTING	=	-2
+MODEM_CHECK_FREE_SPACE	=	12372
+boot	=	-2
+count	=	-6
+estimator_ir	=	-2
+estimator_rad	=	0
+estimator_rad_of_ir	=	-2
+ir_pitch_neutral	=	1
+ir_roll_neutral	=	-1
+version	=	-2
+
+Test 38:
+DL_ADC	=	1
+DL_ATTITUDE	=	0
+DL_BAT	=	1
+DL_CLIMB_PID	=	0
+DL_DEBUG	=	1
+DL_DESIRED	=	-3
+DL_NAVIGATION_REF	=	1
+DL_PPRZ_MODE	=	0
+DL_SETTING	=	-2
+MODEM_CHECK_FREE_SPACE	=	12372
+boot	=	-2
+count	=	-6
+estimator_ir	=	-2
+estimator_rad	=	0
+estimator_rad_of_ir	=	-2
+ir_pitch_neutral	=	1
+ir_roll_neutral	=	-1
+version	=	-2
+
+Test 39:
+DL_ADC	=	1
+DL_ATTITUDE	=	1
+DL_BAT	=	1
+DL_CLIMB_PID	=	0
+DL_DEBUG	=	1
+DL_DESIRED	=	-3
+DL_NAVIGATION_REF	=	1
+DL_PPRZ_MODE	=	0
+DL_SETTING	=	-2
+MODEM_CHECK_FREE_SPACE	=	8
+boot	=	-2
+count	=	-6
+estimator_ir	=	-2
+estimator_rad	=	0
+estimator_rad_of_ir	=	-2
+ir_pitch_neutral	=	1
+ir_roll_neutral	=	-1
+version	=	-2
+
+Test 40:
+DL_ADC	=	1
+DL_ATTITUDE	=	1
+DL_BAT	=	1
+DL_CLIMB_PID	=	0
+DL_DEBUG	=	1
+DL_DESIRED	=	-3
+DL_NAVIGATION_REF	=	1
+DL_PPRZ_MODE	=	0
+DL_SETTING	=	-2
+MODEM_CHECK_FREE_SPACE	=	12372
+boot	=	-2
+count	=	249
+estimator_ir	=	-2
+estimator_rad	=	0
+estimator_rad_of_ir	=	-2
+ir_pitch_neutral	=	1
+ir_roll_neutral	=	-1
+version	=	-2
+
+Test 41:
+DL_ADC	=	1
+DL_ATTITUDE	=	1
+DL_BAT	=	1
+DL_CLIMB_PID	=	0
+DL_DEBUG	=	1
+DL_DESIRED	=	-3
+DL_NAVIGATION_REF	=	1
+DL_PPRZ_MODE	=	0
+DL_SETTING	=	-2
+MODEM_CHECK_FREE_SPACE	=	3
+boot	=	1
+count	=	1
+estimator_ir	=	-2
+estimator_rad	=	0
+estimator_rad_of_ir	=	-2
+ir_pitch_neutral	=	1
+ir_roll_neutral	=	-1
+version	=	-2
+

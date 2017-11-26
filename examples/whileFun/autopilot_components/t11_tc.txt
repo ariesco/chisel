@@ -1,0 +1,137 @@
+Function main
+Total: 11 test cases
+Branch coverage: 100%
+Total paths: 11 paths (0 infeasible)
+
+Test 1: 
+CLIMB_MAX	=	-1
+CLIMB_MAX_m	=	3
+altitude_pgain	=	-3
+desired_altitude	=	-3
+desired_climb	=	3
+err	=	2
+estimator_z	=	1
+pprz_mode	=	3
+pre_climb	=	1
+vertical_mode	=	0
+
+Test 2:
+CLIMB_MAX	=	-1
+CLIMB_MAX_m	=	3
+altitude_pgain	=	-3
+desired_altitude	=	-3
+desired_climb	=	3
+err	=	2
+estimator_z	=	1
+pprz_mode	=	3
+pre_climb	=	1
+vertical_mode	=	3
+
+Test 3:
+CLIMB_MAX	=	0
+CLIMB_MAX_m	=	0
+altitude_pgain	=	0
+desired_altitude	=	0
+desired_climb	=	3
+err	=	2
+estimator_z	=	0
+pprz_mode	=	3
+pre_climb	=	-22766
+vertical_mode	=	3
+
+Test 4:
+CLIMB_MAX	=	-1
+CLIMB_MAX_m	=	0
+altitude_pgain	=	0
+desired_altitude	=	0
+desired_climb	=	3
+err	=	2
+estimator_z	=	0
+pprz_mode	=	3
+pre_climb	=	0
+vertical_mode	=	3
+
+Test 5:
+CLIMB_MAX	=	0
+CLIMB_MAX_m	=	0
+altitude_pgain	=	0
+desired_altitude	=	0
+desired_climb	=	3
+err	=	2
+estimator_z	=	0
+pprz_mode	=	3
+pre_climb	=	0
+vertical_mode	=	3
+
+Test 6:
+CLIMB_MAX	=	-1
+CLIMB_MAX_m	=	3
+altitude_pgain	=	-3
+desired_altitude	=	-3
+desired_climb	=	3
+err	=	2
+estimator_z	=	1
+pprz_mode	=	0
+pre_climb	=	1
+vertical_mode	=	0
+
+Test 7:
+CLIMB_MAX	=	-1
+CLIMB_MAX_m	=	3
+altitude_pgain	=	-3
+desired_altitude	=	-3
+desired_climb	=	3
+err	=	2
+estimator_z	=	1
+pprz_mode	=	2
+pre_climb	=	1
+vertical_mode	=	0
+
+Test 8:
+CLIMB_MAX	=	-1
+CLIMB_MAX_m	=	3
+altitude_pgain	=	-3
+desired_altitude	=	-3
+desired_climb	=	3
+err	=	2
+estimator_z	=	1
+pprz_mode	=	2
+pre_climb	=	1
+vertical_mode	=	3
+
+Test 9:
+CLIMB_MAX	=	0
+CLIMB_MAX_m	=	0
+altitude_pgain	=	0
+desired_altitude	=	0
+desired_climb	=	3
+err	=	2
+estimator_z	=	0
+pprz_mode	=	2
+pre_climb	=	-1283
+vertical_mode	=	3
+
+Test 10:
+CLIMB_MAX	=	-1
+CLIMB_MAX_m	=	0
+altitude_pgain	=	0
+desired_altitude	=	0
+desired_climb	=	3
+err	=	2
+estimator_z	=	0
+pprz_mode	=	2
+pre_climb	=	0
+vertical_mode	=	3
+
+Test 11:
+CLIMB_MAX	=	0
+CLIMB_MAX_m	=	0
+altitude_pgain	=	0
+desired_altitude	=	0
+desired_climb	=	3
+err	=	2
+estimator_z	=	0
+pprz_mode	=	2
+pre_climb	=	0
+vertical_mode	=	3
+
