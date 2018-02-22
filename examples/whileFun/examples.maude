@@ -32,7 +32,8 @@ load wfe.maude
                           While (Not Equal(i, 11)) Do
                             Call 'A (sum, i ) ;
                             Call 'B (sum, j ) ;
-                            Call 'A (j, i ) }
+                            Call 'A (j, i ) ;
+                            i := i +. j }
              'A (x, y) { If (Not Equal(x, 1))
                           Then Call 'Add ( x, y ) ;
                                Call 'Inc ( y ) }
@@ -44,11 +45,56 @@ load wfe.maude
                         Local j ;
                         i := 1 ;
                         i := j ;
-                        Call 'Add ( z, i );
-                        Call 'Inc (j) } .
+                        Call 'Add ( z, i ) } .
 
 endm)
 
+(rew < Local i ;
+       Local j ;
+       sum := 0 ;
+       i := 1 ;
+       j := 2 ;
+       While (Not Equal(i, 11)) Do
+         (Call 'A (sum, i ) ;
+         Call 'B (sum, j ) ;
+         Call 'A (j, i ) ;
+         i := i +. j), sum = 0 i = 0 j = 0 x = 0 y = 0 z = 0, nb, myFuns > .)
+
+eof
+
+(debug < Local i ;
+       Local j ;
+       sum := 0 ;
+       i := 1 ;
+       j := 2 ;
+       While (Not Equal(i, 11)) Do
+         (Call 'A (sum, i ) ;
+         Call 'B (sum, j ) ;
+         Call 'A (j, i ) ;
+         i := i +. j), sum = 0 i = 0 j = 0 x = 0 y = 0 z = 0, nb, myFuns >
+=>*
+< skip,i = 11 j = 2 sum = 0 x = 0 y = 0 z = 0,nb,'A(x,y){If Not Equal(x,1)Then
+Call 'Add(x,y);
+Call 'Inc(y)}
+'Add(a,b){a := a +. b}
+'B(x,y){If Not Equal(x,0)Then
+Call 'B(x +. y,y)}
+'Inc(z){Local i ;
+Local j ;
+i := 1 ;
+i := j ;
+Call 'Add(z,i)}
+'Main(nv){Local i ;
+Local j ;
+sum := 0 ;
+i := 1 ;
+j := 2 ;
+While Not Equal(i,11)Do
+Call 'A(sum,i)
+;
+Call 'B(sum,j);
+Call 'A(j,i);
+i := i +. j}            > .)
 
 (set side-effect sorts ESt RWBUF .)
 

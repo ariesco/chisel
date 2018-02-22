@@ -1,0 +1,49 @@
+load examples.maude
+
+fmod LIST-OF-SORT is
+ pr META-LEVEL .
+
+ vars TL TL' : TermList .
+ var  V : Variable .
+ var  C : Constant .
+ vars S S' : Sort .
+ vars T T' : Term .
+ var  M : Module .
+ var  Q : Qid .
+
+ op termsOfSort : Module Term Sort -> TermList .
+ ceq termsOfSort(M, C, S) = C
+  if getType(C) == S .
+ ceq termsOfSort(M, V, S) = V
+  if getType(V) == S .
+ ceq termsOfSort(M, Q[TL], S) = if S == S'
+                                then Q[TL]
+                                else empty
+                                fi,
+                                termsOfSort*(M, TL, S)
+  if S' := getType(metaReduce(M, Q[TL])) .
+ eq termsOfSort(M, T, S) = empty [owise] .
+
+ op termsOfSort* : Module TermList Sort -> TermList .
+ eq termsOfSort*(M, empty, S) = empty .
+ eq termsOfSort*(M, (T, TL), S) = termsOfSort(M, T, S), termsOfSort*(M, TL, S) .
+
+ op compare : TermList TermList -> TermList .
+ ceq compare((T, TL), (T', TL')) = compare(TL, pop(TL'))
+  if overlap(T, T') .
+ ceq compare((T, TL), (T', TL')) = T
+  if not overlap(T, T') .
+ eq compare(TL, TL') = empty [owise] .
+
+ op overlap : Term Term -> Bool .
+ eq overlap(T, T') = T == T' .
+
+ op pop : TermList -> TermList .
+ eq pop(empty) = empty .
+ eq pop((T, TL)) = TL .
+endfm
+
+red termsOfSort(upModule('EXAMPLE, true),
+'_;_['Local_['i.Var],'_;_['Local_['j.Var],'_;_['_:=_['sum.Var,'0.Zero],'_;_['_:=_['i.Var,'s_['0.Zero]],'_;_['_:=_['j.Var,'s_^2['0.Zero]],'While_Do_['Not_['Equal['i.Var,'s_^11['0.Zero]]],'_;_[
+    'Call_`(_`)[''A.Qid,'_`,_['sum.Var,'i.Var]],'_;_['Call_`(_`)[''B.Qid,'_`,_['sum.Var,'j.Var]],'_;_['Call_`(_`)[''A.Qid,'_`,_['j.Var,'i.Var]],'_:=_['i.Var,'___['i.Var,'+..Op,'j.Var]]]]]]]]]]],
+    'Com) .
