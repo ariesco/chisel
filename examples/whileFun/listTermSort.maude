@@ -43,6 +43,8 @@ fmod LIST-OF-SORT is
  eq pop((T, TL)) = TL .
 endfm
 
+eof
+
 red termsOfSort(upModule('EXAMPLE, true),
 '_;_['Local_['i.Var],'_;_['Local_['j.Var],'_;_['_:=_['sum.Var,'0.Zero],'_;_['_:=_['i.Var,'s_['0.Zero]],'_;_['_:=_['j.Var,'s_^2['0.Zero]],'While_Do_['Not_['Equal['i.Var,'s_^11['0.Zero]]],'_;_[
     'Call_`(_`)[''A.Qid,'_`,_['sum.Var,'i.Var]],'_;_['Call_`(_`)[''B.Qid,'_`,_['sum.Var,'j.Var]],'_;_['Call_`(_`)[''A.Qid,'_`,_['j.Var,'i.Var]],'_:=_['i.Var,'___['i.Var,'+..Op,'j.Var]]]]]]]]]]],
