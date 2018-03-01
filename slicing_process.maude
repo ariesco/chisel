@@ -1,6 +1,6 @@
 fmod SIDE-EFFECTS-ANALYSIS is
   pr SEMANTIC-INFERENCE .
-  pr META-LEVEL .
+  pr GRAPH .
 
   vars HTR HTR' HTR'' : HypertreeTraversalResult .
   vars QS QS' QS1 QS2 Orange : QidSet .
@@ -161,14 +161,6 @@ as second argument unifies with any of the terms in the termlist:
    if Eq := getEq(M, Q) .
   ceq getLHS(M, Q) = getLHS(R)
    if R := getRl(M, Q) .
-
-  op getLHS : Equation -> Term .
-  eq getLHS(eq T = T' [AtS] .) = T .
-  eq getLHS(ceq T = T' if COND [AtS] .) = T .
-
-  op getLHS : Rule -> Term .
-  eq getLHS(rl T => T' [AtS] .) = T .
-  eq getLHS(crl T => T' if COND [AtS] .) = T .
 
   op getRHS : Module Qid ~> Term .
   ceq getRHS(M, Q) = getRHS(Eq)

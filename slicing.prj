@@ -1,6 +1,7 @@
 load full-maude.maude
 
 load syntheses.maude
+load graph.maude
 load slicing_process.maude
 load aux-modules.maude
 load ctxt-upd-by-exec.maude

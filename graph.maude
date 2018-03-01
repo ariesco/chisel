@@ -1,0 +1,78 @@
+fmod GRAPH is
+ pr META-LEVEL .
+
+ sort Edge Graph .
+ subsort Edge < Graph .
+
+ op [_,_,_] : Equation Equation UnificationPair -> Edge [ctor] .
+ op [_,_,_] : Equation Rule UnificationPair -> Edge [ctor] .
+ op [_,_,_] : Rule Rule UnificationPair -> Edge [ctor] .
+
+ op noGraph : -> Graph [ctor] .
+ op __ : Graph Graph -> Graph [ctor assoc comm id: noGraph] .
+
+ vars EqS EqS' : EquationSet .
+ var  UP : UnificationPair .
+ vars RlS RlS' : RuleSet .
+ vars Eq Eq' : Equation .
+ var  COND : Condition .
+ var  AtS : AttrSet .
+ vars Rl Rl' : Rule .
+ vars T T' : Term .
+ var  M : Module .
+
+
+ op getGraph : Module -> Graph .
+ eq getGraph(M) = graphEqEq(M, getEqs(M), getEqs(M))
+                  graphEqRl(M, getEqs(M), getRls(M))
+                  graphRlRl(M, getRls(M), getRls(M)) .
+
+ op graphEqEq : Module EquationSet EquationSet -> Graph .
+ eq graphEqEq(M, none, EqS) = noGraph .
+ eq graphEqEq(M, Eq EqS, EqS') = graphEqEq(M, EqS, EqS')
+                                 graphEqEq1(M, Eq, EqS') .
+
+ op graphEqEq1 : Module Equation EquationSet -> Graph .
+ ceq graphEqEq1(M, Eq, Eq' EqS) = [Eq, Eq', UP]
+                                  graphEqEq1(M, Eq, EqS)
+  if Eq =/= Eq' /\
+     T := getLHS(Eq) /\
+     T' := getLHS(Eq') /\
+     UP := metaUnify(M, T =? T', 0, 0) .
+ eq graphEqEq1(M, Eq, Eq' EqS) = graphEqEq1(M, Eq, EqS) [owise] .
+
+ op graphEqRl : Module EquationSet RuleSet -> Graph .
+ eq graphEqRl(M, none, RlS) = noGraph .
+ eq graphEqRl(M, Eq EqS, RlS) = graphEqRl(M, EqS, RlS)
+                                graphEqRl1(M, Eq, RlS) .
+
+ op graphEqRl1 : Module Equation RuleSet -> Graph .
+ ceq graphEqRl1(M, Eq, Rl RlS) = [Eq, Rl, UP]
+                                  graphEqRl1(M, Eq, RlS)
+  if T := getLHS(Eq) /\
+     T' := getLHS(Rl) /\
+     UP := metaUnify(M, T =? T', 0, 0) .
+ eq graphEqRl1(M, Eq, Rl RlS) = graphEqRl1(M, Eq, RlS) [owise] .
+
+ op graphRlRl : Module RuleSet RuleSet -> Graph .
+ eq graphRlRl(M, none, RlS) = noGraph .
+ eq graphRlRl(M, Rl RlS, RlS') = graphRlRl(M, RlS, RlS')
+                                 graphRlRl1(M, Rl, RlS') .
+
+ op graphRlRl1 : Module Rule RuleSet -> Graph .
+ ceq graphRlRl1(M, Rl, Rl' RlS) = [Rl, Rl', UP]
+                                  graphRlRl1(M, Rl, RlS)
+  if Rl =/= Rl' /\
+     T := getLHS(Rl) /\
+     T' := getLHS(Rl') /\
+     UP := metaUnify(M, T =? T', 0, 0) .
+ eq graphRlRl1(M, Rl, Rl' RlS) = graphRlRl1(M, Rl, RlS) [owise] .
+
+ op getLHS : Equation -> Term .
+ eq getLHS(eq T = T' [AtS] .) = T .
+ eq getLHS(ceq T = T' if COND [AtS] .) = T .
+
+ op getLHS : Rule -> Term .
+ eq getLHS(rl T => T' [AtS] .) = T .
+ eq getLHS(crl T => T' if COND [AtS] .) = T .
+endfm
