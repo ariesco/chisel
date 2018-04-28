@@ -266,6 +266,7 @@ The current result of the hypernode, including the nodes in the olive and orange
   eq traverseHypertree(M, none, TL, SET, HTR) = HTR .
   ceq traverseHypertree(M, Q ; QS, TL, SET, HTR) = traverseHypertree(M, QS, TL, SET, HTR')
    if Q in SET /\
+      not traversed?(Q, HTR) /\
       HTR' := add2orange(Q, HTR) .
   ceq traverseHypertree(M, Q ; QS, TL, SET, HTR) = traverseHypertree(M, QS, TL, SET, HTR)
    if traversed?(Q, HTR) .
